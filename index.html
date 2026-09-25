@@ -72,10 +72,7 @@
             border: 1px solid #475569;
             gap: 10px;
         }
-        .nav-tabs-group {
-            display: flex;
-            gap: 8px;
-        }
+        .nav-tabs-group { display: flex; gap: 8px; }
         .tab-btn {
             background: #0f172a;
             color: var(--accent-silver);
@@ -92,12 +89,7 @@
             color: white;
             border-color: #fbbf24;
         }
-        .nav-actions-group {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
+        .nav-actions-group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 
         /* HEADER & MINI LOGOS */
         .header-banner {
@@ -124,7 +116,7 @@
             font-size: 11px;
             font-weight: bold;
         }
-        .mini-team-badge img { width: 22px; height: 22px; object-fit: contain; }
+        .mini-team-badge img { width: 22px; height: 22px; object-fit: contain; background: #fff; border-radius: 50%; padding: 1px; }
 
         .main-title-row {
             display: flex;
@@ -133,12 +125,13 @@
             gap: 15px;
         }
         .league-logo-badge {
-            width: 60px;
-            height: 60px;
+            width: 65px;
+            height: 65px;
             object-fit: contain;
             border-radius: 50%;
             border: 2px solid var(--bronze-gold);
-            background: #000;
+            background: #ffffff;
+            padding: 2px;
         }
 
         .tab-content { display: none; }
@@ -158,17 +151,8 @@
             align-items: center;
             justify-content: space-between;
         }
-        .filter-group {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .filter-group label {
-            font-weight: bold;
-            color: #cbd5e1;
-            font-size: 13px;
-        }
+        .filter-group { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
+        .filter-group label { font-weight: bold; color: #cbd5e1; font-size: 13px; }
         select, input[type="text"], input[type="date"], input[type="number"], input[type="file"] {
             padding: 7px 10px;
             font-size: 13px;
@@ -229,8 +213,9 @@
             object-fit: contain;
             border: 1px solid #475569;
             border-radius: 6px;
-            background: #1e293b;
+            background: #fff;
             cursor: pointer;
+            padding: 2px;
         }
         .team-card-info { flex-grow: 1; overflow: hidden; }
         .team-card-info h5 { margin: 0 0 3px 0; color: white; font-size: 13px; }
@@ -393,11 +378,11 @@
         </div>
         <div class="nav-actions-group">
             <div style="display: flex; align-items: center; gap: 5px; background: #0f172a; padding: 4px 10px; border-radius: 6px; border: 1px solid #475569;">
-                <span style="font-size: 11px; color: #94a3b8;">📥 Excel:</span>
-                <input type="file" id="inputExcel" accept=".xlsx, .xls, .csv" onchange="importarExcel(event)" style="font-size: 11px; width: 160px; padding: 3px;">
+                <span style="font-size: 11px; color: #94a3b8;">📥 Importar Excel (Hasta 200+):</span>
+                <input type="file" id="inputExcel" accept=".xlsx, .xls, .csv" onchange="importarExcel(event)" style="font-size: 11px; width: 170px; padding: 3px;">
             </div>
             <div style="display: flex; align-items: center; gap: 5px; background: #0f172a; padding: 4px 10px; border-radius: 6px; border: 1px solid #475569;">
-                <span style="font-size: 11px; color: #94a3b8;">📂 Fotos:</span>
+                <span style="font-size: 11px; color: #94a3b8;">📂 Fotos Masivas:</span>
                 <input type="file" id="inputFotos" multiple accept="image/*" onchange="cargarFotosLocales(event)" style="font-size: 11px; width: 150px; padding: 3px;">
             </div>
             <button class="btn btn-danger btn-sm" onclick="cerrarSesion()" title="Cerrar Sesión">🔒 Salir</button>
@@ -406,11 +391,9 @@
 
     <!-- HEADER & MINI LOGOS DE EQUIPOS -->
     <div class="header-banner">
-        <div class="mini-teams-header" id="miniTeamsHeaderContainer">
-            <!-- Renderizado dinámico de mini logos de los 6 equipos -->
-        </div>
+        <div class="mini-teams-header" id="miniTeamsHeaderContainer"></div>
         <div class="main-title-row">
-            <img src="" id="imgEscudoLiga" class="league-logo-badge" alt="LIFARCC" onerror="this.src='https://via.placeholder.com/60?text=LIGA'">
+            <img src="" id="imgEscudoLiga" class="league-logo-badge" alt="LIFARCC" onerror="this.src='https://via.placeholder.com/65?text=LIFARCC'">
             <div>
                 <h2 style="margin: 0; font-size: 18px; color: #f8fafc; letter-spacing: 0.5px;">LIGA DE FÚTBOL AMERICANO LIFARCC MONCLOVA</h2>
                 <h3 style="margin: 2px 0 0 0; font-size: 13px; color: var(--bronze-gold); text-transform: uppercase;">GENERADOR Y GESTOR DE ROSTER OFICIAL</h3>
@@ -422,7 +405,7 @@
     <div id="rosterTab" class="tab-content active">
         <!-- GESTIÓN DE SEDES Y LOGOS DE EQUIPOS -->
         <div class="section-box no-print">
-            <h4>🛡️ Configuración de Equipos, Sedes y Logotipos Oficiales</h4>
+            <h4>🛡️ Configuración de Equipos, Sedes y Logotipos Oficiales (Carpeta: Logos Equipos/)</h4>
             <div style="display: grid; grid-template-columns: 1fr auto; gap: 15px; align-items: flex-end; margin-bottom: 15px;">
                 <div>
                     <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 4px;">Dirección del Campo / Sede del Equipo Seleccionado:</label>
@@ -592,23 +575,42 @@
     // Equipos oficiales requeridos
     const listaEquiposOficiales = ["ACEREROS", "BUCANEROS", "BÚFALOS", "CHEYENNES", "PANTERAS", "ZORROS"];
 
-    // Datos iniciales de ejemplo
-    const datosIniciales = [{"id": 0, "equipo": "ACEREROS", "categoria": "ARDILLA", "nombre": "GARCÍA CAMPOS DYLAN ELIAZER", "nacimiento": "2014-03-01", "curp": "GACD140301HCLRMYA8", "doc": "CURP", "numJugador": "", "peso": ""}, {"id": 1, "equipo": "BUCANEROS", "categoria": "ARDILLA", "nombre": "GRECIA ELIZABETH VILLARREAL COVARRUBIAS", "nacimiento": "2014-11-01", "curp": "VICG141101MCLLVRA5", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 2, "equipo": "BÚFALOS", "categoria": "ARDILLA", "nombre": "TORRES REYES IAN GERARDO", "nacimiento": "2015-01-08", "curp": "TORI150108HCLRYNA0", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 3, "equipo": "CHEYENNES", "categoria": "ARDILLA", "nombre": "MARTÍNEZ PÉREZ CARLOS", "nacimiento": "2014-05-12", "curp": "MAPC140512HCLTRRA1", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 4, "equipo": "PANTERAS", "categoria": "ARDILLA", "nombre": "CÁRDENAS RIVERA MARIO ALBERTO", "nacimiento": "2014-03-09", "curp": "CARM140309HCLRVRA8", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 5, "equipo": "ZORROS", "categoria": "ARDILLA", "nombre": "LÓPEZ GÓMEZ ALEJANDRO", "nacimiento": "2014-07-20", "curp": "LOGA140720HCLGZRA2", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}];
+    // Mapeo automático de logotipos desde la carpeta "Logos Equipos/"
+    const logosPorDefecto = {
+        "ACEREROS": "Logos Equipos/acereros.jpg",
+        "BUCANEROS": "Logos Equipos/bucaneros.jpg",
+        "BÚFALOS": "Logos Equipos/bufalo.png",
+        "CHEYENNES": "Logos Equipos/cheyennes.jpg",
+        "PANTERAS": "Logos Equipos/panteras.jpg",
+        "ZORROS": "Logos Equipos/zorros.jpg"
+    };
 
-    let baseDatos = JSON.parse(localStorage.getItem('lifarcc_jugadores_v14')) || datosIniciales;
-    let fotosJugadores = JSON.parse(localStorage.getItem('lifarcc_fotos_v14')) || {};
-    let configEquipos = JSON.parse(localStorage.getItem('lifarcc_config_equipos_v14')) || {};
-    let logoLigaGlobal = localStorage.getItem('lifarcc_logo_liga_v14') || '';
+    const logoLifarccDefault = "Logos Equipos/lifarcc.jpg";
+
+    const datosIniciales = [{"id": 0, "equipo": "ACEREROS", "categoria": "ARDILLA", "nombre": "GARCÍA CAMPOS DYLAN ELIAZER", "nacimiento": "2014-03-01", "curp": "GACD140301HCLRMYA8", "doc": "CURP", "numJugador": "", "peso": ""}];
+
+    let baseDatos = JSON.parse(localStorage.getItem('lifarcc_jugadores_v15')) || datosIniciales;
+    let fotosJugadores = JSON.parse(localStorage.getItem('lifarcc_fotos_v15')) || {};
+    let configEquipos = JSON.parse(localStorage.getItem('lifarcc_config_equipos_v15')) || {};
+    let logoLigaGlobal = localStorage.getItem('lifarcc_logo_liga_v15') || logoLifarccDefault;
+
+    // Asegurar que cada equipo tenga su logo por defecto de la carpeta si no está configurado
+    listaEquiposOficiales.forEach(eq => {
+        if (!configEquipos[eq]) configEquipos[eq] = {};
+        if (!configEquipos[eq].logo) {
+            configEquipos[eq].logo = logosPorDefecto[eq] || '';
+        }
+    });
 
     let equipoSeleccionadoDirecto = null;
     let jugadorSeleccionadoFoto = null;
 
     function guardarEnStorage() {
         try {
-            localStorage.setItem('lifarcc_jugadores_v14', JSON.stringify(baseDatos));
-            localStorage.setItem('lifarcc_fotos_v14', JSON.stringify(fotosJugadores));
-            localStorage.setItem('lifarcc_logo_liga_v14', logoLigaGlobal);
-            localStorage.setItem('lifarcc_config_equipos_v14', JSON.stringify(configEquipos));
+            localStorage.setItem('lifarcc_jugadores_v15', JSON.stringify(baseDatos));
+            localStorage.setItem('lifarcc_fotos_v15', JSON.stringify(fotosJugadores));
+            localStorage.setItem('lifarcc_logo_liga_v15', logoLigaGlobal);
+            localStorage.setItem('lifarcc_config_equipos_v15', JSON.stringify(configEquipos));
         } catch (e) {
             console.error("Error al guardar en localStorage:", e);
         }
@@ -690,7 +692,7 @@
         container.innerHTML = "";
         listaEquiposOficiales.forEach(eq => {
             const conf = configEquipos[eq] || {};
-            const logo = conf.logo || 'https://via.placeholder.com/30?text=LOGO';
+            const logo = conf.logo || logosPorDefecto[eq] || 'https://via.placeholder.com/30?text=LOGO';
             container.innerHTML += `<div class="mini-team-badge"><img src="${logo}" alt="${eq}"> <span>${eq}</span></div>`;
         });
     }
@@ -702,7 +704,7 @@
 
         listaEquiposOficiales.forEach(eq => {
             const conf = configEquipos[eq] || {};
-            const logo = conf.logo || 'https://via.placeholder.com/50?text=LOGO';
+            const logo = conf.logo || logosPorDefecto[eq] || 'https://via.placeholder.com/50?text=LOGO';
             const campo = conf.campo || 'Sin campo asignado';
 
             grid.innerHTML += `<div class="team-card">
@@ -830,11 +832,22 @@
 
             let importados = 0;
             json.forEach(row => {
-                const eq = String(row['CLUB'] || row['Equipo'] || row['equipo'] || '').trim().toUpperCase();
+                let eq = String(row['CLUB'] || row['Equipo'] || row['equipo'] || '').trim().toUpperCase();
                 const nom = String(row['NOMBRE JUGADOR '] || row['NOMBRE JUGADOR'] || row['Nombre'] || row['nombre'] || '').trim().toUpperCase();
                 const cat = String(row['CATEGORIA'] || row['Categoría'] || row['categoria'] || '').trim().toUpperCase();
                 
-                if (eq && nom && listaEquiposOficiales.includes(eq)) {
+                // Normalizar variantes de nombres de equipos
+                if (eq.includes("BUF")) eq = "BÚFALOS";
+                if (eq.includes("ACER")) eq = "ACEREROS";
+                if (eq.includes("BUC")) eq = "BUCANEROS";
+                if (eq.includes("CHEY")) eq = "CHEYENNES";
+                if (eq.includes("PANT")) eq = "PANTERAS";
+                if (eq.includes("ZORR")) eq = "ZORROS";
+
+                if (eq && nom) {
+                    if (!listaEquiposOficiales.includes(eq)) {
+                        listaEquiposOficiales.push(eq);
+                    }
                     baseDatos.push({
                         equipo: eq,
                         categoria: cat || 'ARDILLA',
@@ -848,8 +861,9 @@
                 }
             });
             guardarEnStorage();
+            actualizarSelectsEquipos();
             renderizarRoster();
-            alert(`¡Importación completada con éxito! Se añadieron ${importados} jugadores.`);
+            alert(`¡Importación de 200+ jugadores completada con éxito! Se procesaron ${importados} registros.`);
             event.target.value = "";
         };
         reader.readAsArrayBuffer(file);
@@ -867,14 +881,16 @@
         renderizarMiniLogosHeader();
 
         const configEq = configEquipos[equipoSelect] || {};
-        document.getElementById("printLogoEquipo").src = configEq.logo || 'https://via.placeholder.com/75?text=EQUIPO';
-        document.getElementById("imgEscudoLiga").src = logoLigaGlobal || 'https://via.placeholder.com/60?text=LIGA';
-        document.getElementById("printLogoLiga").src = logoLigaGlobal || 'https://via.placeholder.com/75?text=LIGA';
+        const logoEqFinal = configEq.logo || logosPorDefecto[equipoSelect] || 'https://via.placeholder.com/75?text=EQUIPO';
+        const logoLigaFinal = logoLigaGlobal || logoLifarccDefault;
+
+        document.getElementById("printLogoEquipo").src = logoEqFinal;
+        document.getElementById("imgEscudoLiga").src = logoLigaFinal;
+        document.getElementById("printLogoLiga").src = logoLigaFinal;
         document.getElementById("lblEquipo").innerText = equipoSelect;
         document.getElementById("lblCategoria").innerText = categoriaSelect;
         document.getElementById("lblCampo").innerText = configEq.campo || '---';
 
-        // Filtrar exclusivamente para el equipo y categoría seleccionados
         const filtrados = [];
         baseDatos.forEach((j, idx) => {
             let coincide = (j.equipo === equipoSelect && j.categoria === categoriaSelect);
@@ -884,7 +900,6 @@
             if (coincide) filtrados.push({ ...j, indexReal: idx });
         });
 
-        // Ordenar alfabéticamente por nombre
         filtrados.sort((a, b) => a.nombre.localeCompare(b.nombre));
 
         if (filtrados.length === 0) {
@@ -921,7 +936,6 @@
         if (!tbody) return;
         tbody.innerHTML = "";
 
-        // Orden estricto: Equipo -> Categoría -> Alfabéticamente por Nombre
         let listaOrdenada = [...baseDatos].map((j, idx) => ({ ...j, indexReal: idx }));
         listaOrdenada.sort((a, b) => {
             if (a.equipo !== b.equipo) return a.equipo.localeCompare(b.equipo);
@@ -968,7 +982,6 @@
             return;
         }
 
-        // Agrupar y ordenar por Equipo y Categoría
         const combinaciones = {};
         baseDatos.forEach(j => {
             const eq = (j.equipo || "").trim().toUpperCase();
@@ -1003,8 +1016,8 @@
             grupo.jugadores.sort((a, b) => a.nombre.localeCompare(b.nombre));
 
             const conf = configEquipos[grupo.equipo] || {};
-            const logoEq = conf.logo || 'https://via.placeholder.com/75?text=EQUIPO';
-            const logoLiga = logoLigaGlobal || 'https://via.placeholder.com/75?text=LIGA';
+            const logoEq = conf.logo || logosPorDefecto[grupo.equipo] || 'https://via.placeholder.com/75?text=EQUIPO';
+            const logoLiga = logoLigaGlobal || logoLifarccDefault;
             const campo = conf.campo || '---';
 
             let filasHtml = "";
