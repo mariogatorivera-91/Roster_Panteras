@@ -336,7 +336,7 @@
         </div>
         <div id="divPassword" style="margin-bottom: 20px; text-align: left;">
             <label style="font-size: 11px; font-weight: bold; color: #cbd5e1;" id="lblPassText">CONTRASEÑA:</label>
-            <input type="password" id="loginPassword" placeholder="Contraseña..." style="width: 100%; margin-top: 5px; box-sizing: border-box; padding: 8px; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white;">
+            <input type="password" id="loginPassword" placeholder="Contraseña..." onkeydown="if(event.key==='Enter') intentarLogin()" style="width: 100%; margin-top: 5px; box-sizing: border-box; padding: 8px; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white;">
         </div>
         <button class="btn btn-warning" style="width: 100%; justify-content: center;" onclick="intentarLogin()">Ingresar al Sistema</button>
     </div>
@@ -365,7 +365,7 @@
         </div>
     </div>
 
-    <!-- HEADER & MINI LOGOS (ORDEN ESTRICTO SOLICITADO) -->
+    <!-- HEADER & MINI LOGOS -->
     <div class="header-banner">
         <div class="main-title-row">
             <img src="" id="imgEscudoLiga" class="league-logo-badge" alt="LIFARCC" onerror="this.src='https://via.placeholder.com/70?text=LIFARCC'">
@@ -377,7 +377,23 @@
 
     <!-- PESTAÑA 1: GENERADOR DE ROSTERS -->
     <div id="rosterTab" class="tab-content active">
-        <!-- 1. CONFIGURACIÓN DE SEDES Y LOGOS -->
+        <!-- 1. CONFIGURACIÓN DE FECHAS DE REGISTRO (EXCLUSIVO ADMINISTRADOR) -->
+        <div class="section-box no-print col-admin" style="background: #1e293b; border: 1px solid var(--bronze-gold);">
+            <h4>📅 Configuración de Fechas de Registro para Equipos</h4>
+            <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                <div>
+                    <label style="font-size: 11px; font-weight: bold;">Fecha Inicio:</label>
+                    <input type="date" id="adminFechaInicio" onchange="guardarFechasRegistroNube()">
+                </div>
+                <div>
+                    <label style="font-size: 11px; font-weight: bold;">Fecha Fin (Límite):</label>
+                    <input type="date" id="adminFechaFin" onchange="guardarFechasRegistroNube()">
+                </div>
+                <span style="font-size: 11px; color: #94a3b8;" id="lblEstadoFechas">Configura el periodo permitido de registros.</span>
+            </div>
+        </div>
+
+        <!-- 2. CONFIGURACIÓN DE SEDES Y LOGOS -->
         <div class="section-box no-print">
             <h4>🛡️ Configuración de Sedes y Logotipos</h4>
             <div style="display: grid; grid-template-columns: 1fr auto; gap: 15px; align-items: flex-end; margin-bottom: 12px;">
@@ -392,7 +408,7 @@
             <div id="teamsPreviewGrid" class="teams-preview-grid"></div>
         </div>
 
-        <!-- 2. SECCIÓN DE REGISTRAR JUGADOR -->
+        <!-- 3. SECCIÓN DE REGISTRAR JUGADOR -->
         <div class="section-box" id="seccionAltaIndividual" style="background: #1e293b; border: 1px solid var(--bronze-gold);">
             <h4>➕ Registrar Jugador de 1 en 1 (Sincronizado en la Nube)</h4>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 10px;">
@@ -402,7 +418,7 @@
                 </div>
                 <div>
                     <label style="font-size: 11px; font-weight: bold;">Categoría:</label>
-                    <select id="altaCategoria" style="width:130px;">
+                    <select id="altaCategoria" style="width:130px;" onchange="renderizarRoster()">
                         <option value="MOSCO">MOSCO</option>
                         <option value="ARDILLA">ARDILLA</option>
                         <option value="BOTANA">BOTANA</option>
@@ -434,7 +450,7 @@
             <button class="btn btn-purple btn-sm" onclick="registrarJugadorIndividual()">Guardar Jugador en la Nube</button>
         </div>
 
-        <!-- 3. PANEL DE PERFILES DE BÚSQUEDA Y FILTROS -->
+        <!-- 4. PANEL DE PERFILES DE BÚSQUEDA Y FILTROS -->
         <div class="controls-panel">
             <div class="filter-row">
                 <div class="filter-group">
@@ -454,7 +470,10 @@
                     </div>
                     <div>
                         <label for="buscadorGlobal">🔍 Buscador:</label><br>
-                        <input type="text" id="buscadorGlobal" placeholder="Nombre o CURP..." oninput="renderizarRoster()" style="width: 180px;">
+                        <div style="display: flex; gap: 5px; align-items: center;">
+                            <input type="text" id="buscadorGlobal" placeholder="Nombre o CURP..." oninput="renderizarRoster()" style="width: 150px;">
+                            <button class="btn btn-warning btn-sm" onclick="renderizarRoster()" title="Actualizar / Generar Vista">🔄 Generar</button>
+                        </div>
                     </div>
                 </div>
                 <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
@@ -464,7 +483,7 @@
             </div>
         </div>
 
-        <!-- 4. TABLA CON LOS DATOS DE LOS JUGADORES (AL FINAL DE ABAJO) -->
+        <!-- 5. TABLA CON LOS DATOS DE LOS JUGADORES (AL FINAL DE ABAJO) -->
         <div class="table-responsive">
             <table>
                 <thead>
@@ -535,7 +554,7 @@
     </div>
 </div>
 
-<!-- MODAL EDITAR JUGADOR -->
+<!-- MODAL EDITAR JUGADOR (SOLO ADMINISTRADOR) -->
 <div id="modalEditar" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -600,6 +619,7 @@
 
     let baseDatos = [];
     let configEquipos = {};
+    let fechasRegistro = { inicio: "", fin: "" };
     let logoLigaGlobal = logoLifarccDefault;
     let rolActual = "Administrador"; 
     let equipoAsignado = null;
@@ -686,8 +706,15 @@
 
             const configSnapshot = await getDocs(collection(db, "configuracion"));
             configSnapshot.forEach((docSnap) => {
-                configEquipos[docSnap.id] = docSnap.data();
+                if (docSnap.id === "fechas_sistema") {
+                    fechasRegistro = docSnap.data();
+                } else {
+                    configEquipos[docSnap.id] = docSnap.data();
+                }
             });
+
+            if (document.getElementById("adminFechaInicio")) document.getElementById("adminFechaInicio").value = fechasRegistro.inicio || "";
+            if (document.getElementById("adminFechaFin")) document.getElementById("adminFechaFin").value = fechasRegistro.fin || "";
 
             listaEquiposOficiales.forEach(eq => {
                 if (!configEquipos[eq]) configEquipos[eq] = {};
@@ -699,6 +726,15 @@
             console.error("Error al conectar con Firestore:", e);
             alert("Error al conectar con la base de datos en la nube. Verifica tus credenciales de Firebase.");
         }
+    }
+
+    window.guardarFechasRegistroNube = async function() {
+        if (rolActual !== "Administrador") return;
+        fechasRegistro.inicio = document.getElementById("adminFechaInicio").value;
+        fechasRegistro.fin = document.getElementById("adminFechaFin").value;
+
+        await setDoc(doc(db, "configuracion", "fechas_sistema"), fechasRegistro);
+        alert("¡Fechas de registro actualizadas en la nube!");
     }
 
     function formatearFechaExcel(val) {
@@ -868,6 +904,19 @@
     }
 
     window.registrarJugadorIndividual = async function() {
+        // Validar fechas límite si es equipo
+        if (rolActual === "Equipo") {
+            const hoy = new Date().toISOString().split('T')[0];
+            if (fechasRegistro.inicio && hoy < fechasRegistro.inicio) {
+                alert(`El periodo de registro aún no ha comenzado (Inicia el ${fechasRegistro.inicio}).`);
+                return;
+            }
+            if (fechasRegistro.fin && hoy > fechasRegistro.fin) {
+                alert(`El periodo de registro ha finalizado (Terminó el ${fechasRegistro.fin}). Ya no se pueden registrar más jugadores.`);
+                return;
+            }
+        }
+
         const equipo = rolActual === "Equipo" ? equipoAsignado : document.getElementById("altaEquipo").value;
         const categoria = document.getElementById("altaCategoria").value;
         const nombre = document.getElementById("altaNombre").value.trim().toUpperCase();
@@ -928,6 +977,11 @@
     }
 
     window.dispararFotoIndividual = function(idJugador) {
+        const j = baseDatos.find(item => item.id === idJugador);
+        if (rolActual === "Equipo" && j && j.equipo !== equipoAsignado) {
+            alert("No puedes modificar jugadores de otros equipos.");
+            return;
+        }
         jugadorSeleccionadoId = idJugador;
         document.getElementById("inputFotoIndividual").click();
     }
@@ -938,10 +992,6 @@
             comprimirYConvertirImagen(archivo, async function(base64) {
                 const jugador = baseDatos.find(j => j.id === jugadorSeleccionadoId);
                 if (jugador) {
-                    if (rolActual === "Equipo" && jugador.equipo !== equipoAsignado) {
-                        alert("No puedes modificar jugadores de otros equipos.");
-                        return;
-                    }
                     jugador.foto = base64;
                     await updateDoc(doc(db, "jugadores", jugador.id), { foto: base64 });
                     renderizarRoster();
@@ -1001,7 +1051,7 @@
         reader.readAsArrayBuffer(file);
     }
 
-    function renderizarRoster() {
+    window.renderizarRoster = function() {
         const equipoSelect = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
         const categoriaSelect = document.getElementById("filtroCategoria").value;
         const textoBusqueda = document.getElementById("buscadorGlobal").value.trim().toUpperCase();
@@ -1036,10 +1086,16 @@
                 `<div class="player-photo-container" onclick="dispararFotoIndividual('${jugador.id}')" title="Cambiar foto"><img src="${jugador.foto}" class="player-photo"></div>` : 
                 `<div class="player-photo-container" onclick="dispararFotoIndividual('${jugador.id}')" title="Subir foto"><span class="no-photo">Subir</span></div>`;
 
-            let accionesHtml = `
-                <button class="btn btn-sm" onclick="abrirModal('${jugador.id}')" title="Editar">✏️</button>
-                <button class="btn btn-danger btn-sm" onclick="eliminarJugador('${jugador.id}')" title="Eliminar">🗑️</button>
-            `;
+            // Si es equipo, NO puede editar ni eliminar una vez guardado. Solo el Administrador.
+            let accionesHtml = "";
+            if (rolActual === "Administrador") {
+                accionesHtml = `
+                    <button class="btn btn-sm" onclick="abrirModal('${jugador.id}')" title="Editar">✏️</button>
+                    <button class="btn btn-danger btn-sm" onclick="eliminarJugador('${jugador.id}')" title="Eliminar">🗑️</button>
+                `;
+            } else {
+                accionesHtml = `<span style="font-size: 10px; color: #94a3b8; font-weight: bold;">Registrado (Bloqueado)</span>`;
+            }
 
             tbody.innerHTML += `<tr>
                 <td><strong>${index + 1}</strong></td>
@@ -1151,7 +1207,7 @@
         alert(msg);
     }
 
-    // DISEÑO DE IMPRESIÓN CENTRADO Y MEJORADO (LOGOS Y TÍTULOS GRANDES)
+    // DISEÑO DE IMPRESIÓN CENTRADO Y MEJORADO
     window.imprimirRosterActual = function() {
         const equipoSelect = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
         const categoriaSelect = document.getElementById("filtroCategoria").value;
@@ -1383,17 +1439,16 @@
     }
 
     window.abrirModal = function(idJugador) {
-        const j = baseDatos.find(item => item.id === idJugador);
-        if(!j) return;
-        if (rolActual === "Equipo" && j.equipo !== equipoAsignado) {
-            alert("No puedes editar jugadores de otros equipos.");
+        if (rolActual !== "Administrador") {
+            alert("Solo el Administrador puede editar registros una vez guardados.");
             return;
         }
+        const j = baseDatos.find(item => item.id === idJugador);
+        if(!j) return;
 
         document.getElementById("editDocId").value = idJugador;
         document.getElementById("editNombre").value = j.nombre;
         document.getElementById("editEquipoSelect").value = j.equipo;
-        if (rolActual === "Equipo") document.getElementById("editEquipoSelect").disabled = true;
         document.getElementById("editCategoria").value = j.categoria;
         document.getElementById("editNacimiento").value = formatearFechaExcel(j.nacimiento) || "";
         document.getElementById("editCurp").value = j.curp || "";
@@ -1408,6 +1463,7 @@
     window.cerrarModal = function() { document.getElementById("modalEditar").style.display = "none"; }
 
     window.guardarEdicionModal = async function() {
+        if (rolActual !== "Administrador") return;
         const idJugador = document.getElementById("editDocId").value;
         const jugador = baseDatos.find(item => item.id === idJugador);
         if(!jugador) return;
@@ -1425,7 +1481,7 @@
     async function ejecutarGuardadoEdicion(idJugador, jugador, fotoUrl) {
         const datosActualizados = {
             nombre: document.getElementById("editNombre").value.trim().toUpperCase(),
-            equipo: rolActual === "Equipo" ? equipoAsignado : document.getElementById("editEquipoSelect").value,
+            equipo: document.getElementById("editEquipoSelect").value,
             categoria: document.getElementById("editCategoria").value,
             nacimiento: formatearFechaExcel(document.getElementById("editNacimiento").value),
             curp: document.getElementById("editCurp").value.trim().toUpperCase(),
@@ -1442,9 +1498,8 @@
     }
 
     window.eliminarJugador = async function(idJugador) {
-        const j = baseDatos.find(item => item.id === idJugador);
-        if (rolActual === "Equipo" && j && j.equipo !== equipoAsignado) {
-            alert("No puedes eliminar jugadores de otros equipos.");
+        if (rolActual !== "Administrador") {
+            alert("Solo el Administrador puede eliminar registros una vez guardados.");
             return;
         }
         if (confirm("¿Estás seguro de eliminar este jugador de la base de datos en la nube?")) {
@@ -1455,7 +1510,7 @@
     }
 
     window.borrarTodosRegistros = async function() {
-        if (rolActual === "Equipo") return;
+        if (rolActual !== "Administrador") return;
         if (confirm("⚠️ ¿Estás seguro de borrar TODOS los jugadores de la base de datos en la nube?")) {
             for (const j of baseDatos) {
                 await deleteDoc(doc(db, "jugadores", j.id));
