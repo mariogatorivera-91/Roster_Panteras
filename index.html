@@ -648,9 +648,12 @@
     }
 
     function sincronizarEquipos() {
-        let eqsSet = new Set(listaEquiposDinamica);
+        let eqsSet = new Set(["ACEREROS", "BUCANEROS", "BUFALOS", "PANTERAS", "ZORROS"]);
+        if (savedEquipos && Array.isArray(savedEquipos)) {
+            savedEquipos.forEach(eq => { if(eq) eqsSet.add(eq.trim().toUpperCase()); });
+        }
         baseDatos.forEach(j => { if(j.equipo) eqsSet.add(j.equipo.trim().toUpperCase()); });
-        Object.keys(configEquipos).forEach(eq => eqsSet.add(eq.trim().toUpperCase()));
+        Object.keys(configEquipos).forEach(eq => { if(eq) eqsSet.add(eq.trim().toUpperCase()); });
         listaEquiposDinamica = Array.from(eqsSet).sort();
     }
     sincronizarEquipos();
@@ -671,6 +674,9 @@
             alert("Aviso: Espacio de almacenamiento lleno.");
         }
     }
+    
+    // Guardar sincronización inicial de inmediato
+    guardarEnStorage();
 
     function formatearFechaExcel(val) {
         if (!val) return "";
@@ -701,6 +707,8 @@
 
         if (tabId === 'todosTab') {
             renderizarDirectorioGeneral();
+        } else {
+            renderizarVistaPreviaEquipos();
         }
     }
 
@@ -1278,7 +1286,6 @@
             return;
         }
 
-        // Agrupar estrictamente por Equipo y luego por Categoría
         const combinaciones = {};
         baseDatos.forEach(j => {
             const eq = (j.equipo || "").trim().toUpperCase();
@@ -1292,7 +1299,6 @@
             }
         });
 
-        // Ordenar alfabéticamente por Equipo y luego por Categoría
         const keysOrdenadas = Object.keys(combinaciones).sort((a, b) => {
             const [eqA, catA] = a.split("___");
             const [eqB, catB] = b.split("___");
@@ -1305,7 +1311,6 @@
             return;
         }
 
-        // Construir documento HTML limpio exclusivamente para impresión masiva
         let htmlContenido = `<!DOCTYPE html>
 <html lang="es">
 <head>
@@ -1403,7 +1408,6 @@
 
         htmlContenido += `</body></html>`;
 
-        // Abrir ventana emergente e imprimir de inmediato
         const ventanaImpresion = window.open('', '_blank');
         if (!ventanaImpresion) {
             alert("El navegador bloqueó la ventana emergente. Por favor, permite las ventanas emergentes para este sitio.");
