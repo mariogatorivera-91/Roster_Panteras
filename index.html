@@ -499,7 +499,7 @@
     <!-- PESTAÑA 2: VISTA GENERAL DE TODOS LOS REGISTROS -->
     <div id="todosTab" class="tab-content">
         <h3>📚 Directorio Completo de Registros en la Liga</h3>
-        <p style="font-size: 13px; color: #64748b;">Aquí puedes consultar la lista unificada de todos los jugadores de la liga, añadir nuevos jugadores y editar seus datos o fotografías.</p>
+        <p style="font-size: 13px; color: #64748b;">Aquí puedes consultar la lista unificada de todos los jugadores de la liga, añadir nuevos jugadores y editar sus datos o fotografías.</p>
         
         <!-- AGREGAR NUEVO JUGADOR -->
         <div class="section-box" style="background: #f1f5f9; border: 1px solid var(--border-color);">
@@ -724,16 +724,20 @@
         {"id": 82, "equipo": "PANTERAS", "categoria": "MOSCO", "nombre": "CÁRDENAS RIVERA MARIANO NICOLÁS", "nacimiento": "2018-10-10", "curp": "CARM181010HCLRVRA8", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}
     ];
 
-    let baseDatos = JSON.parse(localStorage.getItem('lifarcc_jugadores_v10')) || datosIniciales;
-    let fotosJugadores = JSON.parse(localStorage.getItem('lifarcc_fotos_v10')) || {};
-    let configEquipos = JSON.parse(localStorage.getItem('lifarcc_config_equipos_v10')) || {};
-    let logoLigaGlobal = localStorage.getItem('lifarcc_logo_liga_v10') || '';
+    // Claves unificadas y seguras para localStorage v12
+    let baseDatos = JSON.parse(localStorage.getItem('lifarcc_jugadores_v12')) || JSON.parse(localStorage.getItem('lifarcc_jugadores_v10')) || datosIniciales;
+    let fotosJugadores = JSON.parse(localStorage.getItem('lifarcc_fotos_v12')) || JSON.parse(localStorage.getItem('lifarcc_fotos_v10')) || {};
+    let configEquipos = JSON.parse(localStorage.getItem('lifarcc_config_equipos_v12')) || JSON.parse(localStorage.getItem('lifarcc_config_equipos_v10')) || {};
+    let logoLigaGlobal = localStorage.getItem('lifarcc_logo_liga_v12') || localStorage.getItem('lifarcc_logo_liga_v10') || '';
     
+    // Lista robusta de equipos combinando valores por defecto y detectados en la BD
     let listaEquiposDinamica = ["ACEREROS", "BUCANEROS", "BUFALOS", "PANTERAS", "ZORROS"];
-    let savedEquipos = JSON.parse(localStorage.getItem('lifarcc_lista_equipos_v10'));
+    let savedEquipos = JSON.parse(localStorage.getItem('lifarcc_lista_equipos_v12')) || JSON.parse(localStorage.getItem('lifarcc_lista_equipos_v10'));
     if (savedEquipos && Array.isArray(savedEquipos) && savedEquipos.length > 0) {
         listaEquiposDinamica = savedEquipos;
     }
+
+    // Agregar automáticamente cualquier equipo presente en la base de datos
     baseDatos.forEach(j => {
         if (j.equipo) {
             let eqClean = j.equipo.trim().toUpperCase();
@@ -748,11 +752,11 @@
 
     function guardarEnStorage() {
         try {
-            localStorage.setItem('lifarcc_jugadores_v10', JSON.stringify(baseDatos));
-            localStorage.setItem('lifarcc_fotos_v10', JSON.stringify(fotosJugadores));
-            localStorage.setItem('lifarcc_logo_liga_v10', logoLigaGlobal);
-            localStorage.setItem('lifarcc_config_equipos_v10', JSON.stringify(configEquipos));
-            localStorage.setItem('lifarcc_lista_equipos_v10', JSON.stringify(listaEquiposDinamica));
+            localStorage.setItem('lifarcc_jugadores_v12', JSON.stringify(baseDatos));
+            localStorage.setItem('lifarcc_fotos_v12', JSON.stringify(fotosJugadores));
+            localStorage.setItem('lifarcc_logo_liga_v12', logoLigaGlobal);
+            localStorage.setItem('lifarcc_config_equipos_v12', JSON.stringify(configEquipos));
+            localStorage.setItem('lifarcc_lista_equipos_v12', JSON.stringify(listaEquiposDinamica));
         } catch (e) {
             console.error("Error al guardar en localStorage:", e);
             alert("Aviso: Espacio de almacenamiento lleno. Intenta comprimir o reducir imágenes.");
