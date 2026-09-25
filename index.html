@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Roster Oficial - LIFARCC Monclova</title>
+    <!-- SheetJS para importar archivos de Excel -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #1e293b;
+            --accent-color: #2563eb;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --danger-color: #dc2626;
+            --success-color: #16a34a;
+            --warning-color: #d97706;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: #334155;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        .tab-btn {
+            background: #e2e8f0;
+            color: var(--primary-color);
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        .tab-btn.active {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        .controls-panel {
+            background: #f1f5f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+        }
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0;
+        }
+        .filter-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .filter-group label {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        select, input[type="text"], input[type="date"], input[type="number"], input[type="file"] {
+            padding: 8px 12px;
+            font-size: 14px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: white;
+        }
+        
+        .btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 9px 16px;
+            font-size: 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn:hover { opacity: 0.9; }
+        .btn-success { background-color: var(--success-color); }
+        .btn-purple { background-color: #7c3aed; }
+        .btn-danger { background-color: var(--danger-color); }
+        .btn-warning { background-color: var(--warning-color); color: white; }
+        .btn-sm { padding: 5px 10px; font-size: 12px; }
+
+        .section-box {
+            background: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border: 1px dashed #94a3b8;
+        }
+        .section-box h4 {
+            margin: 0 0 12px 0;
+            color: var(--primary-color);
+            font-size: 16px;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 4px;
+            color: var(--primary-color);
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .teams-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .team-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .team-card img {
+            width: 55px;
+            height: 55px;
+            object-fit: contain;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            background: #f8fafc;
+            cursor: pointer;
+        }
+        .team-card-info {
+            flex-grow: 1;
+            overflow: hidden;
+        }
+        .team-card-info h5 {
+            margin: 0 0 4px 0;
+            color: var(--primary-color);
+            font-size: 14px;
+        }
+        .team-card-info p {
+            margin: 0 0 6px 0;
+            font-size: 11px;
+            color: #64748b;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .print-header {
+            display: none;
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .print-header td {
+            border: none;
+            padding: 5px;
+            vertical-align: middle;
+        }
+        .league-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1e3a8a;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+        .roster-info-bar {
+            background-color: #fce7f3;
+            border: 1px solid #1e3a8a;
+            font-weight: bold;
+            font-size: 15px;
+            color: #1e3a8a;
+            padding: 8px;
+            text-align: center;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+        .logo-box {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            border: 1px solid #cbd5e1;
+            background: #fff;
+            padding: 2px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background: white;
+        }
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: center;
+            font-size: 13px;
+        }
+        th {
+            background-color: #1e3a8a;
+            color: white;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+        tr:nth-child(even) { background-color: #f8fafc; }
+        
+        .player-photo-container {
+            width: 45px;
+            height: 55px;
+            margin: auto;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            overflow: hidden;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+        }
+        .player-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .no-photo {
+            font-size: 9px;
+            color: #64748b;
+            text-align: center;
+            padding: 2px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .modal-header {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .close-btn { cursor: pointer; color: var(--danger-color); font-size: 20px; }
+
+        .actions-footer {
+            margin-top: 25px;
+            text-align: center;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .danger-zone {
+            background: #fee2e2;
+            border: 1px dashed #ef4444;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .print-masivo-container {
+            display: none;
+        }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .container { box-shadow: none; padding: 0; max-width: 100%; }
+            .controls-panel, .section-box, .actions-footer, .nav-tabs, .danger-zone, .no-print { display: none !important; }
+            .print-header { display: none !important; }
+            table { page-break-inside: auto; }
+            tr { page-break-inside: avoid; page-break-after: auto; }
+            th { background-color: #1e3a8a !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .roster-info-bar { background-color: #fce7f3 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            
+            .print-masivo-container {
+                display: block !important;
+            }
+            .hoja-roster-impresion {
+                page-break-after: always;
+                margin-bottom: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header no-print">
+        <h2>LIGA DE FÚTBOL AMERICANO LIFARCC MONCLOVA</h2>
+        <h3>GENERADOR Y GESTOR DE ROSTER OFICIAL</h3>
+    </div>
+
+    <!-- PESTAÑAS DE NAVEGACIÓN -->
+    <div class="nav-tabs no-print">
+        <button class="tab-btn active" onclick="cambiarPestaña('rosterTab', this)">📋 Generador de Roster por Equipo</button>
+        <button class="tab-btn" onclick="cambiarPestaña('todosTab', this)">📚 Vista General de Todos los Registros</button>
+    </div>
+
+    <!-- PESTAÑA 1: GENERADOR DE ROSTER -->
+    <div id="rosterTab" class="tab-content active">
+        <!-- CONFIGURAR Y AÑADIR EQUIPOS -->
+        <div class="section-box no-print">
+            <h4>⚙️ Gestión y Configuración de Equipos (Añadir Nuevos Clubes, Sedes y Logos)</h4>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>➕ Añadir Nuevo Equipo a la Liga:</label>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="inputNuevoNombreEquipo" placeholder="Nombre del club...">
+                        <button class="btn btn-purple btn-sm" onclick="crearNuevoEquipo()">Agregar</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Logotipo General de la Liga:</label>
+                    <input type="file" id="inputLogoLiga" accept="image/*" onchange="cargarLogoLiga(event)">
+                </div>
+                <div class="form-group" style="grid-column: span 2;">
+                    <label>Dirección del Campo / Sede del Equipo Seleccionado:</label>
+                    <input type="text" id="inputCampo" placeholder="Ej. Campo PAC-Snyder Monclova" oninput="guardarDatosCampoActual()">
+                </div>
+            </div>
+            
+            <h5 style="margin: 15px 0 5px 0; color: var(--primary-color);">Vista Previa de Equipos Registrados (Haz clic en su logo para cambiarlo):</h5>
+            <div id="teamsPreviewGrid" class="teams-preview-grid">
+            </div>
+        </div>
+
+        <!-- IMPORTAR EXCEL -->
+        <div class="section-box no-print" style="background: #e2e8f0;">
+            <h4>📥 Importar Base de Datos desde Excel / CSV (Antiduplicados Activado)</h4>
+            <input type="file" id="inputExcel" accept=".xlsx, .xls, .csv" onchange="importarExcel(event)">
+            <p style="font-size: 11px; color: #475569; margin: 5px 0 0 0;">💡 El sistema detecta automáticamente si un CURP o nombre ya existe para evitar duplicados.</p>
+        </div>
+
+        <!-- CARGA DE FOTOS -->
+        <div class="section-box no-print" style="background: #e2e8f0;">
+            <h4>📂 Cargar Fotografías Masivas de Jugadores (por Nombre)</h4>
+            <input type="file" id="inputFotos" multiple accept="image/*" onchange="cargarFotosLocales(event)">
+            <span id="contadorFotos" style="margin-left: 15px; font-size: 13px; font-weight: bold; color: var(--success-color);"></span>
+        </div>
+
+        <!-- PANEL DE FILTROS Y BUSCADOR -->
+        <div class="controls-panel">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <div>
+                        <label for="filtroEquipo">EQUIPO:</label><br>
+                        <select id="filtroEquipo" onchange="cambiarFiltroEquipo()">
+                        </select>
+                    </div>
+                    <div>
+                        <label for="filtroCategoria">CATEGORÍA:</label><br>
+                        <select id="filtroCategoria" onchange="renderizarRoster()">
+                            <option value="MOSCO">MOSCO</option>
+                            <option value="ARDILLA">ARDILLA</option>
+                            <option value="BOTANA">BOTANA</option>
+                            <option value="HORMIGUITA">HORMIGUITA</option>
+                            <option value="HORMIGA">HORMIGA</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="buscadorGlobal">🔍 Buscador Rápido:</label><br>
+                        <input type="text" id="buscadorGlobal" placeholder="Nombre o CURP..." oninput="renderizarRoster()" style="width: 200px;">
+                    </div>
+                </div>
+                <div>
+                    <button class="btn btn-success" onclick="window.print()">🖨️ Imprimir Roster Oficial / PDF</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ENCABEZADO OFICIAL PARA IMPRESIÓN -->
+        <table class="print-header">
+            <tr>
+                <td style="width: 20%; text-align: left;">
+                    <img id="printLogoLiga" src="" class="logo-box" alt="Logo Liga" onerror="this.src='https://via.placeholder.com/90?text=LIGA'">
+                </td>
+                <td style="width: 60%; text-align: center;">
+                    <div class="league-title">LIGA DE FÚTBOL AMERICANO</div>
+                    <div class="league-title" style="font-size: 20px; margin-top: 2px;">LIFARCC MONCLOVA</div>
+                </td>
+                <td style="width: 20%; text-align: right;">
+                    <img id="printLogoEquipo" src="" class="logo-box" alt="Logo Equipo" onerror="this.src='https://via.placeholder.com/90?text=EQUIPO'">
+                </td>
+            </tr>
+        </table>
+
+        <div id="printInfoBar" class="roster-info-bar">
+            EQUIPO: <span id="lblEquipo">---</span> &nbsp;&nbsp;|&nbsp;&nbsp; CATEGORÍA: <span id="lblCategoria">MOSCO</span> &nbsp;&nbsp;|&nbsp;&nbsp; CAMPO: <span id="lblCampo">---</span>
+        </div>
+
+        <!-- TABLA DE RESULTADOS -->
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 45px;">N°</th>
+                        <th style="width: 80px;">Fotografía</th>
+                        <th>Nombre del Jugador</th>
+                        <th style="width: 100px;">Categoría</th>
+                        <th style="width: 120px;">Fecha de Nacimiento</th>
+                        <th style="width: 170px;">CURP</th>
+                        <th style="width: 130px;">Tipo Documento</th>
+                        <th class="no-print" style="width: 80px;">Equipo</th>
+                        <th class="no-print" style="width: 90px;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaCuerpo">
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ZONA DE PELIGRO / BOTONES DE BORRADO MASIVO -->
+        <div class="danger-zone no-print">
+            <div>
+                <strong>⚠️ Zona de Mantenimiento y Limpieza:</strong><br>
+                <span style="font-size: 12px; color: #b91c1c;">Puedes vaciar completamente los registros de jugadores o eliminar únicamente todas las fotografías de los jugadores (los logos de equipos se conservan).</span>
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="btn btn-danger btn-sm" onclick="borrarTodosRegistros()">🗑️ Borrar Todos los Registros</button>
+                <button class="btn btn-warning btn-sm" onclick="borrarTodasFotografias()">🖼️ Borrar Todas las Fotos de Jugadores</button>
+            </div>
+        </div>
+
+        <div class="actions-footer no-print">
+            <button class="btn btn-success" onclick="window.print()">🖨️ Imprimir Roster Oficial / PDF</button>
+        </div>
+    </div>
+
+    <!-- PESTAÑA 2: VISTA GENERAL DE TODOS LOS REGISTROS -->
+    <div id="todosTab" class="tab-content">
+        <h3>📚 Directorio Completo de Registros en la Liga</h3>
+        <p style="font-size: 13px; color: #64748b;">Aquí puedes consultar la lista unificada de todos los jugadores de la liga, añadir nuevos jugadores y editar seus datos o fotografías.</p>
+        
+        <!-- AGREGAR NUEVO JUGADOR -->
+        <div class="section-box" style="background: #f1f5f9; border: 1px solid var(--border-color);">
+            <h4>➕ Registrar Nuevo Jugador</h4>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Equipo:</label>
+                    <select id="nuevoEquipo">
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Categoría:</label>
+                    <select id="nuevoCategoria">
+                        <option value="MOSCO">MOSCO</option>
+                        <option value="ARDILLA">ARDILLA</option>
+                        <option value="BOTANA">BOTANA</option>
+                        <option value="HORMIGUITA">HORMIGUITA</option>
+                        <option value="HORMIGA">HORMIGA</option>
+                    </select>
+                </div>
+                <div class="form-group" style="grid-column: span 2;">
+                    <label>Nombre Completo:</label>
+                    <input type="text" id="nuevoNombre" placeholder="APELLIDOS Y NOMBRES">
+                </div>
+                <div class="form-group">
+                    <label>Fecha Nacimiento:</label>
+                    <input type="date" id="nuevoNacimiento">
+                </div>
+                <div class="form-group">
+                    <label>CURP:</label>
+                    <input type="text" id="nuevoCurp" placeholder="CURP">
+                </div>
+                <div class="form-group">
+                    <label>Documento:</label>
+                    <input type="text" id="nuevoDoc" value="ACTA DE NACIMIENTO, CURP">
+                </div>
+                <div class="form-group">
+                    <label>N° Jugador:</label>
+                    <input type="text" id="nuevoNum" placeholder="Ej. 12">
+                </div>
+                <div class="form-group">
+                    <label>Peso (kg):</label>
+                    <input type="text" id="nuevoPeso" placeholder="Ej. 35 kg">
+                </div>
+            </div>
+            <button class="btn btn-purple" onclick="agregarJugador()">Guardar Jugador</button>
+        </div>
+
+        <div style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <input type="text" id="buscadorDirectorioGeneral" placeholder="🔍 Buscar por nombre, CURP o equipo..." oninput="renderizarDirectorioGeneral()" style="width: 320px;">
+            <button class="btn btn-success" onclick="imprimirTodosRostersMasivo()">🖨️ Imprimir Todos los Rosters (Todas las Categorías y Equipos)</button>
+        </div>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 45px;">N°</th>
+                        <th style="width: 80px;">Foto</th>
+                        <th>Equipo</th>
+                        <th>Nombre del Jugador</th>
+                        <th>Categoría</th>
+                        <th>Fecha Nac.</th>
+                        <th>CURP</th>
+                        <th>Documento</th>
+                        <th style="width: 90px;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaDirectorioGeneral">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- CONTENEDOR OCULTO PARA IMPRESIÓN MASIVA -->
+<div id="printMasivoContainer" class="print-masivo-container"></div>
+
+<!-- MODAL EDITAR JUGADOR -->
+<div id="modalEditar" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>✏️ Editar Jugador y Fotografía</span>
+            <span class="close-btn" onclick="cerrarModal()">&times;</span>
+        </div>
+        <input type="hidden" id="editIndex">
+        <div class="form-grid" style="grid-template-columns: 1fr;">
+            <div class="form-group"><label>Nombre:</label><input type="text" id="editNombre"></div>
+            <div class="form-group"><label>Equipo:</label><select id="editEquipoSelect"></select></div>
+            <div class="form-group"><label>Categoría:</label><select id="editCategoria"><option value="MOSCO">MOSCO</option><option value="ARDILLA">ARDILLA</option><option value="BOTANA">BOTANA</option><option value="HORMIGUITA">HORMIGUITA</option><option value="HORMIGA">HORMIGA</option></select></div>
+            <div class="form-group"><label>Fecha Nac:</label><input type="date" id="editNacimiento"></div>
+            <div class="form-group"><label>CURP:</label><input type="text" id="editCurp"></div>
+            <div class="form-group"><label>Documento:</label><input type="text" id="editDoc"></div>
+            <div class="form-group"><label>N°:</label><input type="text" id="editNum"></div>
+            <div class="form-group"><label>Peso:</label><input type="text" id="editPeso"></div>
+            <div class="form-group">
+                <label>Fotografía del Jugador:</label>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div id="modalFotoPreview" class="player-photo-container" style="width: 50px; height: 60px;"></div>
+                    <input type="file" id="editFotoFile" accept="image/*" style="font-size: 12px;">
+                </div>
+            </div>
+        </div>
+        <div style="text-align: right; margin-top: 15px;">
+            <button class="btn btn-success" onclick="guardarEdicionModal()">Guardar Cambios</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL EDITAR EQUIPO (SEDE Y LOGO) -->
+<div id="modalEquipo" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>🛡️ Editar Equipo: <span id="modalEquipoNombre"></span></span>
+            <span class="close-btn" onclick="cerrarModalEquipo()">&times;</span>
+        </div>
+        <input type="hidden" id="modalEquipoId">
+        <div class="form-grid" style="grid-template-columns: 1fr;">
+            <div class="form-group">
+                <label>Dirección del Campo / Sede:</label>
+                <input type="text" id="modalEquipoCampo" placeholder="Ej. Campo Deportivo Monclova">
+            </div>
+            <div class="form-group">
+                <label>Cambiar Logotipo del Equipo:</label>
+                <input type="file" id="modalEquipoLogoFile" accept="image/*">
+            </div>
+        </div>
+        <div style="text-align: right; margin-top: 15px; display: flex; justify-content: space-between;">
+            <button class="btn btn-danger btn-sm" onclick="eliminarEquipoConfig()">Eliminar Equipo</button>
+            <button class="btn btn-success" onclick="guardarEquipoModal()">Guardar Cambios</button>
+        </div>
+    </div>
+</div>
+
+<input type="file" id="inputFotoIndividual" accept="image/*" style="display:none" onchange="cargarFotoIndividual(event)">
+<input type="file" id="inputLogoEquipoDirecto" accept="image/*" style="display:none" onchange="cargarLogoEquipoDirecto(event)">
+
+<script>
+    const datosIniciales = [
+        {"id": 0, "equipo": "ACEREROS", "categoria": "ARDILLA", "nombre": "GARCÍA CAMPOS DYLAN ELIAZER", "nacimiento": "2014-03-01", "curp": "GACD140301HCLRMYA8", "doc": "CURP", "numJugador": "", "peso": ""}, 
+        {"id": 1, "equipo": "ACEREROS", "categoria": "ARDILLA", "nombre": "UCHINO SIFUENTES OSMAR YERAY", "nacimiento": "2015-02-18", "curp": "UISO150218HCLCFSA1", "doc": "CURP", "numJugador": "", "peso": ""}, 
+        {"id": 2, "equipo": "ACEREROS", "categoria": "ARDILLA", "nombre": "REYES CASTILLO JIMENA MARIEL", "nacimiento": "2015-06-16", "curp": "RECJ150616MCLYSMA", "doc": "CURP", "numJugador": "", "peso": ""}, 
+        {"id": 3, "equipo": "ACEREROS", "categoria": "ARDILLA", "nombre": "REYES MARTINEZ TANIA ALITZEL", "nacimiento": "2014-09-23", "curp": "EMT140923MCLYRNA2", "doc": "CURP", "numJugador": "", "peso": ""}, 
+        {"id": 4, "equipo": "ACEREROS", "categoria": "ARDILLA", "nombre": "GARCIA BAUTISTA RODRIGO ROBERTO", "nacimiento": "2021-07-31", "curp": "GABR210731HCLRTDA4", "doc": "CURP", "numJugador": "", "peso": ""}, 
+        {"id": 5, "equipo": "ACEREROS", "categoria": "BOTANA", "nombre": "FUENTES MARTÍNEZ MAURICIO ALEJANDRO", "nacimiento": "2020-08-08", "curp": "FUMM200815HCLNRRA3", "doc": "CURP", "numJugador": "", "peso": ""}, 
+        {"id": 6, "equipo": "ACEREROS", "categoria": "BOTANA", "nombre": "ALEXEI ARENAS EVAN", "nacimiento": "2023-08-04", "curp": "ZAAE230804HCLMRVA7", "doc": "CURP", "numJugador": "", "peso": ""}, 
+        {"id": 7, "equipo": "ACEREROS", "categoria": "BOTANA", "nombre": "DE LEÓN SÁNCHEZ SOFÍA FERNANDA", "nacimiento": "2022-07-11", "curp": "LESS220711MCLNNFA7", "doc": "CURP", "numJugador": "", "peso": ""}, 
+        {"id": 8, "equipo": "ACEREROS", "categoria": "BOTANA", "nombre": "CISNEROS BARROSO EITHAN ALEXANDER", "nacimiento": "2021-06-20", "curp": "CIBE210620HCLSRTA2", "doc": "CURP", "numJugador": "", "peso": ""}, 
+        {"id": 9, "equipo": "ACEREROS", "categoria": "BOTANA", "nombre": "FLORES VALDES SERGIO ALBERTO", "nacimiento": "2021-02-19", "curp": "FOVS210219HCLLLRA5", "doc": "CURP", "numJugador": "", "peso": ""}, 
+        {"id": 10, "equipo": "ACEREROS", "categoria": "HORMIGA", "nombre": "TREVIÑO BUENTELLO SALVADOR", "nacimiento": "2016-03-01", "curp": "TEBS160301HCLRNLA6", "doc": "CURP", "numJugador": "", "peso": ""}, 
+        {"id": 11, "equipo": "ACEREROS", "categoria": "HORMIGA", "nombre": "BALDERAS MORALES NICOLÁS", "nacimiento": "2016-11-08", "curp": "BAMN161108HCLLRCA9", "doc": "CURP", "numJugador": "", "peso": ""}, 
+        {"id": 12, "equipo": "ACEREROS", "categoria": "HORMIGA", "nombre": "GONZÁLEZ PADILLA ROMINA", "nacimiento": "2015-11-24", "curp": "GOPR150924MCLNDMA8", "doc": "CURP", "numJugador": "", "peso": ""}, 
+        {"id": 13, "equipo": "ACEREROS", "categoria": "HORMIGA", "nombre": "GARCÍA BAUTISTA ANA VICTORIA", "nacimiento": "2016-08-27", "curp": "GABA160827MCLRTA8", "doc": "CURP", "numJugador": "", "peso": ""}, 
+        {"id": 14, "equipo": "ACEREROS", "categoria": "HORMIGUITA", "nombre": "GARCÍA GONZÁLEZ LIAM FELIPE", "nacimiento": "2017-06-24", "curp": "GAGL170624HCLRNMAO", "doc": "CURP", "numJugador": "", "peso": ""}, 
+        {"id": 15, "equipo": "ACEREROS", "categoria": "HORMIGUITA", "nombre": "ABREGO GARCÍA HÉCTOR GAEL", "nacimiento": "2018-05-04", "curp": "AEGH180504HCLBRCA3", "doc": "CURP", "numJugador": "", "peso": ""}, 
+        {"id": 16, "equipo": "ACEREROS", "categoria": "HORMIGUITA", "nombre": "RODRÍGUEZ CASTILLO IAN ARMANDO", "nacimiento": "2017-06-23", "curp": "ROCI170623HCLDSNA5", "doc": "CURP", "numJugador": "", "peso": ""}, 
+        {"id": 17, "equipo": "ACEREROS", "categoria": "HORMIGUITA", "nombre": "DE LEÓN SÁNCHEZ IKER", "nacimiento": "2018-07-14", "curp": "LESI180714HCLNNKA6", "doc": "CURP", "numJugador": "", "peso": ""}, 
+        {"id": 18, "equipo": "ACEREROS", "categoria": "HORMIGUITA", "nombre": "MENDOZA GARCÍA RENATO ANTONIO", "nacimiento": "2017-07-22", "curp": "MEGR170722HCLNRNA8", "doc": "CURP", "numJugador": "", "peso": ""}, 
+        {"id": 19, "equipo": "ACEREROS", "categoria": "HORMIGUITA", "nombre": "ESPINOZA MUÑOS ADRIÁN GERARDO", "nacimiento": "2018-01-16", "curp": "ELMA180116HCLSXDA1", "doc": "CURP", "numJugador": "", "peso": ""}, 
+        {"id": 20, "equipo": "ACEREROS", "categoria": "HORMIGUITA", "nombre": "FUENETES MARTÍNEZ LEONARDO", "nacimiento": "2017-02-27", "curp": "FUML170227HCLNRNA4", "doc": "CURP", "numJugador": "", "peso": ""}, 
+        {"id": 21, "equipo": "ACEREROS", "categoria": "MOSCO", "nombre": "CISNEROS PACHECO ORLANDO ISMAEL", "nacimiento": "2021-12-19", "curp": "CIPO191221HCLSCRA0", "doc": "CURP", "numJugador": "", "peso": ""}, 
+        {"id": 22, "equipo": "BUCANEROS", "categoria": "ARDILLA", "nombre": "GRECIA ELIZABETH VILLARREAL COVARRUBIAS", "nacimiento": "2014-11-01", "curp": "VICG141101MCLLVRA5", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 23, "equipo": "BUCANEROS", "categoria": "ARDILLA", "nombre": "MATEO ALEJANDRO MONTOYA ESCALANTE", "nacimiento": "2014-07-04", "curp": "MOEM140704HCLNSTA9", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 24, "equipo": "BUCANEROS", "categoria": "ARDILLA", "nombre": "DEREK ALEJANDRO AGUILAR ORDOÑEZ", "nacimiento": "2015-04-26", "curp": "AUOD150426HCLGRRA9", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 25, "equipo": "BUCANEROS", "categoria": "ARDILLA", "nombre": "GABRIEL GARCIA SANTILLAN", "nacimiento": "2014-03-24", "curp": "GASG140324HCLRNBA2", "doc": "ACTA DE NACIMIENTO", "numJugador": "", "peso": ""}, 
+        {"id": 26, "equipo": "BUCANEROS", "categoria": "ARDILLA", "nombre": "BRAYAN ABDIEL LOYA SALDAÑA", "nacimiento": "2014-08-18", "curp": "LOSB140818HCLYLRA3", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 27, "equipo": "BUCANEROS", "categoria": "ARDILLA", "nombre": "FERNANDO ENSISO OLVERA", "nacimiento": "2014-06-11", "curp": "EIOF140611HCLNLRA7", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 28, "equipo": "BUCANEROS", "categoria": "HORMIGA", "nombre": "ALAN ROLANDO FLORES RODRIGIEZ", "nacimiento": "2015-07-24", "curp": "FORA150724HCLLDLA9", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 29, "equipo": "BUCANEROS", "categoria": "HORMIGA", "nombre": "ABRIL SOFIA TOVAR ZAMORA", "nacimiento": "2015-12-28", "curp": "TOZA151228MCLVMBA7", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 30, "equipo": "BUFALOS", "categoria": "ARDILLA", "nombre": "TORRES REYES IAN GERARDO", "nacimiento": "2015-01-08", "curp": "TORI150108HCLRYNA0", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 31, "equipo": "BUFALOS", "categoria": "ARDILLA", "nombre": "MÉNDEZ RESÉNDIZ MADELYN YAQUELIN", "nacimiento": "2014-05-10", "curp": "MERM140510MCLNSDA1", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 32, "equipo": "BUFALOS", "categoria": "ARDILLA", "nombre": "RODRIGUEZ DOMÍNGUEZ HECTOR LEONEL", "nacimiento": "2015-04-22", "curp": "RODH150422HCLDMCA2", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 33, "equipo": "BUFALOS", "categoria": "ARDILLA", "nombre": "CAMPUZANO GARZA LEONARDO", "nacimiento": "2015-08-07", "curp": "CAGL150807HCLMRNA6", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 34, "equipo": "BUFALOS", "categoria": "ARDILLA", "nombre": "RESENDIZ SEPÚLVEDA DEREK JAVIER", "nacimiento": "2015-12-14", "curp": "RESED151214HCLSPRA1", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 35, "equipo": "BUFALOS", "categoria": "ARDILLA", "nombre": "SALCEDO CASTELLANOS PATRICIO", "nacimiento": "2014-06-03", "curp": "SACP140603HCLCSTA5", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 36, "equipo": "BUFALOS", "categoria": "ARDILLA", "nombre": "CHAPA CASTRO HOMERO EFRAIN", "nacimiento": "2013-12-31", "curp": "CACH131231HCLHSMA8", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 37, "equipo": "BUFALOS", "categoria": "ARDILLA", "nombre": "SAUCEDO GOMEZ AURORA", "nacimiento": "2014-08-13", "curp": "SAGA140813MCLCMRA3", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 38, "equipo": "BUFALOS", "categoria": "ARDILLA", "nombre": "LESPRON MORENO DYLAN SAID", "nacimiento": "2014-08-27", "curp": "LEMD140827HCLSRYA2", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 39, "equipo": "BUFALOS", "categoria": "ARDILLA", "nombre": "HERNÁNDEZ GUERRERO MIA ABIGAIL", "nacimiento": "2013-06-25", "curp": "HEGM130625MCLRRXA6", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 40, "equipo": "BUFALOS", "categoria": "ARDILLA", "nombre": "GUTIÉRREZ HUESCA PAULA MARIANA", "nacimiento": "2013-12-09", "curp": "GUHO131209MCLTSLA0", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 41, "equipo": "BUFALOS", "categoria": "BOTANA", "nombre": "CORDERO MACARENO JOAN ARTURO", "nacimiento": "2020-01-30", "curp": "COMJ200130HCLRCNA0", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 42, "equipo": "BUFALOS", "categoria": "BOTANA", "nombre": "BRETADO RAMOS LUCIANO ALEXANDER", "nacimiento": "2020-08-20", "curp": "BERL200820HCLRMCA5", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 43, "equipo": "BUFALOS", "categoria": "BOTANA", "nombre": "GÓMEZ VÁZQUEZ ELIAN", "nacimiento": "2022-10-15", "curp": "GOVE221015HCLMZLA1", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 44, "equipo": "BUFALOS", "categoria": "BOTANA", "nombre": "HERNÁNDEZ GUERRERO SANTIAGO", "nacimiento": "2022-04-26", "curp": "HEGS220426HCLRRNA6", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 45, "equipo": "BUFALOS", "categoria": "BOTANA", "nombre": "MATA HERNÁNDEZ BRANDON EMMANUEL", "nacimiento": "2021-07-26", "curp": "MAHB210726HCLTRRA3", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 46, "equipo": "BUFALOS", "categoria": "HORMIGA", "nombre": "SANCHEZ CARRIZALES SEBASTIÁN", "nacimiento": "2016-10-06", "curp": "SACS161006HCLNRBA7", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 47, "equipo": "BUFALOS", "categoria": "HORMIGA", "nombre": "FLORES GARCIA ADRIAN", "nacimiento": "2016-09-20", "curp": "FOGA160920HCLLRDA6", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 48, "equipo": "BUFALOS", "categoria": "HORMIGA", "nombre": "DE LOS REYES MARTÍNEZ RICARDO JAVIER", "nacimiento": "2016-03-16", "curp": "REMR160316HCLYRCA8", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 49, "equipo": "BUFALOS", "categoria": "HORMIGA", "nombre": "TORRES FLORES YERIK ALI", "nacimiento": "2015-10-12", "curp": "TOFY151012HCLRLRA7", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 50, "equipo": "BUFALOS", "categoria": "HORMIGA", "nombre": "HERNÁNDEZ GUERRERO URIEL", "nacimiento": "2016-12-18", "curp": "HEGU161218HCLRRRA5", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 51, "equipo": "BUFALOS", "categoria": "HORMIGA", "nombre": "IBARRA FUENTES LEONARDO SEBASTIÁN", "nacimiento": "2016-02-04", "curp": "IAFL160204HCLBNNA9", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 52, "equipo": "BUFALOS", "categoria": "HORMIGA", "nombre": "MÉNDEZ RESÉNDIZ DEO YANDEL", "nacimiento": "2016-04-06", "curp": "MERD160406HCLNSXA4", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 53, "equipo": "BUFALOS", "categoria": "HORMIGA", "nombre": "MENDOZA DE LA RIVA GERARDO JEHU", "nacimiento": "2015-10-25", "curp": "MERG151025HCLNVRA9", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 54, "equipo": "BUFALOS", "categoria": "HORMIGA", "nombre": "GOMEZ VÁZQUEZ EVAN NICOLAS", "nacimiento": "2015-12-01", "curp": "GOVE151201HCLMZVA7", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 55, "equipo": "BUFALOS", "categoria": "HORMIGUITA", "nombre": "ÁGUILAR LUCIO MAXIMILIANO", "nacimiento": "2017-06-29", "curp": "AULM170629HCLGCXA9", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 56, "equipo": "BUFALOS", "categoria": "HORMIGUITA", "nombre": "ZAMARRON BERISTAIN SANTIAGO DE JESUS", "nacimiento": "2017-07-24", "curp": "ZABS170724HCLMRNA6", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 57, "equipo": "BUFALOS", "categoria": "HORMIGUITA", "nombre": "BRETADO RAMOS IKER AGUSTÍN", "nacimiento": "2017-06-01", "curp": "BERI170601HCLRMKA2", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 58, "equipo": "BUFALOS", "categoria": "HORMIGUITA", "nombre": "MORALES AGUILERA FELIX ISRAEL", "nacimiento": "2017-06-07", "curp": "MOAF170607HCLRGLA7", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 59, "equipo": "BUFALOS", "categoria": "HORMIGUITA", "nombre": "SILVA ZEPEDA ANDRES TAREQ", "nacimiento": "2017-08-30", "curp": "SIZA170830HCLLPNA9", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 60, "equipo": "BUFALOS", "categoria": "MOSCO", "nombre": "SANDOVAL PEÑA ARTURO JULIAN", "nacimiento": "2019-04-15", "curp": "SAPA190415HCLNXRA1", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 61, "equipo": "BUFALOS", "categoria": "MOSCO", "nombre": "CONTRERAS TELLES NESTOR GERMAN", "nacimiento": "2018-03-10", "curp": "COTN180310HCLNLSA1", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 62, "equipo": "BUFALOS", "categoria": "MOSCO", "nombre": "SANTIBÁÑEZ RICHARTE SANTIAGO", "nacimiento": "2019-08-11", "curp": "SARS190811HCLNCNA9", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 63, "equipo": "BUFALOS", "categoria": "MOSCO", "nombre": "FLORES GARCÍA ALFREDO", "nacimiento": "2019-08-28", "curp": "FOGA190828HCLLRLA2", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 64, "equipo": "BUFALOS", "categoria": "MOSCO", "nombre": "ALVARADO VILLASANA MATIAS EMILIANO", "nacimiento": "2018-09-06", "curp": "AABM180906HCLLLTA2", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 65, "equipo": "BUFALOS", "categoria": "MOSCO", "nombre": "QUINTERO MALDONADO ANGEL SANTIAGO", "nacimiento": "2018-10-25", "curp": "QUMA181025HCLNLNA6", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 66, "equipo": "BUFALOS", "categoria": "MOSCO", "nombre": "RODRIGUEZ SÁNCHEZ DANIEL", "nacimiento": "2018-07-17", "curp": "ROSD180717HCLDNNA2", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 67, "equipo": "BUFALOS", "categoria": "MOSCO", "nombre": "CANTU ALBA MANUEL AMISADAI", "nacimiento": "2019-02-15", "curp": "CAAM190215HCLNLNA2", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 68, "equipo": "PANTERAS", "categoria": "ARDILLA", "nombre": "CADENA RODRÍGUEZ REYNALDO ALÍ", "nacimiento": "2014-12-30", "curp": "CARR141230HCLDDYA8", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 69, "equipo": "PANTERAS", "categoria": "ARDILLA", "nombre": "VILLANUEVA ESPITIA DERICK", "nacimiento": "2014-06-08", "curp": "VIED140608HNELSRA9", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 70, "equipo": "PANTERAS", "categoria": "ARDILLA", "nombre": "FLORES FLORES MARCELO", "nacimiento": "2014-04-28", "curp": "FOFM140428HCLLLRA4", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 71, "equipo": "PANTERAS", "categoria": "ARDILLA", "nombre": "CÁRDENAS RIVERA MARIO ALBERTO", "nacimiento": "2014-03-09", "curp": "CARM140309HCLRVRA8", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 72, "equipo": "PANTERAS", "categoria": "ARDILLA", "nombre": "PUENTE HERNÁNDEZ GABRIEL ALEJANDRO", "nacimiento": "2014-01-06", "curp": "PUHG140106HCLNRBA6", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 73, "equipo": "PANTERAS", "categoria": "HORMIGA", "nombre": "MARTÍNEZ QUIRINO JULIÁN ALEJANDRO", "nacimiento": "2016-07-17", "curp": "MAQJ160717HCLRRLA7", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 74, "equipo": "PANTERAS", "categoria": "HORMIGA", "nombre": "SOTO FIGUEROA EMIR MATEO", "nacimiento": "2016-05-18", "curp": "SOFE160518HCLTGMA8", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 75, "equipo": "PANTERAS", "categoria": "HORMIGA", "nombre": "VÁZQUEZ CRUZ ISABELLA", "nacimiento": "2015-08-22", "curp": "VACI150822MCLZRSA2", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 76, "equipo": "PANTERAS", "categoria": "HORMIGUITA", "nombre": "ROMO MORÍN DIEGO EMILIO", "nacimiento": "2017-10-28", "curp": "ROMD171028HCL", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 77, "equipo": "PANTERAS", "categoria": "HORMIGUITA", "nombre": "VÁZQUEZ CRUZ MATEO", "nacimiento": "2018-05-03", "curp": "VACM180503HCLZRTA4", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 78, "equipo": "PANTERAS", "categoria": "HORMIGUITA", "nombre": "RIVERA OROZCO ROMÁN ALEJANDRO", "nacimiento": "2017-10-14", "curp": "RIOR171014HCLVRMA3", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 79, "equipo": "PANTERAS", "categoria": "HORMIGUITA", "nombre": "MORENO ESCOBEDO RUBÉN JOSAFAT", "nacimiento": "2017-08-28", "curp": "MOER170828HCLRSBA5", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 80, "equipo": "PANTERAS", "categoria": "HORMIGUITA", "nombre": "MEDELLÍN CUELLAR REGINA", "nacimiento": "2017-05-13", "curp": "MECR170513MCLDLGA4", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 81, "equipo": "PANTERAS", "categoria": "HORMIGUITA", "nombre": "CERNA HERNÁNDEZ DAMIÁN", "nacimiento": "2017-03-23", "curp": "CEHD170323HCLRRMA0", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, 
+        {"id": 82, "equipo": "PANTERAS", "categoria": "MOSCO", "nombre": "CÁRDENAS RIVERA MARIANO NICOLÁS", "nacimiento": "2018-10-10", "curp": "CARM181010HCLRVRA8", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}
+    ];
+
+    let baseDatos = JSON.parse(localStorage.getItem('lifarcc_jugadores_v10')) || datosIniciales;
+    let fotosJugadores = JSON.parse(localStorage.getItem('lifarcc_fotos_v10')) || {};
+    let configEquipos = JSON.parse(localStorage.getItem('lifarcc_config_equipos_v10')) || {};
+    let logoLigaGlobal = localStorage.getItem('lifarcc_logo_liga_v10') || '';
+    
+    let listaEquiposDinamica = ["ACEREROS", "BUCANEROS", "BUFALOS", "PANTERAS", "ZORROS"];
+    let savedEquipos = JSON.parse(localStorage.getItem('lifarcc_lista_equipos_v10'));
+    if (savedEquipos && Array.isArray(savedEquipos) && savedEquipos.length > 0) {
+        listaEquiposDinamica = savedEquipos;
+    }
+    baseDatos.forEach(j => {
+        if (j.equipo) {
+            let eqClean = j.equipo.trim().toUpperCase();
+            if (!listaEquiposDinamica.includes(eqClean)) {
+                listaEquiposDinamica.push(eqClean);
+            }
+        }
+    });
+
+    let jugadorSeleccionadoFoto = null;
+    let equipoSeleccionadoDirecto = null;
+
+    function guardarEnStorage() {
+        try {
+            localStorage.setItem('lifarcc_jugadores_v10', JSON.stringify(baseDatos));
+            localStorage.setItem('lifarcc_fotos_v10', JSON.stringify(fotosJugadores));
+            localStorage.setItem('lifarcc_logo_liga_v10', logoLigaGlobal);
+            localStorage.setItem('lifarcc_config_equipos_v10', JSON.stringify(configEquipos));
+            localStorage.setItem('lifarcc_lista_equipos_v10', JSON.stringify(listaEquiposDinamica));
+        } catch (e) {
+            console.error("Error al guardar en localStorage:", e);
+            alert("Aviso: Espacio de almacenamiento lleno. Intenta comprimir o reducir imágenes.");
+        }
+    }
+
+    function formatearFechaExcel(val) {
+        if (!val) return "";
+        let strVal = String(val).trim();
+        if (strVal.includes('T')) strVal = strVal.split('T')[0];
+        
+        if (!isNaN(strVal) && Number(strVal) > 1000) {
+            let excelDate = new Date(Math.round((Number(strVal) - (25567 + 2)) * 86400 * 1000));
+            if (!isNaN(excelDate.getTime())) {
+                let y = excelDate.getUTCFullYear();
+                let m = String(excelDate.getUTCMonth() + 1).padStart(2, '0');
+                let d = String(excelDate.getUTCDate()).padStart(2, '0');
+                return `${y}-${m}-${d}`;
+            }
+        }
+        
+        if (strVal.length >= 10) {
+            return strVal.substring(0, 10);
+        }
+        return strVal;
+    }
+
+    function cambiarPestaña(tabId, btnElement) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        btnElement.classList.add('active');
+
+        if (tabId === 'todosTab') {
+            renderizarDirectorioGeneral();
+        }
+    }
+
+    function actualizarSelectsEquipos() {
+        let eqsSet = new Set(listaEquiposDinamica);
+        baseDatos.forEach(j => { if(j.equipo) eqsSet.add(j.equipo.trim().toUpperCase()); });
+        listaEquiposDinamica = Array.from(eqsSet);
+
+        const selectFiltro = document.getElementById("filtroEquipo");
+        const selectNuevo = document.getElementById("nuevoEquipo");
+        const selectEdit = document.getElementById("editEquipoSelect");
+
+        if (!selectFiltro || !selectNuevo || !selectEdit) return;
+
+        const valActualFiltro = selectFiltro.value;
+        const valActualNuevo = selectNuevo.value;
+        const valActualEdit = selectEdit.value;
+
+        selectFiltro.innerHTML = "";
+        selectNuevo.innerHTML = "";
+        selectEdit.innerHTML = "";
+
+        listaEquiposDinamica.forEach(eq => {
+            selectFiltro.innerHTML += `<option value="${eq}">${eq}</option>`;
+            selectNuevo.innerHTML += `<option value="${eq}">${eq}</option>`;
+            selectEdit.innerHTML += `<option value="${eq}">${eq}</option>`;
+        });
+
+        if (valActualFiltro && listaEquiposDinamica.includes(valActualFiltro)) {
+            selectFiltro.value = valActualFiltro;
+        } else if (listaEquiposDinamica.length > 0) {
+            selectFiltro.selectedIndex = 0;
+        }
+
+        if (listaEquiposDinamica.includes(valActualNuevo)) selectNuevo.value = valActualNuevo;
+        if (listaEquiposDinamica.includes(valActualEdit)) selectEdit.value = valActualEdit;
+    }
+
+    function crearNuevoEquipo() {
+        const input = document.getElementById("inputNuevoNombreEquipo");
+        const nuevoEq = input.value.trim().toUpperCase();
+        if (!nuevoEq) { alert("Ingresa el nombre del nuevo equipo."); return; }
+        if (!listaEquiposDinamica.includes(nuevoEq)) {
+            listaEquiposDinamica.push(nuevoEq);
+            guardarEnStorage();
+            actualizarSelectsEquipos();
+            renderizarVistaPreviaEquipos();
+            document.getElementById("filtroEquipo").value = nuevoEq;
+            cambiarFiltroEquipo();
+            input.value = "";
+            alert(`¡Equipo ${nuevoEq} añadido con éxito!`);
+        } else {
+            alert("Este equipo ya existe en la lista.");
+        }
+    }
+
+    function esDuplicado(nuevoJugador) {
+        return baseDatos.some(j => {
+            let curpCoincide = nuevoJugador.curp && j.curp && nuevoJugador.curp !== "" && j.curp !== "" && nuevoJugador.curp === j.curp;
+            let nombreEquipoCoincide = j.nombre === nuevoJugador.nombre && j.equipo === nuevoJugador.equipo;
+            return curpCoincide || nombreEquipoCoincide;
+        });
+    }
+
+    function comprimirYConvertirImagen(file, callback, maxWidth = 300, maxHeight = 350) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+
+                if (width > height) {
+                    if (width > maxWidth) {
+                        height *= maxWidth / width;
+                        width = maxWidth;
+                    }
+                } else {
+                    if (height > maxHeight) {
+                        width *= maxHeight / height;
+                        height = maxHeight;
+                    }
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                const base64 = canvas.toDataURL('image/jpeg', 0.8);
+                callback(base64);
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function cargarLogoLiga(event) {
+        const archivo = event.target.files[0];
+        if (archivo) {
+            comprimirYConvertirImagen(archivo, function(base64) {
+                logoLigaGlobal = base64;
+                guardarEnStorage();
+                renderizarRoster();
+                alert("¡Logotipo de la liga actualizado y guardado permanentemente!");
+            }, 300, 300);
+        }
+        event.target.value = "";
+    }
+
+    function dispararLogoEquipoDirecto(eq) {
+        equipoSeleccionadoDirecto = eq;
+        document.getElementById("inputLogoEquipoDirecto").click();
+    }
+
+    function cargarLogoEquipoDirecto(event) {
+        const archivo = event.target.files[0];
+        if (archivo && equipoSeleccionadoDirecto) {
+            comprimirYConvertirImagen(archivo, function(base64) {
+                if (!configEquipos[equipoSeleccionadoDirecto]) configEquipos[equipoSeleccionadoDirecto] = {};
+                configEquipos[equipoSeleccionadoDirecto].logo = base64;
+                guardarEnStorage();
+                renderizarVistaPreviaEquipos();
+                renderizarRoster();
+                alert("¡Logotipo actualizado para " + equipoSeleccionadoDirecto + "!");
+            }, 300, 300);
+        }
+        event.target.value = "";
+    }
+
+    function guardarDatosCampoActual() {
+        const eq = document.getElementById("filtroEquipo").value;
+        const campo = document.getElementById("inputCampo").value;
+        if (!configEquipos[eq]) configEquipos[eq] = {};
+        configEquipos[eq].campo = campo;
+        guardarEnStorage();
+        renderizarVistaPreviaEquipos();
+    }
+
+    function abrirModalEquipo(eq) {
+        document.getElementById("modalEquipoNombre").innerText = eq;
+        document.getElementById("modalEquipoId").value = eq;
+        const conf = configEquipos[eq] || {};
+        document.getElementById("modalEquipoCampo").value = conf.campo || '';
+        document.getElementById("modalEquipoLogoFile").value = "";
+        document.getElementById("modalEquipo").style.display = "flex";
+    }
+
+    function cerrarModalEquipo() {
+        document.getElementById("modalEquipo").style.display = "none";
+    }
+
+    function guardarEquipoModal() {
+        const eq = document.getElementById("modalEquipoId").value;
+        const campo = document.getElementById("modalEquipoCampo").value.trim();
+        const fileInput = document.getElementById("modalEquipoLogoFile");
+
+        if (!configEquipos[eq]) configEquipos[eq] = {};
+        configEquipos[eq].campo = campo;
+
+        if (fileInput.files && fileInput.files[0]) {
+            comprimirYConvertirImagen(fileInput.files[0], function(base64) {
+                configEquipos[eq].logo = base64;
+                guardarEnStorage();
+                cerrarModalEquipo();
+                renderizarVistaPreviaEquipos();
+                renderizarRoster();
+                alert(`¡Configuración de ${eq} actualizada con éxito!`);
+            }, 300, 300);
+        } else {
+            guardarEnStorage();
+            cerrarModalEquipo();
+            renderizarVistaPreviaEquipos();
+            renderizarRoster();
+            alert(`¡Configuración de ${eq} actualizada con éxito!`);
+        }
+    }
+
+    function eliminarEquipoConfig() {
+        const eq = document.getElementById("modalEquipoId").value;
+        if (confirm(`¿Deseas eliminar el equipo ${eq} de la lista y borrar su configuración?`)) {
+            delete configEquipos[eq];
+            listaEquiposDinamica = listaEquiposDinamica.filter(item => item !== eq);
+            if (listaEquiposDinamica.length === 0) listaEquiposDinamica = ["PANTERAS"];
+            guardarEnStorage();
+            cerrarModalEquipo();
+            actualizarSelectsEquipos();
+            renderizarVistaPreviaEquipos();
+            renderizarRoster();
+            alert(`Equipo ${eq} eliminado.`);
+        }
+    }
+
+    function renderizarVistaPreviaEquipos() {
+        const grid = document.getElementById("teamsPreviewGrid");
+        if (!grid) return;
+        grid.innerHTML = "";
+        
+        let eqsSet = new Set(listaEquiposDinamica);
+        baseDatos.forEach(j => { if(j.equipo) eqsSet.add(j.equipo.trim().toUpperCase()); });
+        listaEquiposDinamica = Array.from(eqsSet);
+
+        listaEquiposDinamica.forEach(eq => {
+            const conf = configEquipos[eq] || {};
+            const logo = conf.logo || 'https://via.placeholder.com/55?text=LOGO';
+            const campo = conf.campo || 'Sin campo asignado';
+            
+            grid.innerHTML += `<div class="team-card">
+                <img src="${logo}" alt="${eq}" onclick="dispararLogoEquipoDirecto('${eq}')" title="Clic para cambiar logo">
+                <div class="team-card-info">
+                    <h5>${eq}</h5>
+                    <p title="${campo}">📍 ${campo}</p>
+                    <button class="btn btn-sm" onclick="abrirModalEquipo('${eq}')" style="padding: 2px 6px; font-size: 11px;">Editar Sede/Logo</button>
+                </div>
+            </div>`;
+        });
+    }
+
+    function cambiarFiltroEquipo() {
+        const eq = document.getElementById("filtroEquipo").value;
+        const conf = configEquipos[eq] || {};
+        const inputCampo = document.getElementById("inputCampo");
+        if(inputCampo) inputCampo.value = conf.campo || '';
+        renderizarRoster();
+    }
+
+    function agregarJugador() {
+        const equipo = document.getElementById("nuevoEquipo").value;
+        const categoria = document.getElementById("nuevoCategoria").value;
+        const nombre = document.getElementById("nuevoNombre").value.trim().toUpperCase();
+        const nacimiento = formatearFechaExcel(document.getElementById("nuevoNacimiento").value);
+        const curp = document.getElementById("nuevoCurp").value.trim().toUpperCase();
+        const doc = document.getElementById("nuevoDoc").value.trim().toUpperCase();
+        const numJugador = document.getElementById("nuevoNum").value.trim();
+        const peso = document.getElementById("nuevoPeso").value.trim();
+
+        if (!nombre) { alert("Ingresa el nombre del jugador."); return; }
+
+        const nuevoJ = { equipo, categoria, nombre, nacimiento, curp, doc: doc || "ACTA DE NACIMIENTO, CURP", numJugador, peso };
+
+        if (esDuplicado(nuevoJ)) {
+            alert(`⚠️ Este jugador (${nombre}) o CURP ya se encuentra registrado en el sistema. Se ha evitado el duplicado.`);
+            return;
+        }
+
+        baseDatos.push(nuevoJ);
+        guardarEnStorage();
+        actualizarSelectsEquipos();
+        renderizarVistaPreviaEquipos();
+        
+        document.getElementById("nuevoNombre").value = "";
+        document.getElementById("nuevoNacimiento").value = "";
+        document.getElementById("nuevoCurp").value = "";
+        document.getElementById("nuevoNum").value = "";
+        document.getElementById("nuevoPeso").value = "";
+
+        document.getElementById("filtroEquipo").value = equipo;
+        document.getElementById("filtroCategoria").value = categoria;
+        renderizarRoster();
+        if(document.getElementById('todosTab').classList.contains('active')) {
+            renderizarDirectorioGeneral();
+        }
+        alert("¡Jugador guardado con éxito!");
+    }
+
+    function eliminarJugador(indexReal) {
+        if (confirm("¿Deseas eliminar este jugador?")) {
+            baseDatos.splice(indexReal, 1);
+            guardarEnStorage();
+            actualizarSelectsEquipos();
+            renderizarVistaPreviaEquipos();
+            renderizarRoster();
+            if(document.getElementById('todosTab').classList.contains('active')) {
+                renderizarDirectorioGeneral();
+            }
+        }
+    }
+
+    function borrarTodosRegistros() {
+        if (confirm("⚠️ ¿Estás COMPLETAMENTE SEGURO de borrar TODOS los registros de jugadores? Esta acción no se puede deshacer.")) {
+            if (confirm("Confirma nuevamente: Se eliminarán todos los jugadores de la base de datos.")) {
+                baseDatos = [];
+                guardarEnStorage();
+                actualizarSelectsEquipos();
+                renderizarVistaPreviaEquipos();
+                renderizarRoster();
+                alert("Se han borrado todos los registros de jugadores.");
+            }
+        }
+    }
+
+    function borrarTodasFotografias() {
+        if (confirm("⚠️ ¿Deseas eliminar TODAS las fotografías de los jugadores guardadas en el sistema? (Los logotipos de los equipos no se borrarán)")) {
+            fotosJugadores = {};
+            guardarEnStorage();
+            renderizarRoster();
+            if(document.getElementById('todosTab').classList.contains('active')) {
+                renderizarDirectorioGeneral();
+            }
+            alert("Se han eliminado todas las fotografías de los jugadores correctamente.");
+        }
+    }
+
+    function abrirModal(indexReal) {
+        const j = baseDatos[indexReal];
+        document.getElementById("editIndex").value = indexReal;
+        document.getElementById("editNombre").value = j.nombre;
+        document.getElementById("editEquipoSelect").value = j.equipo;
+        document.getElementById("editCategoria").value = j.categoria;
+        document.getElementById("editNacimiento").value = formatearFechaExcel(j.nacimiento) || "";
+        document.getElementById("editCurp").value = j.curp || "";
+        document.getElementById("editDoc").value = j.doc || "";
+        document.getElementById("editNum").value = j.numJugador || "";
+        document.getElementById("editPeso").value = j.peso || "";
+        document.getElementById("editFotoFile").value = "";
+
+        const fotoUrl = fotosJugadores[j.nombre.trim().toUpperCase()];
+        const previewContainer = document.getElementById("modalFotoPreview");
+        if (fotoUrl) {
+            previewContainer.innerHTML = `<img src="${fotoUrl}" style="width:100%; height:100%; object-fit:cover;">`;
+        } else {
+            previewContainer.innerHTML = `<span style="font-size:9px; color:#64748b;">Sin foto</span>`;
+        }
+
+        document.getElementById("modalEditar").style.display = "flex";
+    }
+
+    function cerrarModal() { document.getElementById("modalEditar").style.display = "none"; }
+
+    function guardarEdicionModal() {
+        const idx = document.getElementById("editIndex").value;
+        const nombreAntiguo = baseDatos[idx].nombre.trim().toUpperCase();
+        const nuevoNombre = document.getElementById("editNombre").value.trim().toUpperCase();
+
+        baseDatos[idx].nombre = nuevoNombre;
+        baseDatos[idx].equipo = document.getElementById("editEquipoSelect").value;
+        baseDatos[idx].categoria = document.getElementById("editCategoria").value;
+        baseDatos[idx].nacimiento = formatearFechaExcel(document.getElementById("editNacimiento").value);
+        baseDatos[idx].curp = document.getElementById("editCurp").value.trim().toUpperCase();
+        baseDatos[idx].doc = document.getElementById("editDoc").value.trim().toUpperCase();
+        baseDatos[idx].numJugador = document.getElementById("editNum").value.trim();
+        baseDatos[idx].peso = document.getElementById("editPeso").value.trim();
+
+        const fileInput = document.getElementById("editFotoFile");
+        if (fileInput.files && fileInput.files[0]) {
+            comprimirYConvertirImagen(fileInput.files[0], function(base64) {
+                if (nombreAntiguo !== nuevoNombre && fotosJugadores[nombreAntiguo]) {
+                    delete fotosJugadores[nombreAntiguo];
+                }
+                fotosJugadores[nuevoNombre] = base64;
+                finalizarGuardadoEdicion();
+            }, 200, 250);
+        } else {
+            if (nombreAntiguo !== nuevoNombre && fotosJugadores[nombreAntiguo]) {
+                fotosJugadores[nuevoNombre] = fotosJugadores[nombreAntiguo];
+                delete fotosJugadores[nombreAntiguo];
+            }
+            finalizarGuardadoEdicion();
+        }
+    }
+
+    function finalizarGuardadoEdicion() {
+        guardarEnStorage();
+        cerrarModal();
+        actualizarSelectsEquipos();
+        renderizarVistaPreviaEquipos();
+        renderizarRoster();
+        if(document.getElementById('todosTab').classList.contains('active')) {
+            renderizarDirectorioGeneral();
+        }
+        alert("¡Jugador actualizado con éxito!");
+    }
+
+    function cargarFotosLocales(event) {
+        const archivos = event.target.files;
+        let count = 0;
+        let total = archivos.length;
+        
+        for (let i = 0; i < total; i++) {
+            const archivo = archivos[i];
+            const nombreLimpio = archivo.name.substring(0, archivo.name.lastIndexOf('.')).trim().toUpperCase();
+            comprimirYConvertirImagen(archivo, function(base64) {
+                fotosJugadores[nombreLimpio] = base64;
+                count++;
+                if (count === total) {
+                    guardarEnStorage();
+                    document.getElementById("contadorFotos").innerText = `✅ ${count} foto(s) cargada(s) y guardadas permanentemente.`;
+                    renderizarRoster();
+                    if(document.getElementById('todosTab').classList.contains('active')) {
+                        renderizarDirectorioGeneral();
+                    }
+                    alert(`¡${count} fotografías procesadas y guardadas de forma permanente!`);
+                }
+            }, 200, 250);
+        }
+        event.target.value = "";
+    }
+
+    function dispararFotoIndividual(nombreJugador) {
+        jugadorSeleccionadoFoto = nombreJugador.trim().toUpperCase();
+        document.getElementById("inputFotoIndividual").click();
+    }
+
+    function cargarFotoIndividual(event) {
+        const archivo = event.target.files[0];
+        if (archivo && jugadorSeleccionadoFoto) {
+            comprimirYConvertirImagen(archivo, function(base64) {
+                fotosJugadores[jugadorSeleccionadoFoto] = base64;
+                guardarEnStorage();
+                renderizarRoster();
+                if(document.getElementById('todosTab').classList.contains('active')) {
+                    renderizarDirectorioGeneral();
+                }
+                alert("¡Foto actualizada y guardada permanentemente!");
+            }, 200, 250);
+        }
+        event.target.value = "";
+    }
+
+    function importarExcel(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, {type: 'array'});
+            
+            let sheetName = workbook.SheetNames.includes("BD_Jugadores") ? "BD_Jugadores" : workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            const json = XLSX.utils.sheet_to_json(worksheet);
+
+            let importados = 0;
+            let duplicadosOmitidos = 0;
+
+            json.forEach(row => {
+                const eq = String(row['CLUB'] || row['Equipo'] || row['equipo'] || '').trim().toUpperCase();
+                const nom = String(row['NOMBRE JUGADOR '] || row['NOMBRE JUGADOR'] || row['Nombre'] || row['nombre'] || '').trim().toUpperCase();
+                const cat = String(row['CATEGORIA'] || row['Categoría'] || row['categoria'] || '').trim().toUpperCase();
+                
+                if (eq && nom) {
+                    const rawDate = row['FECHA DE NACIMIENTO'] || row['Nacimiento'] || '';
+                    const nuevoJ = {
+                        equipo: eq,
+                        categoria: cat || 'ARDILLA',
+                        nombre: nom,
+                        nacimiento: formatearFechaExcel(rawDate),
+                        curp: String(row['CURP'] || row['curp'] || '').trim().toUpperCase(),
+                        doc: String(row['documentos'] || row['Documento'] || 'ACTA DE NACIMIENTO, CURP').trim().toUpperCase(),
+                        numJugador: String(row['N°'] || row['Numero'] || '').trim(),
+                        peso: String(row['PESO'] || row['Peso'] || '').trim()
+                    };
+
+                    if (!esDuplicado(nuevoJ)) {
+                        baseDatos.push(nuevoJ);
+                        importados++;
+                    } else {
+                        duplicadosOmitidos++;
+                    }
+                }
+            });
+
+            guardarEnStorage();
+            actualizarSelectsEquipos();
+            renderizarVistaPreviaEquipos();
+            renderizarRoster();
+            alert(`¡Importación completada!\n- Se importaron: ${importados} jugadores.\n- Duplicados omitidos: ${duplicadosOmitidos}.`);
+            event.target.value = "";
+        };
+        reader.readAsArrayBuffer(file);
+    }
+
+    function renderizarRoster() {
+        const equipoSelect = document.getElementById("filtroEquipo").value;
+        const categoriaSelect = document.getElementById("filtroCategoria").value;
+        const textoBusqueda = document.getElementById("buscadorGlobal").value.trim().toUpperCase();
+        const tbody = document.getElementById("tablaCuerpo");
+        if (!tbody) return;
+        tbody.innerHTML = "";
+
+        renderizarVistaPreviaEquipos();
+
+        const configEq = configEquipos[equipoSelect] || {};
+        document.getElementById("printLogoEquipo").src = configEq.logo || '';
+        document.getElementById("printLogoLiga").src = logoLigaGlobal || '';
+        document.getElementById("lblEquipo").innerText = equipoSelect || '---';
+        document.getElementById("lblCategoria").innerText = categoriaSelect;
+        document.getElementById("lblCampo").innerText = configEq.campo || '---';
+
+        const filtradosConIndice = [];
+        baseDatos.forEach((j, idx) => {
+            let coincideBusqueda = true;
+            if (textoBusqueda !== "") {
+                coincideBusqueda = j.nombre.includes(textoBusqueda) || (j.curp && j.curp.includes(textoBusqueda));
+            } else {
+                coincideBusqueda = (j.equipo === equipoSelect && j.categoria === categoriaSelect);
+            }
+
+            if (coincideBusqueda) {
+                filtradosConIndice.push({ ...j, indexReal: idx });
+            }
+        });
+
+        if (filtradosConIndice.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="9" style="padding: 20px; color: #64748b;">No se encontraron jugadores con los filtros seleccionados o la búsqueda.</td></tr>`;
+            return;
+        }
+
+        filtradosConIndice.forEach((jugador, index) => {
+            const fotoUrl = fotosJugadores[jugador.nombre.trim().toUpperCase()];
+            let htmlFoto = fotoUrl ? 
+                `<div class="player-photo-container" onclick="dispararFotoIndividual('${jugador.nombre}')" title="Clic para cambiar foto"><img src="${fotoUrl}" class="player-photo"></div>` : 
+                `<div class="player-photo-container" onclick="dispararFotoIndividual('${jugador.nombre}')" title="Clic para subir foto"><span class="no-photo">Subir Foto</span></div>`;
+
+            tbody.innerHTML += `<tr>
+                <td><strong>${index + 1}</strong></td>
+                <td>${htmlFoto}</td>
+                <td style="text-align: left; padding-left: 12px; font-weight: 500;">${jugador.nombre}</td>
+                <td>${jugador.categoria}</td>
+                <td>${formatearFechaExcel(jugador.nacimiento) || ''}</td>
+                <td><code style="font-size: 12px;">${jugador.curp || ''}</code></td>
+                <td>${jugador.doc || ''}</td>
+                <td class="no-print"><span style="font-size: 11px; background: #e2e8f0; padding: 3px 6px; border-radius: 4px; font-weight: bold;">${jugador.equipo}</span></td>
+                <td class="no-print">
+                    <button class="btn btn-sm" onclick="abrirModal(${jugador.indexReal})" title="Modificar">✏️</button>
+                    <button class="btn btn-danger btn-sm" onclick="eliminarJugador(${jugador.indexReal})" title="Eliminar">🗑️</button>
+                </td>
+            </tr>`;
+        });
+    }
+
+    function renderizarDirectorioGeneral() {
+        const textoBusqueda = document.getElementById("buscadorDirectorioGeneral").value.trim().toUpperCase();
+        const tbody = document.getElementById("tablaDirectorioGeneral");
+        if (!tbody) return;
+        tbody.innerHTML = "";
+
+        const filtradosConIndice = [];
+        baseDatos.forEach((j, idx) => {
+            if (!textoBusqueda) {
+                filtradosConIndice.push({ ...j, indexReal: idx });
+            } else {
+                if (j.nombre.includes(textoBusqueda) || (j.curp && j.curp.includes(textoBusqueda)) || j.equipo.includes(textoBusqueda) || j.categoria.includes(textoBusqueda)) {
+                    filtradosConIndice.push({ ...j, indexReal: idx });
+                }
+            }
+        });
+
+        if (filtradosConIndice.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="9" style="padding: 20px; color: #64748b;">No hay registros en el directorio general.</td></tr>`;
+            return;
+        }
+
+        filtradosConIndice.forEach((jugador, index) => {
+            const fotoUrl = fotosJugadores[jugador.nombre.trim().toUpperCase()];
+            let htmlFoto = fotoUrl ? 
+                `<div class="player-photo-container" onclick="dispararFotoIndividual('${jugador.nombre}')" title="Clic para cambiar foto" style="width:35px; height:45px;"><img src="${fotoUrl}" style="width:100%; height:100%; object-fit:cover;"></div>` : 
+                `<div class="player-photo-container" onclick="dispararFotoIndividual('${jugador.nombre}')" title="Clic para subir foto" style="width:35px; height:45px;"><span style="font-size:8px; color:#94a3b8;">Subir</span></div>`;
+
+            tbody.innerHTML += `<tr>
+                <td><strong>${index + 1}</strong></td>
+                <td>${htmlFoto}</td>
+                <td><span style="font-size: 11px; background: #e2e8f0; padding: 3px 6px; border-radius: 4px; font-weight: bold;">${jugador.equipo}</span></td>
+                <td style="text-align: left; padding-left: 12px; font-weight: 500;">${jugador.nombre}</td>
+                <td>${jugador.categoria}</td>
+                <td>${formatearFechaExcel(jugador.nacimiento) || ''}</td>
+                <td><code style="font-size: 12px;">${jugador.curp || ''}</code></td>
+                <td>${jugador.doc || ''}</td>
+                <td>
+                    <button class="btn btn-sm" onclick="abrirModal(${jugador.indexReal})" title="Modificar">✏️</button>
+                    <button class="btn btn-danger btn-sm" onclick="eliminarJugador(${jugador.indexReal})" title="Eliminar">🗑️</button>
+                </td>
+            </tr>`;
+        });
+    }
+
+    function imprimirTodosRostersMasivo() {
+        const container = document.getElementById("printMasivoContainer");
+        if (!container) {
+            alert("No se encontró el contenedor de impresión masiva.");
+            return;
+        }
+        container.innerHTML = "";
+
+        if (!baseDatos || baseDatos.length === 0) {
+            alert("No hay registros en la base de datos para imprimir.");
+            return;
+        }
+
+        const combinaciones = {};
+        baseDatos.forEach(j => {
+            const eq = (j.equipo || "").trim().toUpperCase();
+            const cat = (j.categoria || "").trim().toUpperCase();
+            if (eq && cat) {
+                const key = `${eq}___${cat}`;
+                if (!combinaciones[key]) {
+                    combinaciones[key] = { equipo: eq, categoria: cat, jugadores: [] };
+                }
+                combinaciones[key].jugadores.push(j);
+            }
+        });
+
+        const keys = Object.keys(combinaciones);
+        if (keys.length === 0) {
+            alert("No hay combinaciones válidas de equipo y categoría para imprimir.");
+            return;
+        }
+
+        keys.forEach(key => {
+            const grupo = combinaciones[key];
+            const conf = configEquipos[grupo.equipo] || {};
+            const logoEq = conf.logo || 'https://via.placeholder.com/90?text=EQUIPO';
+            const logoLiga = logoLigaGlobal || 'https://via.placeholder.com/90?text=LIGA';
+            const campo = conf.campo || '---';
+
+            let filasHtml = "";
+            grupo.jugadores.forEach((j, idx) => {
+                const fotoUrl = fotosJugadores[j.nombre.trim().toUpperCase()];
+                let fotoTd = fotoUrl ? `<img src="${fotoUrl}" style="width:40px; height:50px; object-fit:cover; border-radius:4px;">` : `<span style="font-size:9px; color:#64748b;">Sin foto</span>`;
+                
+                filasHtml += `<tr>
+                    <td><strong>${idx + 1}</strong></td>
+                    <td>${fotoTd}</td>
+                    <td style="text-align: left; padding-left: 10px; font-weight: 500;">${j.nombre}</td>
+                    <td>${j.categoria}</td>
+                    <td>${formatearFechaExcel(j.nacimiento) || ''}</td>
+                    <td><code>${j.curp || ''}</code></td>
+                    <td>${j.doc || ''}</td>
+                </tr>`;
+            });
+
+            const hojaHtml = `
+            <div class="hoja-roster-impresion">
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px; text-align: center;">
+                    <tr>
+                        <td style="width: 20%; text-align: left; border:none;"><img src="${logoLiga}" style="width:80px; height:80px; object-fit:contain;" onerror="this.src='https://via.placeholder.com/80?text=LIGA'"></td>
+                        <td style="width: 60%; text-align: center; border:none;">
+                            <div style="font-size: 16px; font-weight: bold; color: #1e3a8a; text-transform: uppercase;">LIGA DE FÚTBOL AMERICANO</div>
+                            <div style="font-size: 18px; font-weight: bold; color: #1e3a8a; text-transform: uppercase; margin-top: 2px;">LIFARCC MONCLOVA</div>
+                        </td>
+                        <td style="width: 20%; text-align: right; border:none;"><img src="${logoEq}" style="width:80px; height:80px; object-fit:contain;" onerror="this.src='https://via.placeholder.com/80?text=EQUIPO'"></td>
+                    </tr>
+                </table>
+                <div style="background-color: #fce7f3; border: 1px solid #1e3a8a; font-weight: bold; font-size: 14px; color: #1e3a8a; padding: 6px; text-align: center; margin-bottom: 12px; text-transform: uppercase;">
+                    EQUIPO: ${grupo.equipo} &nbsp;&nbsp;|&nbsp;&nbsp; CATEGORÍA: ${grupo.categoria} &nbsp;&nbsp;|&nbsp;&nbsp; CAMPO: ${campo}
+                </div>
+                <table style="width: 100%; border-collapse: collapse; background: white;">
+                    <thead>
+                        <tr style="background-color: #1e3a8a; color: white;">
+                            <th style="border: 1px solid #cbd5e1; padding: 8px; font-size: 11px;">N°</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 8px; font-size: 11px;">FOTO</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 8px; font-size: 11px;">NOMBRE DEL JUGADOR</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 8px; font-size: 11px;">CATEGORÍA</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 8px; font-size: 11px;">FECHA NAC.</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 8px; font-size: 11px;">CURP</th>
+                            <th style="border: 1px solid #cbd5e1; padding: 8px; font-size: 11px;">DOCUMENTO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${filasHtml}
+                    </tbody>
+                </table>
+            </div>`;
+
+            container.innerHTML += hojaHtml;
+        });
+
+        setTimeout(() => {
+            window.print();
+        }, 100);
+    }
+
+    window.onload = function() { 
+        actualizarSelectsEquipos();
+        renderizarVistaPreviaEquipos();
+        const eqInicial = document.getElementById("filtroEquipo").value;
+        const conf = configEquipos[eqInicial] || {};
+        const inputCampo = document.getElementById("inputCampo");
+        if(inputCampo) inputCampo.value = conf.campo || '';
+        renderizarRoster(); 
+    };
+</script>
+
+</body>
+</html>
