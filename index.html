@@ -221,30 +221,35 @@
         .team-card-info h5 { margin: 0 0 3px 0; color: white; font-size: 13px; }
         .team-card-info p { margin: 0 0 5px 0; font-size: 10px; color: var(--accent-silver); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
+        /* FORMATO DE ENCABEZADO DE IMPRESIÓN (EXACTO A TU IMAGEN) */
         .print-header {
             display: none;
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             text-align: center;
         }
-        .league-title {
+        .print-header td {
+            border: none !important;
+            padding: 2px;
+            vertical-align: middle;
+        }
+        .league-title-main {
             font-size: 16px;
             font-weight: bold;
             color: #1e3a8a;
             text-transform: uppercase;
             line-height: 1.2;
         }
-        .roster-info-bar {
-            display: none;
+        .roster-info-bar-exact {
             background-color: #fce7f3 !important;
-            border: 1px solid #1e3a8a;
+            border: 1px solid #1e3a8a !important;
             font-weight: bold;
             font-size: 13px;
             color: #1e3a8a;
             padding: 5px;
             text-align: center;
-            margin-bottom: 10px;
+            margin-top: 4px;
             text-transform: uppercase;
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
@@ -327,18 +332,20 @@
         @media print {
             body { background: white; padding: 0; color: #334155; }
             .container, .top-navbar, .controls-panel, .section-box, .nav-tabs, .footer-copyright, .no-print { display: none !important; }
+            
             .print-header { display: table !important; }
-            .roster-info-bar { display: block !important; background-color: #fce7f3 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            
             .hoja-roster-impresion {
                 page-break-after: always;
                 break-after: page;
+                margin-bottom: 0px;
             }
             .hoja-roster-impresion:last-child {
                 page-break-after: avoid;
                 break-after: avoid;
             }
-            table { page-break-inside: auto; }
-            tr { page-break-inside: avoid; }
+            table { page-break-inside: auto; width: 100%; }
+            tr { page-break-inside: avoid; page-break-after: auto; }
             th { background-color: #1e3a8a !important; color: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         }
     </style>
@@ -349,19 +356,15 @@
 <div id="loginOverlay">
     <div class="login-box">
         <h3>LIFARCC MONCLOVA</h3>
-        <p style="font-size: 12px; color: #94a3b8; margin-bottom: 20px;">Selecciona tu equipo e ingresa la contraseña para acceder al sistema.</p>
+        <p style="font-size: 12px; color: #94a3b8; margin-bottom: 20px;">Selecciona tu rol de acceso:</p>
         <div style="margin-bottom: 12px; text-align: left;">
-            <label style="font-size: 11px; font-weight: bold; color: #cbd5e1;">USUARIO (EQUIPO):</label>
-            <select id="loginUsuario" style="width: 100%; margin-top: 5px; background: #0f172a; color: white; padding: 8px; border-radius: 6px; border: 1px solid #475569;">
-                <option value="ACEREROS">ACEREROS</option>
-                <option value="BUCANEROS">BUCANEROS</option>
-                <option value="BÚFALOS">BÚFALOS</option>
-                <option value="CHEYENNES">CHEYENNES</option>
-                <option value="PANTERAS">PANTERAS</option>
-                <option value="ZORROS">ZORROS</option>
+            <label style="font-size: 11px; font-weight: bold; color: #cbd5e1;">USUARIO:</label>
+            <select id="loginUsuario" onchange="verificarRolLogin()" style="width: 100%; margin-top: 5px; background: #0f172a; color: white; padding: 8px; border-radius: 6px; border: 1px solid #475569;">
+                <option value="Administrador">Administrador</option>
+                <option value="Invitado">Invitado</option>
             </select>
         </div>
-        <div style="margin-bottom: 20px; text-align: left;">
+        <div id="divPassword" style="margin-bottom: 20px; text-align: left;">
             <label style="font-size: 11px; font-weight: bold; color: #cbd5e1;">CONTRASEÑA:</label>
             <input type="password" id="loginPassword" placeholder="Contraseña..." style="width: 100%; margin-top: 5px; box-sizing: border-box; padding: 8px; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white;">
         </div>
@@ -372,20 +375,23 @@
 <div class="container" id="appContainer" style="display: none;">
     <!-- MENÚ SUPERIOR EN RENGLÓN CON ACCIONES -->
     <div class="top-navbar no-print">
-        <div class="nav-tabs-group">
+        <div class="nav-tabs-group" id="navTabsContainer">
             <button class="tab-btn active" onclick="cambiarPestaña('rosterTab', this)">📋 Generador de Roster</button>
-            <button class="tab-btn" onclick="cambiarPestaña('todosTab', this)">📚 Directorio General y Masivo</button>
+            <button class="tab-btn" id="btnTabDirectorio" onclick="cambiarPestaña('todosTab', this)">📚 Directorio General</button>
         </div>
-        <div class="nav-actions-group">
+        <div class="nav-actions-group" id="navActionsContainer">
             <div style="display: flex; align-items: center; gap: 5px; background: #0f172a; padding: 4px 10px; border-radius: 6px; border: 1px solid #475569;">
-                <span style="font-size: 11px; color: #94a3b8;">📥 Importar Excel (Hasta 200+):</span>
-                <input type="file" id="inputExcel" accept=".xlsx, .xls, .csv" onchange="importarExcel(event)" style="font-size: 11px; width: 170px; padding: 3px;">
+                <span style="font-size: 11px; color: #94a3b8;">📥 Importar Excel:</span>
+                <input type="file" id="inputExcel" accept=".xlsx, .xls, .csv" onchange="importarExcel(event)" style="font-size: 11px; width: 150px; padding: 3px;">
             </div>
             <div style="display: flex; align-items: center; gap: 5px; background: #0f172a; padding: 4px 10px; border-radius: 6px; border: 1px solid #475569;">
                 <span style="font-size: 11px; color: #94a3b8;">📂 Fotos Masivas:</span>
-                <input type="file" id="inputFotos" multiple accept="image/*" onchange="cargarFotosLocales(event)" style="font-size: 11px; width: 150px; padding: 3px;">
+                <input type="file" id="inputFotos" multiple accept="image/*" onchange="cargarFotosLocales(event)" style="font-size: 11px; width: 140px; padding: 3px;">
             </div>
-            <button class="btn btn-danger btn-sm" onclick="cerrarSesion()" title="Cerrar Sesión">🔒 Salir</button>
+        </div>
+        <div>
+            <span id="lblRolActual" style="font-size: 11px; color: #fbbf24; font-weight: bold; margin-right: 10px;"></span>
+            <button class="btn btn-danger btn-sm" onclick="cerrarSesion()">🔒 Salir</button>
         </div>
     </div>
 
@@ -401,18 +407,60 @@
         </div>
     </div>
 
-    <!-- PESTAÑA 1: GENERADOR DE ROSTER -->
+    <!-- PESTAÑA 1: GENERADOR DE RASTERS Y ALTA INDIVIDUAL -->
     <div id="rosterTab" class="tab-content active">
-        <!-- GESTIÓN DE SEDES Y LOGOS DE EQUIPOS -->
-        <div class="section-box no-print">
-            <h4>🛡️ Configuración de Equipos, Sedes y Logotipos Oficiales (Carpeta: Logos Equipos/)</h4>
-            <div style="display: grid; grid-template-columns: 1fr auto; gap: 15px; align-items: flex-end; margin-bottom: 15px;">
+        <!-- FORMULARIO DE ALTA INDIVIDUAL (SOLO ADMINISTRADOR) -->
+        <div class="section-box no-print" id="seccionAltaIndividual" style="background: #1e293b; border: 1px solid var(--bronze-gold);">
+            <h4>➕ Registrar Jugador de 1 en 1</h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 10px;">
                 <div>
-                    <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 4px;">Dirección del Campo / Sede del Equipo Seleccionado:</label>
+                    <label style="font-size: 11px; font-weight: bold;">Equipo:</label>
+                    <select id="altaEquipo" style="width:150px;"></select>
+                </div>
+                <div>
+                    <label style="font-size: 11px; font-weight: bold;">Categoría:</label>
+                    <select id="altaCategoria" style="width:130px;">
+                        <option value="MOSCO">MOSCO</option>
+                        <option value="ARDILLA">ARDILLA</option>
+                        <option value="BOTANA">BOTANA</option>
+                        <option value="HORMIGUITA">HORMIGUITA</option>
+                        <option value="HORMIGA">HORMIGA</option>
+                    </select>
+                </div>
+                <div style="grid-column: span 2;">
+                    <label style="font-size: 11px; font-weight: bold;">Nombre Completo:</label>
+                    <input type="text" id="altaNombre" placeholder="APELLIDOS Y NOMBRES" style="width:100%;">
+                </div>
+                <div>
+                    <label style="font-size: 11px; font-weight: bold;">Fecha Nacimiento:</label>
+                    <input type="date" id="altaNacimiento" style="width:100%;">
+                </div>
+                <div>
+                    <label style="font-size: 11px; font-weight: bold;">CURP:</label>
+                    <input type="text" id="altaCurp" placeholder="CURP..." style="width:100%;">
+                </div>
+                <div>
+                    <label style="font-size: 11px; font-weight: bold;">Documento:</label>
+                    <input type="text" id="altaDoc" value="ACTA DE NACIMIENTO, CURP" style="width:100%;">
+                </div>
+                <div>
+                    <label style="font-size: 11px; font-weight: bold;">Fotografía Individual:</label>
+                    <input type="file" id="altaFoto" accept="image/*" style="font-size: 11px; width:100%;">
+                </div>
+            </div>
+            <button class="btn btn-purple btn-sm" onclick="registrarJugadorIndividual()">Guardar Jugador en Base de Datos</button>
+        </div>
+
+        <!-- CONFIGURACIÓN DE SEDES Y LOGOS -->
+        <div class="section-box no-print">
+            <h4>🛡️ Configuración de Sedes y Logotipos (Ruta: Logos Equipos/)</h4>
+            <div style="display: grid; grid-template-columns: 1fr auto; gap: 15px; align-items: flex-end; margin-bottom: 12px;">
+                <div>
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 3px;">Dirección del Campo / Sede:</label>
                     <input type="text" id="inputCampo" placeholder="Ej. Campo PAC-Snyder Monclova" oninput="guardarDatosCampoActual()" style="width: 100%;">
                 </div>
                 <div>
-                    <button class="btn btn-warning btn-sm" onclick="mostrarResumenEquiposRegistrados()" style="height: 35px;">📋 Ver Conteo General</button>
+                    <button class="btn btn-warning btn-sm" onclick="mostrarResumenEquiposRegistrados()" style="height: 33px;">📋 Ver Conteo General</button>
                 </div>
             </div>
             <div id="teamsPreviewGrid" class="teams-preview-grid"></div>
@@ -442,30 +490,29 @@
                     </div>
                 </div>
                 <div>
-                    <button class="btn btn-success" onclick="window.print()">🖨️ Imprimir Roster Seleccionado</button>
+                    <button class="btn btn-success" onclick="imprimirRosterActual()">🖨️ Imprimir Roster Seleccionado</button>
                 </div>
             </div>
         </div>
 
-        <!-- ENCABEZADO OFICIAL PARA IMPRESIÓN INDIVIDUAL -->
+        <!-- ENCABEZADO DE IMPRESIÓN OFICIAL (IDÉNTICO A TU IMAGEN Y REPETIBLE) -->
         <table class="print-header">
             <tr>
-                <td style="width: 20%; text-align: left; border:none;">
-                    <img id="printLogoLiga" src="" class="logo-box" alt="Logo Liga">
+                <td style="width: 20%; text-align: left;">
+                    <img id="printLogoLiga" src="" class="logo-box" alt="LIFARCC">
                 </td>
-                <td style="width: 60%; text-align: center; border:none;">
-                    <div class="league-title">LIGA DE FÚTBOL AMERICANO</div>
-                    <div class="league-title" style="font-size: 18px; margin-top: 2px;">LIFARCC MONCLOVA</div>
+                <td style="width: 60%; text-align: center;">
+                    <div class="league-title-main">LIGA DE FÚTBOL AMERICANO</div>
+                    <div class="league-title-main" style="font-size: 17px; margin-top: 2px;">LIFARCC MONCLOVA</div>
+                    <div class="roster-info-bar-exact">
+                        EQUIPO: <span id="printLblEquipo">---</span> &nbsp;&nbsp;|&nbsp;&nbsp; CATEGORÍA: <span id="printLblCategory">---</span>
+                    </div>
                 </td>
-                <td style="width: 20%; text-align: right; border:none;">
-                    <img id="printLogoEquipo" src="" class="logo-box" alt="Logo Equipo">
+                <td style="width: 20%; text-align: right;">
+                    <img id="printLogoEquipo" src="" class="logo-box" alt="Equipo">
                 </td>
             </tr>
         </table>
-
-        <div id="printInfoBar" class="roster-info-bar">
-            EQUIPO: <span id="lblEquipo">---</span> &nbsp;&nbsp;|&nbsp;&nbsp; CATEGORÍA: <span id="lblCategoria">MOSCO</span> &nbsp;&nbsp;|&nbsp;&nbsp; CAMPO: <span id="lblCampo">---</span>
-        </div>
 
         <!-- TABLA DE RESULTADOS -->
         <div class="table-responsive">
@@ -479,37 +526,37 @@
                         <th style="width: 110px;">Fecha Nac.</th>
                         <th style="width: 160px;">CURP</th>
                         <th style="width: 120px;">Documento</th>
-                        <th class="no-print" style="width: 75px;">Equipo</th>
-                        <th class="no-print" style="width: 85px;">Acciones</th>
+                        <th class="no-print col-admin" style="width: 75px;">Equipo</th>
+                        <th class="no-print col-admin" style="width: 85px;">Acciones</th>
                     </tr>
                 </thead>
                 <tbody id="tablaCuerpo"></tbody>
             </table>
         </div>
 
-        <!-- ZONA DE MANTENIMIENTO -->
-        <div class="section-box no-print" style="background: rgba(220, 38, 38, 0.1); border-color: #7f1d1d; margin-top: 25px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <!-- ZONA DE MANTENIMIENTO (SOLO ADMINISTRADOR) -->
+        <div class="section-box no-print col-admin" style="background: rgba(220, 38, 38, 0.1); border-color: #7f1d1d; margin-top: 25px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
             <div>
                 <strong>⚠️ Zona de Mantenimiento:</strong><br>
-                <span style="font-size: 11px; color: #fca5a5;">Vaciar registros de jugadores o depurar todas las fotografías.</span>
+                <span style="font-size: 11px; color: #fca5a5;">Vaciar base de datos o depurar fotografías.</span>
             </div>
             <div style="display: flex; gap: 8px;">
-                <button class="btn btn-danger btn-sm" onclick="borrarTodosRegistros()">🗑️ Borrar Todos los Jugadores</button>
-                <button class="btn btn-warning btn-sm" onclick="borrarTodasFotografias()">🖼️ Borrar Todas las Fotos</button>
+                <button class="btn btn-danger btn-sm" onclick="borrarTodosRegistros()">🗑️ Borrar Todos</button>
+                <button class="btn btn-warning btn-sm" onclick="borrarTodasFotografias()">🖼️ Borrar Fotos</button>
             </div>
         </div>
     </div>
 
-    <!-- PESTAÑA 2: VISTA GENERAL Y MASIVA -->
+    <!-- PESTAÑA 2: DIRECTORIO GENERAL (SOLO ADMINISTRADOR) -->
     <div id="todosTab" class="tab-content">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
             <div>
-                <h3 style="margin: 0; color: #f8fafc;">📚 Directorio General Organizado</h3>
+                <h3 style="margin: 0; color: #f8fafc;">📚 Directorio General</h3>
                 <p style="font-size: 12px; color: var(--accent-silver); margin: 2px 0 0 0;">Ordenado estrictamente por Equipo, Categoría y Alfabéticamente.</p>
             </div>
             <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                 <input type="text" id="buscadorDirectorioGeneral" placeholder="🔍 Buscar jugador..." oninput="renderizarDirectorioGeneral()" style="width: 220px;">
-                <button class="btn btn-success" onclick="imprimirTodosRostersMasivo()">🖨️ Imprimir Todos los Rosters (Masivo por Categoría)</button>
+                <button class="btn btn-success" onclick="imprimirTodosRostersMasivo()">🖨️ Imprimir Todos los Rosters (Masivo)</button>
             </div>
         </div>
 
@@ -572,10 +619,8 @@
 <input type="file" id="inputLogoEquipoDirecto" accept="image/*" style="display:none" onchange="cargarLogoEquipoDirecto(event)">
 
 <script>
-    // Equipos oficiales requeridos
     const listaEquiposOficiales = ["ACEREROS", "BUCANEROS", "BÚFALOS", "CHEYENNES", "PANTERAS", "ZORROS"];
 
-    // Mapeo automático de logotipos desde la carpeta "Logos Equipos/"
     const logosPorDefecto = {
         "ACEREROS": "Logos Equipos/acereros.jpg",
         "BUCANEROS": "Logos Equipos/bucaneros.jpg",
@@ -587,14 +632,13 @@
 
     const logoLifarccDefault = "Logos Equipos/lifarcc.jpg";
 
-    const datosIniciales = [{"id": 0, "equipo": "ACEREROS", "categoria": "ARDILLA", "nombre": "GARCÍA CAMPOS DYLAN ELIAZER", "nacimiento": "2014-03-01", "curp": "GACD140301HCLRMYA8", "doc": "CURP", "numJugador": "", "peso": ""}];
+    const datosIniciales = [{"id": 0, "equipo": "PANTERAS", "categoria": "MOSCO", "nombre": "CÁRDENAS RIVERA MARIANO NICOLÁS", "nacimiento": "2018-10-10", "curp": "CARM181010HCLRVRA8", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}];
 
-    let baseDatos = JSON.parse(localStorage.getItem('lifarcc_jugadores_v15')) || datosIniciales;
-    let fotosJugadores = JSON.parse(localStorage.getItem('lifarcc_fotos_v15')) || {};
-    let configEquipos = JSON.parse(localStorage.getItem('lifarcc_config_equipos_v15')) || {};
-    let logoLigaGlobal = localStorage.getItem('lifarcc_logo_liga_v15') || logoLifarccDefault;
+    let baseDatos = JSON.parse(localStorage.getItem('lifarcc_jugadores_v16')) || datosIniciales;
+    let fotosJugadores = JSON.parse(localStorage.getItem('lifarcc_fotos_v16')) || {};
+    let configEquipos = JSON.parse(localStorage.getItem('lifarcc_config_equipos_v16')) || {};
+    let logoLigaGlobal = localStorage.getItem('lifarcc_logo_liga_v16') || logoLifarccDefault;
 
-    // Asegurar que cada equipo tenga su logo por defecto de la carpeta si no está configurado
     listaEquiposOficiales.forEach(eq => {
         if (!configEquipos[eq]) configEquipos[eq] = {};
         if (!configEquipos[eq].logo) {
@@ -602,30 +646,55 @@
         }
     });
 
+    let rolActual = "Administrador";
     let equipoSeleccionadoDirecto = null;
     let jugadorSeleccionadoFoto = null;
 
     function guardarEnStorage() {
         try {
-            localStorage.setItem('lifarcc_jugadores_v15', JSON.stringify(baseDatos));
-            localStorage.setItem('lifarcc_fotos_v15', JSON.stringify(fotosJugadores));
-            localStorage.setItem('lifarcc_logo_liga_v15', logoLigaGlobal);
-            localStorage.setItem('lifarcc_config_equipos_v15', JSON.stringify(configEquipos));
+            localStorage.setItem('lifarcc_jugadores_v16', JSON.stringify(baseDatos));
+            localStorage.setItem('lifarcc_fotos_v16', JSON.stringify(fotosJugadores));
+            localStorage.setItem('lifarcc_logo_liga_v16', logoLigaGlobal);
+            localStorage.setItem('lifarcc_config_equipos_v16', JSON.stringify(configEquipos));
         } catch (e) {
             console.error("Error al guardar en localStorage:", e);
         }
     }
 
-    function intentarLogin() {
-        const usuario = document.getElementById("loginUsuario").value;
-        const pass = document.getElementById("loginPassword").value.trim();
-        if (pass === "lifarcc") {
-            document.getElementById("loginOverlay").style.display = "none";
-            document.getElementById("appContainer").style.display = "block";
-            document.getElementById("filtroEquipo").value = usuario;
-            inicializarSistema();
+    function verificarRolLogin() {
+        const rol = document.getElementById("loginUsuario").value;
+        const divPass = document.getElementById("divPassword");
+        if (rol === "Invitado") {
+            divPass.style.display = "none";
         } else {
-            alert("Contraseña incorrecta. La contraseña para todos los equipos es: lifarcc");
+            divPass.style.display = "block";
+        }
+    }
+
+    function intentarLogin() {
+        rolActual = document.getElementById("loginUsuario").value;
+        if (rolActual === "Administrador") {
+            const pass = document.getElementById("loginPassword").value.trim();
+            if (pass !== "linfarcc") {
+                alert("Contraseña incorrecta. La contraseña de Administrador es: linfarcc");
+                return;
+            }
+        }
+
+        document.getElementById("loginOverlay").style.display = "none";
+        document.getElementById("appContainer").style.display = "block";
+        document.getElementById("lblRolActual").innerText = `Rol: ${rolActual}`;
+
+        aplicarPermisosRol();
+        inicializarSistema();
+    }
+
+    function aplicarPermisosRol() {
+        const elementosAdmin = document.querySelectorAll('.col-admin, #seccionAltaIndividual, #navActionsContainer, #btnTabDirectorio');
+        if (rolActual === "Invitado") {
+            elementosAdmin.forEach(el => el.style.display = 'none');
+        } else {
+            elementosAdmin.forEach(el => el.style.display = '');
         }
     }
 
@@ -653,6 +722,7 @@
     }
 
     function cambiarPestaña(tabId, btnElement) {
+        if (rolActual === "Invitado" && tabId === 'todosTab') return;
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
         document.getElementById(tabId).classList.add('active');
@@ -669,21 +739,26 @@
     function actualizarSelectsEquipos() {
         const selectFiltro = document.getElementById("filtroEquipo");
         const selectEdit = document.getElementById("editEquipoSelect");
-        if (!selectFiltro || !selectEdit) return;
+        const selectAlta = document.getElementById("altaEquipo");
+        if (!selectFiltro) return;
 
         const valActualFiltro = selectFiltro.value;
-        const valActualEdit = selectEdit.value;
+        const valActualEdit = selectEdit ? selectEdit.value : "";
+        const valActualAlta = selectAlta ? selectAlta.value : "";
 
         selectFiltro.innerHTML = "";
-        selectEdit.innerHTML = "";
+        if(selectEdit) selectEdit.innerHTML = "";
+        if(selectAlta) selectAlta.innerHTML = "";
 
         listaEquiposOficiales.forEach(eq => {
             selectFiltro.innerHTML += `<option value="${eq}">${eq}</option>`;
-            selectEdit.innerHTML += `<option value="${eq}">${eq}</option>`;
+            if(selectEdit) selectEdit.innerHTML += `<option value="${eq}">${eq}</option>`;
+            if(selectAlta) selectAlta.innerHTML += `<option value="${eq}">${eq}</option>`;
         });
 
         if (valActualFiltro && listaEquiposOficiales.includes(valActualFiltro)) selectFiltro.value = valActualFiltro;
-        if (valActualEdit && listaEquiposOficiales.includes(valActualEdit)) selectEdit.value = valActualEdit;
+        if (selectEdit && valActualEdit && listaEquiposOficiales.includes(valActualEdit)) selectEdit.value = valActualEdit;
+        if (selectAlta && valActualAlta && listaEquiposOficiales.includes(valActualAlta)) selectAlta.value = valActualAlta;
     }
 
     function renderizarMiniLogosHeader() {
@@ -707,18 +782,21 @@
             const logo = conf.logo || logosPorDefecto[eq] || 'https://via.placeholder.com/50?text=LOGO';
             const campo = conf.campo || 'Sin campo asignado';
 
+            let btnHtml = (rolActual === "Administrador") ? `<button class="btn btn-sm" onclick="dispararLogoEquipoDirecto('${eq}')" style="padding: 2px 6px; font-size: 10px;">Cambiar Logo</button>` : '';
+
             grid.innerHTML += `<div class="team-card">
-                <img src="${logo}" alt="${eq}" onclick="dispararLogoEquipoDirecto('${eq}')" title="Clic para cambiar logotipo">
+                <img src="${logo}" alt="${eq}" ${rolActual==='Administrador' ? `onclick="dispararLogoEquipoDirecto('${eq}')" title="Cambiar logotipo"` : ''}>
                 <div class="team-card-info">
                     <h5>${eq}</h5>
                     <p title="${campo}">📍 ${campo}</p>
-                    <button class="btn btn-sm" onclick="dispararLogoEquipoDirecto('${eq}')" style="padding: 2px 6px; font-size: 10px;">Cambiar Logo</button>
+                    ${btnHtml}
                 </div>
             </div>`;
         });
     }
 
     function dispararLogoEquipoDirecto(eq) {
+        if (rolActual !== "Administrador") return;
         equipoSeleccionadoDirecto = eq;
         document.getElementById("inputLogoEquipoDirecto").click();
     }
@@ -740,6 +818,7 @@
     }
 
     function guardarDatosCampoActual() {
+        if (rolActual !== "Administrador") return;
         const eq = document.getElementById("filtroEquipo").value;
         const campo = document.getElementById("inputCampo").value;
         if (!configEquipos[eq]) configEquipos[eq] = {};
@@ -754,6 +833,41 @@
         const inputCampo = document.getElementById("inputCampo");
         if(inputCampo) inputCampo.value = conf.campo || '';
         renderizarRoster();
+    }
+
+    function registrarJugadorIndividual() {
+        if (rolActual !== "Administrador") return;
+        const equipo = document.getElementById("altaEquipo").value;
+        const categoria = document.getElementById("altaCategoria").value;
+        const nombre = document.getElementById("altaNombre").value.trim().toUpperCase();
+        const nacimiento = formatearFechaExcel(document.getElementById("altaNacimiento").value);
+        const curp = document.getElementById("altaCurp").value.trim().toUpperCase();
+        const doc = document.getElementById("altaDoc").value.trim().toUpperCase();
+
+        if (!nombre) { alert("Ingresa el nombre completo del jugador."); return; }
+
+        const nuevoJ = { equipo, categoria, nombre, nacimiento, curp, doc: doc || "ACTA DE NACIMIENTO, CURP", numJugador: "", peso: "" };
+        baseDatos.push(nuevoJ);
+
+        const fileInput = document.getElementById("altaFoto");
+        if (fileInput.files && fileInput.files[0]) {
+            comprimirYConvertirImagen(fileInput.files[0], function(base64) {
+                fotosJugadores[nombre] = base64;
+                finalizarAltaIndividual();
+            }, 200, 250);
+        } else {
+            finalizarAltaIndividual();
+        }
+    }
+
+    function finalizarAltaIndividual() {
+        guardarEnStorage();
+        document.getElementById("altaNombre").value = "";
+        document.getElementById("altaNacimiento").value = "";
+        document.getElementById("altaCurp").value = "";
+        document.getElementById("altaFoto").value = "";
+        renderizarRoster();
+        alert("¡Jugador registrado con éxito!");
     }
 
     function comprimirYConvertirImagen(file, callback, maxWidth = 300, maxHeight = 350) {
@@ -781,6 +895,7 @@
     }
 
     function cargarFotosLocales(event) {
+        if (rolActual !== "Administrador") return;
         const archivos = event.target.files;
         let count = 0, total = archivos.length;
         for (let i = 0; i < total; i++) {
@@ -793,7 +908,7 @@
                     guardarEnStorage();
                     renderizarRoster();
                     if(document.getElementById('todosTab').classList.contains('active')) renderizarDirectorioGeneral();
-                    alert(`¡${count} fotografía(s) cargada(s) y guardadas correctamente!`);
+                    alert(`¡${count} fotografía(s) cargada(s) correctamente!`);
                 }
             }, 200, 250);
         }
@@ -801,6 +916,7 @@
     }
 
     function dispararFotoIndividual(nombreJugador) {
+        if (rolActual !== "Administrador") return;
         jugadorSeleccionadoFoto = nombreJugador.trim().toUpperCase();
         document.getElementById("inputFotoIndividual").click();
     }
@@ -820,6 +936,7 @@
     }
 
     function importarExcel(event) {
+        if (rolActual !== "Administrador") return;
         const file = event.target.files[0];
         if (!file) return;
         const reader = new FileReader();
@@ -836,7 +953,6 @@
                 const nom = String(row['NOMBRE JUGADOR '] || row['NOMBRE JUGADOR'] || row['Nombre'] || row['nombre'] || '').trim().toUpperCase();
                 const cat = String(row['CATEGORIA'] || row['Categoría'] || row['categoria'] || '').trim().toUpperCase();
                 
-                // Normalizar variantes de nombres de equipos
                 if (eq.includes("BUF")) eq = "BÚFALOS";
                 if (eq.includes("ACER")) eq = "ACEREROS";
                 if (eq.includes("BUC")) eq = "BUCANEROS";
@@ -845,9 +961,7 @@
                 if (eq.includes("ZORR")) eq = "ZORROS";
 
                 if (eq && nom) {
-                    if (!listaEquiposOficiales.includes(eq)) {
-                        listaEquiposOficiales.push(eq);
-                    }
+                    if (!listaEquiposOficiales.includes(eq)) listaEquiposOficiales.push(eq);
                     baseDatos.push({
                         equipo: eq,
                         categoria: cat || 'ARDILLA',
@@ -863,7 +977,7 @@
             guardarEnStorage();
             actualizarSelectsEquipos();
             renderizarRoster();
-            alert(`¡Importación de 200+ jugadores completada con éxito! Se procesaron ${importados} registros.`);
+            alert(`¡Importación completada! Se procesaron ${importados} registros.`);
             event.target.value = "";
         };
         reader.readAsArrayBuffer(file);
@@ -887,9 +1001,8 @@
         document.getElementById("printLogoEquipo").src = logoEqFinal;
         document.getElementById("imgEscudoLiga").src = logoLigaFinal;
         document.getElementById("printLogoLiga").src = logoLigaFinal;
-        document.getElementById("lblEquipo").innerText = equipoSelect;
-        document.getElementById("lblCategoria").innerText = categoriaSelect;
-        document.getElementById("lblCampo").innerText = configEq.campo || '---';
+        document.getElementById("printLblEquipo").innerText = equipoSelect;
+        document.getElementById("printLblCategory").innerText = categoriaSelect;
 
         const filtrados = [];
         baseDatos.forEach((j, idx) => {
@@ -910,8 +1023,13 @@
         filtrados.forEach((jugador, index) => {
             const fotoUrl = fotosJugadores[jugador.nombre.trim().toUpperCase()];
             let htmlFoto = fotoUrl ? 
-                `<div class="player-photo-container" onclick="dispararFotoIndividual('${jugador.nombre}')" title="Cambiar foto"><img src="${fotoUrl}" class="player-photo"></div>` : 
-                `<div class="player-photo-container" onclick="dispararFotoIndividual('${jugador.nombre}')" title="Subir foto"><span class="no-photo">Subir</span></div>`;
+                `<div class="player-photo-container" ${rolActual==='Administrador' ? `onclick="dispararFotoIndividual('${jugador.nombre}')" title="Cambiar foto"` : ''}><img src="${fotoUrl}" class="player-photo"></div>` : 
+                `<div class="player-photo-container" ${rolActual==='Administrador' ? `onclick="dispararFotoIndividual('${jugador.nombre}')" title="Subir foto"` : ''}><span class="no-photo">${rolActual==='Administrador'?'Subir':'Sin foto'}</span></div>`;
+
+            let accionesHtml = (rolActual === "Administrador") ? `
+                <button class="btn btn-sm" onclick="abrirModal(${jugador.indexReal})" title="Editar">✏️</button>
+                <button class="btn btn-danger btn-sm" onclick="eliminarJugador(${jugador.indexReal})" title="Eliminar">🗑️</button>
+            ` : `<span style="font-size:11px; color:#64748b;">Solo lectura</span>`;
 
             tbody.innerHTML += `<tr>
                 <td><strong>${index + 1}</strong></td>
@@ -921,16 +1039,14 @@
                 <td>${formatearFechaExcel(jugador.nacimiento) || ''}</td>
                 <td><code style="font-size: 11px;">${jugador.curp || ''}</code></td>
                 <td>${jugador.doc || ''}</td>
-                <td class="no-print"><span style="font-size: 10px; background: #e2e8f0; padding: 2px 5px; border-radius: 4px; font-weight: bold;">${jugador.equipo}</span></td>
-                <td class="no-print">
-                    <button class="btn btn-sm" onclick="abrirModal(${jugador.indexReal})" title="Editar">✏️</button>
-                    <button class="btn btn-danger btn-sm" onclick="eliminarJugador(${jugador.indexReal})" title="Eliminar">🗑️</button>
-                </td>
+                <td class="no-print col-admin"><span style="font-size: 10px; background: #e2e8f0; padding: 2px 5px; border-radius: 4px; font-weight: bold;">${jugador.equipo}</span></td>
+                <td class="no-print col-admin">${accionesHtml}</td>
             </tr>`;
         });
     }
 
     function renderizarDirectorioGeneral() {
+        if (rolActual !== "Administrador") return;
         const textoBusqueda = document.getElementById("buscadorDirectorioGeneral").value.trim().toUpperCase();
         const tbody = document.getElementById("tablaDirectorioGeneral");
         if (!tbody) return;
@@ -976,7 +1092,89 @@
         });
     }
 
+    function imprimirRosterActual() {
+        const equipoSelect = document.getElementById("filtroEquipo").value;
+        const categoriaSelect = document.getElementById("filtroCategoria").value;
+        
+        const configEq = configEquipos[equipoSelect] || {};
+        const logoEq = configEq.logo || logosPorDefecto[equipoSelect] || 'https://via.placeholder.com/75?text=EQUIPO';
+        const logoLiga = logoLigaGlobal || logoLifarccDefault;
+
+        // Filtrar jugadores de este equipo y categoría exacta
+        const filtrados = baseDatos.filter(j => j.equipo === equipoSelect && j.categoria === categoriaSelect);
+        filtrados.sort((a, b) => a.nombre.localeCompare(b.nombre));
+
+        if (filtrados.length === 0) {
+            alert("No hay jugadores en este roster para imprimir.");
+            return;
+        }
+
+        let filasHtml = "";
+        filtrados.forEach((j, idx) => {
+            const fotoUrl = fotosJugadores[j.nombre.trim().toUpperCase()];
+            let fotoTd = fotoUrl ? `<img src="${fotoUrl}" style="width:35px; height:45px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:7px; color:#64748b;">Sin foto</span>`;
+            
+            filasHtml += `<tr>
+                <td><strong>${idx + 1}</strong></td>
+                <td>${fotoTd}</td>
+                <td style="text-align: left; padding-left: 10px; font-weight: 500;">${j.nombre}</td>
+                <td>${j.categoria}</td>
+                <td>${formatearFechaExcel(j.nacimiento) || ''}</td>
+                <td><code>${j.curp || ''}</code></td>
+                <td>${j.doc || ''}</td>
+            </tr>`;
+        });
+
+        let htmlContenido = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Roster - ${equipoSelect} (${categoriaSelect})</title><style>
+            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; color: #334155; background: white; }
+            .hoja-roster-impresion { page-break-after: always; break-after: page; margin-bottom: 20px; }
+            .hoja-roster-impresion:last-child { page-break-after: avoid; break-after: avoid; }
+            table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; }
+            th, td { border: 1px solid #cbd5e1; padding: 7px 9px; text-align: center; font-size: 12px; }
+            th { background-color: #1e3a8a !important; color: white !important; text-transform: uppercase; font-size: 11px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .logo-box { width: 75px; height: 75px; object-fit: contain; border: 1px solid #cbd5e1; background: #fff; padding: 2px; }
+            .roster-info-bar-exact { background-color: #fce7f3 !important; border: 1px solid #1e3a8a !important; font-weight: bold; font-size: 13px; color: #1e3a8a; padding: 5px; text-align: center; margin-top: 4px; text-transform: uppercase; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        </style></head><body>
+        <div class="hoja-roster-impresion">
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 8px; text-align: center;">
+                <tr>
+                    <td style="width: 20%; text-align: left; border:none;"><img src="${logoLiga}" class="logo-box"></td>
+                    <td style="width: 60%; text-align: center; border:none;">
+                        <div style="font-size: 16px; font-weight: bold; color: #1e3a8a; text-transform: uppercase;">LIGA DE FÚTBOL AMERICANO</div>
+                        <div style="font-size: 17px; font-weight: bold; color: #1e3a8a; text-transform: uppercase; margin-top: 2px;">LIFARCC MONCLOVA</div>
+                        <div class="roster-info-bar-exact">
+                            EQUIPO: ${equipoSelect} &nbsp;&nbsp;|&nbsp;&nbsp; CATEGORÍA: ${categoriaSelect}
+                        </div>
+                    </td>
+                    <td style="width: 20%; text-align: right; border:none;"><img src="${logoEq}" class="logo-box"></td>
+                </tr>
+            </table>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 40px;">N°</th>
+                        <th style="width: 75px;">FOTO</th>
+                        <th>NOMBRE DEL JUGADOR</th>
+                        <th style="width: 90px;">CATEGORÍA</th>
+                        <th style="width: 110px;">FECHA NAC.</th>
+                        <th style="width: 160px;">CURP</th>
+                        <th style="width: 120px;">DOCUMENTO</th>
+                    </tr>
+                </thead>
+                <tbody>${filasHtml}</tbody>
+            </table>
+        </div></body></html>`;
+
+        const vPrint = window.open('', '_blank');
+        if (!vPrint) { alert("Permite las ventanas emergentes."); return; }
+        vPrint.document.write(htmlContenido);
+        vPrint.document.close();
+        vPrint.focus();
+        setTimeout(() => { vPrint.print(); }, 500);
+    }
+
     function imprimirTodosRostersMasivo() {
+        if (rolActual !== "Administrador") return;
         if (!baseDatos || baseDatos.length === 0) {
             alert("No hay registros para imprimir.");
             return;
@@ -1008,7 +1206,7 @@
             th, td { border: 1px solid #cbd5e1; padding: 7px 9px; text-align: center; font-size: 12px; }
             th { background-color: #1e3a8a !important; color: white !important; text-transform: uppercase; font-size: 11px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             .logo-box { width: 75px; height: 75px; object-fit: contain; border: 1px solid #cbd5e1; background: #fff; padding: 2px; }
-            .roster-info-bar { background-color: #fce7f3 !important; border: 1px solid #1e3a8a; font-weight: bold; font-size: 13px; color: #1e3a8a; padding: 5px; text-align: center; margin-bottom: 10px; text-transform: uppercase; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .roster-info-bar-exact { background-color: #fce7f3 !important; border: 1px solid #1e3a8a !important; font-weight: bold; font-size: 13px; color: #1e3a8a; padding: 5px; text-align: center; margin-top: 4px; text-transform: uppercase; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         </style></head><body>`;
 
         keysOrdenadas.forEach(key => {
@@ -1018,7 +1216,6 @@
             const conf = configEquipos[grupo.equipo] || {};
             const logoEq = conf.logo || logosPorDefecto[grupo.equipo] || 'https://via.placeholder.com/75?text=EQUIPO';
             const logoLiga = logoLigaGlobal || logoLifarccDefault;
-            const campo = conf.campo || '---';
 
             let filasHtml = "";
             grupo.jugadores.forEach((j, idx) => {
@@ -1042,15 +1239,15 @@
                     <tr>
                         <td style="width: 20%; text-align: left; border:none;"><img src="${logoLiga}" class="logo-box"></td>
                         <td style="width: 60%; text-align: center; border:none;">
-                            <div style="font-size: 15px; font-weight: bold; color: #1e3a8a; text-transform: uppercase;">LIGA DE FÚTBOL AMERICANO</div>
+                            <div style="font-size: 16px; font-weight: bold; color: #1e3a8a; text-transform: uppercase;">LIGA DE FÚTBOL AMERICANO</div>
                             <div style="font-size: 17px; font-weight: bold; color: #1e3a8a; text-transform: uppercase; margin-top: 2px;">LIFARCC MONCLOVA</div>
+                            <div class="roster-info-bar-exact">
+                                EQUIPO: ${grupo.equipo} &nbsp;&nbsp;|&nbsp;&nbsp; CATEGORÍA: ${grupo.categoria}
+                            </div>
                         </td>
                         <td style="width: 20%; text-align: right; border:none;"><img src="${logoEq}" class="logo-box"></td>
                     </tr>
                 </table>
-                <div class="roster-info-bar">
-                    EQUIPO: ${grupo.equipo} &nbsp;&nbsp;|&nbsp;&nbsp; CATEGORÍA: ${grupo.categoria} &nbsp;&nbsp;|&nbsp;&nbsp; CAMPO: ${campo}
-                </div>
                 <table>
                     <thead>
                         <tr>
@@ -1079,6 +1276,7 @@
     }
 
     function abrirModal(indexReal) {
+        if (rolActual !== "Administrador") return;
         const j = baseDatos[indexReal];
         document.getElementById("editIndex").value = indexReal;
         document.getElementById("editNombre").value = j.nombre;
@@ -1098,6 +1296,7 @@
     function cerrarModal() { document.getElementById("modalEditar").style.display = "none"; }
 
     function guardarEdicionModal() {
+        if (rolActual !== "Administrador") return;
         const idx = document.getElementById("editIndex").value;
         const nombreAntiguo = baseDatos[idx].nombre.trim().toUpperCase();
         const nuevoNombre = document.getElementById("editNombre").value.trim().toUpperCase();
@@ -1118,7 +1317,7 @@
             }, 200, 250);
         } else {
             if (nombreAntiguo !== nuevoNombre && fotosJugadores[nombreAntiguo]) {
-                fotosJugadores[nuevoNombre] = fotosJugadores[nombreAntiguo];
+                fotosJugadores[nombreAntiguo] = fotosJugadores[nombreAntiguo];
                 delete fotosJugadores[nombreAntiguo];
             }
             finalizarEdicion();
@@ -1134,6 +1333,7 @@
     }
 
     function eliminarJugador(indexReal) {
+        if (rolActual !== "Administrador") return;
         if (confirm("¿Estás seguro de eliminar este jugador?")) {
             baseDatos.splice(indexReal, 1);
             guardarEnStorage();
@@ -1143,6 +1343,7 @@
     }
 
     function borrarTodosRegistros() {
+        if (rolActual !== "Administrador") return;
         if (confirm("⚠️ ¿Estás seguro de borrar todos los jugadores de la base de datos?")) {
             baseDatos = [];
             guardarEnStorage();
@@ -1152,6 +1353,7 @@
     }
 
     function borrarTodasFotografias() {
+        if (rolActual !== "Administrador") return;
         if (confirm("⚠️ ¿Deseas eliminar todas las fotografías guardadas?")) {
             fotosJugadores = {};
             guardarEnStorage();
