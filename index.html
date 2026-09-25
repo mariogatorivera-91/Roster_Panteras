@@ -221,7 +221,7 @@
         .team-card-info h5 { margin: 0 0 3px 0; color: white; font-size: 13px; }
         .team-card-info p { margin: 0 0 5px 0; font-size: 10px; color: var(--accent-silver); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* FORMATO DE ENCABEZADO DE IMPRESIÓN (EXACTO A TU IMAGEN) */
+        /* FORMATO DE ENCABEZADO DE IMPRESIÓN */
         .print-header {
             display: none;
             width: 100%;
@@ -332,9 +332,7 @@
         @media print {
             body { background: white; padding: 0; color: #334155; }
             .container, .top-navbar, .controls-panel, .section-box, .nav-tabs, .footer-copyright, .no-print { display: none !important; }
-            
             .print-header { display: table !important; }
-            
             .hoja-roster-impresion {
                 page-break-after: always;
                 break-after: page;
@@ -345,7 +343,7 @@
                 break-after: avoid;
             }
             table { page-break-inside: auto; width: 100%; }
-            tr { page-break-inside: avoid; page-break-after: auto; }
+            tr { page-break-inside: avoid; }
             th { background-color: #1e3a8a !important; color: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         }
     </style>
@@ -411,7 +409,7 @@
     <div id="rosterTab" class="tab-content active">
         <!-- FORMULARIO DE ALTA INDIVIDUAL (SOLO ADMINISTRADOR) -->
         <div class="section-box no-print" id="seccionAltaIndividual" style="background: #1e293b; border: 1px solid var(--bronze-gold);">
-            <h4>➕ Registrar Jugador de 1 en 1</h4>
+            <h4>➕ Registrar Jugador de 1 en 1 (Sincronizado en la Nube)</h4>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 10px;">
                 <div>
                     <label style="font-size: 11px; font-weight: bold;">Equipo:</label>
@@ -448,12 +446,12 @@
                     <input type="file" id="altaFoto" accept="image/*" style="font-size: 11px; width:100%;">
                 </div>
             </div>
-            <button class="btn btn-purple btn-sm" onclick="registrarJugadorIndividual()">Guardar Jugador en Base de Datos</button>
+            <button class="btn btn-purple btn-sm" onclick="registrarJugadorIndividual()">Guardar Jugador en la Nube</button>
         </div>
 
         <!-- CONFIGURACIÓN DE SEDES Y LOGOS -->
         <div class="section-box no-print">
-            <h4>🛡️ Configuración de Sedes y Logotipos (Ruta: Logos Equipos/)</h4>
+            <h4>🛡️ Configuración de Sedes y Logotipos</h4>
             <div style="display: grid; grid-template-columns: 1fr auto; gap: 15px; align-items: flex-end; margin-bottom: 12px;">
                 <div>
                     <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 3px;">Dirección del Campo / Sede:</label>
@@ -495,7 +493,7 @@
             </div>
         </div>
 
-        <!-- ENCABEZADO DE IMPRESIÓN OFICIAL (IDÉNTICO A TU IMAGEN Y REPETIBLE) -->
+        <!-- ENCABEZADO DE IMPRESIÓN OFICIAL -->
         <table class="print-header">
             <tr>
                 <td style="width: 20%; text-align: left;">
@@ -534,20 +532,19 @@
             </table>
         </div>
 
-        <!-- ZONA DE MANTENIMIENTO (SOLO ADMINISTRADOR) -->
+        <!-- ZONA DE MANTENIMIENTO -->
         <div class="section-box no-print col-admin" style="background: rgba(220, 38, 38, 0.1); border-color: #7f1d1d; margin-top: 25px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
             <div>
                 <strong>⚠️ Zona de Mantenimiento:</strong><br>
-                <span style="font-size: 11px; color: #fca5a5;">Vaciar base de datos o depurar fotografías.</span>
+                <span style="font-size: 11px; color: #fca5a5;">Vaciar base de datos en la nube.</span>
             </div>
             <div style="display: flex; gap: 8px;">
                 <button class="btn btn-danger btn-sm" onclick="borrarTodosRegistros()">🗑️ Borrar Todos</button>
-                <button class="btn btn-warning btn-sm" onclick="borrarTodasFotografias()">🖼️ Borrar Fotos</button>
             </div>
         </div>
     </div>
 
-    <!-- PESTAÑA 2: DIRECTORIO GENERAL (SOLO ADMINISTRADOR) -->
+    <!-- PESTAÑA 2: DIRECTORIO GENERAL -->
     <div id="todosTab" class="tab-content">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
             <div>
@@ -593,7 +590,7 @@
             <span>✏️ Editar Jugador y Fotografía</span>
             <span class="close-btn" onclick="cerrarModal()">&times;</span>
         </div>
-        <input type="hidden" id="editIndex">
+        <input type="hidden" id="editDocId">
         <div style="display: grid; grid-template-columns: 1fr; gap: 10px;">
             <div><label style="font-size: 11px; font-weight: bold;">Nombre:</label><input type="text" id="editNombre" style="width:100%;"></div>
             <div><label style="font-size: 11px; font-weight: bold;">Equipo:</label><select id="editEquipoSelect" style="width:100%;"></select></div>
@@ -610,7 +607,7 @@
             </div>
         </div>
         <div style="text-align: right; margin-top: 20px;">
-            <button class="btn btn-success" onclick="guardarEdicionModal()">Guardar Cambios</button>
+            <button class="btn btn-success" onclick="guardarEdicionModal()">Guardar en la Nube</button>
         </div>
     </div>
 </div>
@@ -618,9 +615,27 @@
 <input type="file" id="inputFotoIndividual" accept="image/*" style="display:none" onchange="cargarFotoIndividual(event)">
 <input type="file" id="inputLogoEquipoDirecto" accept="image/*" style="display:none" onchange="cargarLogoEquipoDirecto(event)">
 
-<script>
-    const listaEquiposOficiales = ["ACEREROS", "BUCANEROS", "BÚFALOS", "CHEYENNES", "PANTERAS", "ZORROS"];
+<!-- SCRIPT DE FIREBASE (FIRESTORE) Y LÓGICA -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+    // ==========================================
+    // ⚙️ PEGA AQUÍ TUS CREDENCIALES DE FIREBASE
+    // ==========================================
+    const firebaseConfig = {
+        apiKey: "TU_API_KEY",
+        authDomain: "TU_AUTH_DOMAIN",
+        projectId: "TU_PROJECT_ID",
+        storageBucket: "TU_STORAGE_BUCKET",
+        messagingSenderId: "TU_MESSAGING_SENDER_ID",
+        appId: "TU_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const listaEquiposOficiales = ["ACEREROS", "BUCANEROS", "BÚFALOS", "CHEYENNES", "PANTERAS", "ZORROS"];
     const logosPorDefecto = {
         "ACEREROS": "Logos Equipos/acereros.jpg",
         "BUCANEROS": "Logos Equipos/bucaneros.jpg",
@@ -629,54 +644,27 @@
         "PANTERAS": "Logos Equipos/panteras.jpg",
         "ZORROS": "Logos Equipos/zorros.jpg"
     };
-
     const logoLifarccDefault = "Logos Equipos/lifarcc.jpg";
 
-    const datosIniciales = [{"id": 0, "equipo": "PANTERAS", "categoria": "MOSCO", "nombre": "CÁRDENAS RIVERA MARIANO NICOLÁS", "nacimiento": "2018-10-10", "curp": "CARM181010HCLRVRA8", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}];
-
-    let baseDatos = JSON.parse(localStorage.getItem('lifarcc_jugadores_v16')) || datosIniciales;
-    let fotosJugadores = JSON.parse(localStorage.getItem('lifarcc_fotos_v16')) || {};
-    let configEquipos = JSON.parse(localStorage.getItem('lifarcc_config_equipos_v16')) || {};
-    let logoLigaGlobal = localStorage.getItem('lifarcc_logo_liga_v16') || logoLifarccDefault;
-
-    listaEquiposOficiales.forEach(eq => {
-        if (!configEquipos[eq]) configEquipos[eq] = {};
-        if (!configEquipos[eq].logo) {
-            configEquipos[eq].logo = logosPorDefecto[eq] || '';
-        }
-    });
-
+    let baseDatos = [];
+    let configEquipos = {};
+    let logoLigaGlobal = logoLifarccDefault;
     let rolActual = "Administrador";
     let equipoSeleccionadoDirecto = null;
-    let jugadorSeleccionadoFoto = null;
+    let jugadorSeleccionadoId = null;
 
-    function guardarEnStorage() {
-        try {
-            localStorage.setItem('lifarcc_jugadores_v16', JSON.stringify(baseDatos));
-            localStorage.setItem('lifarcc_fotos_v16', JSON.stringify(fotosJugadores));
-            localStorage.setItem('lifarcc_logo_liga_v16', logoLigaGlobal);
-            localStorage.setItem('lifarcc_config_equipos_v16', JSON.stringify(configEquipos));
-        } catch (e) {
-            console.error("Error al guardar en localStorage:", e);
-        }
-    }
-
-    function verificarRolLogin() {
+    window.verificarRolLogin = function() {
         const rol = document.getElementById("loginUsuario").value;
         const divPass = document.getElementById("divPassword");
-        if (rol === "Invitado") {
-            divPass.style.display = "none";
-        } else {
-            divPass.style.display = "block";
-        }
+        divPass.style.display = (rol === "Invitado") ? "none" : "block";
     }
 
-    function intentarLogin() {
+    window.intentarLogin = async function() {
         rolActual = document.getElementById("loginUsuario").value;
         if (rolActual === "Administrador") {
             const pass = document.getElementById("loginPassword").value.trim();
             if (pass !== "linfarcc") {
-                alert("Contraseña incorrecta.");
+                alert("Contraseña incorrecta. Intentalo de Nuevo");
                 return;
             }
         }
@@ -686,22 +674,45 @@
         document.getElementById("lblRolActual").innerText = `Rol: ${rolActual}`;
 
         aplicarPermisosRol();
-        inicializarSistema();
+        await cargarDatosDesdeNube();
     }
 
     function aplicarPermisosRol() {
         const elementosAdmin = document.querySelectorAll('.col-admin, #seccionAltaIndividual, #navActionsContainer, #btnTabDirectorio');
-        if (rolActual === "Invitado") {
-            elementosAdmin.forEach(el => el.style.display = 'none');
-        } else {
-            elementosAdmin.forEach(el => el.style.display = '');
-        }
+        elementosAdmin.forEach(el => {
+            el.style.display = (rolActual === "Invitado") ? 'none' : '';
+        });
     }
 
-    function cerrarSesion() {
+    window.cerrarSesion = function() {
         document.getElementById("loginPassword").value = "";
         document.getElementById("appContainer").style.display = "none";
         document.getElementById("loginOverlay").style.display = "flex";
+    }
+
+    async function cargarDatosDesdeNube() {
+        try {
+            const querySnapshot = await getDocs(collection(db, "jugadores"));
+            baseDatos = [];
+            querySnapshot.forEach((docSnap) => {
+                baseDatos.push({ id: docSnap.id, ...docSnap.data() });
+            });
+
+            const configSnapshot = await getDocs(collection(db, "configuracion"));
+            configSnapshot.forEach((docSnap) => {
+                configEquipos[docSnap.id] = docSnap.data();
+            });
+
+            listaEquiposOficiales.forEach(eq => {
+                if (!configEquipos[eq]) configEquipos[eq] = {};
+                if (!configEquipos[eq].logo) configEquipos[eq].logo = logosPorDefecto[eq] || '';
+            });
+
+            inicializarSistema();
+        } catch (e) {
+            console.error("Error al conectar con Firestore:", e);
+            alert("Error al conectar con la base de datos en la nube. Verifica tus credenciales de Firebase.");
+        }
     }
 
     function formatearFechaExcel(val) {
@@ -721,7 +732,7 @@
         return strVal;
     }
 
-    function cambiarPestaña(tabId, btnElement) {
+    window.cambiarPestaña = function(tabId, btnElement) {
         if (rolActual === "Invitado" && tabId === 'todosTab') return;
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
@@ -795,79 +806,47 @@
         });
     }
 
-    function dispararLogoEquipoDirecto(eq) {
+    window.dispararLogoEquipoDirecto = function(eq) {
         if (rolActual !== "Administrador") return;
         equipoSeleccionadoDirecto = eq;
         document.getElementById("inputLogoEquipoDirecto").click();
     }
 
-    function cargarLogoEquipoDirecto(event) {
+    window.cargarLogoEquipoDirecto = async function(event) {
         const archivo = event.target.files[0];
         if (archivo && equipoSeleccionadoDirecto) {
-            comprimirYConvertirImagen(archivo, function(base64) {
+            comprimirYConvertirImagen(archivo, async function(base64) {
                 if (!configEquipos[equipoSeleccionadoDirecto]) configEquipos[equipoSeleccionadoDirecto] = {};
                 configEquipos[equipoSeleccionadoDirecto].logo = base64;
-                guardarEnStorage();
+
+                await setDoc(doc(db, "configuracion", equipoSeleccionadoDirecto), configEquipos[equipoSeleccionadoDirecto]);
+
                 renderizarMiniLogosHeader();
                 renderizarVistaPreviaEquipos();
                 renderizarRoster();
-                alert(`¡Logotipo actualizado para ${equipoSeleccionadoDirecto}!`);
+                alert(`¡Logotipo actualizado en la nube para ${equipoSeleccionadoDirecto}!`);
             }, 300, 300);
         }
         event.target.value = "";
     }
 
-    function guardarDatosCampoActual() {
+    window.guardarDatosCampoActual = async function() {
         if (rolActual !== "Administrador") return;
         const eq = document.getElementById("filtroEquipo").value;
         const campo = document.getElementById("inputCampo").value;
         if (!configEquipos[eq]) configEquipos[eq] = {};
         configEquipos[eq].campo = campo;
-        guardarEnStorage();
+
+        await setDoc(doc(db, "configuracion", eq), configEquipos[eq]);
         renderizarVistaPreviaEquipos();
     }
 
-    function cambiarFiltroEquipo() {
+    window.cambiarFiltroEquipo = function() {
         const eq = document.getElementById("filtroEquipo").value;
         const conf = configEquipos[eq] || {};
         const inputCampo = document.getElementById("inputCampo");
         if(inputCampo) inputCampo.value = conf.campo || '';
         renderizarRoster();
-    }
-
-    function registrarJugadorIndividual() {
-        if (rolActual !== "Administrador") return;
-        const equipo = document.getElementById("altaEquipo").value;
-        const categoria = document.getElementById("altaCategoria").value;
-        const nombre = document.getElementById("altaNombre").value.trim().toUpperCase();
-        const nacimiento = formatearFechaExcel(document.getElementById("altaNacimiento").value);
-        const curp = document.getElementById("altaCurp").value.trim().toUpperCase();
-        const doc = document.getElementById("altaDoc").value.trim().toUpperCase();
-
-        if (!nombre) { alert("Ingresa el nombre completo del jugador."); return; }
-
-        const nuevoJ = { equipo, categoria, nombre, nacimiento, curp, doc: doc || "ACTA DE NACIMIENTO, CURP", numJugador: "", peso: "" };
-        baseDatos.push(nuevoJ);
-
-        const fileInput = document.getElementById("altaFoto");
-        if (fileInput.files && fileInput.files[0]) {
-            comprimirYConvertirImagen(fileInput.files[0], function(base64) {
-                fotosJugadores[nombre] = base64;
-                finalizarAltaIndividual();
-            }, 200, 250);
-        } else {
-            finalizarAltaIndividual();
-        }
-    }
-
-    function finalizarAltaIndividual() {
-        guardarEnStorage();
-        document.getElementById("altaNombre").value = "";
-        document.getElementById("altaNacimiento").value = "";
-        document.getElementById("altaCurp").value = "";
-        document.getElementById("altaFoto").value = "";
-        renderizarRoster();
-        alert("¡Jugador registrado con éxito!");
     }
 
     function comprimirYConvertirImagen(file, callback, maxWidth = 300, maxHeight = 350) {
@@ -887,60 +866,104 @@
                 canvas.height = height;
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0, width, height);
-                callback(canvas.toDataURL('image/jpeg', 0.85));
+                callback(canvas.toDataURL('image/jpeg', 0.8));
             };
             img.src = e.target.result;
         };
         reader.readAsDataURL(file);
     }
 
-    function cargarFotosLocales(event) {
+    window.registrarJugadorIndividual = async function() {
+        if (rolActual !== "Administrador") return;
+        const equipo = document.getElementById("altaEquipo").value;
+        const categoria = document.getElementById("altaCategoria").value;
+        const nombre = document.getElementById("altaNombre").value.trim().toUpperCase();
+        const nacimiento = formatearFechaExcel(document.getElementById("altaNacimiento").value);
+        const curp = document.getElementById("altaCurp").value.trim().toUpperCase();
+        const docText = document.getElementById("altaDoc").value.trim().toUpperCase();
+
+        if (!nombre) { alert("Ingresa el nombre completo del jugador."); return; }
+
+        const fileInput = document.getElementById("altaFoto");
+        if (fileInput.files && fileInput.files[0]) {
+            comprimirYConvertirImagen(fileInput.files[0], async function(base64Foto) {
+                await guardarJugadorEnFirestore(equipo, categoria, nombre, nacimiento, curp, docText, base64Foto);
+            }, 200, 250);
+        } else {
+            await guardarJugadorEnFirestore(equipo, categoria, nombre, nacimiento, curp, docText, "");
+        }
+    }
+
+    async function guardarJugadorEnFirestore(equipo, categoria, nombre, nacimiento, curp, docText, fotoBase64) {
+        const nuevoJ = { equipo, categoria, nombre, nacimiento, curp, doc: docText || "ACTA DE NACIMIENTO, CURP", foto: fotoBase64, numJugador: "", peso: "" };
+        const docRef = await addDoc(collection(db, "jugadores"), nuevoJ);
+        baseDatos.push({ id: docRef.id, ...nuevoJ });
+
+        document.getElementById("altaNombre").value = "";
+        document.getElementById("altaNacimiento").value = "";
+        document.getElementById("altaCurp").value = "";
+        document.getElementById("altaFoto").value = "";
+        
+        renderizarRoster();
+        alert("¡Jugador registrado y guardado en la nube con éxito!");
+    }
+
+    window.cargarFotosLocales = async function(event) {
         if (rolActual !== "Administrador") return;
         const archivos = event.target.files;
         let count = 0, total = archivos.length;
+        
         for (let i = 0; i < total; i++) {
             const archivo = archivos[i];
             const nombreLimpio = archivo.name.substring(0, archivo.name.lastIndexOf('.')).trim().toUpperCase();
-            comprimirYConvertirImagen(archivo, function(base64) {
-                fotosJugadores[nombreLimpio] = base64;
-                count++;
-                if (count === total) {
-                    guardarEnStorage();
+            
+            await new Promise((resolve) => {
+                comprimirYConvertirImagen(archivo, async function(base64) {
+                    const jugadorEncontrado = baseDatos.find(j => j.nombre === nombreLimpio);
+                    if (jugadorEncontrado) {
+                        jugadorEncontrado.foto = base64;
+                        await updateDoc(doc(db, "jugadores", jugadorEncontrado.id), { foto: base64 });
+                    }
+                    count++;
+                    resolve();
+                }, 200, 250);
+            });
+        }
+        renderizarRoster();
+        if(document.getElementById('todosTab').classList.contains('active')) renderizarDirectorioGeneral();
+        alert(`¡${count} fotografía(s) guardadas en la nube correctamente!`);
+        event.target.value = "";
+    }
+
+    window.dispararFotoIndividual = function(idJugador) {
+        if (rolActual !== "Administrador") return;
+        jugadorSeleccionadoId = idJugador;
+        document.getElementById("inputFotoIndividual").click();
+    }
+
+    window.cargarFotoIndividual = async function(event) {
+        const archivo = event.target.files[0];
+        if (archivo && jugadorSeleccionadoId) {
+            comprimirYConvertirImagen(archivo, async function(base64) {
+                const jugador = baseDatos.find(j => j.id === jugadorSeleccionadoId);
+                if (jugador) {
+                    jugador.foto = base64;
+                    await updateDoc(doc(db, "jugadores", jugador.id), { foto: base64 });
                     renderizarRoster();
                     if(document.getElementById('todosTab').classList.contains('active')) renderizarDirectorioGeneral();
-                    alert(`¡${count} fotografía(s) cargada(s) correctamente!`);
+                    alert("¡Fotografía actualizada en la nube!");
                 }
             }, 200, 250);
         }
         event.target.value = "";
     }
 
-    function dispararFotoIndividual(nombreJugador) {
-        if (rolActual !== "Administrador") return;
-        jugadorSeleccionadoFoto = nombreJugador.trim().toUpperCase();
-        document.getElementById("inputFotoIndividual").click();
-    }
-
-    function cargarFotoIndividual(event) {
-        const archivo = event.target.files[0];
-        if (archivo && jugadorSeleccionadoFoto) {
-            comprimirYConvertirImagen(archivo, function(base64) {
-                fotosJugadores[jugadorSeleccionadoFoto] = base64;
-                guardarEnStorage();
-                renderizarRoster();
-                if(document.getElementById('todosTab').classList.contains('active')) renderizarDirectorioGeneral();
-                alert("¡Fotografía actualizada!");
-            }, 200, 250);
-        }
-        event.target.value = "";
-    }
-
-    function importarExcel(event) {
+    window.importarExcel = async function(event) {
         if (rolActual !== "Administrador") return;
         const file = event.target.files[0];
         if (!file) return;
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = async function(e) {
             const data = new Uint8Array(e.target.result);
             const workbook = XLSX.read(data, {type: 'array'});
             let sheetName = workbook.SheetNames.includes("BD_Jugadores") ? "BD_Jugadores" : workbook.SheetNames[0];
@@ -948,7 +971,7 @@
             const json = XLSX.utils.sheet_to_json(worksheet);
 
             let importados = 0;
-            json.forEach(row => {
+            for (const row of json) {
                 let eq = String(row['CLUB'] || row['Equipo'] || row['equipo'] || '').trim().toUpperCase();
                 const nom = String(row['NOMBRE JUGADOR '] || row['NOMBRE JUGADOR'] || row['Nombre'] || row['nombre'] || '').trim().toUpperCase();
                 const cat = String(row['CATEGORIA'] || row['Categoría'] || row['categoria'] || '').trim().toUpperCase();
@@ -962,22 +985,24 @@
 
                 if (eq && nom) {
                     if (!listaEquiposOficiales.includes(eq)) listaEquiposOficiales.push(eq);
-                    baseDatos.push({
+                    const nuevoJ = {
                         equipo: eq,
                         categoria: cat || 'ARDILLA',
                         nombre: nom,
                         nacimiento: formatearFechaExcel(row['FECHA DE NACIMIENTO'] || row['Nacimiento'] || ''),
                         curp: String(row['CURP'] || row['curp'] || '').trim().toUpperCase(),
                         doc: String(row['documentos'] || row['Documento'] || 'ACTA DE NACIMIENTO, CURP').trim().toUpperCase(),
+                        foto: "",
                         numJugador: '', peso: ''
-                    });
+                    };
+                    const docRef = await addDoc(collection(db, "jugadores"), nuevoJ);
+                    baseDatos.push({ id: docRef.id, ...nuevoJ });
                     importados++;
                 }
-            });
-            guardarEnStorage();
+            }
             actualizarSelectsEquipos();
             renderizarRoster();
-            alert(`¡Importación completada! Se procesaron ${importados} registros.`);
+            alert(`¡Importación masiva completada! Se guardaron ${importados} registros en la nube.`);
             event.target.value = "";
         };
         reader.readAsArrayBuffer(file);
@@ -1005,12 +1030,12 @@
         document.getElementById("printLblCategory").innerText = categoriaSelect;
 
         const filtrados = [];
-        baseDatos.forEach((j, idx) => {
+        baseDatos.forEach((j) => {
             let coincide = (j.equipo === equipoSelect && j.categoria === categoriaSelect);
             if (textoBusqueda !== "") {
                 coincide = (j.nombre.includes(textoBusqueda) || (j.curp && j.curp.includes(textoBusqueda))) && j.equipo === equipoSelect;
             }
-            if (coincide) filtrados.push({ ...j, indexReal: idx });
+            if (coincide) filtrados.push(j);
         });
 
         filtrados.sort((a, b) => a.nombre.localeCompare(b.nombre));
@@ -1021,14 +1046,13 @@
         }
 
         filtrados.forEach((jugador, index) => {
-            const fotoUrl = fotosJugadores[jugador.nombre.trim().toUpperCase()];
-            let htmlFoto = fotoUrl ? 
-                `<div class="player-photo-container" ${rolActual==='Administrador' ? `onclick="dispararFotoIndividual('${jugador.nombre}')" title="Cambiar foto"` : ''}><img src="${fotoUrl}" class="player-photo"></div>` : 
-                `<div class="player-photo-container" ${rolActual==='Administrador' ? `onclick="dispararFotoIndividual('${jugador.nombre}')" title="Subir foto"` : ''}><span class="no-photo">${rolActual==='Administrador'?'Subir':'Sin foto'}</span></div>`;
+            let htmlFoto = jugador.foto ? 
+                `<div class="player-photo-container" ${rolActual==='Administrador' ? `onclick="dispararFotoIndividual('${jugador.id}')" title="Cambiar foto"` : ''}><img src="${jugador.foto}" class="player-photo"></div>` : 
+                `<div class="player-photo-container" ${rolActual==='Administrador' ? `onclick="dispararFotoIndividual('${jugador.id}')" title="Subir foto"` : ''}><span class="no-photo">${rolActual==='Administrador'?'Subir':'Sin foto'}</span></div>`;
 
             let accionesHtml = (rolActual === "Administrador") ? `
-                <button class="btn btn-sm" onclick="abrirModal(${jugador.indexReal})" title="Editar">✏️</button>
-                <button class="btn btn-danger btn-sm" onclick="eliminarJugador(${jugador.indexReal})" title="Eliminar">🗑️</button>
+                <button class="btn btn-sm" onclick="abrirModal('${jugador.id}')" title="Editar">✏️</button>
+                <button class="btn btn-danger btn-sm" onclick="eliminarJugador('${jugador.id}')" title="Eliminar">🗑️</button>
             ` : `<span style="font-size:11px; color:#64748b;">Solo lectura</span>`;
 
             tbody.innerHTML += `<tr>
@@ -1045,14 +1069,14 @@
         });
     }
 
-    function renderizarDirectorioGeneral() {
+    window.renderizarDirectorioGeneral = function() {
         if (rolActual !== "Administrador") return;
         const textoBusqueda = document.getElementById("buscadorDirectorioGeneral").value.trim().toUpperCase();
         const tbody = document.getElementById("tablaDirectorioGeneral");
         if (!tbody) return;
         tbody.innerHTML = "";
 
-        let listaOrdenada = [...baseDatos].map((j, idx) => ({ ...j, indexReal: idx }));
+        let listaOrdenada = [...baseDatos];
         listaOrdenada.sort((a, b) => {
             if (a.equipo !== b.equipo) return a.equipo.localeCompare(b.equipo);
             if (a.categoria !== b.categoria) return a.categoria.localeCompare(b.categoria);
@@ -1070,10 +1094,9 @@
         }
 
         filtrados.forEach((jugador, index) => {
-            const fotoUrl = fotosJugadores[jugador.nombre.trim().toUpperCase()];
-            let htmlFoto = fotoUrl ? 
-                `<div class="player-photo-container" onclick="dispararFotoIndividual('${jugador.nombre}')" style="width:30px; height:40px;"><img src="${fotoUrl}" style="width:100%; height:100%; object-fit:cover;"></div>` : 
-                `<div class="player-photo-container" onclick="dispararFotoIndividual('${jugador.nombre}')" style="width:30px; height:40px;"><span style="font-size:7px;">Subir</span></div>`;
+            let htmlFoto = jugador.foto ? 
+                `<div class="player-photo-container" onclick="dispararFotoIndividual('${jugador.id}')" style="width:30px; height:40px;"><img src="${jugador.foto}" style="width:100%; height:100%; object-fit:cover;"></div>` : 
+                `<div class="player-photo-container" onclick="dispararFotoIndividual('${jugador.id}')" style="width:30px; height:40px;"><span style="font-size:7px;">Subir</span></div>`;
 
             tbody.innerHTML += `<tr>
                 <td><strong>${index + 1}</strong></td>
@@ -1085,14 +1108,14 @@
                 <td><code style="font-size: 11px;">${jugador.curp || ''}</code></td>
                 <td>${jugador.doc || ''}</td>
                 <td>
-                    <button class="btn btn-sm" onclick="abrirModal(${jugador.indexReal})" title="Editar">✏️</button>
-                    <button class="btn btn-danger btn-sm" onclick="eliminarJugador(${jugador.indexReal})" title="Eliminar">🗑️</button>
+                    <button class="btn btn-sm" onclick="abrirModal('${jugador.id}')" title="Editar">✏️</button>
+                    <button class="btn btn-danger btn-sm" onclick="eliminarJugador('${jugador.id}')" title="Eliminar">🗑️</button>
                 </td>
             </tr>`;
         });
     }
 
-    function imprimirRosterActual() {
+    window.imprimirRosterActual = function() {
         const equipoSelect = document.getElementById("filtroEquipo").value;
         const categoriaSelect = document.getElementById("filtroCategoria").value;
         
@@ -1100,7 +1123,6 @@
         const logoEq = configEq.logo || logosPorDefecto[equipoSelect] || 'https://via.placeholder.com/75?text=EQUIPO';
         const logoLiga = logoLigaGlobal || logoLifarccDefault;
 
-        // Filtrar jugadores de este equipo y categoría exacta
         const filtrados = baseDatos.filter(j => j.equipo === equipoSelect && j.categoria === categoriaSelect);
         filtrados.sort((a, b) => a.nombre.localeCompare(b.nombre));
 
@@ -1111,8 +1133,7 @@
 
         let filasHtml = "";
         filtrados.forEach((j, idx) => {
-            const fotoUrl = fotosJugadores[j.nombre.trim().toUpperCase()];
-            let fotoTd = fotoUrl ? `<img src="${fotoUrl}" style="width:35px; height:45px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:7px; color:#64748b;">Sin foto</span>`;
+            let fotoTd = j.foto ? `<img src="${j.foto}" style="width:35px; height:45px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:7px; color:#64748b;">Sin foto</span>`;
             
             filasHtml += `<tr>
                 <td><strong>${idx + 1}</strong></td>
@@ -1173,7 +1194,7 @@
         setTimeout(() => { vPrint.print(); }, 500);
     }
 
-    function imprimirTodosRostersMasivo() {
+    window.imprimirTodosRostersMasivo = function() {
         if (rolActual !== "Administrador") return;
         if (!baseDatos || baseDatos.length === 0) {
             alert("No hay registros para imprimir.");
@@ -1219,8 +1240,7 @@
 
             let filasHtml = "";
             grupo.jugadores.forEach((j, idx) => {
-                const fotoUrl = fotosJugadores[j.nombre.trim().toUpperCase()];
-                let fotoTd = fotoUrl ? `<img src="${fotoUrl}" style="width:35px; height:45px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:7px; color:#64748b;">Sin foto</span>`;
+                let fotoTd = j.foto ? `<img src="${j.foto}" style="width:35px; height:45px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:7px; color:#64748b;">Sin foto</span>`;
                 
                 filasHtml += `<tr>
                     <td><strong>${idx + 1}</strong></td>
@@ -1275,10 +1295,12 @@
         setTimeout(() => { vPrint.print(); }, 500);
     }
 
-    function abrirModal(indexReal) {
+    window.abrirModal = function(idJugador) {
         if (rolActual !== "Administrador") return;
-        const j = baseDatos[indexReal];
-        document.getElementById("editIndex").value = indexReal;
+        const j = baseDatos.find(item => item.id === idJugador);
+        if(!j) return;
+
+        document.getElementById("editDocId").value = idJugador;
         document.getElementById("editNombre").value = j.nombre;
         document.getElementById("editEquipoSelect").value = j.equipo;
         document.getElementById("editCategoria").value = j.categoria;
@@ -1287,82 +1309,72 @@
         document.getElementById("editDoc").value = j.doc || "";
         document.getElementById("editFotoFile").value = "";
 
-        const fotoUrl = fotosJugadores[j.nombre.trim().toUpperCase()];
         const preview = document.getElementById("modalFotoPreview");
-        preview.innerHTML = fotoUrl ? `<img src="${fotoUrl}" style="width:100%; height:100%; object-fit:cover;">` : `<span style="font-size:7px;">Sin foto</span>`;
+        preview.innerHTML = j.foto ? `<img src="${j.foto}" style="width:100%; height:100%; object-fit:cover;">` : `<span style="font-size:7px;">Sin foto</span>`;
         document.getElementById("modalEditar").style.display = "flex";
     }
 
-    function cerrarModal() { document.getElementById("modalEditar").style.display = "none"; }
+    window.cerrarModal = function() { document.getElementById("modalEditar").style.display = "none"; }
 
-    function guardarEdicionModal() {
+    window.guardarEdicionModal = async function() {
         if (rolActual !== "Administrador") return;
-        const idx = document.getElementById("editIndex").value;
-        const nombreAntiguo = baseDatos[idx].nombre.trim().toUpperCase();
-        const nuevoNombre = document.getElementById("editNombre").value.trim().toUpperCase();
-
-        baseDatos[idx].nombre = nuevoNombre;
-        baseDatos[idx].equipo = document.getElementById("editEquipoSelect").value;
-        baseDatos[idx].categoria = document.getElementById("editCategoria").value;
-        baseDatos[idx].nacimiento = formatearFechaExcel(document.getElementById("editNacimiento").value);
-        baseDatos[idx].curp = document.getElementById("editCurp").value.trim().toUpperCase();
-        baseDatos[idx].doc = document.getElementById("editDoc").value.trim().toUpperCase();
+        const idJugador = document.getElementById("editDocId").value;
+        const jugador = baseDatos.find(item => item.id === idJugador);
+        if(!jugador) return;
 
         const fileInput = document.getElementById("editFotoFile");
         if (fileInput.files && fileInput.files[0]) {
-            comprimirYConvertirImagen(fileInput.files[0], function(base64) {
-                if (nombreAntiguo !== nuevoNombre && fotosJugadores[nombreAntiguo]) delete fotosJugadores[nombreAntiguo];
-                fotosJugadores[nuevoNombre] = base64;
-                finalizarEdicion();
+            comprimirYConvertirImagen(fileInput.files[0], async function(base64) {
+                await ejecutarGuardadoEdicion(idJugador, jugador, base64);
             }, 200, 250);
         } else {
-            if (nombreAntiguo !== nuevoNombre && fotosJugadores[nombreAntiguo]) {
-                fotosJugadores[nombreAntiguo] = fotosJugadores[nombreAntiguo];
-                delete fotosJugadores[nombreAntiguo];
-            }
-            finalizarEdicion();
+            await ejecutarGuardadoEdicion(idJugador, jugador, jugador.foto);
         }
     }
 
-    function finalizarEdicion() {
-        guardarEnStorage();
+    async function ejecutarGuardadoEdicion(idJugador, jugador, fotoUrl) {
+        const datosActualizados = {
+            nombre: document.getElementById("editNombre").value.trim().toUpperCase(),
+            equipo: document.getElementById("editEquipoSelect").value,
+            categoria: document.getElementById("editCategoria").value,
+            nacimiento: formatearFechaExcel(document.getElementById("editNacimiento").value),
+            curp: document.getElementById("editCurp").value.trim().toUpperCase(),
+            doc: document.getElementById("editDoc").value.trim().toUpperCase(),
+            foto: fotoUrl
+        };
+
+        await updateDoc(doc(db, "jugadores", idJugador), datosActualizados);
+        Object.assign(jugador, datosActualizados);
+
         cerrarModal();
         renderizarRoster();
         if(document.getElementById('todosTab').classList.contains('active')) renderizarDirectorioGeneral();
-        alert("¡Jugador actualizado correctamente!");
+        alert("¡Jugador actualizado en la nube!");
     }
 
-    function eliminarJugador(indexReal) {
+    window.eliminarJugador = async function(idJugador) {
         if (rolActual !== "Administrador") return;
-        if (confirm("¿Estás seguro de eliminar este jugador?")) {
-            baseDatos.splice(indexReal, 1);
-            guardarEnStorage();
+        if (confirm("¿Estás seguro de eliminar este jugador de la base de datos en la nube?")) {
+            await deleteDoc(doc(db, "jugadores", idJugador));
+            baseDatos = baseDatos.filter(j => j.id !== idJugador);
             renderizarRoster();
             if(document.getElementById('todosTab').classList.contains('active')) renderizarDirectorioGeneral();
         }
     }
 
-    function borrarTodosRegistros() {
+    window.borrarTodosRegistros = async function() {
         if (rolActual !== "Administrador") return;
-        if (confirm("⚠️ ¿Estás seguro de borrar todos los jugadores de la base de datos?")) {
+        if (confirm("⚠️ ¿Estás seguro de borrar TODOS los jugadores de la base de datos en la nube?")) {
+            for (const j of baseDatos) {
+                await deleteDoc(doc(db, "jugadores", j.id));
+            }
             baseDatos = [];
-            guardarEnStorage();
             renderizarRoster();
-            alert("Se han borrado todos los registros.");
+            alert("Se han borrado todos los registros de la nube.");
         }
     }
 
-    function borrarTodasFotografias() {
-        if (rolActual !== "Administrador") return;
-        if (confirm("⚠️ ¿Deseas eliminar todas las fotografías guardadas?")) {
-            fotosJugadores = {};
-            guardarEnStorage();
-            renderizarRoster();
-            alert("Se han eliminado todas las fotos.");
-        }
-    }
-
-    function mostrarResumenEquiposRegistrados() {
+    window.mostrarResumenEquiposRegistrados = function() {
         let conteo = {};
         listaEquiposOficiales.forEach(eq => conteo[eq] = 0);
         baseDatos.forEach(j => {
@@ -1371,7 +1383,7 @@
                 if (conteo[eq] !== undefined) conteo[eq]++;
             }
         });
-        let msg = "📋 RESUMEN DE JUGADORES POR EQUIPO:\n\n";
+        let msg = "📋 RESUMEN DE JUGADORES EN LA NUBE:\n\n";
         let total = 0;
         Object.keys(conteo).sort().forEach(eq => {
             msg += `• ${eq}: ${conteo[eq]} jugador(es)\n`;
