@@ -92,7 +92,7 @@
         }
         .nav-actions-group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 
-        /* HEADER & MINI LOGOS (ORDEN SOLICITADO) */
+        /* HEADER & MINI LOGOS */
         .header-banner {
             text-align: center;
             margin-bottom: 20px;
@@ -295,7 +295,8 @@
             .hoja-roster-impresion {
                 page-break-after: always;
                 break-after: page;
-                margin: auto;
+                margin: 0 auto;
+                width: 100%;
                 max-width: 195mm;
             }
             .hoja-roster-impresion:last-child {
@@ -304,12 +305,12 @@
             }
             table.print-table { width: 100%; border-collapse: collapse; margin-top: 8px; background: white; }
             table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 5px; text-align: center; font-size: 11px; height: 28px; }
-            table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            .logo-box-print { width: 90px; height: 90px; object-fit: contain; background: #fff; }
-            .header-layout { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
+            table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; text-transform: uppercase; font-size: 11px; }
+            .logo-box-print { width: 110px; height: 110px; object-fit: contain; background: #fff; }
+            .header-layout { width: 100%; border-collapse: collapse; margin-bottom: 12px; text-align: center; }
             .header-layout td { border: none !important; padding: 2px; vertical-align: middle; }
-            .league-title-print { font-size: 20px; font-weight: bold; color: #000; text-transform: uppercase; text-align: center; line-height: 1.1; letter-spacing: 1px; }
-            .league-subtitle-print { font-size: 10px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 3px; }
+            .league-title-print { font-size: 24px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1.1; letter-spacing: 1px; }
+            .league-subtitle-print { font-size: 11px; font-weight: bold; color: #111; text-transform: uppercase; text-align: center; margin-top: 4px; }
             .info-bar { margin-top: 8px; margin-bottom: 8px; font-size: 13px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; }
         }
     </style>
@@ -385,13 +386,13 @@
                     <input type="text" id="inputCampo" placeholder="Ej. Campo PAC-Snyder Monclova" oninput="guardarDatosCampoActual()" style="width: 100%;">
                 </div>
                 <div>
-                    <button class="btn btn-warning btn-sm" onclick="mostrarResumenEquiposRegistrados()" style="height: 33px;">📋 Ver Conteo General</button>
+                    <button class="btn btn-warning btn-sm" onclick="mostrarResumenEquiposRegistrados()" style="height: 33px;">📋 Ver Conteo General por Categoría</button>
                 </div>
             </div>
             <div id="teamsPreviewGrid" class="teams-preview-grid"></div>
         </div>
 
-        <!-- 2. SECCIÓN DE REGISTRAR JUGADOR (DISPONIBLE PARA ADMIN Y EQUIPOS) -->
+        <!-- 2. SECCIÓN DE REGISTRAR JUGADOR -->
         <div class="section-box" id="seccionAltaIndividual" style="background: #1e293b; border: 1px solid var(--bronze-gold);">
             <h4>➕ Registrar Jugador de 1 en 1 (Sincronizado en la Nube)</h4>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 10px;">
@@ -456,7 +457,8 @@
                         <input type="text" id="buscadorGlobal" placeholder="Nombre o CURP..." oninput="renderizarRoster()" style="width: 180px;">
                     </div>
                 </div>
-                <div>
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <button class="btn btn-warning" onclick="mostrarPlantillaEquipo()">📋 Ver Plantilla</button>
                     <button class="btn btn-success" onclick="imprimirRosterActual()">🖨️ Imprimir Roster Seleccionado</button>
                 </div>
             </div>
@@ -494,7 +496,7 @@
         </div>
     </div>
 
-    <!-- PESTAÑA 2: DIRECTORIO GENERAL (SOLO ADMINISTRADOR) -->
+    <!-- PESTAÑA 2: DIRECTORIO GENERAL -->
     <div id="todosTab" class="tab-content">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
             <div>
@@ -599,7 +601,7 @@
     let baseDatos = [];
     let configEquipos = {};
     let logoLigaGlobal = logoLifarccDefault;
-    let rolActual = "Administrador"; // "Administrador" o "Equipo"
+    let rolActual = "Administrador"; 
     let equipoAsignado = null;
     let equipoSeleccionadoDirecto = null;
     let jugadorSeleccionadoId = null;
@@ -628,7 +630,6 @@
             rolActual = "Administrador";
             equipoAsignado = null;
         } else {
-            // Es un equipo
             if (pass.toUpperCase() !== selectVal.toUpperCase()) {
                 alert(`Contraseña incorrecta. La contraseña para el club ${selectVal} es el nombre de su equipo.`);
                 return;
@@ -825,7 +826,7 @@
     }
 
     window.guardarDatosCampoActual = async function() {
-        const eq = document.getElementById("filtroEquipo").value;
+        const eq = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
         const campo = document.getElementById("inputCampo").value;
         if (!configEquipos[eq]) configEquipos[eq] = {};
         configEquipos[eq].campo = campo;
@@ -835,7 +836,7 @@
     }
 
     window.cambiarFiltroEquipo = function() {
-        const eq = document.getElementById("filtroEquipo").value;
+        const eq = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
         const conf = configEquipos[eq] || {};
         const inputCampo = document.getElementById("inputCampo");
         if(inputCampo) inputCampo.value = conf.campo || '';
@@ -1100,13 +1101,63 @@
         });
     }
 
-    // DISEÑO DE IMPRESIÓN CENTRADO Y MEJORADO
+    // BOTÓN VER PLANTILLA COMPLETA DEL EQUIPO
+    window.mostrarPlantillaEquipo = function() {
+        const eqTarget = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
+        const filtrados = baseDatos.filter(j => j.equipo === eqTarget);
+        filtrados.sort((a, b) => {
+            if (a.categoria !== b.categoria) return a.categoria.localeCompare(b.categoria);
+            return a.nombre.localeCompare(b.nombre);
+        });
+
+        if (filtrados.length === 0) {
+            alert(`No hay jugadores registrados para el club ${eqTarget}.`);
+            return;
+        }
+
+        let msg = `📋 PLANTILLA COMPLETA - CLUB ${eqTarget} (${filtrados.length} jugadores):\n\n`;
+        let catActual = "";
+        filtrados.forEach((j, i) => {
+            if (j.categoria !== catActual) {
+                catActual = j.categoria;
+                msg += `\n--- CATEGORÍA: ${catActual} ---\n`;
+            }
+            msg += `${i + 1}. ${j.nombre} [Nac: ${formatearFechaExcel(j.nacimiento) || 'N/D'}]\n`;
+        });
+        alert(msg);
+    }
+
+    // CONTEO GENERAL POR CATEGORÍA
+    window.mostrarResumenEquiposRegistrados = function() {
+        const eqTarget = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
+        const categorias = ["MOSCO", "ARDILLA", "BOTANA", "HORMIGUITA", "HORMIGA"];
+        let conteoCat = {};
+        categorias.forEach(c => conteoCat[c] = 0);
+        let total = 0;
+
+        baseDatos.forEach(j => {
+            if (j.equipo === eqTarget) {
+                let cat = (j.categoria || "ARDILLA").trim().toUpperCase();
+                if (conteoCat[cat] !== undefined) conteoCat[cat]++;
+                total++;
+            }
+        });
+
+        let msg = `📋 CONTEO DE JUGADORES - CLUB ${eqTarget}:\n\n`;
+        categorias.forEach(c => {
+            msg += `• Categoría ${c}: ${conteoCat[c]} jugador(es)\n`;
+        });
+        msg += `\nTotal general del equipo: ${total} jugadores.`;
+        alert(msg);
+    }
+
+    // DISEÑO DE IMPRESIÓN CENTRADO Y MEJORADO (LOGOS Y TÍTULOS GRANDES)
     window.imprimirRosterActual = function() {
         const equipoSelect = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
         const categoriaSelect = document.getElementById("filtroCategoria").value;
         
         const configEq = configEquipos[equipoSelect] || {};
-        const logoEq = configEq.logo || logosPorDefecto[equipoSelect] || 'https://via.placeholder.com/90?text=EQUIPO';
+        const logoEq = configEq.logo || logosPorDefecto[equipoSelect] || 'https://via.placeholder.com/110?text=EQUIPO';
         const logoLiga = logoLigaGlobal || logoLifarccDefault;
 
         const filtrados = baseDatos.filter(j => j.equipo === equipoSelect && j.categoria === categoriaSelect);
@@ -1147,28 +1198,28 @@
 
         let htmlContenido = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Roster - ${equipoSelect} (${categoriaSelect})</title><style>
             body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 10mm; color: #000; background: white; }
-            .hoja-roster-impresion { page-break-after: always; break-after: page; margin: auto; max-width: 195mm; }
+            .hoja-roster-impresion { page-break-after: always; break-after: page; margin: 0 auto; width: 100%; max-width: 195mm; }
             .hoja-roster-impresion:last-child { page-break-after: avoid; break-after: avoid; }
             table.print-table { width: 100%; border-collapse: collapse; margin-top: 8px; background: white; }
             table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 5px; text-align: center; font-size: 11px; height: 28px; }
             table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; text-transform: uppercase; font-size: 11px; }
-            .logo-box-print { width: 90px; height: 90px; object-fit: contain; background: #fff; }
-            .header-layout { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
+            .logo-box-print { width: 110px; height: 110px; object-fit: contain; background: #fff; }
+            .header-layout { width: 100%; border-collapse: collapse; margin-bottom: 12px; text-align: center; }
             .header-layout td { border: none !important; padding: 2px; vertical-align: middle; }
-            .league-title-print { font-size: 20px; font-weight: bold; color: #000; text-transform: uppercase; text-align: center; line-height: 1.1; letter-spacing: 1px; }
-            .league-subtitle-print { font-size: 10px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 3px; }
+            .league-title-print { font-size: 24px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1.1; letter-spacing: 1px; }
+            .league-subtitle-print { font-size: 11px; font-weight: bold; color: #111; text-transform: uppercase; text-align: center; margin-top: 4px; }
             .info-bar { margin-top: 8px; margin-bottom: 8px; font-size: 13px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; }
         </style></head><body>
         <div class="hoja-roster-impresion">
             <table class="header-layout">
                 <tr>
-                    <td style="width: 20%; text-align: left;"><img src="${logoLiga}" class="logo-box-print"></td>
-                    <td style="width: 60%; text-align: center;">
+                    <td style="width: 22%; text-align: left;"><img src="${logoLiga}" class="logo-box-print"></td>
+                    <td style="width: 56%; text-align: center;">
                         <div class="league-title-print">LIFARCC</div>
                         <div class="league-subtitle-print">LIGA INFANTIL DE FOOTBALL AMERICANO DE LA REGION CENTRO DE COAHUILA</div>
                         <div style="font-size: 11px; margin-top: 6px; font-weight: bold;">FECHA: ___________________________________</div>
                     </td>
-                    <td style="width: 20%; text-align: right;"><img src="${logoEq}" class="logo-box-print"></td>
+                    <td style="width: 22%; text-align: right;"><img src="${logoEq}" class="logo-box-print"></td>
                 </tr>
             </table>
 
@@ -1232,16 +1283,16 @@
 
         let htmlContenido = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Impresión Masiva - LIFARCC</title><style>
             body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 10mm; color: #000; background: white; }
-            .hoja-roster-impresion { page-break-after: always; break-after: page; margin: auto; max-width: 195mm; }
+            .hoja-roster-impresion { page-break-after: always; break-after: page; margin: 0 auto; width: 100%; max-width: 195mm; }
             .hoja-roster-impresion:last-child { page-break-after: avoid; break-after: avoid; }
             table.print-table { width: 100%; border-collapse: collapse; margin-top: 8px; background: white; }
             table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 5px; text-align: center; font-size: 11px; height: 28px; }
             table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; text-transform: uppercase; font-size: 11px; }
-            .logo-box-print { width: 90px; height: 90px; object-fit: contain; background: #fff; }
-            .header-layout { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
+            .logo-box-print { width: 110px; height: 110px; object-fit: contain; background: #fff; }
+            .header-layout { width: 100%; border-collapse: collapse; margin-bottom: 12px; text-align: center; }
             .header-layout td { border: none !important; padding: 2px; vertical-align: middle; }
-            .league-title-print { font-size: 20px; font-weight: bold; color: #000; text-transform: uppercase; text-align: center; line-height: 1.1; letter-spacing: 1px; }
-            .league-subtitle-print { font-size: 10px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 3px; }
+            .league-title-print { font-size: 24px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1.1; letter-spacing: 1px; }
+            .league-subtitle-print { font-size: 11px; font-weight: bold; color: #111; text-transform: uppercase; text-align: center; margin-top: 4px; }
             .info-bar { margin-top: 8px; margin-bottom: 8px; font-size: 13px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; }
         </style></head><body>`;
 
@@ -1250,7 +1301,7 @@
             grupo.jugadores.sort((a, b) => a.nombre.localeCompare(b.nombre));
 
             const conf = configEquipos[grupo.equipo] || {};
-            const logoEq = conf.logo || logosPorDefecto[grupo.equipo] || 'https://via.placeholder.com/90?text=EQUIPO';
+            const logoEq = conf.logo || logosPorDefecto[grupo.equipo] || 'https://via.placeholder.com/110?text=EQUIPO';
             const logoLiga = logoLigaGlobal || logoLifarccDefault;
 
             let filasHtml = "";
@@ -1285,13 +1336,13 @@
             <div class="hoja-roster-impresion">
                 <table class="header-layout">
                     <tr>
-                        <td style="width: 20%; text-align: left;"><img src="${logoLiga}" class="logo-box-print"></td>
-                        <td style="width: 60%; text-align: center;">
+                        <td style="width: 22%; text-align: left;"><img src="${logoLiga}" class="logo-box-print"></td>
+                        <td style="width: 56%; text-align: center;">
                             <div class="league-title-print">LIFARCC</div>
                             <div class="league-subtitle-print">LIGA INFANTIL DE FOOTBALL AMERICANO DE LA REGION CENTRO DE COAHUILA</div>
                             <div style="font-size: 11px; margin-top: 6px; font-weight: bold;">FECHA: ___________________________________</div>
                         </td>
-                        <td style="width: 20%; text-align: right;"><img src="${logoEq}" class="logo-box-print"></td>
+                        <td style="width: 22%; text-align: right;"><img src="${logoEq}" class="logo-box-print"></td>
                     </tr>
                 </table>
 
@@ -1413,27 +1464,6 @@
             renderizarRoster();
             alert("Se han borrado todos los registros de la nube.");
         }
-    }
-
-    window.mostrarResumenEquiposRegistrados = function() {
-        let conteo = {};
-        listaEquiposOficiales.forEach(eq => conteo[eq] = 0);
-        baseDatos.forEach(j => {
-            if (j.equipo) {
-                let eq = j.equipo.trim().toUpperCase();
-                if (conteo[eq] !== undefined) conteo[eq]++;
-            }
-        });
-        let msg = "📋 RESUMEN DE JUGADORES EN LA NUBE:\n\n";
-        let total = 0;
-        Object.keys(conteo).sort().forEach(eq => {
-            if (rolActual === "Administrador" || eq === equipoAsignado) {
-                msg += `• ${eq}: ${conteo[eq]} jugador(es)\n`;
-                total += conteo[eq];
-            }
-        });
-        msg += `\nTotal general: ${total} jugadores.`;
-        alert(msg);
     }
 
     function inicializarSistema() {
