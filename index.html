@@ -155,14 +155,14 @@
         .filter-group { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
         .filter-group label { font-weight: bold; color: #cbd5e1; font-size: 13px; }
         
-        select, input[type="text"], input[type="date"], input[type="number"], input[type="file"] {
+        select, input[type="text"], input[type="date"], input[type="number"], input[type="file"], input[type="password"] {
             padding: 7px 10px;
             font-size: 13px;
             border-radius: 6px;
             border: 1px solid var(--metal-border);
             background: #0f172a;
             color: white;
-            color-scheme: dark; /* Icono y texto de calendario en blanco */
+            color-scheme: dark;
         }
         select:disabled { opacity: 0.7; cursor: not-allowed; }
 
@@ -270,6 +270,8 @@
             border-radius: 10px;
             width: 90%;
             max-width: 480px;
+            max-height: 90vh;
+            overflow-y: auto;
         }
         .modal-header {
             font-size: 16px;
@@ -294,29 +296,31 @@
         @media print {
             body { background: white; padding: 10mm; color: #000; }
             .container, .top-navbar, .controls-panel, .section-box, .nav-tabs, .footer-copyright, .no-print { display: none !important; }
+            
             .hoja-roster-impresion {
-                page-break-after: always;
-                break-after: page;
                 margin: 0 auto;
                 width: 100%;
                 max-width: 195mm;
             }
-            .hoja-roster-impresion:last-child {
-                page-break-after: avoid;
-                break-after: avoid;
+            
+            table.print-table { 
+                width: 100%; 
+                border-collapse: collapse; 
+                margin-top: 8px; 
+                background: white; 
             }
-            table.print-table { width: 100%; border-collapse: collapse; margin-top: 8px; background: white; page-break-inside: auto; }
-            table.print-table tr { page-break-inside: avoid; page-break-after: auto; }
-            table.print-table thead { display: table-header-group; } /* Repite el encabezado de la tabla en cada hoja */
+            
+            /* REPETIR ENCABEZADO Y TÍTULOS EN CADA PÁGINA IMPRESA */
+            thead { display: table-header-group !important; }
+            tr { page-break-inside: avoid !important; page-break-after: auto !important; }
+            
             table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 5px; text-align: center; font-size: 11px; height: 28px; }
             table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; text-transform: uppercase; font-size: 11px; }
-            .logo-box-print { width: 120px; height: 120px; object-fit: contain; background: #fff; }
-            .header-layout { width: 100%; border-collapse: collapse; margin-bottom: 8px; text-align: center; display: table; }
-            .header-layout thead { display: table-header-group; }
-            .header-layout td { border: none !important; padding: 2px; vertical-align: middle; }
-            .league-title-print { font-size: 32px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
-            .league-subtitle-print { font-size: 11px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 6px; }
-            .info-bar { margin-top: 6px; margin-bottom: 6px; font-size: 13px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; }
+            
+            .logo-box-print { width: 110px; height: 110px; object-fit: contain; background: #fff; }
+            .league-title-print { font-size: 30px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
+            .league-subtitle-print { font-size: 10px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 4px; }
+            .info-bar { margin-top: 4px; margin-bottom: 4px; font-size: 12px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; }
         }
     </style>
 </head>
@@ -364,8 +368,10 @@
                 <input type="file" id="inputFotos" multiple accept="image/*" onchange="cargarFotosLocales(event)" style="font-size: 11px; width: 140px; padding: 3px;">
             </div>
         </div>
-        <div>
-            <span id="lblRolActual" style="font-size: 11px; color: #fbbf24; font-weight: bold; margin-right: 10px;"></span>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <span id="lblRolActual" style="font-size: 11px; color: #fbbf24; font-weight: bold;"></span>
+            <button class="btn btn-warning btn-sm" onclick="abrirModalCambiarPass()">🔑 Contraseña</button>
+            <button class="btn btn-purple btn-sm col-admin" onclick="abrirModalAdminUsuarios()" id="btnAdminUsers" style="display:none;">⚙️ Usuarios</button>
             <button class="btn btn-danger btn-sm" onclick="cerrarSesion()">🔒 Salir</button>
         </div>
     </div>
@@ -592,6 +598,57 @@
     </div>
 </div>
 
+<!-- MODAL CAMBIAR CONTRASEÑA -->
+<div id="modalCambiarPass" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>🔑 Cambiar Contraseña</span>
+            <span class="close-btn" onclick="cerrarModalCambiarPass()">&times;</span>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr; gap: 10px;">
+            <div>
+                <label style="font-size: 11px; font-weight: bold;">Contraseña Actual:</label>
+                <input type="password" id="passActual" placeholder="Actual..." style="width:100%;">
+            </div>
+            <div>
+                <label style="font-size: 11px; font-weight: bold;">Nueva Contraseña:</label>
+                <input type="password" id="passNueva1" placeholder="Nueva..." style="width:100%;">
+            </div>
+            <div>
+                <label style="font-size: 11px; font-weight: bold;">Confirmar Nueva Contraseña:</label>
+                <input type="password" id="passNueva2" placeholder="Repetir nueva..." style="width:100%;">
+            </div>
+        </div>
+        <div style="text-align: right; margin-top: 20px;">
+            <button class="btn btn-success" onclick="ejecutarCambioPassword()">Actualizar Contraseña</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL ADMIN DE USUARIOS Y CONTRASEÑAS -->
+<div id="modalAdminUsers" class="modal">
+    <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-header">
+            <span>⚙️ Panel de Control de Usuarios y Contraseñas</span>
+            <span class="close-btn" onclick="cerrarModalAdminUsuarios()">&times;</span>
+        </div>
+        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 15px;">Visualiza y gestiona las credenciales de acceso de todos los clubes y el administrador.</p>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Usuario / Club</th>
+                        <th>Contraseña Actual</th>
+                        <th>Nueva Contraseña</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaAdminUsersCuerpo"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 <input type="file" id="inputFotoIndividual" accept="image/*" style="display:none" onchange="cargarFotoIndividual(event)">
 <input type="file" id="inputLogoEquipoDirecto" accept="image/*" style="display:none" onchange="cargarLogoEquipoDirecto(event)">
 
@@ -629,11 +686,53 @@
     let baseDatos = [];
     let configEquipos = {};
     let fechasRegistro = { inicio: "", fin: "" };
+    let credencialesPasswords = {
+        "Administrador": "linfarcc",
+        "ACEREROS": "ACEREROS",
+        "BUCANEROS": "BUCANEROS",
+        "BÚFALOS": "BÚFALOS",
+        "CHEYENNES": "CHEYENNES",
+        "PANTERAS": "PANTERAS",
+        "ZORROS": "ZORROS"
+    };
     let logoLigaGlobal = logoLifarccDefault;
     let rolActual = "Administrador"; 
     let equipoAsignado = null;
     let equipoSeleccionadoDirecto = null;
     let jugadorSeleccionadoId = null;
+
+    let inactivityTimer;
+
+    function resetInactivityTimer() {
+        clearTimeout(inactivityTimer);
+        if (document.getElementById("appContainer").style.display !== "none") {
+            inactivityTimer = setTimeout(() => {
+                alert("⚠️ Sesión cerrada automáticamente por 5 minutos de inactividad.");
+                cerrarSesion();
+            }, 5 * 60 * 1000);
+        }
+    }
+
+    window.addEventListener('mousemove', resetInactivityTimer);
+    window.addEventListener('keydown', resetInactivityTimer);
+    window.addEventListener('click', resetInactivityTimer);
+
+    window.addEventListener('DOMContentLoaded', async () => {
+        const savedRol = sessionStorage.getItem('lifarcc_rol');
+        const savedEquipo = sessionStorage.getItem('lifarcc_equipo');
+        if (savedRol) {
+            rolActual = savedRol;
+            equipoAsignado = savedEquipo ? savedEquipo : null;
+            document.getElementById("loginOverlay").style.display = "none";
+            document.getElementById("appContainer").style.display = "block";
+            document.getElementById("lblRolActual").innerText = rolActual === "Administrador" ? "Rol: Administrador" : `Club: ${equipoAsignado}`;
+            if (rolActual === "Administrador") {
+                document.getElementById("btnAdminUsers").style.display = "inline-flex";
+            }
+            aplicarPermisosRol();
+            await cargarDatosDesdeNube();
+        }
+    });
 
     window.verificarRolLogin = function() {
         const rol = document.getElementById("loginUsuario").value;
@@ -643,7 +742,7 @@
         if (rol === "Administrador") {
             lblPass.innerText = "CONTRASEÑA DE ADMINISTRADOR:";
         } else {
-            lblPass.innerText = `CONTRASEÑA (NOMBRE DE ${rol}):`;
+            lblPass.innerText = `CONTRASEÑA (CLUB ${rol}):`;
         }
     }
 
@@ -651,28 +750,52 @@
         const selectVal = document.getElementById("loginUsuario").value;
         const pass = document.getElementById("loginPassword").value.trim();
 
+        await cargarCredencialesNube();
+
+        const passCorrecta = credencialesPasswords[selectVal] || selectVal;
+
         if (selectVal === "Administrador") {
-            if (pass !== "linfarcc") {
+            if (pass !== passCorrecta) {
                 alert("Contraseña de administrador incorrecta.");
                 return;
             }
             rolActual = "Administrador";
             equipoAsignado = null;
         } else {
-            if (pass.toUpperCase() !== selectVal.toUpperCase()) {
-                alert(`Contraseña incorrecta. La contraseña para el club ${selectVal} es el nombre de su equipo.`);
+            if (pass !== passCorrecta) {
+                alert(`Contraseña incorrecta para el club ${selectVal}.`);
                 return;
             }
             rolActual = "Equipo";
             equipoAsignado = selectVal;
         }
 
+        sessionStorage.setItem('lifarcc_rol', rolActual);
+        sessionStorage.setItem('lifarcc_equipo', equipoAsignado || '');
+
         document.getElementById("loginOverlay").style.display = "none";
         document.getElementById("appContainer").style.display = "block";
         document.getElementById("lblRolActual").innerText = rolActual === "Administrador" ? "Rol: Administrador" : `Club: ${equipoAsignado}`;
+        
+        if (rolActual === "Administrador") {
+            document.getElementById("btnAdminUsers").style.display = "inline-flex";
+        }
 
         aplicarPermisosRol();
         await cargarDatosDesdeNube();
+    }
+
+    async function cargarCredencialesNube() {
+        try {
+            const snap = await getDocs(collection(db, "configuracion"));
+            snap.forEach(docSnap => {
+                if (docSnap.id === "credenciales_sistema") {
+                    credencialesPasswords = { ...credencialesPasswords, ...docSnap.data() };
+                }
+            });
+        } catch (e) {
+            console.error("Error cargando credenciales:", e);
+        }
     }
 
     function aplicarPermisosRol() {
@@ -700,6 +823,7 @@
     }
 
     window.cerrarSesion = function() {
+        sessionStorage.clear();
         document.getElementById("loginPassword").value = "";
         document.getElementById("appContainer").style.display = "none";
         document.getElementById("loginOverlay").style.display = "flex";
@@ -717,6 +841,8 @@
             configSnapshot.forEach((docSnap) => {
                 if (docSnap.id === "fechas_sistema") {
                     fechasRegistro = docSnap.data();
+                } else if (docSnap.id === "credenciales_sistema") {
+                    credencialesPasswords = { ...credencialesPasswords, ...docSnap.data() };
                 } else {
                     configEquipos[docSnap.id] = docSnap.data();
                 }
@@ -769,6 +895,103 @@
         } else {
             banner.innerText = `📅 FECHA DE REGISTROS: Sin restricciones de fechas configuradas por la liga.`;
         }
+    }
+
+    // GESTIÓN DE CAMBIO DE CONTRASEÑA
+    window.abrirModalCambiarPass = function() {
+        document.getElementById("passActual").value = "";
+        document.getElementById("passNueva1").value = "";
+        document.getElementById("passNueva2").value = "";
+        document.getElementById("modalCambiarPass").style.display = "flex";
+    }
+
+    window.cerrarModalCambiarPass = function() {
+        document.getElementById("modalCambiarPass").style.display = "none";
+    }
+
+    window.ejecutarCambioPassword = async function() {
+        const actual = document.getElementById("passActual").value.trim();
+        const nueva1 = document.getElementById("passNueva1").value.trim();
+        const nueva2 = document.getElementById("passNueva2").value.trim();
+
+        const usuarioTarget = rolActual === "Administrador" ? "Administrador" : equipoAsignado;
+        const passActualReal = credencialesPasswords[usuarioTarget] || usuarioTarget;
+
+        if (actual !== passActualReal) {
+            alert("⚠️ La contraseña actual es incorrecta.");
+            return;
+        }
+        if (!nueva1) {
+            alert("⚠️ La nueva contraseña no puede estar vacía.");
+            return;
+        }
+        if (nueva1 !== nueva2) {
+            alert("⚠️ Las nuevas contraseñas no coinciden.");
+            return;
+        }
+
+        credencialesPasswords[usuarioTarget] = nueva1;
+        await setDoc(doc(db, "configuracion", "credenciales_sistema"), credencialesPasswords);
+        alert("¡Contraseña actualizada con éxito!");
+        cerrarModalCambiarPass();
+    }
+
+    // PANEL ADMIN DE USUARIOS Y CONTRASEÑAS
+    window.abrirModalAdminUsuarios = function() {
+        if (rolActual !== "Administrador") return;
+        const tbody = document.getElementById("tablaAdminUsersCuerpo");
+        tbody.innerHTML = "";
+
+        const keys = ["Administrador", ...listaEquiposOficiales];
+        keys.forEach((user, idx) => {
+            const passVal = credencialesPasswords[user] || user;
+            tbody.innerHTML += `
+                <tr>
+                    <td><strong>${user}</strong></td>
+                    <td>
+                        <div style="display:flex; gap:5px; align-items:center; justify-content:center;">
+                            <input type="password" id="adminPassView_${idx}" value="${passVal}" readonly style="width:110px; background:#0f172a; border:none; text-align:center;">
+                            <button class="btn btn-sm" onclick="toggleVerPassAdmin('adminPassView_${idx}', this)" style="padding:2px 5px;">👁️</button>
+                        </div>
+                    </td>
+                    <td>
+                        <input type="text" id="adminPassNew_${idx}" placeholder="Nueva..." style="width:130px;">
+                    </td>
+                    <td>
+                        <button class="btn btn-success btn-sm" onclick="guardarPassAdmin('${user}', 'adminPassNew_${idx}')">Guardar</button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        document.getElementById("modalAdminUsers").style.display = "flex";
+    }
+
+    window.cerrarModalAdminUsuarios = function() {
+        document.getElementById("modalAdminUsers").style.display = "none";
+    }
+
+    window.toggleVerPassAdmin = function(inputId, btn) {
+        const input = document.getElementById(inputId);
+        if (input.type === "password") {
+            input.type = "text";
+            btn.innerText = "🙈";
+        } else {
+            input.type = "password";
+            btn.innerText = "👁️";
+        }
+    }
+
+    window.guardarPassAdmin = async function(userKey, inputId) {
+        const nuevaPass = document.getElementById(inputId).value.trim();
+        if (!nuevaPass) {
+            alert("La contraseña no puede estar vacía.");
+            return;
+        }
+        credencialesPasswords[userKey] = nuevaPass;
+        await setDoc(doc(db, "configuracion", "credenciales_sistema"), credencialesPasswords);
+        alert(`¡Contraseña actualizada para ${userKey}!`);
+        abrirModalAdminUsuarios();
     }
 
     function formatearFechaExcel(val) {
@@ -959,13 +1182,11 @@
 
         if (!nombre) { alert("Ingresa el nombre completo del jugador."); return; }
 
-        // Validación: El nombre no debe contener números ni puntos
         if (/[0-9\.]/.test(nombre)) {
             alert("⚠️ El nombre del jugador no debe contener números ni puntos.");
             return;
         }
 
-        // Validación: CURP debe tener exactamente 18 caracteres alfanuméricos
         if (curp && !/^[A-Z0-9]{18}$/.test(curp)) {
             alert("⚠️ El CURP debe tener exactamente 18 caracteres alfanuméricos.");
             return;
@@ -1249,13 +1470,13 @@
         alert(msg);
     }
 
-    // DISEÑO DE IMPRESIÓN CON ENCABEZADO REPETIBLE
+    // DISEÑO DE IMPRESIÓN CON ENCABEZADO REPETIBLE EN CADA PÁGINA
     window.imprimirRosterActual = function() {
         const equipoSelect = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
         const categoriaSelect = document.getElementById("filtroCategoria").value;
         
         const configEq = configEquipos[equipoSelect] || {};
-        const logoEq = configEq.logo || logosPorDefecto[equipoSelect] || 'https://via.placeholder.com/120?text=EQUIPO';
+        const logoEq = configEq.logo || logosPorDefecto[equipoSelect] || 'https://via.placeholder.com/110?text=EQUIPO';
         const logoLiga = logoLigaGlobal || logoLifarccDefault;
 
         const filtrados = baseDatos.filter(j => j.equipo === equipoSelect && j.categoria === categoriaSelect);
@@ -1268,7 +1489,7 @@
 
         let filasHtml = "";
         filtrados.forEach((j, idx) => {
-            let fotoTd = j.foto ? `<img src="${j.foto}" style="width:45px; height:60px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:7px; color:#64748b;">Sin foto</span>`;
+            let fotoTd = j.foto ? `<img src="${j.foto}" style="width:40px; height:55px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:7px; color:#64748b;">Sin foto</span>`;
             
             filasHtml += `<tr>
                 <td><strong>${idx + 1}</strong></td>
@@ -1296,72 +1517,61 @@
 
         let htmlContenido = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Roster - ${equipoSelect} (${categoriaSelect})</title><style>
             body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 10mm; color: #000; background: white; }
-            .hoja-roster-impresion { page-break-after: always; break-after: page; margin: 0 auto; width: 100%; max-width: 195mm; }
-            .hoja-roster-impresion:last-child { page-break-after: avoid; break-after: avoid; }
-            table.print-table { width: 100%; border-collapse: collapse; margin-top: 8px; background: white; page-break-inside: auto; }
-            table.print-table tr { page-break-inside: avoid; page-break-after: auto; }
-            table.print-table thead { display: table-header-group; }
-            table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 5px; text-align: center; font-size: 11px; height: 28px; }
+            table.print-table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; }
+            thead { display: table-header-group; }
+            tr { page-break-inside: avoid; }
+            table.print-table th, table.print-table td { border: 1px solid #000; padding: 3px 5px; text-align: center; font-size: 11px; height: 26px; }
             table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; text-transform: uppercase; font-size: 11px; }
-            .logo-box-print { width: 120px; height: 120px; object-fit: contain; background: #fff; }
-            .header-layout { width: 100%; border-collapse: collapse; margin-bottom: 8px; text-align: center; display: table; }
-            .header-layout thead { display: table-header-group; }
-            .header-layout td { border: none !important; padding: 2px; vertical-align: middle; }
-            .league-title-print { font-size: 32px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
-            .league-subtitle-print { font-size: 11px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 6px; }
-            .info-bar { margin-top: 6px; margin-bottom: 6px; font-size: 13px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; }
+            .logo-box-print { width: 100px; height: 100px; object-fit: contain; background: #fff; }
+            .header-table { width: 100%; border-collapse: collapse; margin-bottom: 5px; }
+            .header-table td { border: none !important; padding: 2px; vertical-align: middle; }
+            .league-title-print { font-size: 28px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
+            .league-subtitle-print { font-size: 10px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 4px; }
+            .info-bar { margin-top: 4px; margin-bottom: 4px; font-size: 12px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; }
         </style></head><body>
-        <div class="hoja-roster-impresion">
-            <table class="header-layout">
-                <thead>
-                    <tr>
-                        <td colspan="3" style="text-align: center; padding-bottom: 5px;">
-                            <table style="width:100%; border-collapse:collapse;">
-                                <tr>
-                                    <td style="width: 25%; text-align: left;"><img src="${logoLiga}" class="logo-box-print"></td>
-                                    <td style="width: 50%; text-align: center;">
-                                        <div class="league-title-print">LIFARCC</div>
-                                        <div class="league-subtitle-print">Liga Infantil de Football Americano de la Region Centro de Coahuila</div>
-                                    </td>
-                                    <td style="width: 25%; text-align: right;"><img src="${logoEq}" class="logo-box-print"></td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td colspan="3">
-                            <div style="font-size: 11px; margin-bottom: 6px; font-weight: bold; text-align: center;">
-                                FECHA: ___________________________________
-                            </div>
-                            <div class="info-bar">
-                                <span>CLUB ${equipoSelect}</span>
-                                <span>JORNADA: ____________________</span>
-                            </div>
-                            <div style="font-size: 12px; font-weight: bold; text-transform: uppercase; margin-bottom: 6px; text-align: left;">
-                                ROSTER CATEGORIA: ${categoriaSelect}
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        
+        <table class="print-table">
+            <thead>
+                <tr>
+                    <td colspan="7" style="border: none; padding: 0;">
+                        <table class="header-table">
+                            <tr>
+                                <td style="width: 22%; text-align: left;"><img src="${logoLiga}" class="logo-box-print"></td>
+                                <td style="width: 56%; text-align: center;">
+                                    <div class="league-title-print">LIFARCC</div>
+                                    <div class="league-subtitle-print">Liga Infantil de Football Americano de la Region Centro de Coahuila</div>
+                                </td>
+                                <td style="width: 22%; text-align: right;"><img src="${logoEq}" class="logo-box-print"></td>
+                            </tr>
+                        </table>
+                        <div style="font-size: 10px; font-weight: bold; text-align: center; margin-bottom: 2px;">
+                            FECHA: ___________________________________
+                        </div>
+                        <div style="font-size: 12px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; margin-bottom: 2px;">
+                            <span>CLUB ${equipoSelect}</span>
+                            <span>JORNADA: ____________________</span>
+                        </div>
+                        <div style="font-size: 11px; font-weight: bold; text-transform: uppercase; text-align: left; margin-bottom: 4px;">
+                            ROSTER CATEGORIA: ${categoriaSelect}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th style="width: 35px;">N°</th>
+                    <th style="width: 60px;">Foto</th>
+                    <th>Nombre Completo</th>
+                    <th style="width: 90px;">Fecha Nac.</th>
+                    <th style="width: 135px;">CURP</th>
+                    <th style="width: 50px;">N°- Jersey</th>
+                    <th style="width: 50px;">Peso kg</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${filasHtml}
+            </tbody>
+        </table>
 
-            <table class="print-table">
-                <thead>
-                    <tr>
-                        <th style="width: 35px;">N°</th>
-                        <th style="width: 65px;">Foto</th>
-                        <th>Nombre Completo</th>
-                        <th style="width: 95px;">Fecha de Nacimiento</th>
-                        <th style="width: 140px;">CURP</th>
-                        <th style="width: 55px;">N°- Jersey</th>
-                        <th style="width: 55px;">Peso kg</th>
-                    </tr>
-                </thead>
-                <tbody>${filasHtml}</tbody>
-            </table>
-        </div></body></html>`;
+        </body></html>`;
 
         const vPrint = window.open('', '_blank');
         if (!vPrint) { alert("Permite las ventanas emergentes."); return; }
@@ -1398,20 +1608,18 @@
 
         let htmlContenido = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Impresión Masiva - LIFARCC</title><style>
             body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 10mm; color: #000; background: white; }
-            .hoja-roster-impresion { page-break-after: always; break-after: page; margin: 0 auto; width: 100%; max-width: 195mm; }
+            .hoja-roster-impresion { page-break-after: always; break-after: page; margin-bottom: 20mm; }
             .hoja-roster-impresion:last-child { page-break-after: avoid; break-after: avoid; }
-            table.print-table { width: 100%; border-collapse: collapse; margin-top: 8px; background: white; page-break-inside: auto; }
-            table.print-table tr { page-break-inside: avoid; page-break-after: auto; }
-            table.print-table thead { display: table-header-group; }
-            table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 5px; text-align: center; font-size: 11px; height: 28px; }
+            table.print-table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; }
+            thead { display: table-header-group; }
+            tr { page-break-inside: avoid; }
+            table.print-table th, table.print-table td { border: 1px solid #000; padding: 3px 5px; text-align: center; font-size: 11px; height: 26px; }
             table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; text-transform: uppercase; font-size: 11px; }
-            .logo-box-print { width: 120px; height: 120px; object-fit: contain; background: #fff; }
-            .header-layout { width: 100%; border-collapse: collapse; margin-bottom: 8px; text-align: center; display: table; }
-            .header-layout thead { display: table-header-group; }
-            .header-layout td { border: none !important; padding: 2px; vertical-align: middle; }
-            .league-title-print { font-size: 32px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
-            .league-subtitle-print { font-size: 11px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 6px; }
-            .info-bar { margin-top: 6px; margin-bottom: 6px; font-size: 13px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; }
+            .logo-box-print { width: 100px; height: 100px; object-fit: contain; background: #fff; }
+            .header-table { width: 100%; border-collapse: collapse; margin-bottom: 5px; }
+            .header-table td { border: none !important; padding: 2px; vertical-align: middle; }
+            .league-title-print { font-size: 28px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
+            .league-subtitle-print { font-size: 10px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 4px; }
         </style></head><body>`;
 
         keysOrdenadas.forEach(key => {
@@ -1419,12 +1627,12 @@
             grupo.jugadores.sort((a, b) => a.nombre.localeCompare(b.nombre));
 
             const conf = configEquipos[grupo.equipo] || {};
-            const logoEq = conf.logo || logosPorDefecto[grupo.equipo] || 'https://via.placeholder.com/120?text=EQUIPO';
+            const logoEq = conf.logo || logosPorDefecto[grupo.equipo] || 'https://via.placeholder.com/110?text=EQUIPO';
             const logoLiga = logoLigaGlobal || logoLifarccDefault;
 
             let filasHtml = "";
             grupo.jugadores.forEach((j, idx) => {
-                let fotoTd = j.foto ? `<img src="${j.foto}" style="width:45px; height:60px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:7px; color:#64748b;">Sin foto</span>`;
+                let fotoTd = j.foto ? `<img src="${j.foto}" style="width:40px; height:55px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:7px; color:#64748b;">Sin foto</span>`;
                 
                 filasHtml += `<tr>
                     <td><strong>${idx + 1}</strong></td>
@@ -1452,54 +1660,45 @@
 
             htmlContenido += `
             <div class="hoja-roster-impresion">
-                <table class="header-layout">
+                <table class="print-table">
                     <thead>
                         <tr>
-                            <td colspan="3" style="text-align: center; padding-bottom: 5px;">
-                                <table style="width:100%; border-collapse:collapse;">
+                            <td colspan="7" style="border: none; padding: 0;">
+                                <table class="header-table">
                                     <tr>
-                                        <td style="width: 25%; text-align: left;"><img src="${logoLiga}" class="logo-box-print"></td>
-                                        <td style="width: 50%; text-align: center;">
+                                        <td style="width: 22%; text-align: left;"><img src="${logoLiga}" class="logo-box-print"></td>
+                                        <td style="width: 56%; text-align: center;">
                                             <div class="league-title-print">LIFARCC</div>
                                             <div class="league-subtitle-print">Liga Infantil de Football Americano de la Region Centro de Coahuila</div>
                                         </td>
-                                        <td style="width: 25%; text-align: right;"><img src="${logoEq}" class="logo-box-print"></td>
+                                        <td style="width: 22%; text-align: right;"><img src="${logoEq}" class="logo-box-print"></td>
                                     </tr>
                                 </table>
-                            </td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td colspan="3">
-                                <div style="font-size: 11px; margin-bottom: 6px; font-weight: bold; text-align: center;">
+                                <div style="font-size: 10px; font-weight: bold; text-align: center; margin-bottom: 2px;">
                                     FECHA: ___________________________________
                                 </div>
-                                <div class="info-bar">
+                                <div style="font-size: 12px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; margin-bottom: 2px;">
                                     <span>CLUB ${grupo.equipo}</span>
                                     <span>JORNADA: ____________________</span>
                                 </div>
-                                <div style="font-size: 12px; font-weight: bold; text-transform: uppercase; margin-bottom: 6px; text-align: left;">
+                                <div style="font-size: 11px; font-weight: bold; text-transform: uppercase; text-align: left; margin-bottom: 4px;">
                                     ROSTER CATEGORIA: ${grupo.categoria}
                                 </div>
                             </td>
                         </tr>
-                    </tbody>
-                </table>
-
-                <table class="print-table">
-                    <thead>
                         <tr>
                             <th style="width: 35px;">N°</th>
-                            <th style="width: 65px;">Foto</th>
+                            <th style="width: 60px;">Foto</th>
                             <th>Nombre Completo</th>
-                            <th style="width: 95px;">Fecha de Nacimiento</th>
-                            <th style="width: 140px;">CURP</th>
-                            <th style="width: 55px;">N°- Jersey</th>
-                            <th style="width: 55px;">Peso kg</th>
+                            <th style="width: 90px;">Fecha Nac.</th>
+                            <th style="width: 135px;">CURP</th>
+                            <th style="width: 50px;">N°- Jersey</th>
+                            <th style="width: 50px;">Peso kg</th>
                         </tr>
                     </thead>
-                    <tbody>${filasHtml}</tbody>
+                    <tbody>
+                        ${filasHtml}
+                    </tbody>
                 </table>
             </div>`;
         });
