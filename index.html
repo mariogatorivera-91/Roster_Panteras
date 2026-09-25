@@ -195,38 +195,35 @@
             display: none;
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             text-align: center;
         }
         .print-header td {
             border: none;
-            padding: 2px;
+            padding: 5px;
             vertical-align: middle;
         }
         .league-title {
-            font-size: 17px;
+            font-size: 18px;
             font-weight: bold;
             color: #1e3a8a;
             text-transform: uppercase;
             line-height: 1.2;
         }
         .roster-info-bar {
-            display: none;
-            background-color: #fce7f3 !important;
+            background-color: #fce7f3;
             border: 1px solid #1e3a8a;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 15px;
             color: #1e3a8a;
-            padding: 6px;
+            padding: 8px;
             text-align: center;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             text-transform: uppercase;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
         }
         .logo-box {
-            width: 85px;
-            height: 85px;
+            width: 90px;
+            height: 90px;
             object-fit: contain;
             border: 1px solid #cbd5e1;
             background: #fff;
@@ -239,12 +236,12 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 5px;
+            margin-top: 10px;
             background: white;
         }
         th, td {
             border: 1px solid var(--border-color);
-            padding: 8px 10px;
+            padding: 10px;
             text-align: center;
             font-size: 13px;
         }
@@ -258,8 +255,8 @@
         tr:nth-child(even) { background-color: #f8fafc; }
         
         .player-photo-container {
-            width: 40px;
-            height: 50px;
+            width: 45px;
+            height: 55px;
             margin: auto;
             border: 1px solid #cbd5e1;
             border-radius: 4px;
@@ -277,7 +274,7 @@
             object-fit: cover;
         }
         .no-photo {
-            font-size: 8px;
+            font-size: 9px;
             color: #64748b;
             text-align: center;
             padding: 2px;
@@ -340,11 +337,8 @@
             body { background: white; padding: 0; }
             .container { box-shadow: none; padding: 0; max-width: 100%; }
             .controls-panel, .section-box, .actions-footer, .nav-tabs, .danger-zone, .no-print { display: none !important; }
-            
-            /* Mostrar encabezado y barra de info exactamente igual en individual y masivo */
             .print-header { display: table !important; }
             .roster-info-bar { display: block !important; background-color: #fce7f3 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            
             table { page-break-inside: auto; }
             tr { page-break-inside: avoid; page-break-after: auto; }
             th { background-color: #1e3a8a !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -354,7 +348,7 @@
             }
             .hoja-roster-impresion {
                 page-break-after: always;
-                margin-bottom: 30px;
+                margin-bottom: 40px;
             }
         }
     </style>
@@ -450,7 +444,7 @@
             </div>
         </div>
 
-        <!-- ENCABEZADO OFICIAL PARA IMPRESIÓN INDIVIDUAL -->
+        <!-- ENCABEZADO OFICIAL PARA IMPRESIÓN -->
         <table class="print-header">
             <tr>
                 <td style="width: 20%; text-align: left;">
@@ -458,7 +452,7 @@
                 </td>
                 <td style="width: 60%; text-align: center;">
                     <div class="league-title">LIGA DE FÚTBOL AMERICANO</div>
-                    <div class="league-title" style="font-size: 19px; margin-top: 2px;">LIFARCC MONCLOVA</div>
+                    <div class="league-title" style="font-size: 20px; margin-top: 2px;">LIFARCC MONCLOVA</div>
                 </td>
                 <td style="width: 20%; text-align: right;">
                     <img id="printLogoEquipo" src="" class="logo-box" alt="Logo Equipo" onerror="this.src='https://via.placeholder.com/90?text=EQUIPO'">
@@ -562,7 +556,7 @@
 
         <div style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
             <input type="text" id="buscadorDirectorioGeneral" placeholder="🔍 Buscar por nombre, CURP o equipo..." oninput="renderizarDirectorioGeneral()" style="width: 320px;">
-            <button class="btn btn-success" onclick="imprimirTodosRostersMasivo()">🖨️ Imprimir Todos los Rosters (Ordenados por Equipo y Categoría)</button>
+            <button class="btn btn-success" onclick="imprimirTodosRostersMasivo()">🖨️ Imprimir Todos los Rosters (Todas las Categorías y Equipos)</button>
         </div>
 
         <div class="table-responsive">
@@ -652,40 +646,42 @@
 <script>
     const datosIniciales = [{"id": 0, "equipo": "ACEREROS", "categoria": "ARDILLA", "nombre": "GARCÍA CAMPOS DYLAN ELIAZER", "nacimiento": "2014-03-01 00:00:00", "curp": "GACD140301HCLRMYA8", "doc": "CURP", "numJugador": "", "peso": ""}, {"id": 1, "equipo": "ACEREROS", "categoria": "ARDILLA", "nombre": "UCHINO SIFUENTES OSMAR YERAY", "nacimiento": "2015-02-18 00:00:00", "curp": "UISO150218HCLCFSA1", "doc": "CURP", "numJugador": "", "peso": ""}, {"id": 2, "equipo": "ACEREROS", "categoria": "ARDILLA", "nombre": "REYES CASTILLO JIMENA MARIEL", "nacimiento": "2015-06-16 00:00:00", "curp": ": RECJ150616MCLYSMA", "doc": "CURP", "numJugador": "", "peso": ""}, {"id": 3, "equipo": "ACEREROS", "categoria": "ARDILLA", "nombre": "REYES MARTINEZ TANIA ALITZEL", "nacimiento": "2014-09-23 00:00:00", "curp": "EMT140923MCLYRNA2", "doc": "CURP", "numJugador": "", "peso": ""}, {"id": 4, "equipo": "ACEREROS", "categoria": "ARDILLA", "nombre": "GARCIA BAUTISTA RODRIGO ROBERTO", "nacimiento": "2021-07-31 00:00:00", "curp": "GABR210731HCLRTDA4", "doc": "CURP", "numJugador": "", "peso": ""}, {"id": 5, "equipo": "ACEREROS", "categoria": "BOTANA", "nombre": "FUENTES MARTÍNEZ MAURICIO ALEJANDRO", "nacimiento": "2020-08-08 00:00:00", "curp": "FUMM200815HCLNRRA3", "doc": "CURP", "numJugador": "", "peso": ""}, {"id": 6, "equipo": "ACEREROS", "categoria": "BOTANA", "nombre": "ALEXEI ARENAS EVAN", "nacimiento": "2023-08-04 00:00:00", "curp": "ZAAE230804HCLMRVA7", "doc": "CURP", "numJugador": "", "peso": ""}, {"id": 7, "equipo": "ACEREROS", "categoria": "BOTANA", "nombre": "DE LEÓN SÁNCHEZ SOFÍA FERNANDA", "nacimiento": "2022-07-11 00:00:00", "curp": "LESS220711MCLNNFA7", "doc": "CURP", "numJugador": "", "peso": ""}, {"id": 8, "equipo": "ACEREROS", "categoria": "BOTANA", "nombre": "CISNEROS BARROSO EITHAN ALEXANDER", "nacimiento": "2021-06-20 00:00:00", "curp": "CIBE210620HCLSRTA2", "doc": "CURP", "numJugador": "", "peso": ""}, {"id": 9, "equipo": "ACEREROS", "categoria": "BOTANA", "nombre": "FLORES VALDES SERGIO ALBERTO", "nacimiento": "2021-02-19 00:00:00", "curp": "FOVS210219HCLLLRA5", "doc": "CURP", "numJugador": "", "peso": ""}, {"id": 10, "equipo": "ACEREROS", "categoria": "HORMIGA", "nombre": "TREVIÑO BUENTELLO SALVADOR", "nacimiento": "2016-03-01 00:00:00", "curp": "TEBS160301HCLRNLA6", "doc": "CURP", "numJugador": "", "peso": ""}, {"id": 11, "equipo": "ACEREROS", "categoria": "HORMIGA", "nombre": "BALDERAS MORALES NICOLÁS", "nacimiento": "2016-11-08 00:00:00", "curp": "BAMN161108HCLLRCA9", "doc": "CURP", "numJugador": "", "peso": ""}, {"id": 12, "equipo": "ACEREROS", "categoria": "HORMIGA", "nombre": "GONZÁLEZ PADILLA ROMINA", "nacimiento": "2015-11-24 00:00:00", "curp": "GOPR150924MCLNDMA8", "doc": "CURP", "numJugador": "", "peso": ""}, {"id": 13, "equipo": "ACEREROS", "categoria": "HORMIGA", "nombre": "GARCÍA BAUTISTA ANA VICTORIA", "nacimiento": "2016-08-27 00:00:00", "curp": "GABA160827MCLRTA8", "doc": "CURP", "numJugador": "", "peso": ""}, {"id": 14, "equipo": "ACEREROS", "categoria": "HORMIGUITA", "nombre": "GARCÍA GONZÁLEZ LIAM FELIPE", "nacimiento": "2017-06-24 00:00:00", "curp": "GAGL170624HCLRNMAO", "doc": "CURP", "numJugador": "", "peso": ""}, {"id": 15, "equipo": "ACEREROS", "categoria": "HORMIGUITA", "nombre": "ABREGO GARCÍA HÉCTOR GAEL", "nacimiento": "2018-05-04 00:00:00", "curp": "AEGH180504HCLBRCA3", "doc": "CURP", "numJugador": "", "peso": ""}, {"id": 16, "equipo": "ACEREROS", "categoria": "HORMIGUITA", "nombre": "RODRÍGUEZ CASTILLO IAN ARMANDO", "nacimiento": "2017-06-23 00:00:00", "curp": "ROCI170623HCLDSNA5", "doc": "CURP", "numJugador": "", "peso": ""}, {"id": 17, "equipo": "ACEREROS", "categoria": "HORMIGUITA", "nombre": "DE LEÓN SÁNCHEZ IKER", "nacimiento": "2018-07-14 00:00:00", "curp": "LESI180714HCLNNKA6", "doc": "CURP", "numJugador": "", "peso": ""}, {"id": 18, "equipo": "ACEREROS", "categoria": "HORMIGUITA", "nombre": "MENDOZA GARCÍA RENATO ANTONIO", "nacimiento": "2017-07-22 00:00:00", "curp": "MEGR170722HCLNRNA8", "doc": "CURP", "numJugador": "", "peso": ""}, {"id": 19, "equipo": "ACEREROS", "categoria": "HORMIGUITA", "nombre": "ESPINOZA MUÑOS ADRIÁN GERARDO", "nacimiento": "2018-01-16 00:00:00", "curp": "ELMA180116HCLSXDA1", "doc": "CURP", "numJugador": "", "peso": ""}, {"id": 20, "equipo": "ACEREROS", "categoria": "HORMIGUITA", "nombre": "FUENETES MARTÍNEZ LEONARDO", "nacimiento": "2017-02-27 00:00:00", "curp": "FUML170227HCLNRNA4", "doc": "CURP", "numJugador": "", "peso": ""}, {"id": 21, "equipo": "ACEREROS", "categoria": "MOSCO", "nombre": "CISNEROS PACHECO ORLANDO ISMAEL", "nacimiento": "2021-12-19 00:00:00", "curp": "CIPO191221HCLSCRA0", "doc": "CURP", "numJugador": "", "peso": ""}, {"id": 22, "equipo": "BUCANEROS", "categoria": "ARDILLA", "nombre": "GRECIA ELIZABETH VILLARREAL COVARRUBIAS", "nacimiento": "2014-11-01 00:00:00", "curp": "VICG141101MCLLVRA5", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 23, "equipo": "BUCANEROS", "categoria": "ARDILLA", "nombre": "MATEO ALEJANDRO MONTOYA ESCALANTE", "nacimiento": "2014-07-04 00:00:00", "curp": "MOEM140704HCLNSTA9", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 24, "equipo": "BUCANEROS", "categoria": "ARDILLA", "nombre": "DEREK ALEJANDRO AGUILAR ORDOÑEZ", "nacimiento": "2015-04-26 00:00:00", "curp": "AUOD150426HCLGRRA9", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 25, "equipo": "BUCANEROS", "categoria": "ARDILLA", "nombre": "GABRIEL GARCIA SANTILLAN", "nacimiento": "2014-03-24 00:00:00", "curp": "GASG140324HCLRNBA2", "doc": "ACTA DE NACIMIENTO", "numJugador": "", "peso": ""}, {"id": 26, "equipo": "BUCANEROS", "categoria": "ARDILLA", "nombre": "BRAYAN ABDIEL LOYA SALDAÑA", "nacimiento": "2014-08-18 00:00:00", "curp": "LOSB140818HCLYLRA3", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 27, "equipo": "BUCANEROS", "categoria": "ARDILLA", "nombre": "FERNANDO ENSISO OLVERA", "nacimiento": "2014-06-11 00:00:00", "curp": "EIOF140611HCLNLRA7", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 28, "equipo": "BUCANEROS", "categoria": "HORMIGA", "nombre": "ALAN ROLANDO FLORES RODRIGIEZ", "nacimiento": "2015-07-24 00:00:00", "curp": "FORA150724HCLLDLA9", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 29, "equipo": "BUCANEROS", "categoria": "HORMIGA", "nombre": "ABRIL SOFIA TOVAR ZAMORA", "nacimiento": "2015-12-28 00:00:00", "curp": "TOZA151228MCLVMBA7", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 30, "equipo": "BUFALOS", "categoria": "ARDILLA", "nombre": "TORRES REYES IAN GERARDO", "nacimiento": "2015-01-08 00:00:00", "curp": "TORI150108HCLRYNA0", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 31, "equipo": "BUFALOS", "categoria": "ARDILLA", "nombre": "MÉNDEZ RESÉNDIZ MADELYN YAQUELIN", "nacimiento": "2014-05-10 00:00:00", "curp": "MERM140510MCLNSDA1", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 32, "equipo": "BUFALOS", "categoria": "ARDILLA", "nombre": "RODRIGUEZ DOMÍNGUEZ HECTOR LEONEL", "nacimiento": "2015-04-22 00:00:00", "curp": "RODH150422HCLDMCA2", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 33, "equipo": "BUFALOS", "categoria": "ARDILLA", "nombre": "CAMPUZANO GARZA LEONARDO", "nacimiento": "2015-08-07 00:00:00", "curp": "CAGL150807HCLMRNA6", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 34, "equipo": "BUFALOS", "categoria": "ARDILLA", "nombre": "RESENDIZ SEPÚLVEDA DEREK JAVIER", "nacimiento": "2015-12-14 00:00:00", "curp": "RESED151214HCLSPRA1", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 35, "equipo": "BUFALOS", "categoria": "ARDILLA", "nombre": "SALCEDO CASTELLANOS PATRICIO", "nacimiento": "2014-06-03 00:00:00", "curp": "SACP140603HCLCSTA5", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 36, "equipo": "BUFALOS", "categoria": "ARDILLA", "nombre": "CHAPA CASTRO HOMERO EFRAIN", "nacimiento": "2013-12-31 00:00:00", "curp": "CACH131231HCLHSMA8", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 37, "equipo": "BUFALOS", "categoria": "ARDILLA", "nombre": "SAUCEDO GOMEZ AURORA", "nacimiento": "2014-08-13 00:00:00", "curp": "SAGA140813MCLCMRA3", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 38, "equipo": "BUFALOS", "categoria": "ARDILLA", "nombre": "LESPRON MORENO DYLAN SAID", "nacimiento": "2014-08-27 00:00:00", "curp": "LEMD140827HCLSRYA2", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 39, "equipo": "BUFALOS", "categoria": "ARDILLA", "nombre": "HERNÁNDEZ GUERRERO MIA ABIGAIL", "nacimiento": "2013-06-25 00:00:00", "curp": "HEGM130625MCLRRXA6", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 40, "equipo": "BUFALOS", "categoria": "ARDILLA", "nombre": "GUTIÉRREZ HUESCA PAULA MARIANA", "nacimiento": "2013-12-09 00:00:00", "curp": "GUHO131209MCLTSLA0", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 41, "equipo": "BUFALOS", "categoria": "BOTANA", "nombre": "CORDERO MACARENO JOAN ARTURO", "nacimiento": "2020-01-30 00:00:00", "curp": "COMJ200130HCLRCNA0", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 42, "equipo": "BUFALOS", "categoria": "BOTANA", "nombre": "BRETADO RAMOS LUCIANO ALEXANDER", "nacimiento": "2020-08-20 00:00:00", "curp": "BERL200820HCLRMCA5", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 43, "equipo": "BUFALOS", "categoria": "BOTANA", "nombre": "GÓMEZ VÁZQUEZ ELIAN", "nacimiento": "2022-10-15 00:00:00", "curp": "GOVE221015HCLMZLA1", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 44, "equipo": "BUFALOS", "categoria": "BOTANA", "nombre": "HERNÁNDEZ GUERRERO SANTIAGO", "nacimiento": "2022-04-26 00:00:00", "curp": "HEGS220426HCLRRNA6", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 45, "equipo": "BUFALOS", "categoria": "BOTANA", "nombre": "MATA HERNÁNDEZ BRANDON EMMANUEL", "nacimiento": "2021-07-26 00:00:00", "curp": "MAHB210726HCLTRRA3", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 46, "equipo": "BUFALOS", "categoria": "HORMIGA", "nombre": "SANCHEZ CARRIZALES SEBASTIÁN", "nacimiento": "2016-10-06 00:00:00", "curp": "SACS161006HCLNRBA7", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 47, "equipo": "BUFALOS", "categoria": "HORMIGA", "nombre": "FLORES GARCIA ADRIAN", "nacimiento": "2016-09-20 00:00:00", "curp": "FOGA160920HCLLRDA6", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 48, "equipo": "BUFALOS", "categoria": "HORMIGA", "nombre": "DE LOS REYES MARTÍNEZ RICARDO JAVIER", "nacimiento": "2016-03-16 00:00:00", "curp": "REMR160316HCLYRCA8", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 49, "equipo": "BUFALOS", "categoria": "HORMIGA", "nombre": "TORRES FLORES YERIK ALI", "nacimiento": "2015-10-12 00:00:00", "curp": "TOFY151012HCLRLRA7", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 50, "equipo": "BUFALOS", "categoria": "HORMIGA", "nombre": "HERNÁNDEZ GUERRERO URIEL", "nacimiento": "2016-12-18 00:00:00", "curp": "HEGU161218HCLRRRA5", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 51, "equipo": "BUFALOS", "categoria": "HORMIGA", "nombre": "IBARRA FUENTES LEONARDO SEBASTIÁN", "nacimiento": "2016-02-04 00:00:00", "curp": "IAFL160204HCLBNNA9", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 52, "equipo": "BUFALOS", "categoria": "HORMIGA", "nombre": "MÉNDEZ RESÉNDIZ DEO YANDEL", "nacimiento": "2016-04-06 00:00:00", "curp": "MERD160406HCLNSXA4", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 53, "equipo": "BUFALOS", "categoria": "HORMIGA", "nombre": "MENDOZA DE LA RIVA GERARDO JEHU", "nacimiento": "2015-10-25 00:00:00", "curp": "MERG151025HCLNVRA9", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 54, "equipo": "BUFALOS", "categoria": "HORMIGA", "nombre": "GOMEZ VÁZQUEZ EVAN NICOLAS", "nacimiento": "2015-12-01 00:00:00", "curp": "GOVE151201HCLMZVA7", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 55, "equipo": "BUFALOS", "categoria": "HORMIGUITA", "nombre": "ÁGUILAR LUCIO MAXIMILIANO", "nacimiento": "2017-06-29 00:00:00", "curp": "AULM170629HCLGCXA9", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 56, "equipo": "BUFALOS", "categoria": "HORMIGUITA", "nombre": "ZAMARRON BERISTAIN SANTIAGO DE JESUS", "nacimiento": "2017-07-24 00:00:00", "curp": "ZABS170724HCLMRNA6", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 57, "equipo": "BUFALOS", "categoria": "HORMIGUITA", "nombre": "BRETADO RAMOS IKER AGUSTÍN", "nacimiento": "2017-06-01 00:00:00", "curp": "BERI170601HCLRMKA2", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 58, "equipo": "BUFALOS", "categoria": "HORMIGUITA", "nombre": "MORALES AGUILERA FELIX ISRAEL", "nacimiento": "2017-06-07 00:00:00", "curp": "MOAF170607HCLRGLA7", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 59, "equipo": "BUFALOS", "categoria": "HORMIGUITA", "nombre": "SILVA ZEPEDA ANDRES TAREQ", "nacimiento": "2017-08-30 00:00:00", "curp": "SIZA170830HCLLPNA9", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 60, "equipo": "BUFALOS", "categoria": "MOSCO", "nombre": "SANDOVAL PEÑA ARTURO JULIAN", "nacimiento": "2019-04-15 00:00:00", "curp": "SAPA190415HCLNXRA1", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 61, "equipo": "BUFALOS", "categoria": "MOSCO", "nombre": "CONTRERAS TELLES NESTOR GERMAN", "nacimiento": "2018-03-10 00:00:00", "curp": "COTN180310HCLNLSA1", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 62, "equipo": "BUFALOS", "categoria": "MOSCO", "nombre": "SANTIBÁÑEZ RICHARTE SANTIAGO", "nacimiento": "2019-08-11 00:00:00", "curp": "SARS190811HCLNCNA9", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 63, "equipo": "BUFALOS", "categoria": "MOSCO", "nombre": "FLORES GARCÍA ALFREDO", "nacimiento": "2019-08-28 00:00:00", "curp": "FOGA190828HCLLRLA2", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 64, "equipo": "BUFALOS", "categoria": "MOSCO", "nombre": "ALVARADO VILLASANA MATIAS EMILIANO", "nacimiento": "2018-09-06 00:00:00", "curp": "AABM180906HCLLLTA2", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 65, "equipo": "BUFALOS", "categoria": "MOSCO", "nombre": "QUINTERO MALDONADO ANGEL SANTIAGO", "nacimiento": "2018-10-25 00:00:00", "curp": "QUMA181025HCLNLNA6", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 66, "equipo": "BUFALOS", "categoria": "MOSCO", "nombre": "RODRIGUEZ SÁNCHEZ DANIEL", "nacimiento": "2018-07-17 00:00:00", "curp": "ROSD180717HCLDNNA2", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 67, "equipo": "BUFALOS", "categoria": "MOSCO", "nombre": "CANTU ALBA MANUEL AMISADAI", "nacimiento": "2019-02-15 00:00:00", "curp": "CAAM190215HCLNLNA2", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 68, "equipo": "PANTERAS", "categoria": "ARDILLA", "nombre": "CADENA RODRÍGUEZ REYNALDO ALÍ", "nacimiento": "2014-12-30 00:00:00", "curp": "CARR141230HCLDDYA8", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 69, "equipo": "PANTERAS", "categoria": "ARDILLA", "nombre": "VILLANUEVA ESPITIA DERICK", "nacimiento": "2014-06-08 00:00:00", "curp": "VIED140608HNELSRA9", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 70, "equipo": "PANTERAS", "categoria": "ARDILLA", "nombre": "FLORES FLORES MARCELO", "nacimiento": "2014-04-28 00:00:00", "curp": "FOFM140428HCLLLRA4", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 71, "equipo": "PANTERAS", "categoria": "ARDILLA", "nombre": "CÁRDENAS RIVERA MARIO ALBERTO", "nacimiento": "2014-03-09 00:00:00", "curp": "CARM140309HCLRVRA8", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 72, "equipo": "PANTERAS", "categoria": "ARDILLA", "nombre": "PUENTE HERNÁNDEZ GABRIEL ALEJANDRO", "nacimiento": "2014-01-06 00:00:00", "curp": "PUHG140106HCLNRBA6", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 73, "equipo": "PANTERAS", "categoria": "HORMIGA", "nombre": "MARTÍNEZ QUIRINO JULIÁN ALEJANDRO", "nacimiento": "2016-07-17 00:00:00", "curp": "MAQJ160717HCLRRLA7", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 74, "equipo": "PANTERAS", "categoria": "HORMIGA", "nombre": "SOTO FIGUEROA EMIR MATEO", "nacimiento": "2016-05-18 00:00:00", "curp": "SOFE160518HCLTGMA8", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 75, "equipo": "PANTERAS", "categoria": "HORMIGA", "nombre": "VÁZQUEZ CRUZ ISABELLA", "nacimiento": "2015-08-22 00:00:00", "curp": "VACI150822MCLZRSA2", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 76, "equipo": "PANTERAS", "categoria": "HORMIGUITA", "nombre": "ROMO MORÍN DIEGO EMILIO", "nacimiento": "2017-10-28 00:00:00", "curp": "ROMD171028HCL", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 77, "equipo": "PANTERAS", "categoria": "HORMIGUITA", "nombre": "VÁZQUEZ CRUZ MATEO", "nacimiento": "2018-05-03 00:00:00", "curp": "VACM180503HCLZRTA4", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 78, "equipo": "PANTERAS", "categoria": "HORMIGUITA", "nombre": "RIVERA OROZCO ROMÁN ALEJANDRO", "nacimiento": "2017-10-14 00:00:00", "curp": "RIOR171014HCLVRMA3", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 79, "equipo": "PANTERAS", "categoria": "HORMIGUITA", "nombre": "MORENO ESCOBEDO RUBÉN JOSAFAT", "nacimiento": "2017-08-28 00:00:00", "curp": "MOER170828HCLRSBA5", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 80, "equipo": "PANTERAS", "categoria": "HORMIGUITA", "nombre": "MEDELLÍN CUELLAR REGINA", "nacimiento": "2017-05-13 00:00:00", "curp": "MECR170513MCLDLGA4", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 81, "equipo": "PANTERAS", "categoria": "HORMIGUITA", "nombre": "CERNA HERNÁNDEZ DAMIÁN", "nacimiento": "2017-03-23 00:00:00", "curp": "CEHD170323HCLRRMA0", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}, {"id": 82, "equipo": "PANTERAS", "categoria": "MOSCO", "nombre": "CÁRDENAS RIVERA MARIANO NICOLÁS", "nacimiento": "2018-10-10 00:00:00", "curp": "CARM181010HCLRVRA8", "doc": "ACTA DE NACIMIENTO, CURP", "numJugador": "", "peso": ""}];
 
-    let baseDatos = JSON.parse(localStorage.getItem('lifarcc_jugadores_v13')) || JSON.parse(localStorage.getItem('lifarcc_jugadores_v12')) || datosIniciales;
-    let fotosJugadores = JSON.parse(localStorage.getItem('lifarcc_fotos_v13')) || JSON.parse(localStorage.getItem('lifarcc_fotos_v12')) || {};
-    let configEquipos = JSON.parse(localStorage.getItem('lifarcc_config_equipos_v13')) || JSON.parse(localStorage.getItem('lifarcc_config_equipos_v12')) || {};
-    let logoLigaGlobal = localStorage.getItem('lifarcc_logo_liga_v13') || localStorage.getItem('lifarcc_logo_liga_v12') || '';
+    // Claves unificadas y seguras para localStorage v12
+    let baseDatos = JSON.parse(localStorage.getItem('lifarcc_jugadores_v12')) || JSON.parse(localStorage.getItem('lifarcc_jugadores_v10')) || datosIniciales;
+    let fotosJugadores = JSON.parse(localStorage.getItem('lifarcc_fotos_v12')) || JSON.parse(localStorage.getItem('lifarcc_fotos_v10')) || {};
+    let configEquipos = JSON.parse(localStorage.getItem('lifarcc_config_equipos_v12')) || JSON.parse(localStorage.getItem('lifarcc_config_equipos_v10')) || {};
+    let logoLigaGlobal = localStorage.getItem('lifarcc_logo_liga_v12') || localStorage.getItem('lifarcc_logo_liga_v10') || '';
     
+    // Lista robusta de equipos combinando valores por defecto y detectados en la BD
     let listaEquiposDinamica = ["ACEREROS", "BUCANEROS", "BUFALOS", "PANTERAS", "ZORROS"];
-    let savedEquipos = JSON.parse(localStorage.getItem('lifarcc_lista_equipos_v13')) || JSON.parse(localStorage.getItem('lifarcc_lista_equipos_v12'));
+    let savedEquipos = JSON.parse(localStorage.getItem('lifarcc_lista_equipos_v12')) || JSON.parse(localStorage.getItem('lifarcc_lista_equipos_v10'));
     if (savedEquipos && Array.isArray(savedEquipos) && savedEquipos.length > 0) {
         listaEquiposDinamica = savedEquipos;
     }
 
-    // Agregar automáticamente todos los equipos detectados en la BD y en configEquipos
-    function sincronizarEquipos() {
-        let eqsSet = new Set(listaEquiposDinamica);
-        baseDatos.forEach(j => { if(j.equipo) eqsSet.add(j.equipo.trim().toUpperCase()); });
-        Object.keys(configEquipos).forEach(eq => eqsSet.add(eq.trim().toUpperCase()));
-        listaEquiposDinamica = Array.from(eqsSet).sort();
-    }
-    sincronizarEquipos();
+    // Agregar automáticamente cualquier equipo presente en la base de datos
+    baseDatos.forEach(j => {
+        if (j.equipo) {
+            let eqClean = j.equipo.trim().toUpperCase();
+            if (!listaEquiposDinamica.includes(eqClean)) {
+                listaEquiposDinamica.push(eqClean);
+            }
+        }
+    });
 
     let jugadorSeleccionadoFoto = null;
     let equipoSeleccionadoDirecto = null;
 
     function guardarEnStorage() {
         try {
-            sincronizarEquipos();
-            localStorage.setItem('lifarcc_jugadores_v13', JSON.stringify(baseDatos));
-            localStorage.setItem('lifarcc_fotos_v13', JSON.stringify(fotosJugadores));
-            localStorage.setItem('lifarcc_logo_liga_v13', logoLigaGlobal);
-            localStorage.setItem('lifarcc_config_equipos_v13', JSON.stringify(configEquipos));
-            localStorage.setItem('lifarcc_lista_equipos_v13', JSON.stringify(listaEquiposDinamica));
+            localStorage.setItem('lifarcc_jugadores_v12', JSON.stringify(baseDatos));
+            localStorage.setItem('lifarcc_fotos_v12', JSON.stringify(fotosJugadores));
+            localStorage.setItem('lifarcc_logo_liga_v12', logoLigaGlobal);
+            localStorage.setItem('lifarcc_config_equipos_v12', JSON.stringify(configEquipos));
+            localStorage.setItem('lifarcc_lista_equipos_v12', JSON.stringify(listaEquiposDinamica));
         } catch (e) {
             console.error("Error al guardar en localStorage:", e);
-            alert("Aviso: Espacio de almacenamiento lleno.");
+            alert("Aviso: Espacio de almacenamiento lleno. Intenta comprimir o reducir imágenes.");
         }
     }
 
@@ -722,7 +718,10 @@
     }
 
     function actualizarSelectsEquipos() {
-        sincronizarEquipos();
+        let eqsSet = new Set(listaEquiposDinamica);
+        baseDatos.forEach(j => { if(j.equipo) eqsSet.add(j.equipo.trim().toUpperCase()); });
+        listaEquiposDinamica = Array.from(eqsSet);
+
         const selectFiltro = document.getElementById("filtroEquipo");
         const selectNuevo = document.getElementById("nuevoEquipo");
         const selectEdit = document.getElementById("editEquipoSelect");
@@ -914,7 +913,9 @@
         if (!grid) return;
         grid.innerHTML = "";
         
-        sincronizarEquipos();
+        let eqsSet = new Set(listaEquiposDinamica);
+        baseDatos.forEach(j => { if(j.equipo) eqsSet.add(j.equipo.trim().toUpperCase()); });
+        listaEquiposDinamica = Array.from(eqsSet);
 
         listaEquiposDinamica.forEach(eq => {
             const conf = configEquipos[eq] || {};
@@ -1302,7 +1303,6 @@
             return;
         }
 
-        // Agrupar por Equipo y luego por Categoría de manera ordenada
         const combinaciones = {};
         baseDatos.forEach(j => {
             const eq = (j.equipo || "").trim().toUpperCase();
@@ -1316,20 +1316,13 @@
             }
         });
 
-        // Ordenar alfabéticamente por Equipo y luego por Categoría
-        const keysOrdenadas = Object.keys(combinaciones).sort((a, b) => {
-            const [eqA, catA] = a.split("___");
-            const [eqB, catB] = b.split("___");
-            if (eqA !== eqB) return eqA.localeCompare(eqB);
-            return catA.localeCompare(catB);
-        });
-
-        if (keysOrdenadas.length === 0) {
+        const keys = Object.keys(combinaciones);
+        if (keys.length === 0) {
             alert("No hay combinaciones válidas de equipo y categoría para imprimir.");
             return;
         }
 
-        keysOrdenadas.forEach(key => {
+        keys.forEach(key => {
             const grupo = combinaciones[key];
             const conf = configEquipos[grupo.equipo] || {};
             const logoEq = conf.logo || 'https://via.placeholder.com/90?text=EQUIPO';
@@ -1356,15 +1349,15 @@
             <div class="hoja-roster-impresion">
                 <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px; text-align: center;">
                     <tr>
-                        <td style="width: 20%; text-align: left; border:none;"><img src="${logoLiga}" style="width:85px; height:85px; object-fit:contain;" onerror="this.src='https://via.placeholder.com/85?text=LIGA'"></td>
+                        <td style="width: 20%; text-align: left; border:none;"><img src="${logoLiga}" style="width:80px; height:80px; object-fit:contain;" onerror="this.src='https://via.placeholder.com/80?text=LIGA'"></td>
                         <td style="width: 60%; text-align: center; border:none;">
                             <div style="font-size: 16px; font-weight: bold; color: #1e3a8a; text-transform: uppercase;">LIGA DE FÚTBOL AMERICANO</div>
                             <div style="font-size: 18px; font-weight: bold; color: #1e3a8a; text-transform: uppercase; margin-top: 2px;">LIFARCC MONCLOVA</div>
                         </td>
-                        <td style="width: 20%; text-align: right; border:none;"><img src="${logoEq}" style="width:85px; height:85px; object-fit:contain;" onerror="this.src='https://via.placeholder.com/85?text=EQUIPO'"></td>
+                        <td style="width: 20%; text-align: right; border:none;"><img src="${logoEq}" style="width:80px; height:80px; object-fit:contain;" onerror="this.src='https://via.placeholder.com/80?text=EQUIPO'"></td>
                     </tr>
                 </table>
-                <div style="background-color: #fce7f3; border: 1px solid #1e3a8a; font-weight: bold; font-size: 14px; color: #1e3a8a; padding: 6px; text-align: center; margin-bottom: 12px; text-transform: uppercase; -webkit-print-color-adjust: exact; print-color-adjust: exact;">
+                <div style="background-color: #fce7f3; border: 1px solid #1e3a8a; font-weight: bold; font-size: 14px; color: #1e3a8a; padding: 6px; text-align: center; margin-bottom: 12px; text-transform: uppercase;">
                     EQUIPO: ${grupo.equipo} &nbsp;&nbsp;|&nbsp;&nbsp; CATEGORÍA: ${grupo.categoria} &nbsp;&nbsp;|&nbsp;&nbsp; CAMPO: ${campo}
                 </div>
                 <table style="width: 100%; border-collapse: collapse; background: white;">
@@ -1406,7 +1399,7 @@
         let mensaje = "📋 RESUMEN DE EQUIPOS REGISTRADOS EN LA LIGA:\n\n";
         let totalJugadoresGeneral = 0;
         
-        Object.keys(conteo).sort().forEach(eq => {
+        Object.keys(conteo).forEach(eq => {
             let num = conteo[eq];
             totalJugadoresGeneral += num;
             mensaje += `• ${eq}: ${num} jugador(es) registrado(s)\n`;
