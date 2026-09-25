@@ -154,6 +154,7 @@
         }
         .filter-group { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
         .filter-group label { font-weight: bold; color: #cbd5e1; font-size: 13px; }
+        
         select, input[type="text"], input[type="date"], input[type="number"], input[type="file"] {
             padding: 7px 10px;
             font-size: 13px;
@@ -161,6 +162,7 @@
             border: 1px solid var(--metal-border);
             background: #0f172a;
             color: white;
+            color-scheme: dark; /* Icono y texto de calendario en blanco */
         }
         select:disabled { opacity: 0.7; cursor: not-allowed; }
 
@@ -303,15 +305,18 @@
                 page-break-after: avoid;
                 break-after: avoid;
             }
-            table.print-table { width: 100%; border-collapse: collapse; margin-top: 8px; background: white; }
+            table.print-table { width: 100%; border-collapse: collapse; margin-top: 8px; background: white; page-break-inside: auto; }
+            table.print-table tr { page-break-inside: avoid; page-break-after: auto; }
+            table.print-table thead { display: table-header-group; } /* Repite el encabezado de la tabla en cada hoja */
             table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 5px; text-align: center; font-size: 11px; height: 28px; }
             table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; text-transform: uppercase; font-size: 11px; }
-            .logo-box-print { width: 110px; height: 110px; object-fit: contain; background: #fff; }
-            .header-layout { width: 100%; border-collapse: collapse; margin-bottom: 12px; text-align: center; }
+            .logo-box-print { width: 120px; height: 120px; object-fit: contain; background: #fff; }
+            .header-layout { width: 100%; border-collapse: collapse; margin-bottom: 8px; text-align: center; display: table; }
+            .header-layout thead { display: table-header-group; }
             .header-layout td { border: none !important; padding: 2px; vertical-align: middle; }
-            .league-title-print { font-size: 24px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1.1; letter-spacing: 1px; }
-            .league-subtitle-print { font-size: 11px; font-weight: bold; color: #111; text-transform: uppercase; text-align: center; margin-top: 4px; }
-            .info-bar { margin-top: 8px; margin-bottom: 8px; font-size: 13px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; }
+            .league-title-print { font-size: 32px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
+            .league-subtitle-print { font-size: 11px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 6px; }
+            .info-bar { margin-top: 6px; margin-bottom: 6px; font-size: 13px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; }
         }
     </style>
 </head>
@@ -383,13 +388,14 @@
             <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
                 <div>
                     <label style="font-size: 11px; font-weight: bold;">Fecha Inicio:</label>
-                    <input type="date" id="adminFechaInicio" onchange="guardarFechasRegistroNube()">
+                    <input type="date" id="adminFechaInicio">
                 </div>
                 <div>
                     <label style="font-size: 11px; font-weight: bold;">Fecha Fin (Límite):</label>
-                    <input type="date" id="adminFechaFin" onchange="guardarFechasRegistroNube()">
+                    <input type="date" id="adminFechaFin">
                 </div>
-                <span style="font-size: 11px; color: #94a3b8;" id="lblEstadoFechas">Configura el periodo permitido de registros.</span>
+                <button class="btn btn-warning btn-sm" onclick="guardarFechasRegistroNube()">Guardar Fechas en la Nube</button>
+                <span style="font-size: 11px; color: #94a3b8;" id="lblEstadoFechas">La fecha final no puede ser menor a la inicial.</span>
             </div>
         </div>
 
@@ -411,6 +417,9 @@
         <!-- 3. SECCIÓN DE REGISTRAR JUGADOR -->
         <div class="section-box" id="seccionAltaIndividual" style="background: #1e293b; border: 1px solid var(--bronze-gold);">
             <h4>➕ Registrar Jugador de 1 en 1 (Sincronizado en la Nube)</h4>
+            <div id="bannerPeriodoRegistro" style="background: rgba(217, 119, 6, 0.2); border: 1px dashed var(--bronze-gold); padding: 8px 12px; border-radius: 6px; margin-bottom: 12px; font-size: 12px; font-weight: bold; color: #fbbf24; text-align: center;">
+                📅 FECHA DE REGISTROS: Cargando periodo...
+            </div>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 10px;">
                 <div>
                     <label style="font-size: 11px; font-weight: bold;">Equipo:</label>
@@ -427,7 +436,7 @@
                     </select>
                 </div>
                 <div style="grid-column: span 2;">
-                    <label style="font-size: 11px; font-weight: bold;">Nombre Completo:</label>
+                    <label style="font-size: 11px; font-weight: bold;">Nombre Completo (Sin números ni puntos):</label>
                     <input type="text" id="altaNombre" placeholder="APELLIDOS Y NOMBRES" style="width:100%;">
                 </div>
                 <div>
@@ -435,8 +444,8 @@
                     <input type="date" id="altaNacimiento" style="width:100%;">
                 </div>
                 <div>
-                    <label style="font-size: 11px; font-weight: bold;">CURP:</label>
-                    <input type="text" id="altaCurp" placeholder="CURP..." style="width:100%;">
+                    <label style="font-size: 11px; font-weight: bold;">CURP (18 Dígitos):</label>
+                    <input type="text" id="altaCurp" maxlength="18" placeholder="18 CARACTERES..." style="width:100%;">
                 </div>
                 <div>
                     <label style="font-size: 11px; font-weight: bold;">Documento:</label>
@@ -483,7 +492,7 @@
             </div>
         </div>
 
-        <!-- 5. TABLA CON LOS DATOS DE LOS JUGADORES (AL FINAL DE ABAJO) -->
+        <!-- 5. TABLA CON LOS DATOS DE LOS JUGADORES -->
         <div class="table-responsive">
             <table>
                 <thead>
@@ -554,7 +563,7 @@
     </div>
 </div>
 
-<!-- MODAL EDITAR JUGADOR (SOLO ADMINISTRADOR) -->
+<!-- MODAL EDITAR JUGADOR -->
 <div id="modalEditar" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -567,7 +576,7 @@
             <div><label style="font-size: 11px; font-weight: bold;">Equipo:</label><select id="editEquipoSelect" style="width:100%;"></select></div>
             <div><label style="font-size: 11px; font-weight: bold;">Categoría:</label><select id="editCategoria" style="width:100%;"><option value="MOSCO">MOSCO</option><option value="ARDILLA">ARDILLA</option><option value="BOTANA">BOTANA</option><option value="HORMIGUITA">HORMIGUITA</option><option value="HORMIGA">HORMIGA</option></select></div>
             <div><label style="font-size: 11px; font-weight: bold;">Fecha Nac:</label><input type="date" id="editNacimiento" style="width:100%;"></div>
-            <div><label style="font-size: 11px; font-weight: bold;">CURP:</label><input type="text" id="editCurp" style="width:100%;"></div>
+            <div><label style="font-size: 11px; font-weight: bold;">CURP (18 Dígitos):</label><input type="text" id="editCurp" maxlength="18" style="width:100%;"></div>
             <div><label style="font-size: 11px; font-weight: bold;">Documento:</label><input type="text" id="editDoc" style="width:100%;"></div>
             <div style="display: flex; align-items: center; gap: 10px; margin-top: 5px;">
                 <div id="modalFotoPreview" class="player-photo-container" style="width: 45px; height: 55px;"></div>
@@ -716,6 +725,8 @@
             if (document.getElementById("adminFechaInicio")) document.getElementById("adminFechaInicio").value = fechasRegistro.inicio || "";
             if (document.getElementById("adminFechaFin")) document.getElementById("adminFechaFin").value = fechasRegistro.fin || "";
 
+            actualizarBannerFechasRegistro();
+
             listaEquiposOficiales.forEach(eq => {
                 if (!configEquipos[eq]) configEquipos[eq] = {};
                 if (!configEquipos[eq].logo) configEquipos[eq].logo = logosPorDefecto[eq] || '';
@@ -730,11 +741,34 @@
 
     window.guardarFechasRegistroNube = async function() {
         if (rolActual !== "Administrador") return;
-        fechasRegistro.inicio = document.getElementById("adminFechaInicio").value;
-        fechasRegistro.fin = document.getElementById("adminFechaFin").value;
+        const inicio = document.getElementById("adminFechaInicio").value;
+        const fin = document.getElementById("adminFechaFin").value;
+
+        if (inicio && fin && fin < inicio) {
+            alert("⚠️ La fecha final no puede ser menor que la fecha inicial.");
+            return;
+        }
+
+        fechasRegistro.inicio = inicio;
+        fechasRegistro.fin = fin;
 
         await setDoc(doc(db, "configuracion", "fechas_sistema"), fechasRegistro);
+        actualizarBannerFechasRegistro();
         alert("¡Fechas de registro actualizadas en la nube!");
+    }
+
+    function actualizarBannerFechasRegistro() {
+        const banner = document.getElementById("bannerPeriodoRegistro");
+        if (!banner) return;
+        if (fechasRegistro.inicio && fechasRegistro.fin) {
+            banner.innerText = `📅 FECHA DE REGISTROS: Del ${fechasRegistro.inicio} al ${fechasRegistro.fin}`;
+        } else if (fechasRegistro.inicio) {
+            banner.innerText = `📅 FECHA DE REGISTROS: A partir del ${fechasRegistro.inicio}`;
+        } else if (fechasRegistro.fin) {
+            banner.innerText = `📅 FECHA DE REGISTROS: Hasta el ${fechasRegistro.fin}`;
+        } else {
+            banner.innerText = `📅 FECHA DE REGISTROS: Sin restricciones de fechas configuradas por la liga.`;
+        }
     }
 
     function formatearFechaExcel(val) {
@@ -904,7 +938,6 @@
     }
 
     window.registrarJugadorIndividual = async function() {
-        // Validar fechas límite si es equipo
         if (rolActual === "Equipo") {
             const hoy = new Date().toISOString().split('T')[0];
             if (fechasRegistro.inicio && hoy < fechasRegistro.inicio) {
@@ -925,6 +958,18 @@
         const docText = document.getElementById("altaDoc").value.trim().toUpperCase();
 
         if (!nombre) { alert("Ingresa el nombre completo del jugador."); return; }
+
+        // Validación: El nombre no debe contener números ni puntos
+        if (/[0-9\.]/.test(nombre)) {
+            alert("⚠️ El nombre del jugador no debe contener números ni puntos.");
+            return;
+        }
+
+        // Validación: CURP debe tener exactamente 18 caracteres alfanuméricos
+        if (curp && !/^[A-Z0-9]{18}$/.test(curp)) {
+            alert("⚠️ El CURP debe tener exactamente 18 caracteres alfanuméricos.");
+            return;
+        }
 
         const fileInput = document.getElementById("altaFoto");
         if (fileInput.files && fileInput.files[0]) {
@@ -972,7 +1017,7 @@
             });
         }
         renderizarRoster();
-        alert(`¡${count} fotografía(s) guardadas en la nube correctamente!`);
+        alert(`¡${count} fotografía(s) guardadas en la nube correctamente asociadas al nombre del jugador!`);
         event.target.value = "";
     }
 
@@ -1086,7 +1131,6 @@
                 `<div class="player-photo-container" onclick="dispararFotoIndividual('${jugador.id}')" title="Cambiar foto"><img src="${jugador.foto}" class="player-photo"></div>` : 
                 `<div class="player-photo-container" onclick="dispararFotoIndividual('${jugador.id}')" title="Subir foto"><span class="no-photo">Subir</span></div>`;
 
-            // Si es equipo, NO puede editar ni eliminar una vez guardado. Solo el Administrador.
             let accionesHtml = "";
             if (rolActual === "Administrador") {
                 accionesHtml = `
@@ -1157,7 +1201,6 @@
         });
     }
 
-    // BOTÓN VER PLANTILLA COMPLETA DEL EQUIPO
     window.mostrarPlantillaEquipo = function() {
         const eqTarget = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
         const filtrados = baseDatos.filter(j => j.equipo === eqTarget);
@@ -1183,7 +1226,6 @@
         alert(msg);
     }
 
-    // CONTEO GENERAL POR CATEGORÍA
     window.mostrarResumenEquiposRegistrados = function() {
         const eqTarget = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
         const categorias = ["MOSCO", "ARDILLA", "BOTANA", "HORMIGUITA", "HORMIGA"];
@@ -1207,13 +1249,13 @@
         alert(msg);
     }
 
-    // DISEÑO DE IMPRESIÓN CENTRADO Y MEJORADO
+    // DISEÑO DE IMPRESIÓN CON ENCABEZADO REPETIBLE
     window.imprimirRosterActual = function() {
         const equipoSelect = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
         const categoriaSelect = document.getElementById("filtroCategoria").value;
         
         const configEq = configEquipos[equipoSelect] || {};
-        const logoEq = configEq.logo || logosPorDefecto[equipoSelect] || 'https://via.placeholder.com/110?text=EQUIPO';
+        const logoEq = configEq.logo || logosPorDefecto[equipoSelect] || 'https://via.placeholder.com/120?text=EQUIPO';
         const logoLiga = logoLigaGlobal || logoLifarccDefault;
 
         const filtrados = baseDatos.filter(j => j.equipo === equipoSelect && j.categoria === categoriaSelect);
@@ -1256,37 +1298,54 @@
             body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 10mm; color: #000; background: white; }
             .hoja-roster-impresion { page-break-after: always; break-after: page; margin: 0 auto; width: 100%; max-width: 195mm; }
             .hoja-roster-impresion:last-child { page-break-after: avoid; break-after: avoid; }
-            table.print-table { width: 100%; border-collapse: collapse; margin-top: 8px; background: white; }
+            table.print-table { width: 100%; border-collapse: collapse; margin-top: 8px; background: white; page-break-inside: auto; }
+            table.print-table tr { page-break-inside: avoid; page-break-after: auto; }
+            table.print-table thead { display: table-header-group; }
             table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 5px; text-align: center; font-size: 11px; height: 28px; }
             table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; text-transform: uppercase; font-size: 11px; }
-            .logo-box-print { width: 110px; height: 110px; object-fit: contain; background: #fff; }
-            .header-layout { width: 100%; border-collapse: collapse; margin-bottom: 12px; text-align: center; }
+            .logo-box-print { width: 120px; height: 120px; object-fit: contain; background: #fff; }
+            .header-layout { width: 100%; border-collapse: collapse; margin-bottom: 8px; text-align: center; display: table; }
+            .header-layout thead { display: table-header-group; }
             .header-layout td { border: none !important; padding: 2px; vertical-align: middle; }
-            .league-title-print { font-size: 24px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1.1; letter-spacing: 1px; }
-            .league-subtitle-print { font-size: 11px; font-weight: bold; color: #111; text-transform: uppercase; text-align: center; margin-top: 4px; }
-            .info-bar { margin-top: 8px; margin-bottom: 8px; font-size: 13px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; }
+            .league-title-print { font-size: 32px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
+            .league-subtitle-print { font-size: 11px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 6px; }
+            .info-bar { margin-top: 6px; margin-bottom: 6px; font-size: 13px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; }
         </style></head><body>
         <div class="hoja-roster-impresion">
             <table class="header-layout">
-                <tr>
-                    <td style="width: 22%; text-align: left;"><img src="${logoLiga}" class="logo-box-print"></td>
-                    <td style="width: 56%; text-align: center;">
-                        <div class="league-title-print">LIFARCC</div>
-                        <div class="league-subtitle-print">LIGA INFANTIL DE FOOTBALL AMERICANO DE LA REGION CENTRO DE COAHUILA</div>
-                        <div style="font-size: 11px; margin-top: 6px; font-weight: bold;">FECHA: ___________________________________</div>
-                    </td>
-                    <td style="width: 22%; text-align: right;"><img src="${logoEq}" class="logo-box-print"></td>
-                </tr>
+                <thead>
+                    <tr>
+                        <td colspan="3" style="text-align: center; padding-bottom: 5px;">
+                            <table style="width:100%; border-collapse:collapse;">
+                                <tr>
+                                    <td style="width: 25%; text-align: left;"><img src="${logoLiga}" class="logo-box-print"></td>
+                                    <td style="width: 50%; text-align: center;">
+                                        <div class="league-title-print">LIFARCC</div>
+                                        <div class="league-subtitle-print">Liga Infantil de Football Americano de la Region Centro de Coahuila</div>
+                                    </td>
+                                    <td style="width: 25%; text-align: right;"><img src="${logoEq}" class="logo-box-print"></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="3">
+                            <div style="font-size: 11px; margin-bottom: 6px; font-weight: bold; text-align: center;">
+                                FECHA: ___________________________________
+                            </div>
+                            <div class="info-bar">
+                                <span>CLUB ${equipoSelect}</span>
+                                <span>JORNADA: ____________________</span>
+                            </div>
+                            <div style="font-size: 12px; font-weight: bold; text-transform: uppercase; margin-bottom: 6px; text-align: left;">
+                                ROSTER CATEGORIA: ${categoriaSelect}
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
-
-            <div class="info-bar">
-                <span>CLUB ${equipoSelect}</span>
-                <span>JORNADA: ____________________</span>
-            </div>
-
-            <div style="font-size: 12px; font-weight: bold; text-transform: uppercase; margin-bottom: 6px;">
-                ROSTER CATEGORIA: ${categoriaSelect}
-            </div>
 
             <table class="print-table">
                 <thead>
@@ -1341,15 +1400,18 @@
             body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 10mm; color: #000; background: white; }
             .hoja-roster-impresion { page-break-after: always; break-after: page; margin: 0 auto; width: 100%; max-width: 195mm; }
             .hoja-roster-impresion:last-child { page-break-after: avoid; break-after: avoid; }
-            table.print-table { width: 100%; border-collapse: collapse; margin-top: 8px; background: white; }
+            table.print-table { width: 100%; border-collapse: collapse; margin-top: 8px; background: white; page-break-inside: auto; }
+            table.print-table tr { page-break-inside: avoid; page-break-after: auto; }
+            table.print-table thead { display: table-header-group; }
             table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 5px; text-align: center; font-size: 11px; height: 28px; }
             table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; text-transform: uppercase; font-size: 11px; }
-            .logo-box-print { width: 110px; height: 110px; object-fit: contain; background: #fff; }
-            .header-layout { width: 100%; border-collapse: collapse; margin-bottom: 12px; text-align: center; }
+            .logo-box-print { width: 120px; height: 120px; object-fit: contain; background: #fff; }
+            .header-layout { width: 100%; border-collapse: collapse; margin-bottom: 8px; text-align: center; display: table; }
+            .header-layout thead { display: table-header-group; }
             .header-layout td { border: none !important; padding: 2px; vertical-align: middle; }
-            .league-title-print { font-size: 24px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1.1; letter-spacing: 1px; }
-            .league-subtitle-print { font-size: 11px; font-weight: bold; color: #111; text-transform: uppercase; text-align: center; margin-top: 4px; }
-            .info-bar { margin-top: 8px; margin-bottom: 8px; font-size: 13px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; }
+            .league-title-print { font-size: 32px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
+            .league-subtitle-print { font-size: 11px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 6px; }
+            .info-bar { margin-top: 6px; margin-bottom: 6px; font-size: 13px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; }
         </style></head><body>`;
 
         keysOrdenadas.forEach(key => {
@@ -1357,7 +1419,7 @@
             grupo.jugadores.sort((a, b) => a.nombre.localeCompare(b.nombre));
 
             const conf = configEquipos[grupo.equipo] || {};
-            const logoEq = conf.logo || logosPorDefecto[grupo.equipo] || 'https://via.placeholder.com/110?text=EQUIPO';
+            const logoEq = conf.logo || logosPorDefecto[grupo.equipo] || 'https://via.placeholder.com/120?text=EQUIPO';
             const logoLiga = logoLigaGlobal || logoLifarccDefault;
 
             let filasHtml = "";
@@ -1391,25 +1453,39 @@
             htmlContenido += `
             <div class="hoja-roster-impresion">
                 <table class="header-layout">
-                    <tr>
-                        <td style="width: 22%; text-align: left;"><img src="${logoLiga}" class="logo-box-print"></td>
-                        <td style="width: 56%; text-align: center;">
-                            <div class="league-title-print">LIFARCC</div>
-                            <div class="league-subtitle-print">LIGA INFANTIL DE FOOTBALL AMERICANO DE LA REGION CENTRO DE COAHUILA</div>
-                            <div style="font-size: 11px; margin-top: 6px; font-weight: bold;">FECHA: ___________________________________</div>
-                        </td>
-                        <td style="width: 22%; text-align: right;"><img src="${logoEq}" class="logo-box-print"></td>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <td colspan="3" style="text-align: center; padding-bottom: 5px;">
+                                <table style="width:100%; border-collapse:collapse;">
+                                    <tr>
+                                        <td style="width: 25%; text-align: left;"><img src="${logoLiga}" class="logo-box-print"></td>
+                                        <td style="width: 50%; text-align: center;">
+                                            <div class="league-title-print">LIFARCC</div>
+                                            <div class="league-subtitle-print">Liga Infantil de Football Americano de la Region Centro de Coahuila</div>
+                                        </td>
+                                        <td style="width: 25%; text-align: right;"><img src="${logoEq}" class="logo-box-print"></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="3">
+                                <div style="font-size: 11px; margin-bottom: 6px; font-weight: bold; text-align: center;">
+                                    FECHA: ___________________________________
+                                </div>
+                                <div class="info-bar">
+                                    <span>CLUB ${grupo.equipo}</span>
+                                    <span>JORNADA: ____________________</span>
+                                </div>
+                                <div style="font-size: 12px; font-weight: bold; text-transform: uppercase; margin-bottom: 6px; text-align: left;">
+                                    ROSTER CATEGORIA: ${grupo.categoria}
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
-
-                <div class="info-bar">
-                    <span>CLUB ${grupo.equipo}</span>
-                    <span>JORNADA: ____________________</span>
-                </div>
-
-                <div style="font-size: 12px; font-weight: bold; text-transform: uppercase; margin-bottom: 6px;">
-                    ROSTER CATEGORIA: ${grupo.categoria}
-                </div>
 
                 <table class="print-table">
                     <thead>
@@ -1467,6 +1543,12 @@
         const idJugador = document.getElementById("editDocId").value;
         const jugador = baseDatos.find(item => item.id === idJugador);
         if(!jugador) return;
+
+        const curpVal = document.getElementById("editCurp").value.trim().toUpperCase();
+        if (curpVal && !/^[A-Z0-9]{18}$/.test(curpVal)) {
+            alert("⚠️ El CURP debe tener exactamente 18 caracteres alfanuméricos.");
+            return;
+        }
 
         const fileInput = document.getElementById("editFotoFile");
         if (fileInput.files && fileInput.files[0]) {
