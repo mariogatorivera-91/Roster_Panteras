@@ -310,17 +310,16 @@
                 background: white; 
             }
             
-            /* REPETIR ENCABEZADO Y TÍTULOS EN CADA PÁGINA IMPRESA */
             thead { display: table-header-group !important; }
             tr { page-break-inside: avoid !important; page-break-after: auto !important; }
             
-            table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 5px; text-align: center; font-size: 11px; height: 28px; }
+            table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 5px; text-align: center; font-size: 11px; height: 32px; }
             table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; text-transform: uppercase; font-size: 11px; }
             
-            .logo-box-print { width: 110px; height: 110px; object-fit: contain; background: #fff; }
-            .league-title-print { font-size: 30px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
-            .league-subtitle-print { font-size: 10px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 4px; }
-            .info-bar { margin-top: 4px; margin-bottom: 4px; font-size: 12px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; }
+            .logo-box-print { width: 100px; height: 100px; object-fit: contain; background: #fff; }
+            .league-title-print { font-size: 26px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
+            .league-subtitle-print { font-size: 9px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 3px; }
+            .info-bar { margin-top: 3px; margin-bottom: 3px; font-size: 11px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; }
         }
     </style>
 </head>
@@ -428,11 +427,11 @@
             </div>
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 10px;">
                 <div>
-                    <label style="font-size: 11px; font-weight: bold;">Equipo:</label>
+                    <label style="font-size: 11px; font-weight: bold;">Equipo *:</label>
                     <select id="altaEquipo" style="width:150px;"></select>
                 </div>
                 <div>
-                    <label style="font-size: 11px; font-weight: bold;">Categoría:</label>
+                    <label style="font-size: 11px; font-weight: bold;">Categoría *:</label>
                     <select id="altaCategoria" style="width:130px;" onchange="renderizarRoster()">
                         <option value="MOSCO">MOSCO</option>
                         <option value="ARDILLA">ARDILLA</option>
@@ -442,15 +441,15 @@
                     </select>
                 </div>
                 <div style="grid-column: span 2;">
-                    <label style="font-size: 11px; font-weight: bold;">Nombre Completo (Sin números ni puntos):</label>
+                    <label style="font-size: 11px; font-weight: bold;">Nombre Completo (Sin números ni puntos) *:</label>
                     <input type="text" id="altaNombre" placeholder="APELLIDOS Y NOMBRES" style="width:100%;">
                 </div>
                 <div>
-                    <label style="font-size: 11px; font-weight: bold;">Fecha Nacimiento:</label>
+                    <label style="font-size: 11px; font-weight: bold;">Fecha Nacimiento *:</label>
                     <input type="date" id="altaNacimiento" style="width:100%;">
                 </div>
                 <div>
-                    <label style="font-size: 11px; font-weight: bold;">CURP (18 Dígitos):</label>
+                    <label style="font-size: 11px; font-weight: bold;">CURP (18 Dígitos) *:</label>
                     <input type="text" id="altaCurp" maxlength="18" placeholder="18 CARACTERES..." style="width:100%;">
                 </div>
                 <div>
@@ -458,7 +457,7 @@
                     <input type="text" id="altaDoc" value="ACTA DE NACIMIENTO, CURP" style="width:100%;">
                 </div>
                 <div>
-                    <label style="font-size: 11px; font-weight: bold;">Fotografía Individual:</label>
+                    <label style="font-size: 11px; font-weight: bold;">Fotografía Individual *:</label>
                     <input type="file" id="altaFoto" accept="image/*" style="font-size: 11px; width:100%;">
                 </div>
             </div>
@@ -644,6 +643,32 @@
                     </tr>
                 </thead>
                 <tbody id="tablaAdminUsersCuerpo"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL VER PLANTILLA COMPLETA (SOLO VISUAL) -->
+<div id="modalPlantillaEquipo" class="modal">
+    <div class="modal-content" style="max-width: 750px;">
+        <div class="modal-header">
+            <span id="tituloModalPlantilla">📋 Plantilla Completa del Equipo</span>
+            <span class="close-btn" onclick="cerrarModalPlantillaEquipo()">&times;</span>
+        </div>
+        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 10px;">Vista general de los jugadores registrados (Modo lectura).</p>
+        <div class="table-responsive" style="max-height: 420px; overflow-y: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 40px;">N°</th>
+                        <th style="width: 60px;">Foto</th>
+                        <th>Nombre del Jugador</th>
+                        <th style="width: 90px;">Categoría</th>
+                        <th style="width: 100px;">Fecha Nac.</th>
+                        <th style="width: 150px;">CURP</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaPlantillaModalCuerpo"></tbody>
             </table>
         </div>
     </div>
@@ -897,6 +922,35 @@
         }
     }
 
+    // FORMATEADORES DE FECHA DD/MM/AAAA
+    function formatearFechaExcel(val) {
+        if (!val) return "";
+        let strVal = String(val).trim();
+        if (strVal.includes('T')) strVal = strVal.split('T')[0];
+        if (!isNaN(strVal) && Number(strVal) > 1000) {
+            let excelDate = new Date(Math.round((Number(strVal) - (25567 + 2)) * 86400 * 1000));
+            if (!isNaN(excelDate.getTime())) {
+                let y = excelDate.getUTCFullYear();
+                let m = String(excelDate.getUTCMonth() + 1).padStart(2, '0');
+                let d = String(excelDate.getUTCDate()).padStart(2, '0');
+                return `${y}-${m}-${d}`;
+            }
+        }
+        if (strVal.length >= 10) return strVal.substring(0, 10);
+        return strVal;
+    }
+
+    function formatearFechaDDMMYYYY(val) {
+        if (!val) return "";
+        let str = formatearFechaExcel(val);
+        if (!str || str.length < 10) return str;
+        let parts = str.split("-");
+        if (parts.length === 3) {
+            return `${parts[2]}/${parts[1]}/${parts[0]}`;
+        }
+        return str;
+    }
+
     // GESTIÓN DE CAMBIO DE CONTRASEÑA
     window.abrirModalCambiarPass = function() {
         document.getElementById("passActual").value = "";
@@ -992,23 +1046,6 @@
         await setDoc(doc(db, "configuracion", "credenciales_sistema"), credencialesPasswords);
         alert(`¡Contraseña actualizada para ${userKey}!`);
         abrirModalAdminUsuarios();
-    }
-
-    function formatearFechaExcel(val) {
-        if (!val) return "";
-        let strVal = String(val).trim();
-        if (strVal.includes('T')) strVal = strVal.split('T')[0];
-        if (!isNaN(strVal) && Number(strVal) > 1000) {
-            let excelDate = new Date(Math.round((Number(strVal) - (25567 + 2)) * 86400 * 1000));
-            if (!isNaN(excelDate.getTime())) {
-                let y = excelDate.getUTCFullYear();
-                let m = String(excelDate.getUTCMonth() + 1).padStart(2, '0');
-                let d = String(excelDate.getUTCDate()).padStart(2, '0');
-                return `${y}-${m}-${d}`;
-            }
-        }
-        if (strVal.length >= 10) return strVal.substring(0, 10);
-        return strVal;
     }
 
     window.cambiarPestaña = function(tabId, btnElement) {
@@ -1176,30 +1213,30 @@
         const equipo = rolActual === "Equipo" ? equipoAsignado : document.getElementById("altaEquipo").value;
         const categoria = document.getElementById("altaCategoria").value;
         const nombre = document.getElementById("altaNombre").value.trim().toUpperCase();
-        const nacimiento = formatearFechaExcel(document.getElementById("altaNacimiento").value);
+        const nacimiento = document.getElementById("altaNacimiento").value;
         const curp = document.getElementById("altaCurp").value.trim().toUpperCase();
         const docText = document.getElementById("altaDoc").value.trim().toUpperCase();
+        const fileInput = document.getElementById("altaFoto");
 
-        if (!nombre) { alert("Ingresa el nombre completo del jugador."); return; }
+        // VALIDACIÓN ESTRICTA DE CAMPOS OBLIGATORIOS
+        if (!equipo || !categoria || !nombre || !nacimiento || !curp || !fileInput.files || !fileInput.files[0]) {
+            alert("⚠️ Todos los campos son obligatorios: Equipo, Categoría, Nombre completo, Fecha de nacimiento, CURP (18 dígitos) y Fotografía.");
+            return;
+        }
 
         if (/[0-9\.]/.test(nombre)) {
             alert("⚠️ El nombre del jugador no debe contener números ni puntos.");
             return;
         }
 
-        if (curp && !/^[A-Z0-9]{18}$/.test(curp)) {
+        if (!/^[A-Z0-9]{18}$/.test(curp)) {
             alert("⚠️ El CURP debe tener exactamente 18 caracteres alfanuméricos.");
             return;
         }
 
-        const fileInput = document.getElementById("altaFoto");
-        if (fileInput.files && fileInput.files[0]) {
-            comprimirYConvertirImagen(fileInput.files[0], async function(base64Foto) {
-                await guardarJugadorEnFirestore(equipo, categoria, nombre, nacimiento, curp, docText, base64Foto);
-            }, 200, 250);
-        } else {
-            await guardarJugadorEnFirestore(equipo, categoria, nombre, nacimiento, curp, docText, "");
-        }
+        comprimirYConvertirImagen(fileInput.files[0], async function(base64Foto) {
+            await guardarJugadorEnFirestore(equipo, categoria, nombre, nacimiento, curp, docText, base64Foto);
+        }, 200, 250);
     }
 
     async function guardarJugadorEnFirestore(equipo, categoria, nombre, nacimiento, curp, docText, fotoBase64) {
@@ -1213,7 +1250,7 @@
         document.getElementById("altaFoto").value = "";
         
         renderizarRoster();
-        alert("¡Jugador registrado y guardado en la nube con éxito!");
+        alert("✅ ¡Jugador registrado con éxito en la nube!\n\n📌 Recordatorio: No olvides entregar la documentación completa y legible al encargado.");
     }
 
     window.cargarFotosLocales = async function(event) {
@@ -1367,7 +1404,7 @@
                 <td>${htmlFoto}</td>
                 <td style="text-align: left; padding-left: 10px; font-weight: 500;">${jugador.nombre}</td>
                 <td>${jugador.categoria}</td>
-                <td>${formatearFechaExcel(jugador.nacimiento) || ''}</td>
+                <td>${formatearFechaDDMMYYYY(jugador.nacimiento) || ''}</td>
                 <td><code style="font-size: 11px;">${jugador.curp || ''}</code></td>
                 <td>${jugador.doc || ''}</td>
                 <td class="no-print col-admin"><span style="font-size: 10px; background: #e2e8f0; padding: 2px 5px; border-radius: 4px; font-weight: bold;">${jugador.equipo}</span></td>
@@ -1411,7 +1448,7 @@
                 <td><span style="font-size: 10px; background: #e2e8f0; padding: 2px 5px; border-radius: 4px; font-weight: bold;">${jugador.equipo}</span></td>
                 <td style="text-align: left; padding-left: 10px; font-weight: 500;">${jugador.nombre}</td>
                 <td>${jugador.categoria}</td>
-                <td>${formatearFechaExcel(jugador.nacimiento) || ''}</td>
+                <td>${formatearFechaDDMMYYYY(jugador.nacimiento) || ''}</td>
                 <td><code style="font-size: 11px;">${jugador.curp || ''}</code></td>
                 <td>${jugador.doc || ''}</td>
                 <td>
@@ -1422,6 +1459,7 @@
         });
     }
 
+    // MODAL VISUAL PARA "VER PLANTILLA"
     window.mostrarPlantillaEquipo = function() {
         const eqTarget = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
         const filtrados = baseDatos.filter(j => j.equipo === eqTarget);
@@ -1430,21 +1468,31 @@
             return a.nombre.localeCompare(b.nombre);
         });
 
+        document.getElementById("tituloModalPlantilla").innerText = `📋 Plantilla Completa - Club ${eqTarget} (${filtrados.length} jugadores)`;
+        const tbody = document.getElementById("tablaPlantillaModalCuerpo");
+        tbody.innerHTML = "";
+
         if (filtrados.length === 0) {
-            alert(`No hay jugadores registrados para el club ${eqTarget}.`);
-            return;
+            tbody.innerHTML = `<tr><td colspan="6" style="padding: 20px; color: #64748b;">No hay jugadores registrados para el club ${eqTarget}.</td></tr>`;
+        } else {
+            filtrados.forEach((j, i) => {
+                let fotoTd = j.foto ? `<img src="${j.foto}" style="width:35px; height:45px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:7px; color:#64748b;">Sin foto</span>`;
+                tbody.innerHTML += `<tr>
+                    <td><strong>${i + 1}</strong></td>
+                    <td>${fotoTd}</td>
+                    <td style="text-align: left; padding-left: 10px; font-weight: 600;">${j.nombre}</td>
+                    <td>${j.categoria}</td>
+                    <td>${formatearFechaDDMMYYYY(j.nacimiento) || ''}</td>
+                    <td><code>${j.curp || ''}</code></td>
+                </tr>`;
+            });
         }
 
-        let msg = `📋 PLANTILLA COMPLETA - CLUB ${eqTarget} (${filtrados.length} jugadores):\n\n`;
-        let catActual = "";
-        filtrados.forEach((j, i) => {
-            if (j.categoria !== catActual) {
-                catActual = j.categoria;
-                msg += `\n--- CATEGORÍA: ${catActual} ---\n`;
-            }
-            msg += `${i + 1}. ${j.nombre} [Nac: ${formatearFechaExcel(j.nacimiento) || 'N/D'}]\n`;
-        });
-        alert(msg);
+        document.getElementById("modalPlantillaEquipo").style.display = "flex";
+    }
+
+    window.cerrarModalPlantillaEquipo = function() {
+        document.getElementById("modalPlantillaEquipo").style.display = "none";
     }
 
     window.mostrarResumenEquiposRegistrados = function() {
@@ -1470,13 +1518,13 @@
         alert(msg);
     }
 
-    // DISEÑO DE IMPRESIÓN CON ENCABEZADO REPETIBLE EN CADA PÁGINA
+    // DISEÑO DE IMPRESIÓN CON FOTO MÁS GRANDE Y FORMATO DD/MM/AAAA
     window.imprimirRosterActual = function() {
         const equipoSelect = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
         const categoriaSelect = document.getElementById("filtroCategoria").value;
         
         const configEq = configEquipos[equipoSelect] || {};
-        const logoEq = configEq.logo || logosPorDefecto[equipoSelect] || 'https://via.placeholder.com/110?text=EQUIPO';
+        const logoEq = configEq.logo || logosPorDefecto[equipoSelect] || 'https://via.placeholder.com/100?text=EQUIPO';
         const logoLiga = logoLigaGlobal || logoLifarccDefault;
 
         const filtrados = baseDatos.filter(j => j.equipo === equipoSelect && j.categoria === categoriaSelect);
@@ -1489,13 +1537,14 @@
 
         let filasHtml = "";
         filtrados.forEach((j, idx) => {
-            let fotoTd = j.foto ? `<img src="${j.foto}" style="width:40px; height:55px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:7px; color:#64748b;">Sin foto</span>`;
+            // FOTO MÁS GRANDE EN IMPRESIÓN
+            let fotoTd = j.foto ? `<img src="${j.foto}" style="width:55px; height:75px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:8px; color:#64748b;">Sin foto</span>`;
             
             filasHtml += `<tr>
                 <td><strong>${idx + 1}</strong></td>
                 <td>${fotoTd}</td>
                 <td style="text-align: left; padding-left: 8px; font-weight: 600; text-transform: uppercase;">${j.nombre}</td>
-                <td>${formatearFechaExcel(j.nacimiento) || ''}</td>
+                <td>${formatearFechaDDMMYYYY(j.nacimiento) || ''}</td>
                 <td><code>${j.curp || ''}</code></td>
                 <td></td>
                 <td></td>
@@ -1520,14 +1569,13 @@
             table.print-table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; }
             thead { display: table-header-group; }
             tr { page-break-inside: avoid; }
-            table.print-table th, table.print-table td { border: 1px solid #000; padding: 3px 5px; text-align: center; font-size: 11px; height: 26px; }
+            table.print-table th, table.print-table td { border: 1px solid #000; padding: 3px 5px; text-align: center; font-size: 11px; height: 32px; }
             table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; text-transform: uppercase; font-size: 11px; }
-            .logo-box-print { width: 100px; height: 100px; object-fit: contain; background: #fff; }
-            .header-table { width: 100%; border-collapse: collapse; margin-bottom: 5px; }
+            .logo-box-print { width: 95px; height: 95px; object-fit: contain; background: #fff; }
+            .header-table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
             .header-table td { border: none !important; padding: 2px; vertical-align: middle; }
-            .league-title-print { font-size: 28px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
-            .league-subtitle-print { font-size: 10px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 4px; }
-            .info-bar { margin-top: 4px; margin-bottom: 4px; font-size: 12px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; }
+            .league-title-print { font-size: 26px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
+            .league-subtitle-print { font-size: 9px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 3px; }
         </style></head><body>
         
         <table class="print-table">
@@ -1547,18 +1595,18 @@
                         <div style="font-size: 10px; font-weight: bold; text-align: center; margin-bottom: 2px;">
                             FECHA: ___________________________________
                         </div>
-                        <div style="font-size: 12px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; margin-bottom: 2px;">
+                        <div style="font-size: 11px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; margin-bottom: 2px;">
                             <span>CLUB ${equipoSelect}</span>
                             <span>JORNADA: ____________________</span>
                         </div>
-                        <div style="font-size: 11px; font-weight: bold; text-transform: uppercase; text-align: left; margin-bottom: 4px;">
+                        <div style="font-size: 11px; font-weight: bold; text-transform: uppercase; text-align: left; margin-bottom: 3px;">
                             ROSTER CATEGORIA: ${categoriaSelect}
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <th style="width: 35px;">N°</th>
-                    <th style="width: 60px;">Foto</th>
+                    <th style="width: 65px;">Foto</th>
                     <th>Nombre Completo</th>
                     <th style="width: 90px;">Fecha Nac.</th>
                     <th style="width: 135px;">CURP</th>
@@ -1613,13 +1661,13 @@
             table.print-table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; }
             thead { display: table-header-group; }
             tr { page-break-inside: avoid; }
-            table.print-table th, table.print-table td { border: 1px solid #000; padding: 3px 5px; text-align: center; font-size: 11px; height: 26px; }
+            table.print-table th, table.print-table td { border: 1px solid #000; padding: 3px 5px; text-align: center; font-size: 11px; height: 32px; }
             table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; text-transform: uppercase; font-size: 11px; }
-            .logo-box-print { width: 100px; height: 100px; object-fit: contain; background: #fff; }
-            .header-table { width: 100%; border-collapse: collapse; margin-bottom: 5px; }
+            .logo-box-print { width: 95px; height: 95px; object-fit: contain; background: #fff; }
+            .header-table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
             .header-table td { border: none !important; padding: 2px; vertical-align: middle; }
-            .league-title-print { font-size: 28px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
-            .league-subtitle-print { font-size: 10px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 4px; }
+            .league-title-print { font-size: 26px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
+            .league-subtitle-print { font-size: 9px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 3px; }
         </style></head><body>`;
 
         keysOrdenadas.forEach(key => {
@@ -1627,18 +1675,18 @@
             grupo.jugadores.sort((a, b) => a.nombre.localeCompare(b.nombre));
 
             const conf = configEquipos[grupo.equipo] || {};
-            const logoEq = conf.logo || logosPorDefecto[grupo.equipo] || 'https://via.placeholder.com/110?text=EQUIPO';
+            const logoEq = conf.logo || logosPorDefecto[grupo.equipo] || 'https://via.placeholder.com/100?text=EQUIPO';
             const logoLiga = logoLigaGlobal || logoLifarccDefault;
 
             let filasHtml = "";
             grupo.jugadores.forEach((j, idx) => {
-                let fotoTd = j.foto ? `<img src="${j.foto}" style="width:40px; height:55px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:7px; color:#64748b;">Sin foto</span>`;
+                let fotoTd = j.foto ? `<img src="${j.foto}" style="width:55px; height:75px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:8px; color:#64748b;">Sin foto</span>`;
                 
                 filasHtml += `<tr>
                     <td><strong>${idx + 1}</strong></td>
                     <td>${fotoTd}</td>
                     <td style="text-align: left; padding-left: 8px; font-weight: 600; text-transform: uppercase;">${j.nombre}</td>
-                    <td>${formatearFechaExcel(j.nacimiento) || ''}</td>
+                    <td>${formatearFechaDDMMYYYY(j.nacimiento) || ''}</td>
                     <td><code>${j.curp || ''}</code></td>
                     <td></td>
                     <td></td>
@@ -1677,18 +1725,18 @@
                                 <div style="font-size: 10px; font-weight: bold; text-align: center; margin-bottom: 2px;">
                                     FECHA: ___________________________________
                                 </div>
-                                <div style="font-size: 12px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; margin-bottom: 2px;">
+                                <div style="font-size: 11px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; margin-bottom: 2px;">
                                     <span>CLUB ${grupo.equipo}</span>
                                     <span>JORNADA: ____________________</span>
                                 </div>
-                                <div style="font-size: 11px; font-weight: bold; text-transform: uppercase; text-align: left; margin-bottom: 4px;">
+                                <div style="font-size: 11px; font-weight: bold; text-transform: uppercase; text-align: left; margin-bottom: 3px;">
                                     ROSTER CATEGORIA: ${grupo.categoria}
                                 </div>
                             </td>
                         </tr>
                         <tr>
                             <th style="width: 35px;">N°</th>
-                            <th style="width: 60px;">Foto</th>
+                            <th style="width: 65px;">Foto</th>
                             <th>Nombre Completo</th>
                             <th style="width: 90px;">Fecha Nac.</th>
                             <th style="width: 135px;">CURP</th>
