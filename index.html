@@ -314,7 +314,7 @@
             thead { display: table-header-group !important; }
             tr { page-break-inside: avoid !important; page-break-after: auto !important; }
             
-            table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 5px; text-align: center; font-size: 11px; height: 32px; }
+            table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 6px; text-align: center; font-size: 11px; }
             table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; text-transform: uppercase; font-size: 11px; }
             
             .logo-box-print { width: 95px; height: 95px; object-fit: contain; background: #fff; }
@@ -1518,7 +1518,7 @@
         alert(msg);
     }
 
-    // DISEÑO DE IMPRESIÓN (SIN RENGLONES VACÍOS Y CON ENCABEZADO REPETIDO)
+    // DISEÑO DE IMPRESIÓN (FOTOS GRANDES, SIN RENGLONES VACÍOS Y ENCABEZADO REPETIDO)
     window.imprimirRosterActual = function() {
         const equipoSelect = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
         const categoriaSelect = document.getElementById("filtroCategoria").value;
@@ -1537,7 +1537,8 @@
 
         let filasHtml = "";
         filtrados.forEach((j, idx) => {
-            let fotoTd = j.foto ? `<img src="${j.foto}" style="width:55px; height:75px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:8px; color:#64748b;">Sin foto</span>`;
+            // FOTOS MÁS GRANDES EN IMPRESIÓN
+            let fotoTd = j.foto ? `<img src="${j.foto}" style="width:75px; height:95px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:8px; color:#64748b;">Sin foto</span>`;
             
             filasHtml += `<tr>
                 <td><strong>${idx + 1}</strong></td>
@@ -1555,7 +1556,7 @@
             table.print-table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; }
             thead { display: table-header-group !important; }
             tr { page-break-inside: avoid !important; }
-            table.print-table th, table.print-table td { border: 1px solid #000; padding: 3px 5px; text-align: center; font-size: 11px; height: 32px; }
+            table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 6px; text-align: center; font-size: 11px; }
             table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; text-transform: uppercase; font-size: 11px; }
             .logo-box-print { width: 95px; height: 95px; object-fit: contain; background: #fff; }
             .header-table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
@@ -1592,7 +1593,7 @@
                 </tr>
                 <tr>
                     <th style="width: 35px;">N°</th>
-                    <th style="width: 65px;">Foto</th>
+                    <th style="width: 80px;">Foto</th>
                     <th>Nombre Completo</th>
                     <th style="width: 90px;">Fecha Nac.</th>
                     <th style="width: 135px;">CURP</th>
@@ -1647,7 +1648,7 @@
             table.print-table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; }
             thead { display: table-header-group !important; }
             tr { page-break-inside: avoid !important; }
-            table.print-table th, table.print-table td { border: 1px solid #000; padding: 3px 5px; text-align: center; font-size: 11px; height: 32px; }
+            table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 6px; text-align: center; font-size: 11px; }
             table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; text-transform: uppercase; font-size: 11px; }
             .logo-box-print { width: 95px; height: 95px; object-fit: contain; background: #fff; }
             .header-table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
@@ -1666,7 +1667,7 @@
 
             let filasHtml = "";
             grupo.jugadores.forEach((j, idx) => {
-                let fotoTd = j.foto ? `<img src="${j.foto}" style="width:55px; height:75px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:8px; color:#64748b;">Sin foto</span>`;
+                let fotoTd = j.foto ? `<img src="${j.foto}" style="width:75px; height:95px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:8px; color:#64748b;">Sin foto</span>`;
                 
                 filasHtml += `<tr>
                     <td><strong>${idx + 1}</strong></td>
@@ -1709,7 +1710,7 @@
                         </tr>
                         <tr>
                             <th style="width: 35px;">N°</th>
-                            <th style="width: 65px;">Foto</th>
+                            <th style="width: 80px;">Foto</th>
                             <th>Nombre Completo</th>
                             <th style="width: 90px;">Fecha Nac.</th>
                             <th style="width: 135px;">CURP</th>
