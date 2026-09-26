@@ -286,7 +286,7 @@
         .footer-copyright {
             margin-top: 30px;
             text-align: center;
-            font-size: 8px;
+            font-size: 9px;
             color: var(--accent-silver);
             letter-spacing: 0.5px;
             border-top: 1px solid var(--metal-border);
@@ -310,8 +310,9 @@
                 background: white; 
             }
             
-            /* REPETIR EL ENCABEZADO COMPLETO EN CADA PÁGINA */
+            /* REPETIR EL ENCABEZADO COMPLETO AUTOMÁTICAMENTE EN CADA PÁGINA */
             thead { display: table-header-group !important; }
+            tbody { display: table-row-group !important; }
             tr { page-break-inside: avoid !important; page-break-after: auto !important; }
             
             table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 6px; text-align: center; font-size: 11px; }
@@ -347,6 +348,10 @@
             <input type="password" id="loginPassword" placeholder="Contraseña..." onkeydown="if(event.key==='Enter') intentarLogin()" style="width: 100%; margin-top: 5px; box-sizing: border-box; padding: 8px; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white;">
         </div>
         <button class="btn btn-warning" style="width: 100%; justify-content: center;" onclick="intentarLogin()">Ingresar al Sistema</button>
+    </div>
+    <!-- PIE DE PÁGINA EN PANTALLA DE ACCESO -->
+    <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
+        Página creada por Carrivers Desing - Todos los derechos reservados © - V.013
     </div>
 </div>
 
@@ -564,7 +569,7 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Todos los derechos reservados creada por Carivers Desing ©
+        Página creada por Carrivers Desing - Todos los derechos reservados © - V.013
     </div>
 </div>
 
@@ -1518,7 +1523,7 @@
         alert(msg);
     }
 
-    // DISEÑO DE IMPRESIÓN (FOTOS GRANDES, SIN RENGLONES VACÍOS Y ENCABEZADO REPETIDO)
+    // DISEÑO DE IMPRESIÓN (CON ENCABEZADO REPETIDO EN CADA PÁGINA)
     window.imprimirRosterActual = function() {
         const equipoSelect = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
         const categoriaSelect = document.getElementById("filtroCategoria").value;
@@ -1537,7 +1542,6 @@
 
         let filasHtml = "";
         filtrados.forEach((j, idx) => {
-            // FOTOS MÁS GRANDES EN IMPRESIÓN
             let fotoTd = j.foto ? `<img src="${j.foto}" style="width:75px; height:95px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:8px; color:#64748b;">Sin foto</span>`;
             
             filasHtml += `<tr>
@@ -1554,8 +1558,10 @@
         let htmlContenido = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Roster - ${equipoSelect} (${categoriaSelect})</title><style>
             body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 10mm; color: #000; background: white; }
             table.print-table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; }
+            /* REPETIR EL ENCABEZADO COMPLETO EN CADA PÁGINA */
             thead { display: table-header-group !important; }
-            tr { page-break-inside: avoid !important; }
+            tbody { display: table-row-group !important; }
+            tr { page-break-inside: avoid !important; page-break-after: auto !important; }
             table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 6px; text-align: center; font-size: 11px; }
             table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; text-transform: uppercase; font-size: 11px; }
             .logo-box-print { width: 95px; height: 95px; object-fit: contain; background: #fff; }
@@ -1646,8 +1652,10 @@
             .hoja-roster-impresion { page-break-after: always; break-after: page; margin-bottom: 20mm; }
             .hoja-roster-impresion:last-child { page-break-after: avoid; break-after: avoid; }
             table.print-table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; }
+            /* REPETIR EL ENCABEZADO COMPLETO EN CADA PÁGINA */
             thead { display: table-header-group !important; }
-            tr { page-break-inside: avoid !important; }
+            tbody { display: table-row-group !important; }
+            tr { page-break-inside: avoid !important; page-break-after: auto !important; }
             table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 6px; text-align: center; font-size: 11px; }
             table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; text-transform: uppercase; font-size: 11px; }
             .logo-box-print { width: 95px; height: 95px; object-fit: contain; background: #fff; }
