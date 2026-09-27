@@ -163,6 +163,7 @@
             background: #0f172a;
             color: white;
             color-scheme: dark;
+            box-sizing: border-box;
         }
         select:disabled { opacity: 0.8; cursor: not-allowed; background: #090d16; color: #fbbf24; font-weight: bold; }
 
@@ -316,7 +317,6 @@
                 background: white; 
             }
             
-            /* REPETIR EL ENCABEZADO COMPLETO AUTOMÁTICAMENTE EN CADA PÁGINA */
             thead { display: table-header-group !important; }
             tbody { display: table-row-group !important; }
             tr { page-break-inside: avoid !important; page-break-after: auto !important; }
@@ -367,7 +367,7 @@
     </div>
     <!-- PIE DE PÁGINA EN PANTALLA DE ACCESO -->
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página creada por Carrivers Desing - Todos los derechos reservados © - V.016
+        Página creada por Carrivers Desing - Todos los derechos reservados © - V.017
     </div>
 </div>
 
@@ -410,18 +410,18 @@
     <div id="rosterTab" class="tab-content active">
         <!-- 1. CONFIGURACIÓN DE FECHAS DE REGISTRO (EXCLUSIVO ADMINISTRADOR) -->
         <div class="section-box no-print col-admin" style="background: #1e293b; border: 1px solid var(--bronze-gold);">
-            <h4>📅 Configuración de Fechas de Registro para Equipos</h4>
+            <h4>📅 Configuración de Fechas de Registro para Equipos (Cierre a las 19:00 hrs)</h4>
             <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
                 <div>
                     <label style="font-size: 11px; font-weight: bold;">Fecha Inicio:</label>
                     <input type="date" id="adminFechaInicio">
                 </div>
                 <div>
-                    <label style="font-size: 11px; font-weight: bold;">Fecha Fin (Límite):</label>
+                    <label style="font-size: 11px; font-weight: bold;">Fecha Fin (Límite 19:00 hrs):</label>
                     <input type="date" id="adminFechaFin">
                 </div>
                 <button class="btn btn-warning btn-sm" onclick="guardarFechasRegistroNube()">Guardar Fechas en la Nube</button>
-                <span style="font-size: 11px; color: #94a3b8;" id="lblEstadoFechas">La fecha final no puede ser menor a la inicial.</span>
+                <span style="font-size: 11px; color: #94a3b8;" id="lblEstadoFechas">El sistema cerrará los registros automáticamente a las 19:00 hrs del día final.</span>
             </div>
         </div>
 
@@ -440,20 +440,22 @@
             <div id="teamsPreviewGrid" class="teams-preview-grid"></div>
         </div>
 
-        <!-- 3. SECCIÓN DE REGISTRAR JUGADOR -->
+        <!-- 3. SECCIÓN DE REGISTRAR JUGADOR (DISTRIBUIDA EN 2 RENGLONES) -->
         <div class="section-box" id="seccionAltaIndividual" style="background: #1e293b; border: 1px solid var(--bronze-gold);">
             <h4>➕ Registrar Jugador de 1 en 1 (Sincronizado en la Nube)</h4>
-            <div id="bannerPeriodoRegistro" style="background: rgba(217, 119, 6, 0.2); border: 1px dashed var(--bronze-gold); padding: 8px 12px; border-radius: 6px; margin-bottom: 12px; font-size: 12px; font-weight: bold; color: #fbbf24; text-align: center;">
+            <div id="bannerPeriodoRegistro" style="background: rgba(217, 119, 6, 0.2); border: 1px dashed var(--bronze-gold); padding: 8px 12px; border-radius: 6px; margin-bottom: 15px; font-size: 12px; font-weight: bold; color: #fbbf24; text-align: center;">
                 📅 FECHA DE REGISTROS: Cargando periodo...
             </div>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 10px;">
+            
+            <!-- Renglón 1 de Registro -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr 2fr; gap: 12px; margin-bottom: 12px;">
                 <div>
-                    <label style="font-size: 11px; font-weight: bold;">Equipo *:</label>
-                    <select id="altaEquipo" style="width:150px;"></select>
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Equipo *:</label>
+                    <select id="altaEquipo" style="width:100%;"></select>
                 </div>
                 <div>
-                    <label style="font-size: 11px; font-weight: bold;">Categoría (Automática) *:</label>
-                    <select id="altaCategoria" style="width:130px;" disabled>
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Categoría (Automática) *:</label>
+                    <select id="altaCategoria" style="width:100%;" disabled>
                         <option value="ARDILLA">ARDILLAS (14-15)</option>
                         <option value="HORMIGA">HORMIGAS (15-16)</option>
                         <option value="HORMIGUITA">HORMIGUITAS (17-18)</option>
@@ -461,27 +463,32 @@
                         <option value="BOTANA">BOTANAS (20-21)</option>
                     </select>
                 </div>
-                <div style="grid-column: span 2;">
-                    <label style="font-size: 11px; font-weight: bold;">Nombre Completo (Sin números ni puntos) *:</label>
+                <div>
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Nombre Completo (Sin números ni puntos) *:</label>
                     <input type="text" id="altaNombre" placeholder="APELLIDOS Y NOMBRES" style="width:100%;">
                 </div>
+            </div>
+
+            <!-- Renglón 2 de Registro -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1.2fr; gap: 12px; margin-bottom: 15px;">
                 <div>
-                    <label style="font-size: 11px; font-weight: bold;">Fecha Nacimiento *:</label>
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Fecha Nacimiento *:</label>
                     <input type="date" id="altaNacimiento" onchange="actualizarCategoriaAutomaticaAlta()" style="width:100%;">
                 </div>
                 <div>
-                    <label style="font-size: 11px; font-weight: bold;">CURP (18 Dígitos) *:</label>
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">CURP (18 Dígitos) *:</label>
                     <input type="text" id="altaCurp" maxlength="18" placeholder="18 CARACTERES..." style="width:100%;">
                 </div>
                 <div>
-                    <label style="font-size: 11px; font-weight: bold;">Documento:</label>
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Documento:</label>
                     <input type="text" id="altaDoc" value="ACTA DE NACIMIENTO, CURP" style="width:100%;">
                 </div>
                 <div>
-                    <label style="font-size: 11px; font-weight: bold;">Fotografía Individual *:</label>
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Fotografía Individual *:</label>
                     <input type="file" id="altaFoto" accept="image/*" style="font-size: 11px; width:100%;">
                 </div>
             </div>
+
             <button class="btn btn-purple btn-sm" onclick="registrarJugadorIndividual()">Guardar Jugador en la Nube</button>
         </div>
 
@@ -585,7 +592,7 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página creada por Carrivers Desing - Todos los derechos reservados © - V.016
+        Página creada por Carrivers Desing - Todos los derechos reservados © - V.017
     </div>
 </div>
 
@@ -732,7 +739,7 @@
         "ACEREROS": "Logos Equipos/acereros.jpg",
         "BUCANEROS": "Logos Equipos/bucaneros.jpg",
         "BÚFALOS": "Logos Equipos/bufalo.png",
-        "CHEYENNES": "Logos Equipos/cheyennes.jpg", // Corregido el nombre del archivo aquí
+        "CHEYENNES": "Logos Equipos/cheyennes.jpg",
         "PANTERAS": "Logos Equipos/panteras.jpg",
         "ZORROS": "Logos Equipos/zorros.jpg"
     };
@@ -935,18 +942,18 @@
 
         await setDoc(doc(db, "configuracion", "fechas_sistema"), fechasRegistro);
         actualizarBannerFechasRegistro();
-        alert("¡Fechas de registro actualizadas en la nube!");
+        alert("¡Fechas de registro actualizadas en la nube! El cierre se aplicará a las 19:00 hrs del día final.");
     }
 
     function actualizarBannerFechasRegistro() {
         const banner = document.getElementById("bannerPeriodoRegistro");
         if (!banner) return;
         if (fechasRegistro.inicio && fechasRegistro.fin) {
-            banner.innerText = `📅 FECHA DE REGISTROS: Del ${fechasRegistro.inicio} al ${fechasRegistro.fin}`;
+            banner.innerText = `📅 FECHA DE REGISTROS: Del ${fechasRegistro.inicio} al ${fechasRegistro.fin} (Cierra a las 19:00 hrs)`;
         } else if (fechasRegistro.inicio) {
             banner.innerText = `📅 FECHA DE REGISTROS: A partir del ${fechasRegistro.inicio}`;
         } else if (fechasRegistro.fin) {
-            banner.innerText = `📅 FECHA DE REGISTROS: Hasta el ${fechasRegistro.fin}`;
+            banner.innerText = `📅 FECHA DE REGISTROS: Hasta el ${fechasRegistro.fin} a las 19:00 hrs`;
         } else {
             banner.innerText = `📅 FECHA DE REGISTROS: Sin restricciones de fechas configuradas por la liga.`;
         }
@@ -990,6 +997,8 @@
         if (parts.length !== 3) return null;
         const yyyymmdd = parseInt(parts[0] + parts[1] + parts[2], 10);
 
+        if (isNaN(yyyymmdd) || yyyymmdd < 20100101) return null;
+
         // Ardillas: 01 Enero 2014 al 30 Junio 2015
         if (yyyymmdd >= 20140101 && yyyymmdd <= 20150630) return "ARDILLA";
         // Hormigas: 01 Julio 2015 al 31 Diciembre 2016
@@ -1012,7 +1021,7 @@
         if (categoriaCalculada) {
             selectCat.value = categoriaCalculada;
         } else if (fecha) {
-            alert("⚠️ La fecha de nacimiento ingresada está fuera de los rangos oficiales de las categorías infantiles de LIFARCC.");
+            alert("⚠️ La fecha de nacimiento ingresada está incompleta o fuera de los rangos oficiales de las categorías infantiles de LIFARCC.");
             selectCat.value = "ARDILLA";
         }
     }
@@ -1025,7 +1034,7 @@
         if (categoriaCalculada) {
             selectCat.value = categoriaCalculada;
         } else if (fecha) {
-            alert("⚠️ La fecha de nacimiento ingresada está fuera de los rangos oficiales de LIFARCC.");
+            alert("⚠️ La fecha de nacimiento ingresada está incompleta o fuera de los rangos oficiales de LIFARCC.");
         }
     }
 
@@ -1275,21 +1284,26 @@
 
     window.registrarJugadorIndividual = async function() {
         if (rolActual === "Equipo") {
-            const hoy = new Date().toISOString().split('T')[0];
-            if (fechasRegistro.inicio && hoy < fechasRegistro.inicio) {
-                alert(`El periodo de registro aún no ha comenzado (Inicia el ${fechasRegistro.inicio}).`);
-                return;
+            const ahora = new Date();
+            if (fechasRegistro.inicio) {
+                const fechaIni = new Date(fechasRegistro.inicio + "T00:00:00");
+                if (ahora < fechaIni) {
+                    alert(`El periodo de registro aún no ha comenzado (Inicia el ${fechasRegistro.inicio}).`);
+                    return;
+                }
             }
-            if (fechasRegistro.fin && hoy > fechasRegistro.fin) {
-                alert(`El periodo de registro ha finalizado (Terminó el ${fechasRegistro.fin}). Ya no se pueden registrar más jugadores.`);
-                return;
+            if (fechasRegistro.fin) {
+                // Límite hasta las 19:00 hrs del día final
+                const fechaFinLimite = new Date(fechasRegistro.fin + "T19:00:00");
+                if (ahora > fechaFinLimite) {
+                    alert(`El periodo de registro ha finalizado (Terminó el ${fechasRegistro.fin} a las 19:00 hrs). Ya no se pueden registrar más jugadores.`);
+                    return;
+                }
             }
         }
 
         const equipo = rolActual === "Equipo" ? equipoAsignado : document.getElementById("altaEquipo").value;
         const nacimiento = document.getElementById("altaNacimiento").value;
-        
-        // Categoría calculada automáticamente por fecha de nacimiento
         const categoria = calcularCategoriaPorFecha(nacimiento);
 
         const nombre = document.getElementById("altaNombre").value.trim().toUpperCase();
@@ -1406,8 +1420,6 @@
                 let eq = String(row['CLUB'] || row['Equipo'] || row['equipo'] || '').trim().toUpperCase();
                 const nom = String(row['NOMBRE JUGADOR '] || row['NOMBRE JUGADOR'] || row['Nombre'] || row['nombre'] || '').trim().toUpperCase();
                 const fechaNac = formatearFechaExcel(row['FECHA DE NACIMIENTO'] || row['Nacimiento'] || '');
-                
-                // Asignar categoría automáticamente según la fecha de nacimiento oficial
                 const catCalc = calcularCategoriaPorFecha(fechaNac);
 
                 if (eq.includes("BUF")) eq = "BÚFALOS";
@@ -1694,7 +1706,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página creada por Carrivers Desing - Todos los derechos reservados © - V.016
+                Página creada por Carrivers Desing - Todos los derechos reservados © - V.017
             </div>
         </div>
 
@@ -1817,7 +1829,7 @@
                     </tbody>
                 </table>
                 <div class="print-footer">
-                    Página creada por Carrivers Desing - Todos los derechos reservados © - V.016
+                    Página creada por Carrivers Desing - Todos los derechos reservados © - V.017
                 </div>
             </div>`;
         });
