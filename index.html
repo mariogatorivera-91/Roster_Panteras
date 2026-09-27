@@ -301,6 +301,12 @@
                 margin: 0 auto;
                 width: 100%;
                 max-width: 195mm;
+                page-break-after: always;
+                break-after: page;
+            }
+            .hoja-roster-impresion:last-child {
+                page-break-after: avoid;
+                break-after: avoid;
             }
             
             table.print-table { 
@@ -321,6 +327,16 @@
             .logo-box-print { width: 95px; height: 95px; object-fit: contain; background: #fff; }
             .league-title-print { font-size: 26px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
             .league-subtitle-print { font-size: 9px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 3px; }
+            
+            .print-footer {
+                text-align: center;
+                font-size: 9px;
+                color: #555;
+                border-top: 1px solid #aaa;
+                padding-top: 6px;
+                margin-top: 15px;
+                letter-spacing: 0.5px;
+            }
         }
     </style>
 </head>
@@ -351,7 +367,7 @@
     </div>
     <!-- PIE DE PÁGINA EN PANTALLA DE ACCESO -->
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página creada por Carrivers Desing - Todos los derechos reservados © - V.013
+        Página creada por Carrivers Desing - Todos los derechos reservados © - V.015
     </div>
 </div>
 
@@ -569,7 +585,7 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página creada por Carrivers Desing - Todos los derechos reservados © - V.013
+        Página creada por Carrivers Desing - Todos los derechos reservados © - V.015
     </div>
 </div>
 
@@ -1621,6 +1637,7 @@
 
         let htmlContenido = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Roster - ${equipoSelect} (${categoriaSelect})</title><style>
             body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 10mm; color: #000; background: white; }
+            .hoja-roster-impresion { width: 100%; max-width: 195mm; margin: 0 auto; }
             table.print-table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; }
             thead { display: table-header-group !important; }
             tbody { display: table-row-group !important; }
@@ -1632,48 +1649,54 @@
             .header-table td { border: none !important; padding: 2px; vertical-align: middle; }
             .league-title-print { font-size: 26px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
             .league-subtitle-print { font-size: 9px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 3px; }
+            .print-footer { text-align: center; font-size: 9px; color: #555; border-top: 1px solid #aaa; padding-top: 6px; margin-top: 15px; letter-spacing: 0.5px; }
         </style></head><body>
         
-        <table class="print-table">
-            <thead>
-                <tr>
-                    <td colspan="7" style="border: none; padding: 0;">
-                        <table class="header-table">
-                            <tr>
-                                <td style="width: 22%; text-align: left;"><img src="${logoLiga}" class="logo-box-print"></td>
-                                <td style="width: 56%; text-align: center;">
-                                    <div class="league-title-print">LIFARCC</div>
-                                    <div class="league-subtitle-print">Liga Infantil de Football Americano de la Region Centro de Coahuila</div>
-                                </td>
-                                <td style="width: 22%; text-align: right;"><img src="${logoEq}" class="logo-box-print"></td>
-                            </tr>
-                        </table>
-                        <div style="font-size: 10px; font-weight: bold; text-align: center; margin-bottom: 2px;">
-                            FECHA: ___________________________________
-                        </div>
-                        <div style="font-size: 11px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; margin-bottom: 2px;">
-                            <span>CLUB ${equipoSelect}</span>
-                            <span>JORNADA: ____________________</span>
-                        </div>
-                        <div style="font-size: 11px; font-weight: bold; text-transform: uppercase; text-align: left; margin-bottom: 3px;">
-                            ROSTER CATEGORIA: ${categoriaSelect}
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th style="width: 35px;">N°</th>
-                    <th style="width: 80px;">Foto</th>
-                    <th>Nombre Completo</th>
-                    <th style="width: 90px;">Fecha Nac.</th>
-                    <th style="width: 135px;">CURP</th>
-                    <th style="width: 50px;">N°- Jersey</th>
-                    <th style="width: 50px;">Peso kg</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${filasHtml}
-            </tbody>
-        </table>
+        <div class="hoja-roster-impresion">
+            <table class="print-table">
+                <thead>
+                    <tr>
+                        <td colspan="7" style="border: none; padding: 0;">
+                            <table class="header-table">
+                                <tr>
+                                    <td style="width: 22%; text-align: left;"><img src="${logoLiga}" class="logo-box-print"></td>
+                                    <td style="width: 56%; text-align: center;">
+                                        <div class="league-title-print">LIFARCC</div>
+                                        <div class="league-subtitle-print">Liga Infantil de Football Americano de la Region Centro de Coahuila</div>
+                                    </td>
+                                    <td style="width: 22%; text-align: right;"><img src="${logoEq}" class="logo-box-print"></td>
+                                </tr>
+                            </table>
+                            <div style="font-size: 10px; font-weight: bold; text-align: center; margin-bottom: 2px;">
+                                FECHA: ___________________________________
+                            </div>
+                            <div style="font-size: 11px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; margin-bottom: 2px;">
+                                <span>CLUB ${equipoSelect}</span>
+                                <span>JORNADA: ____________________</span>
+                            </div>
+                            <div style="font-size: 11px; font-weight: bold; text-transform: uppercase; text-align: left; margin-bottom: 3px;">
+                                ROSTER CATEGORIA: ${categoriaSelect}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 35px;">N°</th>
+                        <th style="width: 80px;">Foto</th>
+                        <th>Nombre Completo</th>
+                        <th style="width: 90px;">Fecha Nac.</th>
+                        <th style="width: 135px;">CURP</th>
+                        <th style="width: 50px;">N°- Jersey</th>
+                        <th style="width: 50px;">Peso kg</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${filasHtml}
+                </tbody>
+            </table>
+            <div class="print-footer">
+                Página creada por Carrivers Desing - Todos los derechos reservados © - V.015
+            </div>
+        </div>
 
         </body></html>`;
 
@@ -1712,8 +1735,8 @@
 
         let htmlContenido = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Impresión Masiva - LIFARCC</title><style>
             body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 10mm; color: #000; background: white; }
-            .hoja-roster-impresion { page-break-after: always; break-after: page; margin-bottom: 20mm; }
-            .hoja-roster-impresion:last-child { page-break-after: avoid; break-after: avoid; }
+            .hoja-roster-impresion { page-break-after: always; break-after: page; margin-bottom: 20mm; width: 100%; max-width: 195mm; margin: 0 auto; }
+            .hoja-roster-impresion:last-child { page-break-after: avoid; break-after: avoid; margin-bottom: 0; }
             table.print-table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; }
             thead { display: table-header-group !important; }
             tbody { display: table-row-group !important; }
@@ -1725,6 +1748,7 @@
             .header-table td { border: none !important; padding: 2px; vertical-align: middle; }
             .league-title-print { font-size: 26px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
             .league-subtitle-print { font-size: 9px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 3px; }
+            .print-footer { text-align: center; font-size: 9px; color: #555; border-top: 1px solid #aaa; padding-top: 6px; margin-top: 15px; letter-spacing: 0.5px; }
         </style></head><body>`;
 
         keysOrdenadas.forEach(key => {
@@ -1792,6 +1816,9 @@
                         ${filasHtml}
                     </tbody>
                 </table>
+                <div class="print-footer">
+                    Página creada por Carrivers Desing - Todos los derechos reservados © - V.015
+                </div>
             </div>`;
         });
 
