@@ -164,7 +164,7 @@
             color: white;
             color-scheme: dark;
         }
-        select:disabled { opacity: 0.7; cursor: not-allowed; }
+        select:disabled { opacity: 0.8; cursor: not-allowed; background: #090d16; color: #fbbf24; font-weight: bold; }
 
         .btn {
             background: linear-gradient(135deg, #3b82f6, #1d4ed8);
@@ -436,13 +436,13 @@
                     <select id="altaEquipo" style="width:150px;"></select>
                 </div>
                 <div>
-                    <label style="font-size: 11px; font-weight: bold;">Categoría *:</label>
-                    <select id="altaCategoria" style="width:130px;" onchange="renderizarRoster()">
-                        <option value="MOSCO">MOSCO</option>
-                        <option value="ARDILLA">ARDILLA</option>
-                        <option value="BOTANA">BOTANA</option>
-                        <option value="HORMIGUITA">HORMIGUITA</option>
-                        <option value="HORMIGA">HORMIGA</option>
+                    <label style="font-size: 11px; font-weight: bold;">Categoría (Automática) *:</label>
+                    <select id="altaCategoria" style="width:130px;" disabled>
+                        <option value="ARDILLA">ARDILLAS (14-15)</option>
+                        <option value="HORMIGA">HORMIGAS (15-16)</option>
+                        <option value="HORMIGUITA">HORMIGUITAS (17-18)</option>
+                        <option value="MOSCO">MOSCOS (18-19)</option>
+                        <option value="BOTANA">BOTANAS (20-21)</option>
                     </select>
                 </div>
                 <div style="grid-column: span 2;">
@@ -451,7 +451,7 @@
                 </div>
                 <div>
                     <label style="font-size: 11px; font-weight: bold;">Fecha Nacimiento *:</label>
-                    <input type="date" id="altaNacimiento" style="width:100%;">
+                    <input type="date" id="altaNacimiento" onchange="actualizarCategoriaAutomaticaAlta()" style="width:100%;">
                 </div>
                 <div>
                     <label style="font-size: 11px; font-weight: bold;">CURP (18 Dígitos) *:</label>
@@ -584,8 +584,17 @@
         <div style="display: grid; grid-template-columns: 1fr; gap: 10px;">
             <div><label style="font-size: 11px; font-weight: bold;">Nombre:</label><input type="text" id="editNombre" style="width:100%;"></div>
             <div><label style="font-size: 11px; font-weight: bold;">Equipo:</label><select id="editEquipoSelect" style="width:100%;"></select></div>
-            <div><label style="font-size: 11px; font-weight: bold;">Categoría:</label><select id="editCategoria" style="width:100%;"><option value="MOSCO">MOSCO</option><option value="ARDILLA">ARDILLA</option><option value="BOTANA">BOTANA</option><option value="HORMIGUITA">HORMIGUITA</option><option value="HORMIGA">HORMIGA</option></select></div>
-            <div><label style="font-size: 11px; font-weight: bold;">Fecha Nac:</label><input type="date" id="editNacimiento" style="width:100%;"></div>
+            <div>
+                <label style="font-size: 11px; font-weight: bold;">Categoría (Automática):</label>
+                <select id="editCategoria" style="width:100%;" disabled>
+                    <option value="ARDILLA">ARDILLA</option>
+                    <option value="HORMIGA">HORMIGA</option>
+                    <option value="HORMIGUITA">HORMIGUITA</option>
+                    <option value="MOSCO">MOSCO</option>
+                    <option value="BOTANA">BOTANA</option>
+                </select>
+            </div>
+            <div><label style="font-size: 11px; font-weight: bold;">Fecha Nac:</label><input type="date" id="editNacimiento" onchange="actualizarCategoriaAutomaticaEdit()" style="width:100%;"></div>
             <div><label style="font-size: 11px; font-weight: bold;">CURP (18 Dígitos):</label><input type="text" id="editCurp" maxlength="18" style="width:100%;"></div>
             <div><label style="font-size: 11px; font-weight: bold;">Documento:</label><input type="text" id="editDoc" style="width:100%;"></div>
             <div style="display: flex; align-items: center; gap: 10px; margin-top: 5px;">
@@ -955,6 +964,55 @@
         return str;
     }
 
+    // ==========================================
+    // 📅 CÁLCULO AUTOMÁTICO DE CATEGORÍA SEGÚN REGLAMENTO LIFARCC
+    // ==========================================
+    function calcularCategoriaPorFecha(fechaStr) {
+        if (!fechaStr) return null;
+        let strVal = formatearFechaExcel(fechaStr);
+        const parts = strVal.split("-");
+        if (parts.length !== 3) return null;
+        const yyyymmdd = parseInt(parts[0] + parts[1] + parts[2], 10);
+
+        // Ardillas: 01 Enero 2014 al 30 Junio 2015
+        if (yyyymmdd >= 20140101 && yyyymmdd <= 20150630) return "ARDILLA";
+        // Hormigas: 01 Julio 2015 al 31 Diciembre 2016
+        if (yyyymmdd >= 20150701 && yyyymmdd <= 20161231) return "HORMIGA";
+        // Hormiguitas: 01 Enero 2017 al 30 Junio 2018
+        if (yyyymmdd >= 20170101 && yyyymmdd <= 20180630) return "HORMIGUITA";
+        // Moscos: 01 Julio 2018 al 31 Diciembre 2019
+        if (yyyymmdd >= 20180701 && yyyymmdd <= 20191231) return "MOSCO";
+        // Botanas: 01 Enero 2020 al 30 Junio 2021
+        if (yyyymmdd >= 20200101 && yyyymmdd <= 20210630) return "BOTANA";
+
+        return null;
+    }
+
+    window.actualizarCategoriaAutomaticaAlta = function() {
+        const fecha = document.getElementById("altaNacimiento").value;
+        const selectCat = document.getElementById("altaCategoria");
+        const categoriaCalculada = calcularCategoriaPorFecha(fecha);
+
+        if (categoriaCalculada) {
+            selectCat.value = categoriaCalculada;
+        } else if (fecha) {
+            alert("⚠️ La fecha de nacimiento ingresada está fuera de los rangos oficiales de las categorías infantiles de LIFARCC.");
+            selectCat.value = "ARDILLA";
+        }
+    }
+
+    window.actualizarCategoriaAutomaticaEdit = function() {
+        const fecha = document.getElementById("editNacimiento").value;
+        const selectCat = document.getElementById("editCategoria");
+        const categoriaCalculada = calcularCategoriaPorFecha(fecha);
+
+        if (categoriaCalculada) {
+            selectCat.value = categoriaCalculada;
+        } else if (fecha) {
+            alert("⚠️ La fecha de nacimiento ingresada está fuera de los rangos oficiales de LIFARCC.");
+        }
+    }
+
     window.abrirModalCambiarPass = function() {
         document.getElementById("passActual").value = "";
         document.getElementById("passNueva1").value = "";
@@ -1213,15 +1271,23 @@
         }
 
         const equipo = rolActual === "Equipo" ? equipoAsignado : document.getElementById("altaEquipo").value;
-        const categoria = document.getElementById("altaCategoria").value;
-        const nombre = document.getElementById("altaNombre").value.trim().toUpperCase();
         const nacimiento = document.getElementById("altaNacimiento").value;
+        
+        // Categoría calculada automáticamente por fecha de nacimiento
+        const categoria = calcularCategoriaPorFecha(nacimiento);
+
+        const nombre = document.getElementById("altaNombre").value.trim().toUpperCase();
         const curp = document.getElementById("altaCurp").value.trim().toUpperCase();
         const docText = document.getElementById("altaDoc").value.trim().toUpperCase();
         const fileInput = document.getElementById("altaFoto");
 
-        if (!equipo || !categoria || !nombre || !nacimiento || !curp || !fileInput.files || !fileInput.files[0]) {
-            alert("⚠️ Todos los campos son obligatorios: Equipo, Categoría, Nombre completo, Fecha de nacimiento, CURP (18 dígitos) y Fotografía.");
+        if (!equipo || !nacimiento || !categoria || !nombre || !curp || !fileInput.files || !fileInput.files[0]) {
+            alert("⚠️ Todos los campos son obligatorios: Equipo, Fecha de nacimiento válida, Nombre completo, CURP (18 dígitos) y Fotografía.");
+            return;
+        }
+
+        if (!categoria) {
+            alert("⚠️ La fecha de nacimiento no corresponde a ninguna categoría oficial de LIFARCC.");
             return;
         }
 
@@ -1249,9 +1315,10 @@
         document.getElementById("altaNacimiento").value = "";
         document.getElementById("altaCurp").value = "";
         document.getElementById("altaFoto").value = "";
+        document.getElementById("altaCategoria").value = "ARDILLA";
         
         renderizarRoster();
-        alert("✅ ¡Jugador registrado con éxito en la nube!\n\n📌 Recordatorio: No olvides entregar la documentación completa y legible al encargado.");
+        alert("✅ ¡Jugador registrado con éxito en la nube y asignado a su categoría oficial!\n\n📌 Recordatorio: No olvides entregar la documentación completa y legible al encargado.");
     }
 
     window.cargarFotosLocales = async function(event) {
@@ -1322,8 +1389,11 @@
             for (const row of json) {
                 let eq = String(row['CLUB'] || row['Equipo'] || row['equipo'] || '').trim().toUpperCase();
                 const nom = String(row['NOMBRE JUGADOR '] || row['NOMBRE JUGADOR'] || row['Nombre'] || row['nombre'] || '').trim().toUpperCase();
-                const cat = String(row['CATEGORIA'] || row['Categoría'] || row['categoria'] || '').trim().toUpperCase();
+                const fechaNac = formatearFechaExcel(row['FECHA DE NACIMIENTO'] || row['Nacimiento'] || '');
                 
+                // Asignar categoría automáticamente según la fecha de nacimiento oficial
+                const catCalc = calcularCategoriaPorFecha(fechaNac);
+
                 if (eq.includes("BUF")) eq = "BÚFALOS";
                 if (eq.includes("ACER")) eq = "ACEREROS";
                 if (eq.includes("BUC")) eq = "BUCANEROS";
@@ -1331,13 +1401,13 @@
                 if (eq.includes("PANT")) eq = "PANTERAS";
                 if (eq.includes("ZORR")) eq = "ZORROS";
 
-                if (eq && nom) {
+                if (eq && nom && catCalc) {
                     if (!listaEquiposOficiales.includes(eq)) listaEquiposOficiales.push(eq);
                     const nuevoJ = {
                         equipo: eq,
-                        categoria: cat || 'ARDILLA',
+                        categoria: catCalc,
                         nombre: nom,
-                        nacimiento: formatearFechaExcel(row['FECHA DE NACIMIENTO'] || row['Nacimiento'] || ''),
+                        nacimiento: fechaNac,
                         curp: String(row['CURP'] || row['curp'] || '').trim().toUpperCase(),
                         doc: String(row['documentos'] || row['Documento'] || 'ACTA DE NACIMIENTO, CURP').trim().toUpperCase(),
                         foto: ""
@@ -1349,7 +1419,7 @@
             }
             actualizarSelectsEquipos();
             renderizarRoster();
-            alert(`¡Importación masiva completada! Se guardaron ${importados} registros en la nube.`);
+            alert(`¡Importación masiva completada! Se guardaron y clasificaron automáticamente ${importados} registros en la nube.`);
             event.target.value = "";
         };
         reader.readAsArrayBuffer(file);
@@ -1746,7 +1816,7 @@
         document.getElementById("editDocId").value = idJugador;
         document.getElementById("editNombre").value = j.nombre;
         document.getElementById("editEquipoSelect").value = j.equipo;
-        document.getElementById("editCategoria").value = j.categoria;
+        document.getElementById("editCategoria").value = j.categoria || "ARDILLA";
         document.getElementById("editNacimiento").value = formatearFechaExcel(j.nacimiento) || "";
         document.getElementById("editCurp").value = j.curp || "";
         document.getElementById("editDoc").value = j.doc || "";
@@ -1771,21 +1841,29 @@
             return;
         }
 
+        const fechaNac = formatearFechaExcel(document.getElementById("editNacimiento").value);
+        const categoriaCalculada = calcularCategoriaPorFecha(fechaNac);
+
+        if (!categoriaCalculada) {
+            alert("⚠️ La fecha de nacimiento no corresponde a ninguna categoría oficial.");
+            return;
+        }
+
         const fileInput = document.getElementById("editFotoFile");
         if (fileInput.files && fileInput.files[0]) {
             comprimirYConvertirImagen(fileInput.files[0], async function(base64) {
-                await ejecutarGuardadoEdicion(idJugador, jugador, base64);
+                await ejecutarGuardadoEdicion(idJugador, jugador, base64, categoriaCalculada);
             }, 200, 250);
         } else {
-            await ejecutarGuardadoEdicion(idJugador, jugador, jugador.foto);
+            await ejecutarGuardadoEdicion(idJugador, jugador, jugador.foto, categoriaCalculada);
         }
     }
 
-    async function ejecutarGuardadoEdicion(idJugador, jugador, fotoUrl) {
+    async function ejecutarGuardadoEdicion(idJugador, jugador, fotoUrl, categoriaCalculada) {
         const datosActualizados = {
             nombre: document.getElementById("editNombre").value.trim().toUpperCase(),
             equipo: document.getElementById("editEquipoSelect").value,
-            categoria: document.getElementById("editCategoria").value,
+            categoria: categoriaCalculada,
             nacimiento: formatearFechaExcel(document.getElementById("editNacimiento").value),
             curp: document.getElementById("editCurp").value.trim().toUpperCase(),
             doc: document.getElementById("editDoc").value.trim().toUpperCase(),
@@ -1797,7 +1875,7 @@
 
         cerrarModal();
         renderizarRoster();
-        alert("¡Jugador actualizado en la nube!");
+        alert("¡Jugador actualizado y reasignado a su categoría oficial en la nube!");
     }
 
     window.eliminarJugador = async function(idJugador) {
