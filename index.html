@@ -707,7 +707,7 @@
         "ACEREROS": "Logos Equipos/acereros.jpg",
         "BUCANEROS": "Logos Equipos/bucaneros.jpg",
         "BÚFALOS": "Logos Equipos/bufalo.png",
-        "CHEYENNES": "Logos Equipos/cheyennes.jpg",
+        "CHEYENNES": "Logos Equipos/cheyenes.jpg",
         "PANTERAS": "Logos Equipos/panteras.jpg",
         "ZORROS": "Logos Equipos/zorros.jpg"
     };
@@ -927,7 +927,6 @@
         }
     }
 
-    // FORMATEADORES DE FECHA DD/MM/AAAA
     function formatearFechaExcel(val) {
         if (!val) return "";
         let strVal = String(val).trim();
@@ -956,7 +955,6 @@
         return str;
     }
 
-    // GESTIÓN DE CAMBIO DE CONTRASEÑA
     window.abrirModalCambiarPass = function() {
         document.getElementById("passActual").value = "";
         document.getElementById("passNueva1").value = "";
@@ -995,7 +993,6 @@
         cerrarModalCambiarPass();
     }
 
-    // PANEL ADMIN DE USUARIOS Y CONTRASEÑAS
     window.abrirModalAdminUsuarios = function() {
         if (rolActual !== "Administrador") return;
         const tbody = document.getElementById("tablaAdminUsersCuerpo");
@@ -1223,7 +1220,6 @@
         const docText = document.getElementById("altaDoc").value.trim().toUpperCase();
         const fileInput = document.getElementById("altaFoto");
 
-        // VALIDACIÓN ESTRICTA DE CAMPOS OBLIGATORIOS
         if (!equipo || !categoria || !nombre || !nacimiento || !curp || !fileInput.files || !fileInput.files[0]) {
             alert("⚠️ Todos los campos son obligatorios: Equipo, Categoría, Nombre completo, Fecha de nacimiento, CURP (18 dígitos) y Fotografía.");
             return;
@@ -1464,7 +1460,6 @@
         });
     }
 
-    // MODAL VISUAL PARA "VER PLANTILLA"
     window.mostrarPlantillaEquipo = function() {
         const eqTarget = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
         const filtrados = baseDatos.filter(j => j.equipo === eqTarget);
@@ -1523,7 +1518,6 @@
         alert(msg);
     }
 
-    // DISEÑO DE IMPRESIÓN (CON ENCABEZADO REPETIDO EN CADA PÁGINA)
     window.imprimirRosterActual = function() {
         const equipoSelect = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
         const categoriaSelect = document.getElementById("filtroCategoria").value;
@@ -1558,7 +1552,6 @@
         let htmlContenido = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Roster - ${equipoSelect} (${categoriaSelect})</title><style>
             body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 10mm; color: #000; background: white; }
             table.print-table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; }
-            /* REPETIR EL ENCABEZADO COMPLETO EN CADA PÁGINA */
             thead { display: table-header-group !important; }
             tbody { display: table-row-group !important; }
             tr { page-break-inside: avoid !important; page-break-after: auto !important; }
@@ -1652,7 +1645,6 @@
             .hoja-roster-impresion { page-break-after: always; break-after: page; margin-bottom: 20mm; }
             .hoja-roster-impresion:last-child { page-break-after: avoid; break-after: avoid; }
             table.print-table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; }
-            /* REPETIR EL ENCABEZADO COMPLETO EN CADA PÁGINA */
             thead { display: table-header-group !important; }
             tbody { display: table-row-group !important; }
             tr { page-break-inside: avoid !important; page-break-after: auto !important; }
