@@ -317,6 +317,7 @@
                 background: white; 
             }
             
+            /* REPETIR ENCABEZADOS ESTRICTAMENTE EN CADA PÁGINA IMPRESA */
             thead { display: table-header-group !important; }
             tbody { display: table-row-group !important; }
             tr { page-break-inside: avoid !important; page-break-after: auto !important; }
@@ -367,7 +368,7 @@
     </div>
     <!-- PIE DE PÁGINA EN PANTALLA DE ACCESO -->
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página creada por Carrivers Desing - Todos los derechos reservados © - V.019
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.022
     </div>
 </div>
 
@@ -441,7 +442,7 @@
             <div id="teamsPreviewGrid" class="teams-preview-grid"></div>
         </div>
 
-        <!-- 3. SECCIÓN DE REGISTRAR JUGADOR (DISTRIBUIDA EN 2 RENGLONES) -->
+        <!-- 3. SECCIÓN DE REGISTRAR JUGADOR -->
         <div class="section-box" id="seccionAltaIndividual" style="background: #1e293b; border: 1px solid var(--bronze-gold);">
             <h4>➕ Registrar Jugador de 1 en 1 (Sincronizado en la Nube)</h4>
             <div id="bannerPeriodoRegistro" style="background: rgba(217, 119, 6, 0.2); border: 1px dashed var(--bronze-gold); padding: 8px 12px; border-radius: 6px; margin-bottom: 15px; font-size: 12px; font-weight: bold; color: #fbbf24; text-align: center;">
@@ -474,7 +475,7 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1.2fr; gap: 12px; margin-bottom: 15px;">
                 <div>
                     <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Fecha Nacimiento *:</label>
-                    <input type="date" id="altaNacimiento" min="2000-01-01" max="2026-12-31" onchange="actualizarCategoriaAutomaticaAlta()" style="width:100%;">
+                    <input type="date" id="altaNacimiento" onblur="validarFechaAltaBlur()" style="width:100%;">
                 </div>
                 <div>
                     <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">CURP (18 Dígitos) *:</label>
@@ -486,7 +487,8 @@
                 </div>
                 <div>
                     <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Fotografía Individual *:</label>
-                    <input type="file" id="altaFoto" accept="image/*" style="font-size: 11px; width:100%;">
+                    <button type="button" class="btn btn-warning btn-sm" onclick="mostrarGuiaFoto('altaFoto')" style="width:100%; justify-content:center;">📷 Seleccionar Foto</button>
+                    <input type="file" id="altaFoto" accept="image/*" style="display:none;" onchange="manejarArchivoFoto(event)">
                 </div>
             </div>
 
@@ -593,7 +595,27 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página creada por Carrivers Desing - Todos los Derechos Reservados© - V.019
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.022
+    </div>
+</div>
+
+<!-- MODAL GUÍA DE FOTOGRAFÍA CORRECTA (LOGOS EQUIPOS/FOTO CORRECTA.JPG) -->
+<div id="modalGuiaFoto" class="modal" style="z-index: 1005;">
+    <div class="modal-content" style="max-width: 520px; text-align: center;">
+        <div class="modal-header">
+            <span>📸 Guía de Fotografía Correcta</span>
+            <span class="close-btn" onclick="cerrarModalGuiaFoto()">&times;</span>
+        </div>
+        <p style="font-size: 12px; color: var(--accent-silver); margin-bottom: 12px;">
+            Asegúrate de que la fotografía del jugador cumpla con los estándares oficiales antes de cargarla:
+        </p>
+        <div style="background: #ffffff; padding: 8px; border-radius: 8px; margin-bottom: 15px; border: 2px solid var(--bronze-gold);">
+            <img src="Logos Equipos/foto correcta.jpg" alt="Guía de Fotografía Correcta" style="max-width: 100%; height: auto; border-radius: 6px; display: block; margin: auto;" onerror="this.src='https://via.placeholder.com/450x550?text=Guia+Fotografia+Correcta+-+Verificar+Imagen'">
+        </div>
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+            <button class="btn btn-danger btn-sm" onclick="cerrarModalGuiaFoto()">Cancelar</button>
+            <button class="btn btn-success" onclick="procederConSubidaFoto()">✅ Entendido, Seleccionar Archivo</button>
+        </div>
     </div>
 </div>
 
@@ -654,14 +676,15 @@
                     <option value="BOTANA">BOTANA</option>
                 </select>
             </div>
-            <div><label style="font-size: 11px; font-weight: bold;">Fecha Nac:</label><input type="date" id="editNacimiento" min="2000-01-01" max="2026-12-31" onchange="actualizarCategoriaAutomaticaEdit()" style="width:100%;"></div>
+            <div><label style="font-size: 11px; font-weight: bold;">Fecha Nac:</label><input type="date" id="editNacimiento" onblur="validarFechaEditBlur()" style="width:100%;"></div>
             <div><label style="font-size: 11px; font-weight: bold;">CURP (18 Dígitos):</label><input type="text" id="editCurp" maxlength="18" style="width:100%;"></div>
             <div><label style="font-size: 11px; font-weight: bold;">Documento:</label><input type="text" id="editDoc" style="width:100%;"></div>
             <div style="display: flex; align-items: center; gap: 10px; margin-top: 5px;">
                 <div id="modalFotoPreview" class="player-photo-container" style="width: 45px; height: 55px;"></div>
                 <div>
                     <label style="font-size: 11px; font-weight: bold; display: block;">Cambiar Foto:</label>
-                    <input type="file" id="editFotoFile" accept="image/*" style="font-size: 11px;">
+                    <button type="button" class="btn btn-warning btn-sm" onclick="mostrarGuiaFoto('editFotoFile')">📷 Cambiar Foto</button>
+                    <input type="file" id="editFotoFile" accept="image/*" style="display:none;" onchange="manejarArchivoFoto(event)">
                 </div>
             </div>
         </div>
@@ -748,7 +771,7 @@
     </div>
 </div>
 
-<input type="file" id="inputFotoIndividual" accept="image/*" style="display:none" onchange="cargarFotoIndividual(event)">
+<input type="file" id="inputFotoIndividual" accept="image/*" style="display:none" onchange="manejarArchivoFoto(event)">
 <input type="file" id="inputLogoEquipoDirecto" accept="image/*" style="display:none" onchange="cargarLogoEquipoDirecto(event)">
 
 <!-- SCRIPT DE FIREBASE Y LÓGICA -->
@@ -799,6 +822,7 @@
     let equipoAsignado = null;
     let equipoSeleccionadoDirecto = null;
     let jugadorSeleccionadoId = null;
+    let inputFotoActivoId = null; 
 
     let inactivityTimer;
 
@@ -1027,7 +1051,7 @@
     }
 
     // ==========================================
-    // 📅 CÁLCULO AUTOMÁTICO DE CATEGORÍA SEGÚN REGLAMENTO LIFARCC
+    // 📅 CÁLCULO Y VALIDACIÓN DE FECHA AL SALIR (ONBLUR)
     // ==========================================
     function calcularCategoriaPorFecha(fechaStr) {
         if (!fechaStr) return null;
@@ -1047,28 +1071,51 @@
         return null;
     }
 
-    window.actualizarCategoriaAutomaticaAlta = function() {
+    window.validarFechaAltaBlur = function() {
         const fecha = document.getElementById("altaNacimiento").value;
         const selectCat = document.getElementById("altaCategoria");
+        if (!fecha) return;
         const categoriaCalculada = calcularCategoriaPorFecha(fecha);
 
         if (categoriaCalculada) {
             selectCat.value = categoriaCalculada;
-        } else if (fecha) {
-            alert("⚠️ La fecha de nacimiento ingresada está incompleta o fuera de los rangos oficiales de las categorías infantiles de LIFARCC.");
+        } else {
+            alert("⚠️ La fecha de nacimiento ingresada no está completa, tiene un año inválido o está fuera de los rangos oficiales de LIFARCC.");
             selectCat.value = "ARDILLA";
         }
     }
 
-    window.actualizarCategoriaAutomaticaEdit = function() {
+    window.validarFechaEditBlur = function() {
         const fecha = document.getElementById("editNacimiento").value;
         const selectCat = document.getElementById("editCategoria");
+        if (!fecha) return;
         const categoriaCalculada = calcularCategoriaPorFecha(fecha);
 
         if (categoriaCalculada) {
             selectCat.value = categoriaCalculada;
-        } else if (fecha) {
-            alert("⚠️ La fecha de nacimiento ingresada está incompleta o fuera de los rangos oficiales de LIFARCC.");
+        } else {
+            alert("⚠️ La fecha de nacimiento ingresada no está completa o está fuera de los rangos oficiales de LIFARCC.");
+        }
+    }
+
+    // ==========================================
+    // 📸 MODAL DE GUÍA DE FOTOGRAFÍA CORRECTA
+    // ==========================================
+    window.mostrarGuiaFoto = function(inputId) {
+        inputFotoActivoId = inputId;
+        document.getElementById("modalGuiaFoto").style.display = "flex";
+    }
+
+    window.cerrarModalGuiaFoto = function() {
+        document.getElementById("modalGuiaFoto").style.display = "none";
+        inputFotoActivoId = null;
+    }
+
+    window.procederConSubidaFoto = function() {
+        const idToTrigger = inputFotoActivoId;
+        cerrarModalGuiaFoto();
+        if (idToTrigger) {
+            document.getElementById(idToTrigger).click();
         }
     }
 
@@ -1238,6 +1285,9 @@
             body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 10mm; color: #000; background: white; }
             .hoja-print { width: 100%; max-width: 195mm; margin: 0 auto; }
             table { width: 100%; border-collapse: collapse; margin-top: 10px; background: white; }
+            thead { display: table-header-group !important; }
+            tbody { display: table-row-group !important; }
+            tr { page-break-inside: avoid !important; }
             th, td { border: 1px solid #000; padding: 5px 8px; text-align: center; font-size: 11px; }
             th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; text-transform: uppercase; }
             .print-footer { text-align: center; font-size: 9px; color: #555; border-top: 1px solid #aaa; padding-top: 6px; margin-top: 15px; }
@@ -1261,7 +1311,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página creada por Carrivers Desing - Todos los derechos reservados © - V.019
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.022
             </div>
         </div>
         </body></html>`;
@@ -1557,12 +1607,14 @@
             return;
         }
         jugadorSeleccionadoId = idJugador;
-        document.getElementById("inputFotoIndividual").click();
+        mostrarGuiaFoto('inputFotoIndividual');
     }
 
-    window.cargarFotoIndividual = async function(event) {
+    window.manejarArchivoFoto = async function(event) {
         const archivo = event.target.files[0];
-        if (archivo && jugadorSeleccionadoId) {
+        if (!archivo) return;
+
+        if (jugadorSeleccionadoId) {
             comprimirYConvertirImagen(archivo, async function(base64) {
                 const jugador = baseDatos.find(j => j.id === jugadorSeleccionadoId);
                 if (jugador) {
@@ -1571,6 +1623,12 @@
                     renderizarRoster();
                     alert("¡Fotografía actualizada en la nube!");
                 }
+                jugadorSeleccionadoId = null;
+            }, 200, 250);
+        } else if (event.target.id === 'editFotoFile') {
+            const preview = document.getElementById("modalFotoPreview");
+            comprimirYConvertirImagen(archivo, function(base64) {
+                preview.innerHTML = `<img src="${base64}" style="width:100%; height:100%; object-fit:cover;">`;
             }, 200, 250);
         }
         event.target.value = "";
@@ -1828,7 +1886,7 @@
             table.print-table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; }
             thead { display: table-header-group !important; }
             tbody { display: table-row-group !important; }
-            tr { page-break-inside: avoid !important; page-break-after: auto !important; }
+            tr { page-break-inside: avoid !important; }
             table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 6px; text-align: center; font-size: 11px; }
             table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; text-transform: uppercase; font-size: 11px; }
             .logo-box-print { width: 95px; height: 95px; object-fit: contain; background: #fff; }
@@ -1881,7 +1939,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página creada por Carrivers Desing - Todos los derechos reservados © - V.019
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.022
             </div>
         </div>
 
@@ -1927,7 +1985,7 @@
             table.print-table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; }
             thead { display: table-header-group !important; }
             tbody { display: table-row-group !important; }
-            tr { page-break-inside: avoid !important; page-break-after: auto !important; }
+            tr { page-break-inside: avoid !important; }
             table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 6px; text-align: center; font-size: 11px; }
             table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; text-transform: uppercase; font-size: 11px; }
             .logo-box-print { width: 95px; height: 95px; object-fit: contain; background: #fff; }
@@ -2004,7 +2062,7 @@
                     </tbody>
                 </table>
                 <div class="print-footer">
-                    Página creada por Carrivers Desing - Todos los derechos reservados © - V.019
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.022
                 </div>
             </div>`;
         });
@@ -2063,14 +2121,13 @@
             return;
         }
 
-        const fileInput = document.getElementById("editFotoFile");
-        if (fileInput.files && fileInput.files[0]) {
-            comprimirYConvertirImagen(fileInput.files[0], async function(base64) {
-                await ejecutarGuardadoEdicion(idJugador, jugador, base64, categoriaCalculada);
-            }, 200, 250);
-        } else {
-            await ejecutarGuardadoEdicion(idJugador, jugador, jugador.foto, categoriaCalculada);
+        const previewImg = document.getElementById("modalFotoPreview").querySelector("img");
+        let fotoUrl = jugador.foto;
+        if (previewImg && previewImg.src && previewImg.src.startsWith("data:image")) {
+            fotoUrl = previewImg.src;
         }
+
+        await ejecutarGuardadoEdicion(idJugador, jugador, fotoUrl, categoriaCalculada);
     }
 
     async function ejecutarGuardadoEdicion(idJugador, jugador, fotoUrl, categoriaCalculada) {
