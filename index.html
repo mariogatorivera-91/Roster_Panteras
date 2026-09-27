@@ -317,7 +317,6 @@
                 background: white; 
             }
             
-            /* REPETIR EL ENCABEZADO COMPLETO AUTOMÁTICAMENTE EN CADA PÁGINA */
             thead { display: table-header-group !important; }
             tbody { display: table-row-group !important; }
             tr { page-break-inside: avoid !important; page-break-after: auto !important; }
@@ -368,7 +367,7 @@
     </div>
     <!-- PIE DE PÁGINA EN PANTALLA DE ACCESO -->
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página creada por Carrivers Desing - Todos los derechos reservados © - V.018
+        Página creada por Carrivers Desing - Todos los derechos reservados © - V.019
     </div>
 </div>
 
@@ -392,6 +391,7 @@
         <div style="display: flex; align-items: center; gap: 8px;">
             <span id="lblRolActual" style="font-size: 11px; color: #fbbf24; font-weight: bold;"></span>
             <button class="btn btn-warning btn-sm" onclick="abrirModalCambiarPass()">🔑 Contraseña</button>
+            <button class="btn btn-success btn-sm col-admin" onclick="abrirReporteSemanal()" id="btnReporteSemanal" style="display:none;">📊 Reporte Semanal</button>
             <button class="btn btn-purple btn-sm col-admin" onclick="abrirModalAdminUsuarios()" id="btnAdminUsers" style="display:none;">⚙️ Usuarios</button>
             <button class="btn btn-danger btn-sm" onclick="cerrarSesion()">🔒 Salir</button>
         </div>
@@ -470,7 +470,7 @@
                 </div>
             </div>
 
-            <!-- Renglón 2 de Registro (Con min y max para evitar el problema de escritura en AAAA) -->
+            <!-- Renglón 2 de Registro -->
             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1.2fr; gap: 12px; margin-bottom: 15px;">
                 <div>
                     <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Fecha Nacimiento *:</label>
@@ -593,7 +593,43 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página creada por Carrivers Desing - Todos los derechos reservados © - V.018
+        Página creada por Carrivers Desing - Todos los Derechos Reservados© - V.019
+    </div>
+</div>
+
+<!-- MODAL REPORTE SEMANAL DE NUEVOS REGISTROS -->
+<div id="modalReporteSemanal" class="modal">
+    <div class="modal-content" style="max-width: 800px;">
+        <div class="modal-header">
+            <span>📊 Reporte de Nuevos Registros (Semanal)</span>
+            <span class="close-btn" onclick="cerrarModalReporteSemanal()">&times;</span>
+        </div>
+        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 15px;">Visualiza los jugadores dados de alta por cada equipo en el rango de fechas seleccionado.</p>
+        <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 15px; flex-wrap: wrap;">
+            <div>
+                <label style="font-size: 11px; font-weight: bold;">Desde:</label>
+                <input type="date" id="repFechaInicio" onchange="filtrarReporteSemanal()">
+            </div>
+            <div>
+                <label style="font-size: 11px; font-weight: bold;">Hasta:</label>
+                <input type="date" id="repFechaFin" onchange="filtrarReporteSemanal()">
+            </div>
+            <button class="btn btn-success btn-sm" onclick="imprimirReporteSemanal()">🖨️ Imprimir Reporte</button>
+        </div>
+        <div class="table-responsive" style="max-height: 380px; overflow-y: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 40px;">N°</th>
+                        <th style="width: 110px;">Club</th>
+                        <th>Nombre del Jugador</th>
+                        <th style="width: 100px;">Categoría</th>
+                        <th style="width: 110px;">Fecha de Alta</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaReporteSemanalCuerpo"></tbody>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -791,6 +827,7 @@
             document.getElementById("lblRolActual").innerText = rolActual === "Administrador" ? "Rol: Administrador" : `Club: ${equipoAsignado}`;
             if (rolActual === "Administrador") {
                 document.getElementById("btnAdminUsers").style.display = "inline-flex";
+                document.getElementById("btnReporteSemanal").style.display = "inline-flex";
             }
             aplicarPermisosRol();
             await cargarDatosDesdeNube();
@@ -842,6 +879,7 @@
         
         if (rolActual === "Administrador") {
             document.getElementById("btnAdminUsers").style.display = "inline-flex";
+            document.getElementById("btnReporteSemanal").style.display = "inline-flex";
         }
 
         aplicarPermisosRol();
@@ -1000,15 +1038,10 @@
 
         if (isNaN(yyyymmdd) || yyyymmdd < 20100101) return null;
 
-        // Ardillas: 01 Enero 2014 al 30 Junio 2015
         if (yyyymmdd >= 20140101 && yyyymmdd <= 20150630) return "ARDILLA";
-        // Hormigas: 01 Julio 2015 al 31 Diciembre 2016
         if (yyyymmdd >= 20150701 && yyyymmdd <= 20161231) return "HORMIGA";
-        // Hormiguitas: 01 Enero 2017 al 30 Junio 2018
         if (yyyymmdd >= 20170101 && yyyymmdd <= 20180630) return "HORMIGUITA";
-        // Moscos: 01 Julio 2018 al 31 Diciembre 2019
         if (yyyymmdd >= 20180701 && yyyymmdd <= 20191231) return "MOSCO";
-        // Botanas: 01 Enero 2020 al 30 Junio 2021
         if (yyyymmdd >= 20200101 && yyyymmdd <= 20210630) return "BOTANA";
 
         return null;
@@ -1109,6 +1142,136 @@
 
     window.cerrarModalAdminUsuarios = function() {
         document.getElementById("modalAdminUsers").style.display = "none";
+    }
+
+    // ==========================================
+    // 📊 REPORTE SEMANAL DE NUEVOS REGISTROS
+    // ==========================================
+    window.abrirReporteSemanal = function() {
+        if (rolActual !== "Administrador") return;
+        const hoy = new Date();
+        const hace7Dias = new Date();
+        hace7Dias.setDate(hoy.getDate() - 7);
+
+        document.getElementById("repFechaInicio").value = hace7Dias.toISOString().split('T')[0];
+        document.getElementById("repFechaFin").value = hoy.toISOString().split('T')[0];
+
+        filtrarReporteSemanal();
+        document.getElementById("modalReporteSemanal").style.display = "flex";
+    }
+
+    window.cerrarModalReporteSemanal = function() {
+        document.getElementById("modalReporteSemanal").style.display = "none";
+    }
+
+    window.filtrarReporteSemanal = function() {
+        const ini = document.getElementById("repFechaInicio").value;
+        const fin = document.getElementById("repFechaFin").value;
+        const tbody = document.getElementById("tablaReporteSemanalCuerpo");
+        tbody.innerHTML = "";
+
+        let filtrados = baseDatos.filter(j => {
+            if (!j.fechaAlta) return false;
+            if (ini && j.fechaAlta < ini) return false;
+            if (fin && j.fechaAlta > fin) return false;
+            return true;
+        });
+
+        filtrados.sort((a, b) => {
+            if (a.equipo !== b.equipo) return a.equipo.localeCompare(b.equipo);
+            return a.nombre.localeCompare(b.nombre);
+        });
+
+        if (filtrados.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" style="padding: 20px; color: #64748b;">No hay nuevos registros en este rango de fechas.</td></tr>`;
+            return;
+        }
+
+        filtrados.forEach((j, idx) => {
+            tbody.innerHTML += `
+                <tr>
+                    <td><strong>${idx + 1}</strong></td>
+                    <td><span style="font-size: 10px; background: #e2e8f0; color:#1e293b; padding: 2px 5px; border-radius: 4px; font-weight: bold;">${j.equipo}</span></td>
+                    <td style="text-align: left; padding-left: 10px; font-weight: 500;">${j.nombre}</td>
+                    <td>${j.categoria}</td>
+                    <td>${formatearFechaDDMMYYYY(j.fechaAlta) || j.fechaAlta}</td>
+                </tr>
+            `;
+        });
+    }
+
+    window.imprimirReporteSemanal = function() {
+        const ini = document.getElementById("repFechaInicio").value;
+        const fin = document.getElementById("repFechaFin").value;
+        
+        let filtrados = baseDatos.filter(j => {
+            if (!j.fechaAlta) return false;
+            if (ini && j.fechaAlta < ini) return false;
+            if (fin && j.fechaAlta > fin) return false;
+            return true;
+        });
+
+        filtrados.sort((a, b) => {
+            if (a.equipo !== b.equipo) return a.equipo.localeCompare(b.equipo);
+            return a.nombre.localeCompare(b.nombre);
+        });
+
+        if (filtrados.length === 0) {
+            alert("No hay registros para imprimir en este rango.");
+            return;
+        }
+
+        let filasHtml = "";
+        filtrados.forEach((j, idx) => {
+            filasHtml += `
+                <tr>
+                    <td><strong>${idx + 1}</strong></td>
+                    <td style="font-weight: bold;">${j.equipo}</td>
+                    <td style="text-align: left; padding-left: 8px; text-transform: uppercase;">${j.nombre}</td>
+                    <td>${j.categoria}</td>
+                    <td>${formatearFechaDDMMYYYY(j.fechaAlta) || j.fechaAlta}</td>
+                </tr>
+            `;
+        });
+
+        let htmlContenido = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Reporte de Nuevos Registros - LIFARCC</title><style>
+            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 10mm; color: #000; background: white; }
+            .hoja-print { width: 100%; max-width: 195mm; margin: 0 auto; }
+            table { width: 100%; border-collapse: collapse; margin-top: 10px; background: white; }
+            th, td { border: 1px solid #000; padding: 5px 8px; text-align: center; font-size: 11px; }
+            th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; text-transform: uppercase; }
+            .print-footer { text-align: center; font-size: 9px; color: #555; border-top: 1px solid #aaa; padding-top: 6px; margin-top: 15px; }
+        </style></head><body>
+        <div class="hoja-print">
+            <h2 style="text-align: center; margin-bottom: 2px; text-transform: uppercase;">LIFARCC MONCLOVA</h2>
+            <h3 style="text-align: center; margin-top: 0; font-size: 14px; color: #333;">REPORTE DE NUEVOS REGISTROS POR EQUIPO</h3>
+            <p style="font-size: 11px; text-align: center; margin-bottom: 15px;">Periodo del <b>${formatearFechaDDMMYYYY(ini)}</b> al <b>${formatearFechaDDMMYYYY(fin)}</b></p>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 40px;">N°</th>
+                        <th style="width: 120px;">Club</th>
+                        <th>Nombre del Jugador</th>
+                        <th style="width: 110px;">Categoría</th>
+                        <th style="width: 110px;">Fecha de Alta</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${filasHtml}
+                </tbody>
+            </table>
+            <div class="print-footer">
+                Página creada por Carrivers Desing - Todos los derechos reservados © - V.019
+            </div>
+        </div>
+        </body></html>`;
+
+        const vPrint = window.open('', '_blank');
+        if (!vPrint) { alert("Permite las ventanas emergentes."); return; }
+        vPrint.document.write(htmlContenido);
+        vPrint.document.close();
+        vPrint.focus();
+        setTimeout(() => { vPrint.print(); }, 500);
     }
 
     window.toggleVerPassAdmin = function(inputId, btn) {
@@ -1337,7 +1500,17 @@
     }
 
     async function guardarJugadorEnFirestore(equipo, categoria, nombre, nacimiento, curp, docText, fotoBase64) {
-        const nuevoJ = { equipo, categoria, nombre, nacimiento, curp, doc: docText || "ACTA DE NACIMIENTO, CURP", foto: fotoBase64 };
+        const fechaActualStr = new Date().toISOString().split('T')[0];
+        const nuevoJ = { 
+            equipo, 
+            categoria, 
+            nombre, 
+            nacimiento, 
+            curp, 
+            doc: docText || "ACTA DE NACIMIENTO, CURP", 
+            foto: fotoBase64,
+            fechaAlta: fechaActualStr 
+        };
         const docRef = await addDoc(collection(db, "jugadores"), nuevoJ);
         baseDatos.push({ id: docRef.id, ...nuevoJ });
 
@@ -1415,6 +1588,7 @@
             const worksheet = workbook.Sheets[sheetName];
             const json = XLSX.utils.sheet_to_json(worksheet);
 
+            const fechaActualStr = new Date().toISOString().split('T')[0];
             let importados = 0;
             for (const row of json) {
                 let eq = String(row['CLUB'] || row['Equipo'] || row['equipo'] || '').trim().toUpperCase();
@@ -1438,7 +1612,8 @@
                         nacimiento: fechaNac,
                         curp: String(row['CURP'] || row['curp'] || '').trim().toUpperCase(),
                         doc: String(row['documentos'] || row['Documento'] || 'ACTA DE NACIMIENTO, CURP').trim().toUpperCase(),
-                        foto: ""
+                        foto: "",
+                        fechaAlta: fechaActualStr
                     };
                     const docRef = await addDoc(collection(db, "jugadores"), nuevoJ);
                     baseDatos.push({ id: docRef.id, ...nuevoJ });
@@ -1506,7 +1681,7 @@
                 <td>${formatearFechaDDMMYYYY(jugador.nacimiento) || ''}</td>
                 <td><code style="font-size: 11px;">${jugador.curp || ''}</code></td>
                 <td>${jugador.doc || ''}</td>
-                <td class="no-print col-admin"><span style="font-size: 10px; background: #e2e8f0; padding: 2px 5px; border-radius: 4px; font-weight: bold;">${jugador.equipo}</span></td>
+                <td class="no-print col-admin"><span style="font-size: 10px; background: #e2e8f0; color:#1e293b; padding: 2px 5px; border-radius: 4px; font-weight: bold;">${jugador.equipo}</span></td>
                 <td class="no-print">${accionesHtml}</td>
             </tr>`;
         });
@@ -1544,7 +1719,7 @@
             tbody.innerHTML += `<tr>
                 <td><strong>${index + 1}</strong></td>
                 <td>${htmlFoto}</td>
-                <td><span style="font-size: 10px; background: #e2e8f0; padding: 2px 5px; border-radius: 4px; font-weight: bold;">${jugador.equipo}</span></td>
+                <td><span style="font-size: 10px; background: #e2e8f0; color:#1e293b; padding: 2px 5px; border-radius: 4px; font-weight: bold;">${jugador.equipo}</span></td>
                 <td style="text-align: left; padding-left: 10px; font-weight: 500;">${jugador.nombre}</td>
                 <td>${jugador.categoria}</td>
                 <td>${formatearFechaDDMMYYYY(jugador.nacimiento) || ''}</td>
@@ -1706,7 +1881,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página creada por Carrivers Desing - Todos los derechos reservados © - V.018
+                Página creada por Carrivers Desing - Todos los derechos reservados © - V.019
             </div>
         </div>
 
@@ -1829,7 +2004,7 @@
                     </tbody>
                 </table>
                 <div class="print-footer">
-                    Página creada por Carrivers Desing - Todos los derechos reservados © - V.018
+                    Página creada por Carrivers Desing - Todos los derechos reservados © - V.019
                 </div>
             </div>`;
         });
