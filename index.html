@@ -164,6 +164,7 @@
             color: white;
             color-scheme: dark;
             box-sizing: border-box;
+            width: 100%;
         }
         select:disabled { opacity: 0.8; cursor: not-allowed; background: #090d16; color: #fbbf24; font-weight: bold; }
 
@@ -294,6 +295,20 @@
             padding-top: 10px;
         }
 
+        /* 📱 MEDIA QUERIES PARA OPTIMIZACIÓN MÓVIL (SIN AFECTAR ESCRITORIO) */
+        @media (max-width: 768px) {
+            body { padding: 5px; }
+            .container { padding: 12px; }
+            .top-navbar { flex-direction: column; align-items: stretch; gap: 10px; padding: 10px; }
+            .nav-tabs-group, .nav-actions-group { justify-content: center; width: 100%; flex-wrap: wrap; }
+            .filter-row { flex-direction: column; align-items: stretch; gap: 10px; }
+            .filter-group { flex-direction: column; align-items: stretch; width: 100%; }
+            .filter-group > div { width: 100%; }
+            .form-grid-1, .form-grid-2 { grid-template-columns: 1fr !important; }
+            .main-title-row { flex-direction: column; gap: 5px; text-align: center; }
+            .teams-preview-grid { grid-template-columns: 1fr; }
+        }
+
         @media print {
             body { background: white; padding: 10mm; color: #000; }
             .container, .top-navbar, .controls-panel, .section-box, .nav-tabs, .footer-copyright, .no-print { display: none !important; }
@@ -368,7 +383,7 @@
     </div>
     <!-- PIE DE PÁGINA EN PANTALLA DE ACCESO -->
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.022
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.023
     </div>
 </div>
 
@@ -450,7 +465,7 @@
             </div>
             
             <!-- Renglón 1 de Registro -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr 2fr; gap: 12px; margin-bottom: 12px;">
+            <div class="form-grid-1" style="display: grid; grid-template-columns: 1fr 1fr 2fr; gap: 12px; margin-bottom: 12px;">
                 <div>
                     <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Equipo *:</label>
                     <select id="altaEquipo" style="width:100%;"></select>
@@ -472,7 +487,7 @@
             </div>
 
             <!-- Renglón 2 de Registro -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1.2fr; gap: 12px; margin-bottom: 15px;">
+            <div class="form-grid-2" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1.2fr; gap: 12px; margin-bottom: 15px;">
                 <div>
                     <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Fecha Nacimiento *:</label>
                     <input type="date" id="altaNacimiento" onblur="validarFechaAltaBlur()" style="width:100%;">
@@ -595,7 +610,7 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.022
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.023
     </div>
 </div>
 
@@ -1311,7 +1326,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.022
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.023
             </div>
         </div>
         </body></html>`;
@@ -1939,7 +1954,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.022
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.023
             </div>
         </div>
 
@@ -2062,7 +2077,7 @@
                     </tbody>
                 </table>
                 <div class="print-footer">
-                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.022
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.023
                 </div>
             </div>`;
         });
