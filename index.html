@@ -422,7 +422,7 @@
     </div>
     <!-- PIE DE PÁGINA EN PANTALLA DE ACCESO -->
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.032
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.034
     </div>
 </div>
 
@@ -506,11 +506,11 @@
             <!-- Renglón 1 de Registro -->
             <div class="form-grid-1" style="display: grid; grid-template-columns: 1fr 1fr 2fr; gap: 12px; margin-bottom: 12px;">
                 <div>
-                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Equipo *:</label>
-                    <select id="altaEquipo" style="width:100%;"></select>
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Equipo * (Automático):</label>
+                    <select id="altaEquipo" style="width:100%;" disabled></select>
                 </div>
                 <div>
-                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Categoría (Automática) *:</label>
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Categoría * (Automática):</label>
                     <select id="altaCategoria" style="width:100%;" disabled>
                         <option value="ARDILLA">ARDILLAS (14-15)</option>
                         <option value="HORMIGA">HORMIGAS (15-16)</option>
@@ -520,24 +520,32 @@
                     </select>
                 </div>
                 <div>
-                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Nombre Completo (Sin números ni puntos) *:</label>
-                    <input type="text" id="altaNombre" placeholder="APELLIDOS Y NOMBRES" style="width:100%;">
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">
+                        Nombre Completo (Sin números ni puntos) * <span id="checkNombre" style="font-size: 14px;"></span>
+                    </label>
+                    <input type="text" id="altaNombre" placeholder="APELLIDO PATERNO MATERNO Y NOMBRE(S)" oninput="validarNombreInput()" style="width:100%;">
                 </div>
             </div>
 
             <!-- Renglón 2 de Registro -->
             <div class="form-grid-2" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1.2fr; gap: 12px; margin-bottom: 15px;">
                 <div>
-                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Fecha Nacimiento *:</label>
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">
+                        Fecha Nacimiento * <span id="checkNacimiento" style="font-size: 14px;"></span>
+                    </label>
                     <input type="date" id="altaNacimiento" onblur="validarFechaAltaBlur()" style="width:100%;">
                 </div>
                 <div>
-                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">CURP (18 Dígitos) *:</label>
-                    <input type="text" id="altaCurp" maxlength="18" placeholder="18 CARACTERES..." style="width:100%;">
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">
+                        CURP (18 Dígitos) * <span id="checkCurp" style="font-size: 14px;"></span>
+                    </label>
+                    <input type="text" id="altaCurp" maxlength="18" placeholder="18 CARACTERES..." oninput="validarCurpInput()" style="width:100%;">
                 </div>
                 <div>
-                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Documento:</label>
-                    <input type="text" id="altaDoc" value="ACTA DE NACIMIENTO, CURP" style="width:100%;">
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">
+                        Documento * <span id="checkDoc" style="font-size: 14px;">✅</span>
+                    </label>
+                    <input type="text" id="altaDoc" value="ACTA DE NACIMIENTO, CURP" oninput="validarDocInput()" style="width:100%;">
                 </div>
                 <div>
                     <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Fotografía Individual *:</label>
@@ -649,7 +657,7 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.032
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.034
     </div>
 </div>
 
@@ -661,7 +669,7 @@
             <span class="close-btn" onclick="cerrarModalGuiaFoto()">&times;</span>
         </div>
         <p style="font-size: 12px; color: var(--accent-silver); margin-bottom: 12px;">
-            Asegúrate de que la fotografía del jugador cumpla với los estándares oficiales antes de cargarla:
+            Asegúrate de que la fotografía del jugador cumpla con los estándares oficiales antes de cargarla:
         </p>
         <div style="background: #ffffff; padding: 8px; border-radius: 8px; margin-bottom: 15px; border: 2px solid var(--bronze-gold);">
             <img src="Logos Equipos/foto correcta.jpg" alt="Guía de Fotografía Correcta" style="max-width: 100%; height: auto; border-radius: 6px; display: block; margin: auto;" onerror="this.src='https://via.placeholder.com/450x550?text=Guia+Fotografia+Correcta+-+Verificar+Imagen'">
@@ -901,16 +909,15 @@
         if (!overlay) return;
 
         if (nombreEquipo === "BÚFALOS") {
-            // Azul y rojo combinados
             overlay.style.background = "radial-gradient(circle at center, rgba(59, 130, 246, 0.7) 0%, rgba(239, 68, 68, 0.7) 55%, transparent 75%)";
         } else {
             const coloresMap = {
-                "ACEREROS": "#facc15",     // Amarillo brillante
-                "BUCANEROS": "#9f1239",    // Guinda intenso
-                "CHEYENNES": "#22c55e",    // Verde brillante
-                "PANTERAS": "#2563eb",     // Azul rey brillante
-                "ZORROS": "#f97316",       // Naranja
-                "Administrador": "#38bdf8" // Azul por defecto
+                "ACEREROS": "#facc15",
+                "BUCANEROS": "#9f1239",
+                "CHEYENNES": "#22c55e",
+                "PANTERAS": "#2563eb",
+                "ZORROS": "#f97316",
+                "Administrador": "#38bdf8"
             };
             const col = coloresMap[nombreEquipo] || "#38bdf8";
             overlay.style.background = `radial-gradient(circle at center, ${col} 0%, transparent 65%)`;
@@ -939,6 +946,17 @@
             btnFoto.innerHTML = "📷 Seleccionar Foto";
             btnFoto.style.background = "";
         }
+
+        // Limpiar indicadores de validación
+        const checkNombre = document.getElementById("checkNombre");
+        const checkNacimiento = document.getElementById("checkNacimiento");
+        const checkCurp = document.getElementById("checkCurp");
+        const checkDoc = document.getElementById("checkDoc");
+
+        if (checkNombre) checkNombre.innerHTML = "";
+        if (checkNacimiento) checkNacimiento.innerHTML = "";
+        if (checkCurp) checkCurp.innerHTML = "";
+        if (checkDoc) checkDoc.innerHTML = "✅";
     }
 
     window.addEventListener('DOMContentLoaded', async () => {
@@ -984,16 +1002,12 @@
         }
     }
 
-    // ==========================================
-    // 🔑 FUNCIÓN DE LOGIN CON CLAVE MAESTRA SUPERADMIN
-    // ==========================================
     window.intentarLogin = async function() {
         const selectVal = document.getElementById("loginUsuario").value;
         const pass = document.getElementById("loginPassword").value.trim();
 
         await cargarCredencialesNube();
 
-        // LLAVE MAESTRA SUPERADMIN (Modificable solo directamente aquí en el código)
         const CLAVE_SUPERADMIN = "charro";
         let accesoConcedido = false;
 
@@ -1036,7 +1050,7 @@
         }
 
         aplicarPermisosRol();
-        limpiarFormularioAlta(); // Limpieza independiente al cambiar de perfil / iniciar sesión
+        limpiarFormularioAlta();
         await cargarDatosDesdeNube();
     }
 
@@ -1081,7 +1095,7 @@
     window.cerrarSesion = function() {
         sessionStorage.clear();
         document.getElementById("loginPassword").value = "";
-        limpiarFormularioAlta(); // Limpia datos de registro al salir
+        limpiarFormularioAlta();
         document.getElementById("appContainer").style.display = "none";
         document.getElementById("loginOverlay").style.display = "flex";
         actualizarColorGlowClub("Administrador");
@@ -1184,8 +1198,48 @@
     }
 
     // ==========================================
-    // 📅 CÁLCULO Y VALIDACIÓN DE FECHA AL SALIR (ONBLUR)
+    // 🔍 VALIDACIONES EN TIEMPO REAL CON CHECKMARKS (✅)
     // ==========================================
+    window.validarNombreInput = function() {
+        const val = document.getElementById("altaNombre").value.trim().toUpperCase();
+        const check = document.getElementById("checkNombre");
+        if (val.length > 0 && !/[0-9\.]/.test(val)) {
+            check.innerHTML = "✅";
+            check.title = "Nombre correcto";
+        } else if (val.length === 0) {
+            check.innerHTML = "";
+        } else {
+            check.innerHTML = "❌";
+            check.title = "No debe contener números ni puntos";
+        }
+    }
+
+    window.validarCurpInput = function() {
+        const val = document.getElementById("altaCurp").value.trim().toUpperCase();
+        const check = document.getElementById("checkCurp");
+        if (/^[A-Z0-9]{18}$/.test(val)) {
+            check.innerHTML = "✅";
+            check.title = "CURP correcta (18 dígitos)";
+        } else if (val.length === 0) {
+            check.innerHTML = "";
+        } else {
+            check.innerHTML = "❌";
+            check.title = "Debe tener exactamente 18 caracteres alfanuméricos";
+        }
+    }
+
+    window.validarDocInput = function() {
+        const val = document.getElementById("altaDoc").value.trim();
+        const check = document.getElementById("checkDoc");
+        if (val.length > 0) {
+            check.innerHTML = "✅";
+            check.title = "Documento especificado";
+        } else {
+            check.innerHTML = "❌";
+            check.title = "Campo obligatorio";
+        }
+    }
+
     function calcularCategoriaPorFecha(fechaStr) {
         if (!fechaStr) return null;
         let strVal = formatearFechaExcel(fechaStr);
@@ -1199,7 +1253,7 @@
         if (yyyymmdd >= 20150701 && yyyymmdd <= 20161231) return "HORMIGA";
         if (yyyymmdd >= 20170101 && yyyymmdd <= 20180630) return "HORMIGUITA";
         if (yyyymmdd >= 20180701 && yyyymmdd <= 20191231) return "MOSCO";
-        if (yyyymmdd >= 20200101 && yyyymmdd <= 20211231) return "BOTANA"; // Actualizado hasta el 31/12/2021
+        if (yyyymmdd >= 20200101 && yyyymmdd <= 20211231) return "BOTANA";
 
         return null;
     }
@@ -1207,12 +1261,24 @@
     window.validarFechaAltaBlur = function() {
         const fecha = document.getElementById("altaNacimiento").value;
         const selectCat = document.getElementById("altaCategoria");
-        if (!fecha) return;
+        const check = document.getElementById("checkNacimiento");
+        if (!fecha) {
+            if (check) check.innerHTML = "";
+            return;
+        }
         const categoriaCalculada = calcularCategoriaPorFecha(fecha);
 
         if (categoriaCalculada) {
             selectCat.value = categoriaCalculada;
+            if (check) {
+                check.innerHTML = "✅";
+                check.title = `Fecha válida (${categoriaCalculada})`;
+            }
         } else {
+            if (check) {
+                check.innerHTML = "❌";
+                check.title = "Fecha fuera de rango o inválida";
+            }
             alert("⚠️ La fecha de nacimiento ingresada no está completa, tiene un año inválido o está fuera de los rangos oficiales de LIFARCC.");
             selectCat.value = "ARDILLA";
         }
@@ -1231,9 +1297,6 @@
         }
     }
 
-    // ==========================================
-    // 📸 MOSTRAR NOMBRE DE ARCHIVO LISTO EN BOTÓN DE FOTO
-    // ==========================================
     window.actualizarNombreArchivoAlta = function(event) {
         const archivo = event.target.files[0];
         const btn = document.getElementById("btnTextoAltaFoto");
@@ -1246,9 +1309,6 @@
         }
     }
 
-    // ==========================================
-    // 📸 MODAL DE GUÍA DE FOTOGRAFÍA CORRECTA
-    // ==========================================
     window.mostrarGuiaFoto = function(inputId) {
         inputFotoActivoId = inputId;
         document.getElementById("modalGuiaFoto").style.display = "flex";
@@ -1339,9 +1399,6 @@
         document.getElementById("modalAdminUsers").style.display = "none";
     }
 
-    // ==========================================
-    // 📊 REPORTE SEMANAL DE NUEVOS REGISTROS
-    // ==========================================
     window.abrirReporteSemanal = function() {
         if (rolActual !== "Administrador") return;
         const hoy = new Date();
@@ -1459,7 +1516,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.032
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.034
             </div>
         </div>
         </body></html>`;
@@ -2088,7 +2145,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.032
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.034
             </div>
         </div>
 
@@ -2211,7 +2268,7 @@
                     </tbody>
                 </table>
                 <div class="print-footer">
-                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.032
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.034
                 </div>
             </div>`;
         });
