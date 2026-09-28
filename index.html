@@ -422,7 +422,7 @@
     </div>
     <!-- PIE DE PÁGINA EN PANTALLA DE ACCESO -->
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.034
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.035
     </div>
 </div>
 
@@ -498,7 +498,10 @@
 
         <!-- 3. SECCIÓN DE REGISTRAR JUGADOR -->
         <div class="section-box" id="seccionAltaIndividual" style="background: #1e293b; border: 1px solid var(--bronze-gold);">
-            <h4>➕ Registrar Jugador de 1 en 1 (Sincronizado en la Nube)</h4>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px;">
+                <h4 style="margin: 0; color: #f1f5f9; font-size: 15px;">➕ Registrar Jugador de 1 en 1 (Sincronizado en la Nube)</h4>
+                <div id="badgeEstadoRegistroContainer"></div>
+            </div>
             <div id="bannerPeriodoRegistro" style="background: rgba(217, 119, 6, 0.2); border: 1px dashed var(--bronze-gold); padding: 8px 12px; border-radius: 6px; margin-bottom: 15px; font-size: 12px; font-weight: bold; color: #fbbf24; text-align: center;">
                 📅 FECHA DE REGISTROS: Cargando periodo...
             </div>
@@ -657,7 +660,21 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.034
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.035
+    </div>
+</div>
+
+<!-- MODAL VISTA AMPLIADA DE FOTOGRAFÍA -->
+<div id="modalAmpliarFoto" class="modal" style="z-index: 1010;">
+    <div class="modal-content" style="max-width: 400px; text-align: center;">
+        <div class="modal-header">
+            <span>🔍 Vista Ampliada de Fotografía</span>
+            <span class="close-btn" onclick="cerrarModalAmpliarFoto()">&times;</span>
+        </div>
+        <div style="background: #0f172a; padding: 10px; border-radius: 8px; margin-bottom: 15px; border: 2px solid var(--bronze-gold); display: flex; justify-content: center; align-items: center; min-height: 250px;">
+            <img id="imgAmpliadaModal" src="" alt="Foto del Jugador" style="max-width: 100%; max-height: 350px; object-fit: contain; border-radius: 6px;" onerror="this.src='https://via.placeholder.com/250x300?text=Sin+Fotografia'">
+        </div>
+        <p id="nombreJugadorAmpliado" style="font-size: 13px; font-weight: bold; color: #fbbf24; margin: 0;"></p>
     </div>
 </div>
 
@@ -1155,17 +1172,41 @@
         alert("¡Fechas de registro actualizadas en la nube! El cierre se aplicará a las 19:00 hrs del día final.");
     }
 
+    function comprobarEstadoRegistroActivo() {
+        const ahora = new Date();
+        let abierto = true;
+        if (fechasRegistro.inicio) {
+            const fechaIni = new Date(fechasRegistro.inicio + "T00:00:00");
+            if (ahora < fechaIni) abierto = false;
+        }
+        if (fechasRegistro.fin) {
+            const fechaFinLimite = new Date(fechasRegistro.fin + "T19:00:00");
+            if (ahora > fechaFinLimite) abierto = false;
+        }
+        return abierto;
+    }
+
     function actualizarBannerFechasRegistro() {
         const banner = document.getElementById("bannerPeriodoRegistro");
-        if (!banner) return;
-        if (fechasRegistro.inicio && fechasRegistro.fin) {
-            banner.innerText = `📅 FECHA DE REGISTROS: Del ${fechasRegistro.inicio} al ${fechasRegistro.fin} (Cierra a las 19:00 hrs)`;
-        } else if (fechasRegistro.inicio) {
-            banner.innerText = `📅 FECHA DE REGISTROS: A partir del ${fechasRegistro.inicio}`;
-        } else if (fechasRegistro.fin) {
-            banner.innerText = `📅 FECHA DE REGISTROS: Hasta el ${fechasRegistro.fin} a las 19:00 hrs`;
-        } else {
-            banner.innerText = `📅 FECHA DE REGISTROS: Sin restricciones de fechas configuradas por la liga.`;
+        const badgeContainer = document.getElementById("badgeEstadoRegistroContainer");
+        if (banner) {
+            if (fechasRegistro.inicio && fechasRegistro.fin) {
+                banner.innerText = `📅 FECHA DE REGISTROS: Del ${fechasRegistro.inicio} al ${fechasRegistro.fin} (Cierra a las 19:00 hrs)`;
+            } else if (fechasRegistro.inicio) {
+                banner.innerText = `📅 FECHA DE REGISTROS: A partir del ${fechasRegistro.inicio}`;
+            } else if (fechasRegistro.fin) {
+                banner.innerText = `📅 FECHA DE REGISTROS: Hasta el ${fechasRegistro.fin} a las 19:00 hrs`;
+            } else {
+                banner.innerText = `📅 FECHA DE REGISTROS: Sin restricciones de fechas configuradas por la liga.`;
+            }
+        }
+
+        if (badgeContainer) {
+            if (comprobarEstadoRegistroActivo()) {
+                badgeContainer.innerHTML = `<span style="background: #16a34a; color: white; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; display: inline-flex; align-items: center; gap: 4px;">🟢 Registro Abierto</span>`;
+            } else {
+                badgeContainer.innerHTML = `<span style="background: #dc2626; color: white; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; display: inline-flex; align-items: center; gap: 4px;">🔴 Registro Cerrado</span>`;
+            }
         }
     }
 
@@ -1325,6 +1366,19 @@
         if (idToTrigger) {
             document.getElementById(idToTrigger).click();
         }
+    }
+
+    // MODAL VISTA AMPLIADA FOTO
+    window.abrirModalAmpliarFoto = function(fotoUrl, nombreJugador) {
+        const imgModal = document.getElementById("imgAmpliadaModal");
+        const nombreP = document.getElementById("nombreJugadorAmpliado");
+        imgModal.src = fotoUrl || 'https://via.placeholder.com/250x300?text=Sin+Fotografia';
+        nombreP.innerText = nombreJugador || '';
+        document.getElementById("modalAmpliarFoto").style.display = "flex";
+    }
+
+    window.cerrarModalAmpliarFoto = function() {
+        document.getElementById("modalAmpliarFoto").style.display = "none";
     }
 
     window.abrirModalCambiarPass = function() {
@@ -1516,7 +1570,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.034
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.035
             </div>
         </div>
         </body></html>`;
@@ -1708,20 +1762,9 @@
 
     window.registrarJugadorIndividual = async function() {
         if (rolActual === "Equipo") {
-            const ahora = new Date();
-            if (fechasRegistro.inicio) {
-                const fechaIni = new Date(fechasRegistro.inicio + "T00:00:00");
-                if (ahora < fechaIni) {
-                    alert(`El periodo de registro aún no ha comenzado (Inicia el ${fechasRegistro.inicio}).`);
-                    return;
-                }
-            }
-            if (fechasRegistro.fin) {
-                const fechaFinLimite = new Date(fechasRegistro.fin + "T19:00:00");
-                if (ahora > fechaFinLimite) {
-                    alert(`El periodo de registro ha finalizado (Terminó el ${fechasRegistro.fin} a las 19:00 hrs). Ya no se pueden registrar más jugadores.`);
-                    return;
-                }
+            if (!comprobarEstadoRegistroActivo()) {
+                alert("⚠️ El periodo de registro se encuentra cerrado. Ya no se pueden registrar más jugadores.");
+                return;
             }
         }
 
@@ -1803,16 +1846,6 @@
         renderizarRoster();
         alert(`¡${count} fotografía(s) guardadas en la nube correctamente asociadas al nombre del jugador!`);
         event.target.value = "";
-    }
-
-    window.dispararFotoIndividual = function(idJugador) {
-        const j = baseDatos.find(item => item.id === idJugador);
-        if (rolActual === "Equipo" && j && j.equipo !== equipoAsignado) {
-            alert("No puedes modificar jugadores de otros equipos.");
-            return;
-        }
-        jugadorSeleccionadoId = idJugador;
-        mostrarGuiaFoto('inputFotoIndividual');
     }
 
     window.manejarArchivoFoto = async function(event) {
@@ -1901,6 +1934,7 @@
 
         renderizarVistaPreviaEquipos();
         renderizarMiniLogosHeader();
+        actualizarBannerFechasRegistro();
 
         const logoLigaFinal = logoLigaGlobal || logoLifarccDefault;
         document.getElementById("imgEscudoLiga").src = logoLigaFinal;
@@ -1923,8 +1957,8 @@
 
         filtrados.forEach((jugador, index) => {
             let htmlFoto = jugador.foto ? 
-                `<div class="player-photo-container" onclick="dispararFotoIndividual('${jugador.id}')" title="Cambiar foto"><img src="${jugador.foto}" class="player-photo"></div>` : 
-                `<div class="player-photo-container" onclick="dispararFotoIndividual('${jugador.id}')" title="Subir foto"><span class="no-photo">Subir</span></div>`;
+                `<div class="player-photo-container" onclick="abrirModalAmpliarFoto('${jugador.foto}', '${jugador.nombre}')" title="Ver fotografía ampliada"><img src="${jugador.foto}" class="player-photo"></div>` : 
+                `<div class="player-photo-container" title="Sin fotografía"><span class="no-photo">Sin foto</span></div>`;
 
             let accionesHtml = "";
             if (rolActual === "Administrador") {
@@ -1976,8 +2010,8 @@
 
         filtrados.forEach((jugador, index) => {
             let htmlFoto = jugador.foto ? 
-                `<div class="player-photo-container" onclick="dispararFotoIndividual('${jugador.id}')" style="width:30px; height:40px;"><img src="${jugador.foto}" style="width:100%; height:100%; object-fit:cover;"></div>` : 
-                `<div class="player-photo-container" onclick="dispararFotoIndividual('${jugador.id}')" style="width:30px; height:40px;"><span style="font-size:7px;">Subir</span></div>`;
+                `<div class="player-photo-container" onclick="abrirModalAmpliarFoto('${jugador.foto}', '${jugador.nombre}')" style="width:30px; height:40px;" title="Ver fotografía ampliada"><img src="${jugador.foto}" style="width:100%; height:100%; object-fit:cover;"></div>` : 
+                `<div class="player-photo-container" style="width:30px; height:40px;" title="Sin fotografía"><span style="font-size:7px;">Sin foto</span></div>`;
 
             tbody.innerHTML += `<tr>
                 <td><strong>${index + 1}</strong></td>
@@ -2012,7 +2046,7 @@
             tbody.innerHTML = `<tr><td colspan="6" style="padding: 20px; color: #64748b;">No hay jugadores registrados para el club ${eqTarget}.</td></tr>`;
         } else {
             filtrados.forEach((j, i) => {
-                let fotoTd = j.foto ? `<img src="${j.foto}" style="width:35px; height:45px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:7px; color:#64748b;">Sin foto</span>`;
+                let fotoTd = j.foto ? `<img src="${j.foto}" onclick="abrirModalAmpliarFoto('${j.foto}', '${j.nombre}')" style="width:35px; height:45px; object-fit:cover; border-radius:3px; cursor:pointer;" title="Ver fotografía ampliada">` : `<span style="font-size:7px; color:#64748b;">Sin foto</span>`;
                 tbody.innerHTML += `<tr>
                     <td><strong>${i + 1}</strong></td>
                     <td>${fotoTd}</td>
@@ -2145,7 +2179,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.034
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.035
             </div>
         </div>
 
@@ -2268,7 +2302,7 @@
                     </tbody>
                 </table>
                 <div class="print-footer">
-                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.034
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.035
                 </div>
             </div>`;
         });
