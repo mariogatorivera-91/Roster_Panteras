@@ -20,12 +20,41 @@
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(rgba(9, 13, 22, 0.88), rgba(9, 13, 22, 0.92)), url('Logos%20Equipos/fibradecarbono3.jpg') repeat;
+            background: linear-gradient(rgba(9, 13, 22, 0.85), rgba(9, 13, 22, 0.90)), url('Logos%20Equipos/fibradecarbono3.jpg') repeat;
             background-color: #0b0f19;
             color: var(--text-light);
             margin: 0;
             padding: 15px;
             min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* LUZ AMBIENTAL DINÁMICA EN MOVIMIENTO SEGÚN EL CLUB */
+        .moving-light-overlay {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, #38bdf8 0%, transparent 65%);
+            opacity: 0.22;
+            pointer-events: none;
+            z-index: 0;
+            animation: moveLightBeam 14s ease-in-out infinite alternate;
+            transition: background 0.8s ease;
+        }
+
+        @keyframes moveLightBeam {
+            0% {
+                transform: translate(-20%, -20%) scale(1);
+            }
+            50% {
+                transform: translate(25%, 20%) scale(1.35);
+            }
+            100% {
+                transform: translate(-15%, 25%) scale(1.15);
+            }
         }
 
         /* PANTALLA DE LOGIN CON FONDO LIFARCC (INALTERADO) */
@@ -52,14 +81,16 @@
         .login-box h3 { margin-top: 0; color: #fbbf24; letter-spacing: 1px; }
 
         .container {
+            position: relative;
+            z-index: 1;
             max-width: 1250px;
             margin: auto;
-            background: rgba(17, 24, 39, 0.90);
-            backdrop-filter: blur(5px);
+            background: rgba(17, 24, 39, 0.88);
+            backdrop-filter: blur(6px);
             padding: 25px;
             border-radius: 12px;
             border: 1px solid var(--metal-border);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
         }
 
         /* MENÚ SUPERIOR EN RENGLÓN */
@@ -313,7 +344,7 @@
 
         @media print {
             body { background: white; padding: 10mm; color: #000; }
-            .container, .top-navbar, .controls-panel, .section-box, .nav-tabs, .footer-copyright, .no-print { display: none !important; }
+            .moving-light-overlay, .container, .top-navbar, .controls-panel, .section-box, .nav-tabs, .footer-copyright, .no-print { display: none !important; }
             
             .hoja-roster-impresion {
                 margin: 0 auto;
@@ -360,6 +391,9 @@
 </head>
 <body>
 
+<!-- CAPA DE LUZ EN MOVIMIENTO (FONDO ANIMADO) -->
+<div class="moving-light-overlay"></div>
+
 <!-- PANTALLA DE INICIO DE SESIÓN -->
 <div id="loginOverlay">
     <div class="login-box">
@@ -388,7 +422,7 @@
     </div>
     <!-- PIE DE PÁGINA EN PANTALLA DE ACCESO -->
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.026
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.028
     </div>
 </div>
 
@@ -615,7 +649,7 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.026
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.028
     </div>
 </div>
 
@@ -815,6 +849,7 @@
     const db = getFirestore(app);
 
     const listaEquiposOficiales = ["ACEREROS", "BUCANEROS", "BÚFALOS", "CHEYENNES", "PANTERAS", "ZORROS"];
+    
     const logosPorDefecto = {
         "ACEREROS": "Logos Equipos/acereros.jpg",
         "BUCANEROS": "Logos Equipos/bucaneros.jpg",
@@ -860,6 +895,28 @@
     window.addEventListener('keydown', resetInactivityTimer);
     window.addEventListener('click', resetInactivityTimer);
 
+    // FUNCIÓN PARA ACTUALIZAR EL COLOR DE LA LUZ AMBIENTAL EN MOVIMIENTO SEGÚN EL CLUB
+    function actualizarColorGlowClub(nombreEquipo) {
+        const overlay = document.querySelector('.moving-light-overlay');
+        if (!overlay) return;
+
+        if (nombreEquipo === "BÚFALOS") {
+            // Azul y rojo combinados
+            overlay.style.background = "radial-gradient(circle at center, rgba(59, 130, 246, 0.7) 0%, rgba(239, 68, 68, 0.7) 55%, transparent 75%)";
+        } else {
+            const coloresMap = {
+                "ACEREROS": "#facc15",     // Amarillo brillante
+                "BUCANEROS": "#9f1239",    // Guinda intenso
+                "CHEYENNES": "#22c55e",    // Verde brillante
+                "PANTERAS": "#2563eb",     // Azul rey brillante
+                "ZORROS": "#f97316",       // Naranja
+                "Administrador": "#38bdf8" // Azul por defecto
+            };
+            const col = coloresMap[nombreEquipo] || "#38bdf8";
+            overlay.style.background = `radial-gradient(circle at center, ${col} 0%, transparent 65%)`;
+        }
+    }
+
     window.addEventListener('DOMContentLoaded', async () => {
         const savedRol = sessionStorage.getItem('lifarcc_rol');
         const savedEquipo = sessionStorage.getItem('lifarcc_equipo');
@@ -869,6 +926,9 @@
             document.getElementById("loginOverlay").style.display = "none";
             document.getElementById("appContainer").style.display = "block";
             document.getElementById("lblRolActual").innerText = rolActual === "Administrador" ? "Rol: Administrador" : `Club: ${equipoAsignado}`;
+            
+            actualizarColorGlowClub(rolActual === "Administrador" ? "Administrador" : equipoAsignado);
+
             if (rolActual === "Administrador") {
                 document.getElementById("btnAdminUsers").style.display = "inline-flex";
                 document.getElementById("btnReporteSemanal").style.display = "inline-flex";
@@ -930,6 +990,8 @@
         sessionStorage.setItem('lifarcc_rol', rolActual);
         sessionStorage.setItem('lifarcc_equipo', equipoAsignado || '');
 
+        actualizarColorGlowClub(rolActual === "Administrador" ? "Administrador" : equipoAsignado);
+
         document.getElementById("loginOverlay").style.display = "none";
         document.getElementById("appContainer").style.display = "block";
         document.getElementById("lblRolActual").innerText = rolActual === "Administrador" ? "Rol: Administrador" : `Club: ${equipoAsignado}`;
@@ -974,6 +1036,7 @@
                 selectFiltroEq.value = equipoAsignado;
                 selectFiltroEq.disabled = true;
             }
+            actualizarColorGlowClub(equipoAsignado);
         } else {
             if (selectAltaEq) selectAltaEq.disabled = false;
             if (selectFiltroEq) selectFiltroEq.disabled = false;
@@ -985,6 +1048,7 @@
         document.getElementById("loginPassword").value = "";
         document.getElementById("appContainer").style.display = "none";
         document.getElementById("loginOverlay").style.display = "flex";
+        actualizarColorGlowClub("Administrador");
     }
 
     async function cargarDatosDesdeNube() {
@@ -1344,7 +1408,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.026
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.028
             </div>
         </div>
         </body></html>`;
@@ -1499,6 +1563,11 @@
 
     window.cambiarFiltroEquipo = function() {
         const eq = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
+        
+        if (rolActual === "Administrador") {
+            actualizarColorGlowClub(eq);
+        }
+
         const conf = configEquipos[eq] || {};
         const inputCampo = document.getElementById("inputCampo");
         if(inputCampo) inputCampo.value = conf.campo || '';
@@ -1973,7 +2042,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.026
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.028
             </div>
         </div>
 
@@ -2096,7 +2165,7 @@
                     </tbody>
                 </table>
                 <div class="print-footer">
-                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.026
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.028
                 </div>
             </div>`;
         });
