@@ -422,7 +422,7 @@
     </div>
     <!-- PIE DE PÁGINA EN PANTALLA DE ACCESO -->
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.030
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.031
     </div>
 </div>
 
@@ -649,7 +649,7 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.030
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.031
     </div>
 </div>
 
@@ -917,6 +917,30 @@
         }
     }
 
+    // ==========================================
+    // 🧹 LIMPIAR FORMULARIO DE REGISTRO 1 EN 1
+    // ==========================================
+    function limpiarFormularioAlta() {
+        const altaNombre = document.getElementById("altaNombre");
+        const altaNacimiento = document.getElementById("altaNacimiento");
+        const altaCurp = document.getElementById("altaCurp");
+        const altaDoc = document.getElementById("altaDoc");
+        const altaFoto = document.getElementById("altaFoto");
+        const btnFoto = document.getElementById("btnTextoAltaFoto");
+        const altaCat = document.getElementById("altaCategoria");
+
+        if (altaNombre) altaNombre.value = "";
+        if (altaNacimiento) altaNacimiento.value = "";
+        if (altaCurp) altaCurp.value = "";
+        if (altaDoc) altaDoc.value = "ACTA DE NACIMIENTO, CURP";
+        if (altaFoto) altaFoto.value = "";
+        if (altaCat) altaCat.value = "ARDILLA";
+        if (btnFoto) {
+            btnFoto.innerHTML = "📷 Seleccionar Foto";
+            btnFoto.style.background = "";
+        }
+    }
+
     window.addEventListener('DOMContentLoaded', async () => {
         const savedRol = sessionStorage.getItem('lifarcc_rol');
         const savedEquipo = sessionStorage.getItem('lifarcc_equipo');
@@ -934,6 +958,7 @@
                 document.getElementById("btnReporteSemanal").style.display = "inline-flex";
             }
             aplicarPermisosRol();
+            limpiarFormularioAlta();
             await cargarDatosDesdeNube();
         }
     });
@@ -1011,6 +1036,7 @@
         }
 
         aplicarPermisosRol();
+        limpiarFormularioAlta(); // Limpieza independiente al cambiar de perfil / iniciar sesión
         await cargarDatosDesdeNube();
     }
 
@@ -1055,6 +1081,7 @@
     window.cerrarSesion = function() {
         sessionStorage.clear();
         document.getElementById("loginPassword").value = "";
+        limpiarFormularioAlta(); // Limpia datos de registro al salir
         document.getElementById("appContainer").style.display = "none";
         document.getElementById("loginOverlay").style.display = "flex";
         actualizarColorGlowClub("Administrador");
@@ -1432,7 +1459,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.030
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.031
             </div>
         </div>
         </body></html>`;
@@ -1690,19 +1717,7 @@
         const docRef = await addDoc(collection(db, "jugadores"), nuevoJ);
         baseDatos.push({ id: docRef.id, ...nuevoJ });
 
-        document.getElementById("altaNombre").value = "";
-        document.getElementById("altaNacimiento").value = "";
-        document.getElementById("altaCurp").value = "";
-        document.getElementById("altaFoto").value = "";
-        document.getElementById("altaCategoria").value = "ARDILLA";
-        
-        // Restablecer el botón de fotografía
-        const btnFoto = document.getElementById("btnTextoAltaFoto");
-        if (btnFoto) {
-            btnFoto.innerHTML = "📷 Seleccionar Foto";
-            btnFoto.style.background = "";
-        }
-
+        limpiarFormularioAlta();
         renderizarRoster();
         alert("✅ ¡Registro subido con éxito a la nube!\n\nEl jugador ha sido guardado y asignado correctamente a su categoría oficial.\n\n📌 Recordatorio: No olvides entregar la documentación completa y legible al encargado.");
     }
@@ -2073,7 +2088,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.030
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.031
             </div>
         </div>
 
@@ -2196,7 +2211,7 @@
                     </tbody>
                 </table>
                 <div class="print-footer">
-                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.030
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.031
                 </div>
             </div>`;
         });
