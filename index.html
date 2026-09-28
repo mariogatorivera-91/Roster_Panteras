@@ -422,7 +422,7 @@
     </div>
     <!-- PIE DE PÁGINA EN PANTALLA DE ACCESO -->
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.029
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.030
     </div>
 </div>
 
@@ -541,8 +541,8 @@
                 </div>
                 <div>
                     <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Fotografía Individual *:</label>
-                    <button type="button" class="btn btn-warning btn-sm" onclick="mostrarGuiaFoto('altaFoto')" style="width:100%; justify-content:center;">📷 Seleccionar Foto</button>
-                    <input type="file" id="altaFoto" accept="image/*" style="display:none;" onchange="manejarArchivoFoto(event)">
+                    <button type="button" id="btnTextoAltaFoto" class="btn btn-warning btn-sm" onclick="mostrarGuiaFoto('altaFoto')" style="width:100%; justify-content:center; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">📷 Seleccionar Foto</button>
+                    <input type="file" id="altaFoto" accept="image/*" style="display:none;" onchange="actualizarNombreArchivoAlta(event)">
                 </div>
             </div>
 
@@ -649,7 +649,7 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.029
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.030
     </div>
 </div>
 
@@ -1205,6 +1205,21 @@
     }
 
     // ==========================================
+    // 📸 MOSTRAR NOMBRE DE ARCHIVO LISTO EN BOTÓN DE FOTO
+    // ==========================================
+    window.actualizarNombreArchivoAlta = function(event) {
+        const archivo = event.target.files[0];
+        const btn = document.getElementById("btnTextoAltaFoto");
+        if (archivo) {
+            btn.innerHTML = `✅ Lista: ${archivo.name}`;
+            btn.style.background = "linear-gradient(135deg, #16a34a, #15803d)";
+        } else {
+            btn.innerHTML = "📷 Seleccionar Foto";
+            btn.style.background = "";
+        }
+    }
+
+    // ==========================================
     // 📸 MODAL DE GUÍA DE FOTOGRAFÍA CORRECTA
     // ==========================================
     window.mostrarGuiaFoto = function(inputId) {
@@ -1417,7 +1432,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.029
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.030
             </div>
         </div>
         </body></html>`;
@@ -1681,8 +1696,15 @@
         document.getElementById("altaFoto").value = "";
         document.getElementById("altaCategoria").value = "ARDILLA";
         
+        // Restablecer el botón de fotografía
+        const btnFoto = document.getElementById("btnTextoAltaFoto");
+        if (btnFoto) {
+            btnFoto.innerHTML = "📷 Seleccionar Foto";
+            btnFoto.style.background = "";
+        }
+
         renderizarRoster();
-        alert("✅ ¡Jugador registrado con éxito en la nube y asignado a su categoría oficial!\n\n📌 Recordatorio: No olvides entregar la documentación completa y legible al encargado.");
+        alert("✅ ¡Registro subido con éxito a la nube!\n\nEl jugador ha sido guardado y asignado correctamente a su categoría oficial.\n\n📌 Recordatorio: No olvides entregar la documentación completa y legible al encargado.");
     }
 
     window.cargarFotosLocales = async function(event) {
@@ -2051,7 +2073,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.029
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.030
             </div>
         </div>
 
@@ -2174,7 +2196,7 @@
                     </tbody>
                 </table>
                 <div class="print-footer">
-                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.029
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.030
                 </div>
             </div>`;
         });
