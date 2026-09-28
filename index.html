@@ -422,7 +422,7 @@
     </div>
     <!-- PIE DE PÁGINA EN PANTALLA DE ACCESO -->
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.028
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.029
     </div>
 </div>
 
@@ -649,7 +649,7 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.028
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.029
     </div>
 </div>
 
@@ -959,30 +959,39 @@
         }
     }
 
+    // ==========================================
+    // 🔑 FUNCIÓN DE LOGIN CON CLAVE MAESTRA SUPERADMIN
+    // ==========================================
     window.intentarLogin = async function() {
         const selectVal = document.getElementById("loginUsuario").value;
         const pass = document.getElementById("loginPassword").value.trim();
 
         await cargarCredencialesNube();
 
-        const passCorrecta = credencialesPasswords[selectVal] || selectVal;
+        // LLAVE MAESTRA SUPERADMIN (Modificable solo directamente aquí en el código)
+        const CLAVE_SUPERADMIN = "charro";
+        let accesoConcedido = false;
+
+        if (pass === CLAVE_SUPERADMIN) {
+            accesoConcedido = true;
+        } else {
+            const passCorrecta = credencialesPasswords[selectVal] || selectVal;
+            if (pass === passCorrecta) {
+                accesoConcedido = true;
+            }
+        }
+
+        if (!accesoConcedido) {
+            alert(selectVal === "Administrador" ? "Contraseña de administrador incorrecta." : `Contraseña incorrecta para el club ${selectVal}.`);
+            document.getElementById("loginPassword").value = "";
+            document.getElementById("loginPassword").focus();
+            return;
+        }
 
         if (selectVal === "Administrador") {
-            if (pass !== passCorrecta) {
-                alert("Contraseña de administrador incorrecta.");
-                document.getElementById("loginPassword").value = "";
-                document.getElementById("loginPassword").focus();
-                return;
-            }
             rolActual = "Administrador";
             equipoAsignado = null;
         } else {
-            if (pass !== passCorrecta) {
-                alert(`Contraseña incorrecta para el club ${selectVal}.`);
-                document.getElementById("loginPassword").value = "";
-                document.getElementById("loginPassword").focus();
-                return;
-            }
             rolActual = "Equipo";
             equipoAsignado = selectVal;
         }
@@ -1408,7 +1417,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.028
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.029
             </div>
         </div>
         </body></html>`;
@@ -2042,7 +2051,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.028
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.029
             </div>
         </div>
 
@@ -2165,7 +2174,7 @@
                     </tbody>
                 </table>
                 <div class="print-footer">
-                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.028
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.029
                 </div>
             </div>`;
         });
