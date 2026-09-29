@@ -422,7 +422,7 @@
     </div>
     <!-- PIE DE PÁGINA EN PANTALLA DE ACCESO -->
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.035
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.036
     </div>
 </div>
 
@@ -464,21 +464,10 @@
 
     <!-- PESTAÑA 1: GENERADOR DE ROSTERS -->
     <div id="rosterTab" class="tab-content active">
-        <!-- 1. CONFIGURACIÓN DE FECHAS DE REGISTRO (EXCLUSIVO ADMINISTRADOR) -->
+        <!-- 1. INFORMACIÓN DE PERIODO AUTOMÁTICO (EXCLUSIVO ADMINISTRADOR) -->
         <div class="section-box no-print col-admin" style="background: #1e293b; border: 1px solid var(--bronze-gold);">
-            <h4>📅 Configuración de Fechas de Registro para Equipos (Cierre a las 19:00 hrs)</h4>
-            <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
-                <div>
-                    <label style="font-size: 11px; font-weight: bold;">Fecha Inicio:</label>
-                    <input type="date" id="adminFechaInicio">
-                </div>
-                <div>
-                    <label style="font-size: 11px; font-weight: bold;">Fecha Fin (Límite 19:00 hrs):</label>
-                    <input type="date" id="adminFechaFin">
-                </div>
-                <button class="btn btn-warning btn-sm" onclick="guardarFechasRegistroNube()">Guardar Fechas en la Nube</button>
-                <span style="font-size: 11px; color: #94a3b8;" id="lblEstadoFechas">El sistema cerrará los registros automáticamente a las 19:00 hrs del día final.</span>
-            </div>
+            <h4>📅 Configuración Automática de Periodo de Registro</h4>
+            <p style="font-size: 12px; color: #cbd5e1; margin: 0;">El sistema opera de forma <b>automática</b> semanalmente: Los registros para los equipos están abiertos de <b>Lunes a Jueves</b>, cerrándose automáticamente todos los <b>jueves a las 11:59 PM</b> (Viernes, Sábado y Domingo permanece cerrado).</p>
         </div>
 
         <!-- 2. CONFIGURACIÓN DE SEDES Y LOGOS -->
@@ -503,7 +492,7 @@
                 <div id="badgeEstadoRegistroContainer"></div>
             </div>
             <div id="bannerPeriodoRegistro" style="background: rgba(217, 119, 6, 0.2); border: 1px dashed var(--bronze-gold); padding: 8px 12px; border-radius: 6px; margin-bottom: 15px; font-size: 12px; font-weight: bold; color: #fbbf24; text-align: center;">
-                📅 FECHA DE REGISTROS: Cargando periodo...
+                📅 PERIODO AUTOMÁTICO: Abierto de Lunes a Jueves (Cierre Jueves a las 11:59 PM)
             </div>
             
             <!-- Renglón 1 de Registro -->
@@ -660,7 +649,7 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.035
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.036
     </div>
 </div>
 
@@ -887,7 +876,6 @@
 
     let baseDatos = [];
     let configEquipos = {};
-    let fechasRegistro = { inicio: "", fin: "" };
     let credencialesPasswords = {
         "Administrador": "linfarcc",
         "ACEREROS": "ACEREROS",
@@ -1128,17 +1116,12 @@
 
             const configSnapshot = await getDocs(collection(db, "configuracion"));
             configSnapshot.forEach((docSnap) => {
-                if (docSnap.id === "fechas_sistema") {
-                    fechasRegistro = docSnap.data();
-                } else if (docSnap.id === "credenciales_sistema") {
+                if (docSnap.id === "credenciales_sistema") {
                     credencialesPasswords = { ...credencialesPasswords, ...docSnap.data() };
-                } else {
+                } else if (docSnap.id !== "fechas_sistema") {
                     configEquipos[docSnap.id] = docSnap.data();
                 }
             });
-
-            if (document.getElementById("adminFechaInicio")) document.getElementById("adminFechaInicio").value = fechasRegistro.inicio || "";
-            if (document.getElementById("adminFechaFin")) document.getElementById("adminFechaFin").value = fechasRegistro.fin || "";
 
             actualizarBannerFechasRegistro();
 
@@ -1154,51 +1137,30 @@
         }
     }
 
-    window.guardarFechasRegistroNube = async function() {
-        if (rolActual !== "Administrador") return;
-        const inicio = document.getElementById("adminFechaInicio").value;
-        const fin = document.getElementById("adminFechaFin").value;
-
-        if (inicio && fin && fin < inicio) {
-            alert("⚠️ La fecha final no puede ser menor que la fecha inicial.");
-            return;
-        }
-
-        fechasRegistro.inicio = inicio;
-        fechasRegistro.fin = fin;
-
-        await setDoc(doc(db, "configuracion", "fechas_sistema"), fechasRegistro);
-        actualizarBannerFechasRegistro();
-        alert("¡Fechas de registro actualizadas en la nube! El cierre se aplicará a las 19:00 hrs del día final.");
-    }
-
+    // REGLA AUTOMÁTICA: LUNES A JUEVES HASTA LAS 11:59 PM (23:59:59)
     function comprobarEstadoRegistroActivo() {
         const ahora = new Date();
-        let abierto = true;
-        if (fechasRegistro.inicio) {
-            const fechaIni = new Date(fechasRegistro.inicio + "T00:00:00");
-            if (ahora < fechaIni) abierto = false;
+        const dia = ahora.getDay(); // 1: Lunes, 2: Martes, 3: Miércoles, 4: Jueves, 5: Viernes, 6: Sábado, 0: Domingo
+        const hora = ahora.getHours();
+        const minutos = ahora.getMinutes();
+
+        // Lunes(1), Martes(2), Miércoles(3) abiertos todo el día
+        if (dia >= 1 && dia <= 3) return true;
+
+        // Jueves(4) abierto hasta las 23:59
+        if (dia === 4) {
+            return true; // Si es jueves completo está abierto (el cierre estricto a las 11:59 PM se cumple al iniciar viernes)
         }
-        if (fechasRegistro.fin) {
-            const fechaFinLimite = new Date(fechasRegistro.fin + "T19:00:00");
-            if (ahora > fechaFinLimite) abierto = false;
-        }
-        return abierto;
+
+        // Viernes(5), Sábado(6), Domingo(0) cerrado
+        return false;
     }
 
     function actualizarBannerFechasRegistro() {
         const banner = document.getElementById("bannerPeriodoRegistro");
         const badgeContainer = document.getElementById("badgeEstadoRegistroContainer");
         if (banner) {
-            if (fechasRegistro.inicio && fechasRegistro.fin) {
-                banner.innerText = `📅 FECHA DE REGISTROS: Del ${fechasRegistro.inicio} al ${fechasRegistro.fin} (Cierra a las 19:00 hrs)`;
-            } else if (fechasRegistro.inicio) {
-                banner.innerText = `📅 FECHA DE REGISTROS: A partir del ${fechasRegistro.inicio}`;
-            } else if (fechasRegistro.fin) {
-                banner.innerText = `📅 FECHA DE REGISTROS: Hasta el ${fechasRegistro.fin} a las 19:00 hrs`;
-            } else {
-                banner.innerText = `📅 FECHA DE REGISTROS: Sin restricciones de fechas configuradas por la liga.`;
-            }
+            banner.innerText = `📅 PERIODO AUTOMÁTICO: Abierto de Lunes a Jueves (Cierre Jueves a las 11:59 PM)`;
         }
 
         if (badgeContainer) {
@@ -1570,7 +1532,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.035
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.036
             </div>
         </div>
         </body></html>`;
@@ -1763,7 +1725,7 @@
     window.registrarJugadorIndividual = async function() {
         if (rolActual === "Equipo") {
             if (!comprobarEstadoRegistroActivo()) {
-                alert("⚠️ El periodo de registro se encuentra cerrado. Ya no se pueden registrar más jugadores.");
+                alert("⚠️ El periodo de registro se encuentra cerrado. Los registros sólo están abiertos de Lunes a Jueves (hasta las 11:59 PM).");
                 return;
             }
         }
@@ -2179,7 +2141,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.035
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.036
             </div>
         </div>
 
@@ -2302,7 +2264,7 @@
                     </tbody>
                 </table>
                 <div class="print-footer">
-                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.035
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.036
                 </div>
             </div>`;
         });
