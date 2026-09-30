@@ -422,7 +422,7 @@
     </div>
     <!-- PIE DE PÁGINA EN PANTALLA DE ACCESO -->
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.036
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.037
     </div>
 </div>
 
@@ -489,7 +489,10 @@
         <div class="section-box" id="seccionAltaIndividual" style="background: #1e293b; border: 1px solid var(--bronze-gold);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px;">
                 <h4 style="margin: 0; color: #f1f5f9; font-size: 15px;">➕ Registrar Jugador de 1 en 1 (Sincronizado en la Nube)</h4>
-                <div id="badgeEstadoRegistroContainer"></div>
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <button class="btn btn-warning btn-sm" onclick="abrirModalRangosCategorias()">📅 Ver Rangos de Fechas por Categoría</button>
+                    <div id="badgeEstadoRegistroContainer"></div>
+                </div>
             </div>
             <div id="bannerPeriodoRegistro" style="background: rgba(217, 119, 6, 0.2); border: 1px dashed var(--bronze-gold); padding: 8px 12px; border-radius: 6px; margin-bottom: 15px; font-size: 12px; font-weight: bold; color: #fbbf24; text-align: center;">
                 📅 PERIODO AUTOMÁTICO: Abierto de Lunes a Jueves (Cierre Jueves a las 11:59 PM)
@@ -508,7 +511,7 @@
                         <option value="HORMIGA">HORMIGAS (15-16)</option>
                         <option value="HORMIGUITA">HORMIGUITAS (17-18)</option>
                         <option value="MOSCO">MOSCOS (18-19)</option>
-                        <option value="BOTANA">BOTANAS (20-21)</option>
+                        <option value="BOTANA">BOTANAS (2022)</option>
                     </select>
                 </div>
                 <div>
@@ -609,7 +612,7 @@
                 <span style="font-size: 11px; color: #fca5a5;">Vaciar base de datos en la nube.</span>
             </div>
             <div style="display: flex; gap: 8px;">
-                <button class="btn btn-danger btn-sm" onclick="borrarTodosRegistros()">🗑️ Borrar Todos</button>
+                <button class="btn btn-danger btn-sm" onclick="borrarTodosRegistros()">🗑️️ Borrar Todos</button>
             </div>
         </div>
     </div>
@@ -649,7 +652,7 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.036
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.037
     </div>
 </div>
 
@@ -664,6 +667,38 @@
             <img id="imgAmpliadaModal" src="" alt="Foto del Jugador" style="max-width: 100%; max-height: 350px; object-fit: contain; border-radius: 6px;" onerror="this.src='https://via.placeholder.com/250x300?text=Sin+Fotografia'">
         </div>
         <p id="nombreJugadorAmpliado" style="font-size: 13px; font-weight: bold; color: #fbbf24; margin: 0;"></p>
+    </div>
+</div>
+
+<!-- MODAL RANGOS DE FECHAS POR CATEGORÍA -->
+<div id="modalRangosCategorias" class="modal" style="z-index: 1010;">
+    <div class="modal-content" style="max-width: 520px;">
+        <div class="modal-header">
+            <span>📅 Rangos de Fechas por Categoría</span>
+            <span class="close-btn" onclick="cerrarModalRangosCategorias()">&times;</span>
+        </div>
+        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 15px;">Fechas mínimas y máximas oficiales para la asignación automática en el sistema:</p>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Categoría</th>
+                        <th>Fecha Mínima</th>
+                        <th>Fecha Máxima</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>ARDILLA</strong></td><td>01/01/2014</td><td>30/06/2015</td></tr>
+                    <tr><td><strong>HORMIGA</strong></td><td>01/07/2015</td><td>31/12/2016</td></tr>
+                    <tr><td><strong>HORMIGUITA</strong></td><td>01/01/2017</td><td>30/06/2018</td></tr>
+                    <tr><td><strong>MOSCO</strong></td><td>01/07/2018</td><td>31/12/2019</td></tr>
+                    <tr><td><strong>BOTANA</strong></td><td>01/01/2022</td><td>31/12/2022</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="text-align: right; margin-top: 15px;">
+            <button class="btn btn-warning btn-sm" onclick="cerrarModalRangosCategorias()">Cerrar</button>
+        </div>
     </div>
 </div>
 
@@ -1141,16 +1176,12 @@
     function comprobarEstadoRegistroActivo() {
         const ahora = new Date();
         const dia = ahora.getDay(); // 1: Lunes, 2: Martes, 3: Miércoles, 4: Jueves, 5: Viernes, 6: Sábado, 0: Domingo
-        const hora = ahora.getHours();
-        const minutos = ahora.getMinutes();
 
         // Lunes(1), Martes(2), Miércoles(3) abiertos todo el día
         if (dia >= 1 && dia <= 3) return true;
 
-        // Jueves(4) abierto hasta las 23:59
-        if (dia === 4) {
-            return true; // Si es jueves completo está abierto (el cierre estricto a las 11:59 PM se cumple al iniciar viernes)
-        }
+        // Jueves(4) abierto completo
+        if (dia === 4) return true;
 
         // Viernes(5), Sábado(6), Domingo(0) cerrado
         return false;
@@ -1256,7 +1287,7 @@
         if (yyyymmdd >= 20150701 && yyyymmdd <= 20161231) return "HORMIGA";
         if (yyyymmdd >= 20170101 && yyyymmdd <= 20180630) return "HORMIGUITA";
         if (yyyymmdd >= 20180701 && yyyymmdd <= 20191231) return "MOSCO";
-        if (yyyymmdd >= 20200101 && yyyymmdd <= 20211231) return "BOTANA";
+        if (yyyymmdd >= 20220101 && yyyymmdd <= 20221231) return "BOTANA"; // Actualizado a todo el 2022
 
         return null;
     }
@@ -1343,6 +1374,15 @@
         document.getElementById("modalAmpliarFoto").style.display = "none";
     }
 
+    // MODAL RANGOS DE FECHAS DE CATEGORÍAS
+    window.abrirModalRangosCategorias = function() {
+        document.getElementById("modalRangosCategorias").style.display = "flex";
+    }
+
+    window.cerrarModalRangosCategorias = function() {
+        document.getElementById("modalRangosCategorias").style.display = "none";
+    }
+
     window.abrirModalCambiarPass = function() {
         document.getElementById("passActual").value = "";
         document.getElementById("passNueva1").value = "";
@@ -1395,7 +1435,7 @@
                     <td>
                         <div style="display:flex; gap:5px; align-items:center; justify-content:center;">
                             <input type="password" id="adminPassView_${idx}" value="${passVal}" readonly style="width:110px; background:#0f172a; border:none; text-align:center;">
-                            <button class="btn btn-sm" onclick="toggleVerPassAdmin('adminPassView_${idx}', this)" style="padding:2px 5px;">👁️</button>
+                            <button class="btn btn-sm" onclick="toggleVerPassAdmin('adminPassView_${idx}', this)" style="padding:2px 5px;">👁️️</button>
                         </div>
                     </td>
                     <td>
@@ -1532,7 +1572,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.036
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.037
             </div>
         </div>
         </body></html>`;
@@ -1755,7 +1795,7 @@
         }
 
         if (!/^[A-Z0-9]{18}$/.test(curp)) {
-            alert("⚠️ El CURP debe tener exactamente 18 caracteres alfanuméricos.");
+            alert("⚠️️ El CURP debe tener exactamente 18 caracteres alfanuméricos.");
             return;
         }
 
@@ -1986,7 +2026,7 @@
                 <td>${jugador.doc || ''}</td>
                 <td>
                     <button class="btn btn-sm" onclick="abrirModal('${jugador.id}')" title="Editar">✏️</button>
-                    <button class="btn btn-danger btn-sm" onclick="eliminarJugador('${jugador.id}')" title="Eliminar">🗑️</button>
+                    <button class="btn btn-danger btn-sm" onclick="eliminarJugador('${jugador.id}')" title="Eliminar">🗑️️</button>
                 </td>
             </tr>`;
         });
@@ -2141,7 +2181,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.036
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.037
             </div>
         </div>
 
@@ -2264,7 +2304,7 @@
                     </tbody>
                 </table>
                 <div class="print-footer">
-                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.036
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.037
                 </div>
             </div>`;
         });
