@@ -511,7 +511,7 @@
                         <option value="HORMIGA">HORMIGAS (15-16)</option>
                         <option value="HORMIGUITA">HORMIGUITAS (17-18)</option>
                         <option value="MOSCO">MOSCOS (18-19)</option>
-                        <option value="BOTANA">BOTANAS (21-22)</option>
+                        <option value="BOTANA">BOTANAS (2020-2022)</option>
                     </select>
                 </div>
                 <div>
@@ -692,7 +692,7 @@
                     <tr><td><strong>HORMIGA</strong></td><td>01/07/2015</td><td>31/12/2016</td></tr>
                     <tr><td><strong>HORMIGUITA</strong></td><td>01/01/2017</td><td>30/06/2018</td></tr>
                     <tr><td><strong>MOSCO</strong></td><td>01/07/2018</td><td>31/12/2019</td></tr>
-                    <tr><td><strong>BOTANA</strong></td><td>01/01/2021</td><td>31/12/2022</td></tr>
+                    <tr><td><strong>BOTANA</strong></td><td>01/01/2020</td><td>31/12/2022</td></tr>
                 </tbody>
             </table>
         </div>
@@ -1287,7 +1287,7 @@
         if (yyyymmdd >= 20150701 && yyyymmdd <= 20161231) return "HORMIGA";
         if (yyyymmdd >= 20170101 && yyyymmdd <= 20180630) return "HORMIGUITA";
         if (yyyymmdd >= 20180701 && yyyymmdd <= 20191231) return "MOSCO";
-        if (yyyymmdd >= 20210101 && yyyymmdd <= 20221231) return "BOTANA"; // Actualizado del 2021 al 2022
+        if (yyyymmdd >= 20200101 && yyyymmdd <= 20221231) return "BOTANA"; // Actualizado del 01/01/2020 al 31/12/2022
 
         return null;
     }
@@ -1765,7 +1765,7 @@
     window.registrarJugadorIndividual = async function() {
         if (rolActual === "Equipo") {
             if (!comprobarEstadoRegistroActivo()) {
-                alert("⚠️ El periodo de registro se encuentra cerrado. Los registros sólo están abiertos de Lunes a Jueves (hasta las 11:59 PM).");
+                alert("⚠️️ El periodo de registro se encuentra cerrado. Los registros sólo están abiertos de Lunes a Jueves (hasta las 11:59 PM).");
                 return;
             }
         }
@@ -1790,7 +1790,7 @@
         }
 
         if (/[0-9\.]/.test(nombre)) {
-            alert("⚠️ El nombre del jugador no debe contener números ni puntos.");
+            alert("⚠️️ El nombre del jugador no debe contener números ni puntos.");
             return;
         }
 
