@@ -422,7 +422,7 @@
     </div>
     <!-- PIE DE PÁGINA EN PANTALLA DE ACCESO -->
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.037
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.038
     </div>
 </div>
 
@@ -511,7 +511,7 @@
                         <option value="HORMIGA">HORMIGAS (15-16)</option>
                         <option value="HORMIGUITA">HORMIGUITAS (17-18)</option>
                         <option value="MOSCO">MOSCOS (18-19)</option>
-                        <option value="BOTANA">BOTANAS (2022)</option>
+                        <option value="BOTANA">BOTANAS (21-22)</option>
                     </select>
                 </div>
                 <div>
@@ -612,7 +612,7 @@
                 <span style="font-size: 11px; color: #fca5a5;">Vaciar base de datos en la nube.</span>
             </div>
             <div style="display: flex; gap: 8px;">
-                <button class="btn btn-danger btn-sm" onclick="borrarTodosRegistros()">🗑️️ Borrar Todos</button>
+                <button class="btn btn-danger btn-sm" onclick="borrarTodosRegistros()">🗑️ Borrar Todos</button>
             </div>
         </div>
     </div>
@@ -652,7 +652,7 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.037
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.038
     </div>
 </div>
 
@@ -692,7 +692,7 @@
                     <tr><td><strong>HORMIGA</strong></td><td>01/07/2015</td><td>31/12/2016</td></tr>
                     <tr><td><strong>HORMIGUITA</strong></td><td>01/01/2017</td><td>30/06/2018</td></tr>
                     <tr><td><strong>MOSCO</strong></td><td>01/07/2018</td><td>31/12/2019</td></tr>
-                    <tr><td><strong>BOTANA</strong></td><td>01/01/2022</td><td>31/12/2022</td></tr>
+                    <tr><td><strong>BOTANA</strong></td><td>01/01/2021</td><td>31/12/2022</td></tr>
                 </tbody>
             </table>
         </div>
@@ -1287,7 +1287,7 @@
         if (yyyymmdd >= 20150701 && yyyymmdd <= 20161231) return "HORMIGA";
         if (yyyymmdd >= 20170101 && yyyymmdd <= 20180630) return "HORMIGUITA";
         if (yyyymmdd >= 20180701 && yyyymmdd <= 20191231) return "MOSCO";
-        if (yyyymmdd >= 20220101 && yyyymmdd <= 20221231) return "BOTANA"; // Actualizado a todo el 2022
+        if (yyyymmdd >= 20210101 && yyyymmdd <= 20221231) return "BOTANA"; // Actualizado del 2021 al 2022
 
         return null;
     }
@@ -1435,7 +1435,7 @@
                     <td>
                         <div style="display:flex; gap:5px; align-items:center; justify-content:center;">
                             <input type="password" id="adminPassView_${idx}" value="${passVal}" readonly style="width:110px; background:#0f172a; border:none; text-align:center;">
-                            <button class="btn btn-sm" onclick="toggleVerPassAdmin('adminPassView_${idx}', this)" style="padding:2px 5px;">👁️️</button>
+                            <button class="btn btn-sm" onclick="toggleVerPassAdmin('adminPassView_${idx}', this)" style="padding:2px 5px;">👁️</button>
                         </div>
                     </td>
                     <td>
@@ -1572,7 +1572,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.037
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.038
             </div>
         </div>
         </body></html>`;
@@ -1795,7 +1795,7 @@
         }
 
         if (!/^[A-Z0-9]{18}$/.test(curp)) {
-            alert("⚠️️ El CURP debe tener exactamente 18 caracteres alfanuméricos.");
+            alert("⚠️ El CURP debe tener exactamente 18 caracteres alfanuméricos.");
             return;
         }
 
@@ -2026,7 +2026,7 @@
                 <td>${jugador.doc || ''}</td>
                 <td>
                     <button class="btn btn-sm" onclick="abrirModal('${jugador.id}')" title="Editar">✏️</button>
-                    <button class="btn btn-danger btn-sm" onclick="eliminarJugador('${jugador.id}')" title="Eliminar">🗑️️</button>
+                    <button class="btn btn-danger btn-sm" onclick="eliminarJugador('${jugador.id}')" title="Eliminar">🗑️</button>
                 </td>
             </tr>`;
         });
@@ -2181,7 +2181,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.037
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.038
             </div>
         </div>
 
@@ -2304,7 +2304,7 @@
                     </tbody>
                 </table>
                 <div class="print-footer">
-                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.037
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.038
                 </div>
             </div>`;
         });
