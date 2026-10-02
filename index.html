@@ -154,11 +154,12 @@
             align-items: center;
             gap: 5px;
             background: #1e293b;
-            padding: 3px 8px;
+            padding: 3px 10px;
             border-radius: 20px;
             border: 1px solid #475569;
             font-size: 11px;
             font-weight: bold;
+            position: relative;
         }
         .mini-team-badge img { width: 22px; height: 22px; object-fit: contain; background: #fff; border-radius: 50%; padding: 1px; }
 
@@ -415,7 +416,7 @@
     </div>
     <!-- PIE DE PÁGINA EN PANTALLA DE ACCESO -->
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.040
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.041
     </div>
 </div>
 
@@ -464,18 +465,9 @@
             <p style="font-size: 12px; color: #cbd5e1; margin: 0;">El sistema opera de forma <b>automática</b> semanalmente: Los registros para los equipos están abiertos de <b>Lunes a Jueves</b>, cerrándose automáticamente todos los <b>jueves a las 11:59 PM</b> (Viernes, Sábado y Domingo permanece cerrado).</p>
         </div>
 
-        <!-- 2. CONFIGURACIÓN DE SEDES Y LOGOS -->
+        <!-- 2. CONFIGURACIÓN DE LOGOTIPOS -->
         <div class="section-box no-print">
-            <h4>🛡️ Configuración de Sedes y Logotipos</h4>
-            <div style="display: grid; grid-template-columns: 1fr auto; gap: 15px; align-items: flex-end; margin-bottom: 12px;">
-                <div>
-                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 3px;">Dirección del Campo / Sede:</label>
-                    <input type="text" id="inputCampo" placeholder="Ej. Campo PAC-Snyder Monclova" oninput="guardarDatosCampoActual()" style="width: 100%;">
-                </div>
-                <div>
-                    <button class="btn btn-warning btn-sm" onclick="mostrarResumenEquiposRegistrados()" style="height: 33px;">📋 Ver Conteo General por Categoría</button>
-                </div>
-            </div>
+            <h4>🛡️ Configuración de Logotipos de Sedes y Equipos</h4>
             <div id="teamsPreviewGrid" class="teams-preview-grid"></div>
         </div>
 
@@ -571,6 +563,10 @@
                             <button class="btn btn-warning btn-sm" onclick="renderizarRoster()" title="Actualizar / Generar Vista">🔄 Generar</button>
                         </div>
                     </div>
+                    <div>
+                        <label for="inputCampo">📍 Dirección del Campo / Sede:</label><br>
+                        <input type="text" id="inputCampo" placeholder="Ej. Campo PAC-Snyder Monclova" oninput="guardarDatosCampoActual()" style="width: 200px;">
+                    </div>
                 </div>
                 <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                     <button class="btn btn-warning" onclick="mostrarPlantillaEquipo()">📋 Ver Plantilla</button>
@@ -646,7 +642,7 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.040
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.041
     </div>
 </div>
 
@@ -680,7 +676,7 @@
             <span class="close-btn" onclick="cerrarModalGestionFechas()" style="font-size: 22px;">&times;</span>
         </div>
 
-        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 12px;">Modifique los rangos de fechas oficiales. Las categorías se muestran con sus iconos oficiales en el orden reglamentario[cite: 4]:</p>
+        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 12px;">Modifique los rangos de fechas oficiales. Las categorías se muestran con sus iconos oficiales en el orden reglamentario:</p>
 
         <div class="table-responsive">
             <table>
@@ -1401,7 +1397,6 @@
         document.getElementById("modalAmpliarFoto").style.display = "none";
     }
 
-    // MODAL GESTIÓN DE FECHAS (ESTILO PÓSTER OFICIAL CON ICONOS Y ORDEN ESTRICTO)
     window.abrirModalGestionFechas = function() {
         if (rolActual !== "Administrador") {
             alert("⚠️ Solo el Administrador puede manipular los rangos de fechas de las categorías.");
@@ -1551,7 +1546,7 @@
                     <td>
                         <div style="display:flex; gap:5px; align-items:center; justify-content:center;">
                             <input type="password" id="adminPassView_${idx}" value="${passVal}" readonly style="width:110px; background:#0f172a; border:none; text-align:center;">
-                            <button class="btn btn-sm" onclick="toggleVerPassAdmin('adminPassView_${idx}', this)" style="padding:2px 5px;">👁️</button>
+                            <button class="btn btn-sm" onclick="toggleVerPassAdmin('adminPassView_${idx}', this)" style="padding:2px 5px;">👁️️</button>
                         </div>
                     </td>
                     <td>
@@ -1688,7 +1683,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.040
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.041
             </div>
         </div>
         </body></html>`;
@@ -1779,7 +1774,14 @@
         listaEquiposOficiales.forEach(eq => {
             const conf = configEquipos[eq] || {};
             const logo = conf.logo || logosPorDefecto[eq] || 'https://via.placeholder.com/30?text=LOGO';
-            container.innerHTML += `<div class="mini-team-badge"><img src="${logo}" alt="${eq}"> <span>${eq}</span></div>`;
+            
+            let badgeHtml = "";
+            if (rolActual === "Administrador") {
+                const totalJugadoresEquipo = baseDatos.filter(j => j.equipo === eq).length;
+                badgeHtml = `<span style="background: #f97316; color: white; border-radius: 50%; padding: 1px 6px; font-size: 10px; font-weight: bold; margin-left: 4px;" title="Total de jugadores registrados">${totalJugadoresEquipo}</span>`;
+            }
+
+            container.innerHTML += `<div class="mini-team-badge"><img src="${logo}" alt="${eq}"> <span>${eq}</span> ${badgeHtml}</div>`;
         });
     }
 
@@ -1793,7 +1795,6 @@
         equiposAMostrar.forEach(eq => {
             const conf = configEquipos[eq] || {};
             const logo = conf.logo || logosPorDefecto[eq] || 'https://via.placeholder.com/50?text=LOGO';
-            const campo = conf.campo || 'Sin campo asignado';
 
             let btnHtml = `<button class="btn btn-sm" onclick="dispararLogoEquipoDirecto('${eq}')" style="padding: 2px 6px; font-size: 10px;">Cambiar Logo</button>`;
 
@@ -1801,7 +1802,6 @@
                 <img src="${logo}" alt="${eq}" onclick="dispararLogoEquipoDirecto('${eq}')" title="Cambiar logotipo">
                 <div class="team-card-info">
                     <h5>${eq}</h5>
-                    <p title="${campo}">📍 ${campo}</p>
                     ${btnHtml}
                 </div>
             </div>`;
@@ -1838,7 +1838,6 @@
         configEquipos[eq].campo = campo;
 
         await setDoc(doc(db, "configuracion", eq), configEquipos[eq]);
-        renderizarVistaPreviaEquipos();
     }
 
     window.cambiarFiltroEquipo = function() {
@@ -1909,7 +1908,7 @@
         }
 
         if (!/^[A-Z0-9]{18}$/.test(curp)) {
-            alert("⚠️️ El CURP debe tener exactamente 18 caracteres alfanuméricos.");
+            alert("⚠ El CURP debe tener exactamente 18 caracteres alfanuméricos.");
             return;
         }
 
@@ -2295,7 +2294,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.040
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.041
             </div>
         </div>
 
@@ -2418,7 +2417,7 @@
                     </tbody>
                 </table>
                 <div class="print-footer">
-                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.040
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.041
                 </div>
             </div>`;
         });
