@@ -215,6 +215,7 @@
         .btn-purple { background: linear-gradient(135deg, #7c3aed, #5b21b6); }
         .btn-danger { background: linear-gradient(135deg, #dc2626, #b91c1c); }
         .btn-warning { background: linear-gradient(135deg, #d97706, #b45309); color: white; }
+        .btn-info { background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white; }
         .btn-sm { padding: 4px 8px; font-size: 11px; }
 
         .section-box {
@@ -415,7 +416,7 @@
     </div>
     <!-- PIE DE PÁGINA EN PANTALLA DE ACCESO -->
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.043
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.044
     </div>
 </div>
 
@@ -573,6 +574,7 @@
                 <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                     <button class="btn btn-warning" onclick="mostrarPlantillaEquipo()">📋 Ver Plantilla</button>
                     <button class="btn btn-success" onclick="imprimirRosterActual()">🖨️ Imprimir Roster Seleccionado</button>
+                    <button class="btn btn-info" onclick="imprimirRosterCompletoEquipoSeleccionado()" title="Imprimir rosters de todas las categorías del equipo seleccionado">🖨️ Imprimir Equipo Completo</button>
                 </div>
             </div>
         </div>
@@ -644,7 +646,7 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.043
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.044
     </div>
 </div>
 
@@ -857,7 +859,7 @@
 <div id="modalAdminUsers" class="modal">
     <div class="modal-content" style="max-width: 600px;">
         <div class="modal-header">
-            <span>⚙️️ Panel de Control de Usuarios y Contraseñas</span>
+            <span>⚙️ Panel de Control de Usuarios y Contraseñas</span>
             <span class="close-btn" onclick="cerrarModalAdminUsuarios()">&times;</span>
         </div>
         <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 15px;">Visualiza y gestiona las credenciales de acceso de todos los clubes y el administrador.</p>
@@ -1518,11 +1520,11 @@
         const passActualReal = credencialesPasswords[usuarioTarget] || usuarioTarget;
 
         if (actual !== passActualReal) {
-            alert("⚠️ La contraseña actual es incorrecta.");
+            alert("⚠️️ La contraseña actual es incorrecta.");
             return;
         }
         if (!nueva1) {
-            alert("⚠️️ La nueva contraseña no puede estar vacía.");
+            alert("⚠️ La nueva contraseña no puede estar vacía.");
             return;
         }
         if (nueva1 !== nueva2) {
@@ -1687,7 +1689,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.043
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.044
             </div>
         </div>
         </body></html>`;
@@ -1925,7 +1927,7 @@
         }
 
         if (/[0-9\.]/.test(nombre)) {
-            alert("⚠ El nombre del jugador no debe contener números ni puntos.");
+            alert("⚠️ El nombre del jugador no debe contener números ni puntos.");
             return;
         }
 
@@ -2101,7 +2103,7 @@
             if (rolActual === "Administrador") {
                 accionesHtml = `
                     <button class="btn btn-sm" onclick="abrirModal('${jugador.id}')" title="Editar">✏️</button>
-                    <button class="btn btn-danger btn-sm" onclick="eliminarJugador('${jugador.id}')" title="Eliminar">🗑️️</button>
+                    <button class="btn btn-danger btn-sm" onclick="eliminarJugador('${jugador.id}')" title="Eliminar">🗑️</button>
                 `;
             } else {
                 accionesHtml = `<span style="font-size: 10px; color: #94a3b8; font-weight: bold;">Registrado (Bloqueado)</span>`;
@@ -2315,11 +2317,130 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.043
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.044
             </div>
         </div>
 
         </body></html>`;
+
+        const vPrint = window.open('', '_blank');
+        if (!vPrint) { alert("Permite las ventanas emergentes."); return; }
+        vPrint.document.write(htmlContenido);
+        vPrint.document.close();
+        vPrint.focus();
+        setTimeout(() => { vPrint.print(); }, 500);
+    }
+
+    window.imprimirRosterCompletoEquipoSeleccionado = function() {
+        const equipoSelect = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
+        
+        const configEq = configEquipos[equipoSelect] || {};
+        const logoEq = configEq.logo || logosPorDefecto[equipoSelect] || 'https://via.placeholder.com/100?text=EQUIPO';
+        const logoLiga = logoLigaGlobal || logoLifarccDefault;
+
+        const jugadoresEquipo = baseDatos.filter(j => j.equipo === equipoSelect);
+
+        if (jugadoresEquipo.length === 0) {
+            alert(`No hay jugadores registrados para el club ${equipoSelect} para imprimir.`);
+            return;
+        }
+
+        let htmlContenido = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Roster Completo - ${equipoSelect}</title><style>
+            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 10mm; color: #000; background: white; }
+            .hoja-roster-impresion { width: 100%; max-width: 195mm; margin: 0 auto; page-break-after: always; break-after: page; }
+            .hoja-roster-impresion:last-child { page-break-after: avoid; break-after: avoid; }
+            table.print-table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; }
+            thead { display: table-header-group !important; }
+            tbody { display: table-row-group !important; }
+            tr { page-break-inside: avoid !important; page-break-after: auto !important; }
+            table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 6px; text-align: center; font-size: 11px; }
+            table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; text-transform: uppercase; font-size: 11px; }
+            .logo-box-print { width: 95px; height: 95px; object-fit: contain; background: #fff; }
+            .header-table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
+            .header-table td { border: none !important; padding: 2px; vertical-align: middle; }
+            .league-title-print { font-size: 26px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
+            .league-subtitle-print { font-size: 9px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 3px; }
+            .print-footer { text-align: center; font-size: 9px; color: #555; border-top: 1px solid #aaa; padding-top: 6px; margin-top: 15px; letter-spacing: 0.5px; }
+        </style></head><body>`;
+
+        let hayHojas = false;
+
+        ordenCategoriasOficial.forEach(cat => {
+            const filtradosCat = jugadoresEquipo.filter(j => j.categoria === cat);
+            if (filtradosCat.length > 0) {
+                hayHojas = true;
+                filtradosCat.sort((a, b) => a.nombre.localeCompare(b.nombre));
+
+                let filasHtml = "";
+                filtradosCat.forEach((j, idx) => {
+                    let fotoTd = j.foto ? `<img src="${j.foto}" style="width:75px; height:95px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:8px; color:#64748b;">Sin foto</span>`;
+                    
+                    filasHtml += `<tr>
+                        <td><strong>${idx + 1}</strong></td>
+                        <td>${fotoTd}</td>
+                        <td style="text-align: left; padding-left: 8px; font-weight: 600; text-transform: uppercase;">${j.nombre}</td>
+                        <td>${formatearFechaDDMMYYYY(j.nacimiento) || ''}</td>
+                        <td><code>${j.curp || ''}</code></td>
+                        <td></td>
+                        <td></td>
+                    </tr>`;
+                });
+
+                htmlContenido += `
+                <div class="hoja-roster-impresion">
+                    <table class="print-table">
+                        <thead>
+                            <tr>
+                                <td colspan="7" style="border: none; padding: 0;">
+                                    <table class="header-table">
+                                        <tr>
+                                            <td style="width: 22%; text-align: left;"><img src="${logoLiga}" class="logo-box-print"></td>
+                                            <td style="width: 56%; text-align: center;">
+                                                <div class="league-title-print">LIFARCC</div>
+                                                <div class="league-subtitle-print">Liga Infantil de Football Americano de la Region Centro de Coahuila</div>
+                                            </td>
+                                            <td style="width: 22%; text-align: right;"><img src="${logoEq}" class="logo-box-print"></td>
+                                        </tr>
+                                    </table>
+                                    <div style="font-size: 10px; font-weight: bold; text-align: center; margin-bottom: 2px;">
+                                        FECHA: ___________________________________
+                                    </div>
+                                    <div style="font-size: 11px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; margin-bottom: 2px;">
+                                        <span>CLUB ${equipoSelect}</span>
+                                        <span>JORNADA: ____________________</span>
+                                    </div>
+                                    <div style="font-size: 11px; font-weight: bold; text-transform: uppercase; text-align: left; margin-bottom: 3px;">
+                                        ROSTER CATEGORIA: ${cat}
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="width: 35px;">N°</th>
+                                <th style="width: 80px;">Foto</th>
+                                <th>Nombre Completo</th>
+                                <th style="width: 90px;">Fecha Nac.</th>
+                                <th style="width: 135px;">CURP</th>
+                                <th style="width: 50px;">N°- Jersey</th>
+                                <th style="width: 50px;">Peso kg</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${filasHtml}
+                        </tbody>
+                    </table>
+                    <div class="print-footer">
+                        Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.044
+                    </div>
+                </div>`;
+            }
+        });
+
+        if (!hayHojas) {
+            alert(`No hay jugadores registrados con categorías válidas para el club ${equipoSelect}.`);
+            return;
+        }
+
+        htmlContenido += `</body></html>`;
 
         const vPrint = window.open('', '_blank');
         if (!vPrint) { alert("Permite las ventanas emergentes."); return; }
@@ -2438,7 +2559,7 @@
                     </tbody>
                 </table>
                 <div class="print-footer">
-                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.043
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.044
                 </div>
             </div>`;
         });
