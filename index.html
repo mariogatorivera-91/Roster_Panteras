@@ -46,18 +46,12 @@
         }
 
         @keyframes moveLightBeam {
-            0% {
-                transform: translate(-20%, -20%) scale(1);
-            }
-            50% {
-                transform: translate(25%, 20%) scale(1.35);
-            }
-            100% {
-                transform: translate(-15%, 25%) scale(1.15);
-            }
+            0% { transform: translate(-20%, -20%) scale(1); }
+            50% { transform: translate(25%, 20%) scale(1.35); }
+            100% { transform: translate(-15%, 25%) scale(1.15); }
         }
 
-        /* PANTALLA DE LOGIN CON FONDO LIFARCC (INALTERADO) */
+        /* PANTALLA DE LOGIN CON FONDO LIFARCC */
         #loginOverlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -365,7 +359,6 @@
                 background: white; 
             }
             
-            /* REPETIR ENCABEZADOS ESTRICTAMENTE EN CADA PÁGINA IMPRESA (INCLUSO SI SON MÁS DE DOS HOJAS) */
             thead { display: table-header-group !important; }
             tbody { display: table-row-group !important; }
             tr { page-break-inside: avoid !important; page-break-after: auto !important; }
@@ -422,7 +415,7 @@
     </div>
     <!-- PIE DE PÁGINA EN PANTALLA DE ACCESO -->
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.039
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.040
     </div>
 </div>
 
@@ -465,7 +458,7 @@
 
     <!-- PESTAÑA 1: GENERADOR DE ROSTERS -->
     <div id="rosterTab" class="tab-content active">
-        <!-- 1. INFORMACIÓN DE PERIODO AUTOMÁTICO (EXCLUSIVO ADMINISTRADOR) -->
+        <!-- 1. INFORMACIÓN DE PERIODO AUTOMÁTICO -->
         <div class="section-box no-print col-admin" style="background: #1e293b; border: 1px solid var(--bronze-gold);">
             <h4>📅 Configuración Automática de Periodo de Registro</h4>
             <p style="font-size: 12px; color: #cbd5e1; margin: 0;">El sistema opera de forma <b>automática</b> semanalmente: Los registros para los equipos están abiertos de <b>Lunes a Jueves</b>, cerrándose automáticamente todos los <b>jueves a las 11:59 PM</b> (Viernes, Sábado y Domingo permanece cerrado).</p>
@@ -627,7 +620,7 @@
             </div>
             <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                 <input type="text" id="buscadorDirectorioGeneral" placeholder="🔍 Buscar jugador..." oninput="renderizarDirectorioGeneral()" style="width: 220px;">
-                <button class="btn btn-success" onclick="imprimirTodosRostersMasivo()">🖨️️ Imprimir Todos los Rosters (Masivo)</button>
+                <button class="btn btn-success" onclick="imprimirTodosRostersMasivo()">🖨 Imprimir Todos los Rosters (Masivo)</button>
             </div>
         </div>
 
@@ -653,7 +646,7 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.039
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.040
     </div>
 </div>
 
@@ -671,36 +664,41 @@
     </div>
 </div>
 
-<!-- MODAL GESTIÓN Y MANIPULACIÓN DE FECHAS DE CATEGORÍAS (ORDEN OFICIAL) -->
+<!-- MODAL GESTIÓN Y MANIPULACIÓN DE FECHAS (ESTILO PÓSTER OFICIAL CON ICONOS) -->
 <div id="modalGestionFechas" class="modal" style="z-index: 1010;">
-    <div class="modal-content" style="max-width: 700px;">
-        <div class="modal-header">
-            <span>📅 Gestión y Configuración de Rangos de Fechas por Categoría</span>
-            <span class="close-btn" onclick="cerrarModalGestionFechas()">&times;</span>
-        </div>
-        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 10px;">Modifique los rangos de fechas oficiales. Estas fechas definen automáticamente la categoría de cada jugador durante el registro o importación[cite: 4].</p>
+    <div class="modal-content" style="max-width: 750px; background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--bronze-gold);">
         
-        <!-- Referencia visual del póster oficial -->
-        <div style="text-align: center; margin-bottom: 15px; background: #0f172a; padding: 8px; border-radius: 6px; border: 1px solid var(--bronze-gold);">
-            <img src="Logos Equipos/categoriasfechas.jpg" alt="Póster Categorías Oficiales" style="max-width: 100%; max-height: 140px; object-fit: contain; border-radius: 4px;" onerror="this.style.display='none'">
+        <!-- Encabezado Estilo Póster LIFARCC -->
+        <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--bronze-gold); padding-bottom: 12px; margin-bottom: 15px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <img src="Logos Equipos/lifarcc.jpg" alt="LIFARCC" style="width: 55px; height: 55px; object-fit: contain; border-radius: 50%; border: 2px solid var(--bronze-gold); background: #fff; padding: 2px;" onerror="this.style.display='none'">
+                <div>
+                    <h3 style="margin: 0; color: #f8fafc; font-size: 18px; letter-spacing: 1px; text-transform: uppercase;">LIFARCC MONCLOVA</h3>
+                    <span style="font-size: 11px; color: var(--bronze-gold); font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">Gestión de Fechas y Rangos - Categorías Infantiles</span>
+                </div>
+            </div>
+            <span class="close-btn" onclick="cerrarModalGestionFechas()" style="font-size: 22px;">&times;</span>
         </div>
+
+        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 12px;">Modifique los rangos de fechas oficiales. Las categorías se muestran con sus iconos oficiales en el orden reglamentario[cite: 4]:</p>
 
         <div class="table-responsive">
             <table>
                 <thead>
                     <tr>
-                        <th style="width: 130px;">Categoría</th>
+                        <th style="width: 160px; text-align: left; padding-left: 12px;">Categoría / Símbolo</th>
                         <th>Fecha Inicial (Mínima)</th>
                         <th>Fecha Final (Máxima)</th>
                     </tr>
                 </thead>
                 <tbody id="tablaGestionFechasCuerpo">
-                    <!-- Rellenado dinámicamente en orden: Ardillas, Hormigas, Hormiguitas, Moscos, Botanas -->
+                    <!-- Dinámico con iconos -->
                 </tbody>
             </table>
         </div>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
-            <span style="font-size: 10px; color: #fbbf24; font-weight: bold;">🔒 Solo Administrador (Requiere Confirmación)</span>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
+            <span style="font-size: 10px; color: #fbbf24; font-weight: bold;">🔒 Exclusivo Administrador (Requiere Confirmación)</span>
             <div style="display: flex; gap: 8px;">
                 <button class="btn btn-danger btn-sm" onclick="cerrarModalGestionFechas()">Cancelar</button>
                 <button class="btn btn-success" onclick="guardarRangosFechasNube()">💾 Guardar Cambios en la Nube</button>
@@ -726,9 +724,7 @@
                         <th>Fecha Máxima</th>
                     </tr>
                 </thead>
-                <tbody id="tablaRangosInformativaCuerpo">
-                    <!-- Dinámico -->
-                </tbody>
+                <tbody id="tablaRangosInformativaCuerpo"></tbody>
             </table>
         </div>
         <div style="text-align: right; margin-top: 15px;">
@@ -737,7 +733,7 @@
     </div>
 </div>
 
-<!-- MODAL GUÍA DE FOTOGRAFÍA CORRECTA (LOGOS EQUIPOS/FOTO CORRECTA.JPG) -->
+<!-- MODAL GUÍA DE FOTOGRAFÍA CORRECTA -->
 <div id="modalGuiaFoto" class="modal" style="z-index: 1005;">
     <div class="modal-content" style="max-width: 520px; text-align: center;">
         <div class="modal-header">
@@ -883,7 +879,7 @@
     </div>
 </div>
 
-<!-- MODAL VER PLANTILLA COMPLETA (SOLO VISUAL) -->
+<!-- MODAL VER PLANTILLA COMPLETA -->
 <div id="modalPlantillaEquipo" class="modal">
     <div class="modal-content" style="max-width: 750px;">
         <div class="modal-header">
@@ -935,7 +931,6 @@
     const listaEquiposOficiales = ["ACEREROS", "BUCANEROS", "BÚFALOS", "CHEYENNES", "PANTERAS", "ZORROS"];
     const ordenCategoriasOficial = ["ARDILLA", "HORMIGA", "HORMIGUITA", "MOSCO", "BOTANA"];
     
-    // Rangos iniciales predeterminados (orden: Ardillas, Hormigas, Hormiguitas, Moscos, Botanas)
     let rangosFechasCategorias = {
         "ARDILLA": { inicio: "2014-01-01", fin: "2015-06-30" },
         "HORMIGA": { inicio: "2015-07-01", fin: "2016-12-31" },
@@ -988,7 +983,6 @@
     window.addEventListener('keydown', resetInactivityTimer);
     window.addEventListener('click', resetInactivityTimer);
 
-    // FUNCIÓN PARA ACTUALIZAR EL COLOR DE LA LUZ AMBIENTAL EN MOVIMIENTO SEGÚN EL CLUB
     function actualizarColorGlowClub(nombreEquipo) {
         const overlay = document.querySelector('.moving-light-overlay');
         if (!overlay) return;
@@ -1009,9 +1003,6 @@
         }
     }
 
-    // ==========================================
-    // 🧹 LIMPIAR FORMULARIO DE REGISTRO 1 EN 1
-    // ==========================================
     function limpiarFormularioAlta() {
         const altaNombre = document.getElementById("altaNombre");
         const altaNacimiento = document.getElementById("altaNacimiento");
@@ -1032,7 +1023,6 @@
             btnFoto.style.background = "";
         }
 
-        // Limpiar indicadores de validación
         const checkNombre = document.getElementById("checkNombre");
         const checkNacimiento = document.getElementById("checkNacimiento");
         const checkCurp = document.getElementById("checkCurp");
@@ -1081,11 +1071,7 @@
 
     window.toggleVerPassLogin = function() {
         const input = document.getElementById("loginPassword");
-        if (input.type === "password") {
-            input.type = "text";
-        } else {
-            input.type = "password";
-        }
+        input.type = input.type === "password" ? "text" : "password";
     }
 
     window.intentarLogin = async function() {
@@ -1221,12 +1207,10 @@
         }
     }
 
-    // REGLA AUTOMÁTICA: LUNES A JUEVES HASTA LAS 11:59 PM (23:59:59)
     function comprobarEstadoRegistroActivo() {
         const ahora = new Date();
-        const dia = ahora.getDay(); // 1: Lunes, 2: Martes, 3: Miércoles, 4: Jueves, 5: Viernes, 6: Sábado, 0: Domingo
-
-        if (dia >= 1 && dia <= 4) return true; // Lunes a Jueves abierto
+        const dia = ahora.getDay();
+        if (dia >= 1 && dia <= 4) return true;
         return false;
     }
 
@@ -1274,9 +1258,6 @@
         return str;
     }
 
-    // ==========================================
-    // 🔍 VALIDACIONES EN TIEMPO REAL CON CHECKMARKS (✅)
-    // ==========================================
     window.validarNombreInput = function() {
         const val = document.getElementById("altaNombre").value.trim().toUpperCase();
         const check = document.getElementById("checkNombre");
@@ -1317,7 +1298,6 @@
         }
     }
 
-    // CÁLCULO DINÁMICO DE CATEGORÍA BASADO EN LOS RANGOS CONFIGURADOS EN LA NUBE
     function calcularCategoriaPorFecha(fechaStr) {
         if (!fechaStr) return null;
         let strVal = formatearFechaExcel(fechaStr);
@@ -1409,7 +1389,6 @@
         }
     }
 
-    // MODAL VISTA AMPLIADA FOTO
     window.abrirModalAmpliarFoto = function(fotoUrl, nombreJugador) {
         const imgModal = document.getElementById("imgAmpliadaModal");
         const nombreP = document.getElementById("nombreJugadorAmpliado");
@@ -1422,7 +1401,7 @@
         document.getElementById("modalAmpliarFoto").style.display = "none";
     }
 
-    // MODAL GESTIÓN DE FECHAS POR CATEGORÍA (EXCLUSIVO ADMIN)
+    // MODAL GESTIÓN DE FECHAS (ESTILO PÓSTER OFICIAL CON ICONOS Y ORDEN ESTRICTO)
     window.abrirModalGestionFechas = function() {
         if (rolActual !== "Administrador") {
             alert("⚠️ Solo el Administrador puede manipular los rangos de fechas de las categorías.");
@@ -1431,19 +1410,22 @@
         const tbody = document.getElementById("tablaGestionFechasCuerpo");
         tbody.innerHTML = "";
 
-        const nombresDisplay = {
-            "ARDILLA": "ARDILLAS",
-            "HORMIGA": "HORMIGAS",
-            "HORMIGUITA": "HORMIGUITAS",
-            "MOSCO": "MOSCOS",
-            "BOTANA": "BOTANAS"
+        const datosCategoriasPost = {
+            "ARDILLA": { nombre: "ARDILLAS", icono: "🐿️" },
+            "HORMIGA": { nombre: "HORMIGAS", icono: "🐜" },
+            "HORMIGUITA": { nombre: "HORMIGUITAS", icono: "🐜✨" },
+            "MOSCO": { nombre: "MOSCOS", icono: "🪰" },
+            "BOTANA": { nombre: "BOTANAS", icono: "🍿" }
         };
 
         ordenCategoriasOficial.forEach(cat => {
             const rango = rangosFechasCategorias[cat] || { inicio: "", fin: "" };
+            const info = datosCategoriasPost[cat] || { nombre: cat, icono: "🏈" };
             tbody.innerHTML += `
                 <tr>
-                    <td><strong>${nombresDisplay[cat] || cat}</strong></td>
+                    <td style="text-align: left; padding-left: 12px; font-weight: bold; font-size: 13px;">
+                        <span style="font-size: 18px; margin-right: 6px; vertical-align: middle;">${info.icono}</span> ${info.nombre}
+                    </td>
                     <td><input type="date" id="rangoIni_${cat}" value="${rango.inicio}" style="width:100%;"></td>
                     <td><input type="date" id="rangoFin_${cat}" value="${rango.fin}" style="width:100%;"></td>
                 </tr>
@@ -1488,16 +1470,15 @@
         }
     }
 
-    // MODAL RANGOS DE FECHAS DE CATEGORÍAS (VISTA INFORMATIVA)
     window.abrirModalRangosCategorias = function() {
         const tbody = document.getElementById("tablaRangosInformativaCuerpo");
         tbody.innerHTML = "";
         const nombresDisplay = {
-            "ARDILLA": "ARDILLA",
-            "HORMIGA": "HORMIGA",
-            "HORMIGUITA": "HORMIGUITA",
-            "MOSCO": "MOSCO",
-            "BOTANA": "BOTANA"
+            "ARDILLA": "ARDILLAS",
+            "HORMIGA": "HORMIGAS",
+            "HORMIGUITA": "HORMIGUITAS",
+            "MOSCO": "MOSCOS",
+            "BOTANA": "BOTANAS"
         };
 
         ordenCategoriasOficial.forEach(cat => {
@@ -1707,7 +1688,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.039
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.040
             </div>
         </div>
         </body></html>`;
@@ -1862,11 +1843,9 @@
 
     window.cambiarFiltroEquipo = function() {
         const eq = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
-        
         if (rolActual === "Administrador") {
             actualizarColorGlowClub(eq);
         }
-
         const conf = configEquipos[eq] || {};
         const inputCampo = document.getElementById("inputCampo");
         if(inputCampo) inputCampo.value = conf.campo || '';
@@ -1930,7 +1909,7 @@
         }
 
         if (!/^[A-Z0-9]{18}$/.test(curp)) {
-            alert("⚠️ El CURP debe tener exactamente 18 caracteres alfanuméricos.");
+            alert("⚠️️ El CURP debe tener exactamente 18 caracteres alfanuméricos.");
             return;
         }
 
@@ -1956,7 +1935,7 @@
 
         limpiarFormularioAlta();
         renderizarRoster();
-        alert("✅ ¡Registro subido con éxito a la nube!\n\nEl jugador ha sido guardado y asignado correctamente a su categoría oficial.\n\n📌 Recordatorio: No olvides entregar la documentación completa y legible al encargado.");
+        alert("✅ ¡Registro subido con éxito a la nube!\n\nEl jugador ha sido guardado y asignado correctamente a su categoría oficial.");
     }
 
     window.cargarFotosLocales = async function(event) {
@@ -2161,7 +2140,7 @@
                 <td>${jugador.doc || ''}</td>
                 <td>
                     <button class="btn btn-sm" onclick="abrirModal('${jugador.id}')" title="Editar">✏️</button>
-                    <button class="btn btn-danger btn-sm" onclick="eliminarJugador('${jugador.id}')" title="Eliminar">🗑️️</button>
+                    <button class="btn btn-danger btn-sm" onclick="eliminarJugador('${jugador.id}')" title="Eliminar">🗑</button>
                 </td>
             </tr>`;
         });
@@ -2316,7 +2295,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.039
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.040
             </div>
         </div>
 
@@ -2439,7 +2418,7 @@
                     </tbody>
                 </table>
                 <div class="print-footer">
-                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.039
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.040
                 </div>
             </div>`;
         });
