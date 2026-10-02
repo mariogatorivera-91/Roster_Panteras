@@ -248,7 +248,6 @@
             border: 1px solid #475569;
             border-radius: 6px;
             background: #fff;
-            cursor: pointer;
             padding: 2px;
         }
         .team-card-info { flex-grow: 1; overflow: hidden; }
@@ -416,7 +415,7 @@
     </div>
     <!-- PIE DE PÁGINA EN PANTALLA DE ACCESO -->
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.041
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.043
     </div>
 </div>
 
@@ -467,7 +466,7 @@
 
         <!-- 2. CONFIGURACIÓN DE LOGOTIPOS -->
         <div class="section-box no-print">
-            <h4>🛡️ Configuración de Logotipos de Sedes y Equipos</h4>
+            <h4>🛡️ Configuración de Logotipos de Equipos</h4>
             <div id="teamsPreviewGrid" class="teams-preview-grid"></div>
         </div>
 
@@ -564,8 +563,11 @@
                         </div>
                     </div>
                     <div>
-                        <label for="inputCampo">📍 Dirección del Campo / Sede:</label><br>
-                        <input type="text" id="inputCampo" placeholder="Ej. Campo PAC-Snyder Monclova" oninput="guardarDatosCampoActual()" style="width: 200px;">
+                        <label for="inputCampo">📍 Dirección Campo / Sede:</label><br>
+                        <div style="display: flex; gap: 5px; align-items: center;">
+                            <input type="text" id="inputCampo" placeholder="Ej. Campo PAC-Snyder Monclova" oninput="guardarDatosCampoActual()" style="width: 200px;">
+                            <button type="button" class="btn btn-sm" onclick="abrirGoogleMapsCampo()" title="Abrir ubicación en Google Maps" style="padding: 7px 10px; background: #334155; border: 1px solid #475569; cursor: pointer;">🗺️</button>
+                        </div>
                     </div>
                 </div>
                 <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
@@ -642,7 +644,7 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.041
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.043
     </div>
 </div>
 
@@ -660,7 +662,7 @@
     </div>
 </div>
 
-<!-- MODAL GESTIÓN Y MANIPULACIÓN DE FECHAS (ESTILO PÓSTER OFICIAL CON ICONOS) -->
+<!-- MODAL GESTIÓN Y MANIPULACIÓN DE FECHAS (ESTILO PÓSTER OFICIAL CON ICONOS Y ORDEN ESTRICTO) -->
 <div id="modalGestionFechas" class="modal" style="z-index: 1010;">
     <div class="modal-content" style="max-width: 750px; background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--bronze-gold);">
         
@@ -676,7 +678,7 @@
             <span class="close-btn" onclick="cerrarModalGestionFechas()" style="font-size: 22px;">&times;</span>
         </div>
 
-        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 12px;">Modifique los rangos de fechas oficiales. Las categorías se muestran con sus iconos oficiales en el orden reglamentario:</p>
+        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 12px;">Modifique los rangos de fechas oficiales en el orden reglamentario (Ardillas, Hormigas, Hormiguitas, Moscos, Botanas):</p>
 
         <div class="table-responsive">
             <table>
@@ -710,7 +712,7 @@
             <span>📅 Rangos de Fechas por Categoría</span>
             <span class="close-btn" onclick="cerrarModalRangosCategorias()">&times;</span>
         </div>
-        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 15px;">Fechas mínimas y máximas oficiales para la asignación automática en el sistema:</p>
+        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 15px;">Fechas mínimas y máximas oficiales:</p>
         <div class="table-responsive">
             <table>
                 <thead>
@@ -855,7 +857,7 @@
 <div id="modalAdminUsers" class="modal">
     <div class="modal-content" style="max-width: 600px;">
         <div class="modal-header">
-            <span>⚙️ Panel de Control de Usuarios y Contraseñas</span>
+            <span>⚙️️ Panel de Control de Usuarios y Contraseñas</span>
             <span class="close-btn" onclick="cerrarModalAdminUsuarios()">&times;</span>
         </div>
         <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 15px;">Visualiza y gestiona las credenciales de acceso de todos los clubes y el administrador.</p>
@@ -925,6 +927,8 @@
     const db = getFirestore(app);
 
     const listaEquiposOficiales = ["ACEREROS", "BUCANEROS", "BÚFALOS", "CHEYENNES", "PANTERAS", "ZORROS"];
+    
+    // ORDEN OFICIAL ESTRICTO: ARDILLA, HORMIGA, HORMIGUITA, MOSCO, BOTANA
     const ordenCategoriasOficial = ["ARDILLA", "HORMIGA", "HORMIGUITA", "MOSCO", "BOTANA"];
     
     let rangosFechasCategorias = {
@@ -1518,7 +1522,7 @@
             return;
         }
         if (!nueva1) {
-            alert("⚠️ La nueva contraseña no puede estar vacía.");
+            alert("⚠️️ La nueva contraseña no puede estar vacía.");
             return;
         }
         if (nueva1 !== nueva2) {
@@ -1546,7 +1550,7 @@
                     <td>
                         <div style="display:flex; gap:5px; align-items:center; justify-content:center;">
                             <input type="password" id="adminPassView_${idx}" value="${passVal}" readonly style="width:110px; background:#0f172a; border:none; text-align:center;">
-                            <button class="btn btn-sm" onclick="toggleVerPassAdmin('adminPassView_${idx}', this)" style="padding:2px 5px;">👁️️</button>
+                            <button class="btn btn-sm" onclick="toggleVerPassAdmin('adminPassView_${idx}', this)" style="padding:2px 5px;">👁</button>
                         </div>
                     </td>
                     <td>
@@ -1683,7 +1687,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.041
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.043
             </div>
         </div>
         </body></html>`;
@@ -1796,10 +1800,17 @@
             const conf = configEquipos[eq] || {};
             const logo = conf.logo || logosPorDefecto[eq] || 'https://via.placeholder.com/50?text=LOGO';
 
-            let btnHtml = `<button class="btn btn-sm" onclick="dispararLogoEquipoDirecto('${eq}')" style="padding: 2px 6px; font-size: 10px;">Cambiar Logo</button>`;
+            let btnHtml = "";
+            let imgAttrs = `alt="${eq}"`;
+            if (rolActual === "Administrador") {
+                btnHtml = `<button class="btn btn-sm" onclick="dispararLogoEquipoDirecto('${eq}')" style="padding: 2px 6px; font-size: 10px;">Cambiar Logo</button>`;
+                imgAttrs = `alt="${eq}" onclick="dispararLogoEquipoDirecto('${eq}')" title="Cambiar logotipo" style="cursor: pointer;"`;
+            } else {
+                imgAttrs = `alt="${eq}" title="Logotipo del equipo (Solo Administrador puede cambiarlo)" style="cursor: default;"`;
+            }
 
             grid.innerHTML += `<div class="team-card">
-                <img src="${logo}" alt="${eq}" onclick="dispararLogoEquipoDirecto('${eq}')" title="Cambiar logotipo">
+                <img src="${logo}" ${imgAttrs}>
                 <div class="team-card-info">
                     <h5>${eq}</h5>
                     ${btnHtml}
@@ -1809,6 +1820,7 @@
     }
 
     window.dispararLogoEquipoDirecto = function(eq) {
+        if (rolActual !== "Administrador") return;
         equipoSeleccionadoDirecto = eq;
         document.getElementById("inputLogoEquipoDirecto").click();
     }
@@ -1838,6 +1850,16 @@
         configEquipos[eq].campo = campo;
 
         await setDoc(doc(db, "configuracion", eq), configEquipos[eq]);
+    }
+
+    window.abrirGoogleMapsCampo = function() {
+        const campoInput = document.getElementById("inputCampo").value.trim();
+        if (!campoInput) {
+            alert("⚠️ No hay ninguna dirección de campo especificada para buscar en Google Maps.");
+            return;
+        }
+        const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(campoInput)}`;
+        window.open(url, '_blank');
     }
 
     window.cambiarFiltroEquipo = function() {
@@ -1903,12 +1925,12 @@
         }
 
         if (/[0-9\.]/.test(nombre)) {
-            alert("⚠️ El nombre del jugador no debe contener números ni puntos.");
+            alert("⚠ El nombre del jugador no debe contener números ni puntos.");
             return;
         }
 
         if (!/^[A-Z0-9]{18}$/.test(curp)) {
-            alert("⚠ El CURP debe tener exactamente 18 caracteres alfanuméricos.");
+            alert("⚠️ El CURP debe tener exactamente 18 caracteres alfanuméricos.");
             return;
         }
 
@@ -2079,7 +2101,7 @@
             if (rolActual === "Administrador") {
                 accionesHtml = `
                     <button class="btn btn-sm" onclick="abrirModal('${jugador.id}')" title="Editar">✏️</button>
-                    <button class="btn btn-danger btn-sm" onclick="eliminarJugador('${jugador.id}')" title="Eliminar">🗑️</button>
+                    <button class="btn btn-danger btn-sm" onclick="eliminarJugador('${jugador.id}')" title="Eliminar">🗑️️</button>
                 `;
             } else {
                 accionesHtml = `<span style="font-size: 10px; color: #94a3b8; font-weight: bold;">Registrado (Bloqueado)</span>`;
@@ -2139,7 +2161,7 @@
                 <td>${jugador.doc || ''}</td>
                 <td>
                     <button class="btn btn-sm" onclick="abrirModal('${jugador.id}')" title="Editar">✏️</button>
-                    <button class="btn btn-danger btn-sm" onclick="eliminarJugador('${jugador.id}')" title="Eliminar">🗑</button>
+                    <button class="btn btn-danger btn-sm" onclick="eliminarJugador('${jugador.id}')" title="Eliminar">🗑️</button>
                 </td>
             </tr>`;
         });
@@ -2182,9 +2204,8 @@
 
     window.mostrarResumenEquiposRegistrados = function() {
         const eqTarget = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
-        const categorias = ["ARDILLA", "HORMIGA", "HORMIGUITA", "MOSCO", "BOTANA"];
         let conteoCat = {};
-        categorias.forEach(c => conteoCat[c] = 0);
+        ordenCategoriasOficial.forEach(c => conteoCat[c] = 0);
         let total = 0;
 
         baseDatos.forEach(j => {
@@ -2196,7 +2217,7 @@
         });
 
         let msg = `📋 CONTEO DE JUGADORES - CLUB ${eqTarget}:\n\n`;
-        categorias.forEach(c => {
+        ordenCategoriasOficial.forEach(c => {
             msg += `• Categoría ${c}: ${conteoCat[c]} jugador(es)\n`;
         });
         msg += `\nTotal general del equipo: ${total} jugadores.`;
@@ -2294,7 +2315,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.041
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.043
             </div>
         </div>
 
@@ -2417,7 +2438,7 @@
                     </tbody>
                 </table>
                 <div class="print-footer">
-                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.041
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.043
                 </div>
             </div>`;
         });
