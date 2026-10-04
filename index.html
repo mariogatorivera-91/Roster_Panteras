@@ -416,7 +416,7 @@
     </div>
     <!-- PIE DE PÁGINA EN PANTALLA DE ACCESO -->
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.044
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.045
     </div>
 </div>
 
@@ -443,6 +443,7 @@
             <button class="btn btn-success btn-sm col-admin" onclick="abrirReporteSemanal()" id="btnReporteSemanal" style="display:none;">📊 Reporte Semanal</button>
             <button class="btn btn-warning btn-sm col-admin" onclick="abrirModalGestionFechas()" id="btnGestionFechas" style="display:none;">📅 Fechas Categorías</button>
             <button class="btn btn-purple btn-sm col-admin" onclick="abrirModalAdminUsuarios()" id="btnAdminUsers" style="display:none;">⚙️ Usuarios</button>
+            <button class="btn btn-info btn-sm col-admin" onclick="abrirModalLogAccesos()" id="btnLogAccesos" style="display:none;">🕒 Log Accesos</button>
             <button class="btn btn-danger btn-sm" onclick="cerrarSesion()">🔒 Salir</button>
         </div>
     </div>
@@ -646,7 +647,7 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.044
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.045
     </div>
 </div>
 
@@ -785,6 +786,34 @@
                 </thead>
                 <tbody id="tablaReporteSemanalCuerpo"></tbody>
             </table>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL LOG DE ACCESOS AL SISTEMA -->
+<div id="modalLogAccesos" class="modal">
+    <div class="modal-content" style="max-width: 650px;">
+        <div class="modal-header">
+            <span>🕒 Registro de Accesos al Sistema (Por Día)</span>
+            <span class="close-btn" onclick="cerrarModalLogAccesos()">&times;</span>
+        </div>
+        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 15px;">Historial de entradas de usuarios y administradores (Excluye acceso con contraseña 'charro').</p>
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 50px;">N°</th>
+                        <th style="width: 130px;">Fecha</th>
+                        <th style="width: 100px;">Hora</th>
+                        <th>Usuario / Club</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaLogAccesosCuerpo"></tbody>
+            </table>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+            <button class="btn btn-danger btn-sm" onclick="borrarLogAccesosNube()">🗑️ Borrar Historial</button>
+            <button class="btn btn-warning btn-sm" onclick="cerrarModalLogAccesos()">Cerrar</button>
         </div>
     </div>
 </div>
@@ -1052,6 +1081,7 @@
                 document.getElementById("btnAdminUsers").style.display = "inline-flex";
                 document.getElementById("btnReporteSemanal").style.display = "inline-flex";
                 document.getElementById("btnGestionFechas").style.display = "inline-flex";
+                document.getElementById("btnLogAccesos").style.display = "inline-flex";
             }
             aplicarPermisosRol();
             limpiarFormularioAlta();
@@ -1101,6 +1131,20 @@
             return;
         }
 
+        // REGISTRAR ACCESO EN LA NUBE (Excluye si la contraseña ingresada es exactamente "charro")
+        if (pass !== "charro") {
+            try {
+                await addDoc(collection(db, "log_accesos"), {
+                    usuario: selectVal,
+                    fecha: new Date().toISOString().split('T')[0],
+                    hora: new Date().toLocaleTimeString(),
+                    timestamp: new Date()
+                });
+            } catch (e) {
+                console.error("Error guardando log de acceso:", e);
+            }
+        }
+
         if (selectVal === "Administrador") {
             rolActual = "Administrador";
             equipoAsignado = null;
@@ -1122,6 +1166,7 @@
             document.getElementById("btnAdminUsers").style.display = "inline-flex";
             document.getElementById("btnReporteSemanal").style.display = "inline-flex";
             document.getElementById("btnGestionFechas").style.display = "inline-flex";
+            document.getElementById("btnLogAccesos").style.display = "inline-flex";
         }
 
         aplicarPermisosRol();
@@ -1202,11 +1247,23 @@
                 if (!configEquipos[eq].logo) configEquipos[eq].logo = logosPorDefecto[eq] || '';
             });
 
+            verificarAlertasJugadores2013();
             inicializarSistema();
         } catch (e) {
             console.error("Error al conectar con Firestore:", e);
             alert("Error al conectar con la base de datos en la nube. Verifica tus credenciales de Firebase.");
         }
+    }
+
+    function verificarAlertasJugadores2013() {
+        let equiposAChecar = rolActual === "Equipo" ? [equipoAsignado] : listaEquiposOficiales;
+        equiposAChecar.forEach(eq => {
+            const j2013 = baseDatos.filter(j => j.equipo === eq && formatearFechaExcel(j.nacimiento).startsWith('2013'));
+            if (j2013.length > 1) {
+                const nombres = j2013.map(p => p.nombre).join(', ');
+                alert(`⚠️ ALERTA DE REGISTROS 2013 (CLUB ${eq})\n\nEl equipo tiene ${j2013.length} jugadores registrados del año 2013 (${nombres}).\n\nSolo se permite 1 registro activo del 2013 por equipo. Por favor, envíe mensaje al administrador para la baja de los jugadores extras del 2013.`);
+            }
+        });
     }
 
     function comprobarEstadoRegistroActivo() {
@@ -1572,6 +1629,66 @@
         document.getElementById("modalAdminUsers").style.display = "none";
     }
 
+    window.abrirModalLogAccesos = async function() {
+        if (rolActual !== "Administrador") return;
+        const tbody = document.getElementById("tablaLogAccesosCuerpo");
+        tbody.innerHTML = `<tr><td colspan="4" style="padding: 20px; color: #64748b;">Cargando registros...</td></tr>`;
+        document.getElementById("modalLogAccesos").style.display = "flex";
+
+        try {
+            const snap = await getDocs(collection(db, "log_accesos"));
+            let logs = [];
+            snap.forEach(docSnap => {
+                logs.push({ id: docSnap.id, ...docSnap.data() });
+            });
+
+            logs.sort((a, b) => {
+                let tA = a.timestamp ? (a.timestamp.seconds || new Date(a.timestamp).getTime()) : 0;
+                let tB = b.timestamp ? (b.timestamp.seconds || new Date(b.timestamp).getTime()) : 0;
+                return tB - tA;
+            });
+
+            tbody.innerHTML = "";
+            if (logs.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="padding: 20px; color: #64748b;">No hay registros de accesos.</td></tr>`;
+                return;
+            }
+
+            logs.forEach((item, idx) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${idx + 1}</strong></td>
+                        <td>${item.fecha || ''}</td>
+                        <td>${item.hora || ''}</td>
+                        <td><span style="font-size: 11px; background: #e2e8f0; color:#1e293b; padding: 2px 6px; border-radius: 4px; font-weight: bold;">${item.usuario}</span></td>
+                    </tr>
+                `;
+            });
+        } catch (e) {
+            console.error("Error cargando log de accesos:", e);
+            tbody.innerHTML = `<tr><td colspan="4" style="padding: 20px; color: #dc2626;">Error al cargar registros de accesos.</td></tr>`;
+        }
+    }
+
+    window.cerrarModalLogAccesos = function() {
+        document.getElementById("modalLogAccesos").style.display = "none";
+    }
+
+    window.borrarLogAccesosNube = async function() {
+        if (rolActual !== "Administrador") return;
+        if (!confirm("⚠️ ¿Estás seguro de borrar todo el historial de accesos?")) return;
+        try {
+            const snap = await getDocs(collection(db, "log_accesos"));
+            for (const docSnap of snap.docs) {
+                await deleteDoc(doc(db, "log_accesos", docSnap.id));
+            }
+            abrirModalLogAccesos();
+            alert("Historial de accesos borrado.");
+        } catch (e) {
+            console.error("Error borrando log de accesos:", e);
+        }
+    }
+
     window.abrirReporteSemanal = function() {
         if (rolActual !== "Administrador") return;
         const hoy = new Date();
@@ -1689,7 +1806,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.044
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.045
             </div>
         </div>
         </body></html>`;
@@ -1899,6 +2016,19 @@
         reader.readAsDataURL(file);
     }
 
+    function verificarLimite2013(equipo, fechaNac) {
+        const anio = formatearFechaExcel(fechaNac).split('-')[0];
+        if (anio === '2013') {
+            const existentes2013 = baseDatos.filter(j => j.equipo === equipo && formatearFechaExcel(j.nacimiento).startsWith('2013'));
+            if (existentes2013.length >= 1) {
+                const nombres = existentes2013.map(p => p.nombre).join(', ');
+                alert(`⚠️ LÍMITE DE JUGADORES 2013 EXCEDIDO\n\nEl club ${equipo} ya cuenta con un jugador registrado del año 2013 (${nombres}).\n\nSolo se permite 1 registro activo del año 2013 por equipo. Por favor, envíe mensaje al administrador para la baja del jugador extra.`);
+                return false;
+            }
+        }
+        return true;
+    }
+
     window.registrarJugadorIndividual = async function() {
         if (rolActual === "Equipo") {
             if (!comprobarEstadoRegistroActivo()) {
@@ -1910,6 +2040,8 @@
         const equipo = rolActual === "Equipo" ? equipoAsignado : document.getElementById("altaEquipo").value;
         const nacimiento = document.getElementById("altaNacimiento").value;
         const categoria = calcularCategoriaPorFecha(nacimiento);
+
+        if (!verificarLimite2013(equipo, nacimiento)) return;
 
         const nombre = document.getElementById("altaNombre").value.trim().toUpperCase();
         const curp = document.getElementById("altaCurp").value.trim().toUpperCase();
@@ -2039,6 +2171,16 @@
                 if (eq.includes("ZORR")) eq = "ZORROS";
 
                 if (eq && nom && catCalc) {
+                    // Validar límite del 2013 antes de importar
+                    const anio = fechaNac.split('-')[0];
+                    if (anio === '2013') {
+                        const existentes = baseDatos.filter(j => j.equipo === eq && formatearFechaExcel(j.nacimiento).startsWith('2013')).length;
+                        if (existentes >= 1) {
+                            console.warn(`Omitido por límite 2013: ${nom} (${eq})`);
+                            continue;
+                        }
+                    }
+
                     if (!listaEquiposOficiales.includes(eq)) listaEquiposOficiales.push(eq);
                     const nuevoJ = {
                         equipo: eq,
@@ -2057,7 +2199,7 @@
             }
             actualizarSelectsEquipos();
             renderizarRoster();
-            alert(`¡Importación masiva completada! Se guardaron y clasificaron automáticamente ${importados} registros en la nube.`);
+            alert(`¡Importación masiva completada! Se guardaron y clasificaron automáticamente ${importados} registros en la nube (respetando restricciones del 2013).`);
             event.target.value = "";
         };
         reader.readAsArrayBuffer(file);
@@ -2317,7 +2459,7 @@
                 </tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.044
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.045
             </div>
         </div>
 
@@ -2429,7 +2571,7 @@
                         </tbody>
                     </table>
                     <div class="print-footer">
-                        Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.044
+                        Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.045
                     </div>
                 </div>`;
             }
@@ -2559,7 +2701,7 @@
                     </tbody>
                 </table>
                 <div class="print-footer">
-                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.044
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.045
                 </div>
             </div>`;
         });
