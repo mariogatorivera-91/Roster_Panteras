@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roster - LIFARCC Monclova</title>
-    <!-- FAVICON OFICIAL: BALÓN DE FÚTBOL AMERICANO -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><ellipse cx='32' cy='32' rx='22' ry='30' fill='%233b82f6' stroke='%231d4ed8' stroke-width='3'/><path d='M16 32h32M32 16v32' stroke='%23ffffff' stroke-width='3' stroke-linecap='round'/></svg>">
+    <title>Generador de Roster Oficial - LIFARCC Monclova</title>
+    <!-- FAVICON OFICIAL: BALÓN DE RUGBY DESDE GITHUB -->
+    <link rel="icon" type="image/svg+xml" href="Logos%20Equipos/rugby-ball.svg">
     <!-- SheetJS para importar archivos de Excel -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
@@ -19,6 +19,7 @@
             --text-light: #f8fafc;
             --danger-color: #dc2626;
             --success-color: #16a34a;
+            --celeste-btn: #0ea5e9;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -183,7 +184,7 @@
         .filter-group { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
         .filter-group label { font-weight: bold; color: #cbd5e1; font-size: 13px; }
         
-        select, input[type="text"], input[type="date"], input[type="number"], input[type="file"], input[type="password"] {
+        select, input[type="text"], input[type="date"], input[type="number"], input[type="file"], input[type="password"], textarea {
             padding: 7px 10px;
             font-size: 13px;
             border-radius: 6px;
@@ -216,7 +217,22 @@
         .btn-danger { background: linear-gradient(135deg, #dc2626, #b91c1c); }
         .btn-warning { background: linear-gradient(135deg, #d97706, #b45309); color: white; }
         .btn-info { background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white; }
+        .btn-celeste { background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white; position: relative; }
         .btn-sm { padding: 4px 8px; font-size: 11px; }
+
+        /* GLOBO DE NOTIFICACIÓN DE MENSAJES */
+        .msg-badge {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            padding: 1px 6px;
+            font-size: 10px;
+            font-weight: bold;
+            border: 1px solid #fff;
+        }
 
         .section-box {
             background: #1e293b;
@@ -300,7 +316,7 @@
             padding: 25px;
             border-radius: 10px;
             width: 90%;
-            max-width: 480px;
+            max-width: 550px;
             max-height: 90vh;
             overflow-y: auto;
         }
@@ -416,7 +432,7 @@
     </div>
     <!-- PIE DE PÁGINA EN PANTALLA DE ACCESO -->
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.049
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.051
     </div>
 </div>
 
@@ -433,7 +449,7 @@
 
     <!-- MENÚ SUPERIOR Y CONTROLES -->
     <div class="top-navbar no-print">
-        <!-- Renglón Superior: Rol, Admin, Contraseña y Salir alineados -->
+        <!-- Renglón Superior: Rol, Admin, Botón Buzón Mensajes, Contraseña y Salir -->
         <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 10px; border-bottom: 1px solid #475569; padding-bottom: 8px;">
             <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                 <span id="lblRolActual" style="font-size: 11px; color: #fbbf24; font-weight: bold;"></span>
@@ -442,10 +458,17 @@
                     <option value="reporte">📊 Reporte Semanal</option>
                     <option value="fechas">📅 Fechas Categorías</option>
                     <option value="usuarios">⚙️ Gestionar Usuarios</option>
+                    <option value="whatsapp">📱 Configurar WhatsApp Admin</option>
                     <option value="logs">🕒 Log de Accesos</option>
                 </select>
             </div>
+            
+            <!-- ZONA DE BOTONES SUPERIOR (INCLUYE EL BOTÓN CELESTE DE BUZÓN DE MENSAJES SOLICITADO) -->
             <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <button class="btn btn-celeste btn-sm" id="btnBuzonSuperior" onclick="abrirBuzonMensajes()" title="Buzón de Mensajes">
+                    📨 <span id="txtBtnBuzon">Buzón</span>
+                    <span id="badgeBuzonCount" class="msg-badge" style="display:none;">0</span>
+                </button>
                 <button class="btn btn-warning btn-sm" onclick="abrirModalCambiarPass()">🔑 Contraseña</button>
                 <button class="btn btn-danger btn-sm" onclick="cerrarSesion()">🔒 Salir</button>
             </div>
@@ -587,7 +610,7 @@
                 <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                     <button class="btn btn-warning" onclick="mostrarPlantillaEquipo()">📋 Ver Plantilla</button>
                     <button class="btn btn-success" onclick="imprimirRosterActual()">🖨️ Imprimir Roster Seleccionado</button>
-                    <button class="btn btn-info" onclick="imprimirRosterCompletoEquipoSeleccionado()" title="Imprimir rosters de todas las categorías del equipo seleccionado">🖨️️ Imprimir Equipo Completo</button>
+                    <button class="btn btn-info" onclick="imprimirRosterCompletoEquipoSeleccionado()" title="Imprimir rosters de todas las categorías del equipo seleccionado">🖨 Imprimir Equipo Completo</button>
                 </div>
             </div>
         </div>
@@ -659,7 +682,7 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.049
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.051
     </div>
 </div>
 
@@ -674,6 +697,111 @@
             <img id="imgAmpliadaModal" src="" alt="Foto del Jugador" style="max-width: 100%; max-height: 350px; object-fit: contain; border-radius: 6px;" onerror="this.src='https://via.placeholder.com/250x300?text=Sin+Fotografia'">
         </div>
         <p id="nombreJugadorAmpliado" style="font-size: 13px; font-weight: bold; color: #fbbf24; margin: 0;"></p>
+    </div>
+</div>
+
+<!-- MODAL BUZÓN DE MENSAJES / INBOX -->
+<div id="modalBuzonMensajes" class="modal" style="z-index: 1020;">
+    <div class="modal-content" style="max-width: 750px; background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--celeste-btn);">
+        <div class="modal-header" style="border-bottom: 1px solid #334155; padding-bottom: 10px;">
+            <span id="tituloBuzonModal">📨 Buzón de Mensajes Oficial</span>
+            <span class="close-btn" onclick="cerrarBuzonMensajes()">&times;</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+            <span style="font-size: 11px; color: var(--accent-silver);">Historial de comunicaciones entre Clubes y Administrador:</span>
+            <button class="btn btn-celeste btn-sm" onclick="abrirModalNuevoMensaje()">✉️ Redactar Nuevo Mensaje</button>
+        </div>
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 40px;">N°</th>
+                        <th style="width: 120px;">Remitente</th>
+                        <th>Asunto / Mensaje</th>
+                        <th style="width: 110px;">Fecha / Hora</th>
+                        <th style="width: 90px;">Estado</th>
+                        <th style="width: 80px;">Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaBuzonCuerpo"></tbody>
+            </table>
+        </div>
+        <div style="text-align: right; margin-top: 15px;">
+            <button class="btn btn-warning btn-sm" onclick="cerrarBuzonMensajes()">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL REDACTAR / ENVIAR MENSAJE -->
+<div id="modalNuevoMensaje" class="modal" style="z-index: 1030;">
+    <div class="modal-content" style="max-width: 520px;">
+        <div class="modal-header">
+            <span>✉️ Enviar Mensaje / Adjuntar Archivo</span>
+            <span class="close-btn" onclick="cerrarModalNuevoMensaje()">&times;</span>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr; gap: 12px;">
+            <div id="divDestinatarioContainer" style="display:none;">
+                <label style="font-size: 11px; font-weight: bold;">Para (Club Destino):</label>
+                <select id="selectDestinatario" style="width:100%;"></select>
+            </div>
+            <div>
+                <label style="font-size: 11px; font-weight: bold;">Mensaje / Texto:</label>
+                <textarea id="txtContenidoMensaje" rows="4" placeholder="Escribe tu mensaje aquí..." style="width:100%; resize:vertical;"></textarea>
+            </div>
+            <div>
+                <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Adjuntar Archivo (Imagen, PDF, Word, Excel):</label>
+                <input type="file" id="inputArchivoMensaje" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" onchange="validarArchivoSeleccionado(event)" style="font-size: 11px;">
+                <span id="lblArchivoSeleccionado" style="font-size: 10px; color: #38bdf8; display: block; margin-top: 3px;"></span>
+            </div>
+            <!-- GRABADORA DE AUDIO -->
+            <div style="background: #0f172a; padding: 10px; border-radius: 6px; border: 1px solid #334155;">
+                <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 6px;">🎙️ O Grabar Audio Directo:</label>
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                    <button type="button" id="btnGrabarAudio" class="btn btn-danger btn-sm" onclick="toggleGrabacionAudio()">🔴 Iniciar Grabación</button>
+                    <span id="lblEstadoGrabacion" style="font-size: 11px; color: #94a3b8;">Grabadora detenida</span>
+                </div>
+                <audio id="audioPlayback" controls style="width: 100%; margin-top: 8px; display: none;"></audio>
+            </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px;">
+            <button class="btn btn-danger btn-sm" onclick="cerrarModalNuevoMensaje()">Cancelar</button>
+            <button class="btn btn-success" onclick="enviarMensajeServidor()">📤 Enviar Mensaje</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL VISOR DE MENSAJE (VENTANA FLOTANTE) -->
+<div id="modalVisorMensaje" class="modal" style="z-index: 1030;">
+    <div class="modal-content" style="max-width: 550px;">
+        <div class="modal-header">
+            <span id="visorAsuntoTitulo">📄 Detalle del Mensaje</span>
+            <span class="close-btn" onclick="cerrarVisorMensaje()">&times;</span>
+        </div>
+        <div id="visorContenidoDetalle" style="background: #0f172a; padding: 15px; border-radius: 8px; border: 1px solid #334155; margin-bottom: 15px; font-size: 13px; line-height: 1.5; word-break: break-word;">
+        </div>
+        <div id="visorAdjuntoContainer" style="text-align: center; margin-bottom: 15px;">
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <button class="btn btn-warning btn-sm" onclick="cerrarVisorMensaje()">Cerrar</button>
+            <button id="btnResponderVisor" class="btn btn-success" onclick="abrirRespuestaDesdeVisor()">↩️ Responder Mensaje</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL CONFIGURAR WHATSAPP ADMIN -->
+<div id="modalConfigWhatsapp" class="modal">
+    <div class="modal-content" style="max-width: 400px;">
+        <div class="modal-header">
+            <span>📱 Configurar Número de WhatsApp Admin</span>
+            <span class="close-btn" onclick="cerrarModalWhatsapp()">&times;</span>
+        </div>
+        <div>
+            <label style="font-size: 11px; font-weight: bold;">Número Telefónico (con Lada, ej. 8661155107):</label>
+            <input type="text" id="inputNumWhatsapp" placeholder="8661155107" style="margin-top: 5px;">
+        </div>
+        <div style="text-align: right; margin-top: 20px;">
+            <button class="btn btn-success" onclick="guardarNumeroWhatsappNube()">💾 Guardar Número</button>
+        </div>
     </div>
 </div>
 
@@ -959,6 +1087,7 @@
     const logoLifarccDefault = "Logos Equipos/lifarcc.jpg";
 
     let baseDatos = [];
+    let listaMensajes = [];
     let configEquipos = {};
     let credencialesPasswords = {
         "Administrador": "linfarcc",
@@ -969,12 +1098,22 @@
         "PANTERAS": "PANTERAS",
         "ZORROS": "ZORROS"
     };
+    let numeroWhatsappAdmin = "8661155107";
     let logoLigaGlobal = logoLifarccDefault;
     let rolActual = "Administrador"; 
     let equipoAsignado = null;
     let equipoSeleccionadoDirecto = null;
     let jugadorSeleccionadoId = null;
     let inputFotoActivoId = null; 
+
+    // Variables de Grabación de Audio
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let audioBlobBase64 = null;
+    let archivoAdjuntoBase64 = null;
+    let nombreArchivoAdjunto = "";
+    let tipoArchivoAdjunto = "";
+    let respuestaDestinatarioActual = null;
 
     let inactivityTimer;
 
@@ -1160,6 +1299,7 @@
         if (accion === "reporte") abrirReporteSemanal();
         else if (accion === "fechas") abrirModalGestionFechas();
         else if (accion === "usuarios") abrirModalAdminUsuarios();
+        else if (accion === "whatsapp") abrirModalConfigWhatsapp();
         else if (accion === "logs") abrirModalLogAccesos();
 
         select.value = "";
@@ -1171,6 +1311,9 @@
             snap.forEach(docSnap => {
                 if (docSnap.id === "credenciales_sistema") {
                     credencialesPasswords = { ...credencialesPasswords, ...docSnap.data() };
+                } else if (docSnap.id === "whatsapp_admin") {
+                    const dat = docSnap.data();
+                    if (dat.numero) numeroWhatsappAdmin = dat.numero;
                 }
             });
         } catch (e) {
@@ -1220,18 +1363,28 @@
                 baseDatos.push({ id: docSnap.id, ...docSnap.data() });
             });
 
+            const mensSnap = await getDocs(collection(db, "mensajes"));
+            listaMensajes = [];
+            mensSnap.forEach((docSnap) => {
+                listaMensajes.push({ id: docSnap.id, ...docSnap.data() });
+            });
+
             const configSnapshot = await getDocs(collection(db, "configuracion"));
             configSnapshot.forEach((docSnap) => {
                 if (docSnap.id === "credenciales_sistema") {
                     credencialesPasswords = { ...credencialesPasswords, ...docSnap.data() };
                 } else if (docSnap.id === "rangos_fechas") {
                     rangosFechasCategorias = { ...rangosFechasCategorias, ...docSnap.data() };
+                } else if (docSnap.id === "whatsapp_admin") {
+                    const dat = docSnap.data();
+                    if (dat.numero) numeroWhatsappAdmin = dat.numero;
                 } else if (docSnap.id !== "fechas_sistema") {
                     configEquipos[docSnap.id] = docSnap.data();
                 }
             });
 
             actualizarBannerFechasRegistro();
+            actualizarNotificadorBuzon();
 
             listaEquiposOficiales.forEach(eq => {
                 if (!configEquipos[eq]) configEquipos[eq] = {};
@@ -1246,257 +1399,344 @@
         }
     }
 
-    function verificarAlertasJugadores2013() {
-        let equiposAChecar = rolActual === "Equipo" ? [equipoAsignado] : listaEquiposOficiales;
-        equiposAChecar.forEach(eq => {
-            const j2013 = baseDatos.filter(j => j.equipo === eq && formatearFechaExcel(j.nacimiento).startsWith('2013'));
-            if (j2013.length > 1) {
-                const nombres = j2013.map(p => p.nombre).join(', ');
-                alert(`⚠️ ALERTA DE REGISTROS 2013 (CLUB ${eq})\n\nEl equipo tiene ${j2013.length} jugadores registrados del año 2013 (${nombres}).\n\nSolo se permite 1 registro activo del 2013 por equipo.`);
-            }
-        });
-    }
+    // --- LÓGICA DE MENSAJERÍA Y BUZÓN ---
+    function actualizarNotificadorBuzon() {
+        const badge = document.getElementById("badgeBuzonCount");
+        if (!badge) return;
 
-    function comprobarEstadoRegistroActivo() {
-        const ahora = new Date();
-        const dia = ahora.getDay();
-        return (dia >= 1 && dia <= 4);
-    }
-
-    function actualizarBannerFechasRegistro() {
-        const banner = document.getElementById("bannerPeriodoRegistro");
-        const badgeContainer = document.getElementById("badgeEstadoRegistroContainer");
-        if (banner) {
-            banner.innerText = `📅 Periodo de Registro de Jugadores: Abierto de Lunes a Jueves (Cierre Jueves a las 11:59 PM)`;
-        }
-
-        if (badgeContainer) {
-            if (comprobarEstadoRegistroActivo()) {
-                badgeContainer.innerHTML = `<span style="background: #16a34a; color: white; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; display: inline-flex; align-items: center; gap: 4px;">🟢 Registro Abierto</span>`;
-            } else {
-                badgeContainer.innerHTML = `<span style="background: #dc2626; color: white; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; display: inline-flex; align-items: center; gap: 4px;">🔴 Registro Cerrado</span>`;
-            }
-        }
-    }
-
-    function formatearFechaExcel(val) {
-        if (!val) return "";
-        let strVal = String(val).trim();
-        if (strVal.includes('T')) strVal = strVal.split('T')[0];
-        if (!isNaN(strVal) && Number(strVal) > 1000) {
-            let excelDate = new Date(Math.round((Number(strVal) - (25567 + 2)) * 86400 * 1000));
-            if (!isNaN(excelDate.getTime())) {
-                let y = excelDate.getUTCFullYear();
-                let m = String(excelDate.getUTCMonth() + 1).padStart(2, '0');
-                let d = String(excelDate.getUTCDate()).padStart(2, '0');
-                return `${y}-${m}-${d}`;
-            }
-        }
-        if (strVal.length >= 10) return strVal.substring(0, 10);
-        return strVal;
-    }
-
-    function formatearFechaDDMMYYYY(val) {
-        if (!val) return "";
-        let str = formatearFechaExcel(val);
-        if (!str || str.length < 10) return str;
-        let parts = str.split("-");
-        if (parts.length === 3) {
-            return `${parts[2]}/${parts[1]}/${parts[0]}`;
-        }
-        return str;
-    }
-
-    window.validarNombreInput = function() {
-        const val = document.getElementById("altaNombre").value.trim().toUpperCase();
-        const check = document.getElementById("checkNombre");
-        if (val.length > 0 && !/[0-9\.]/.test(val)) {
-            check.innerHTML = "✅";
-        } else if (val.length === 0) {
-            check.innerHTML = "";
+        let noLeidos = 0;
+        if (rolActual === "Administrador") {
+            noLeidos = listaMensajes.filter(m => m.destinatario === "Administrador" && !m.leido).length;
         } else {
-            check.innerHTML = "❌";
+            noLeidos = listaMensajes.filter(m => m.destinatario === equipoAsignado && !m.leido).length;
         }
-    }
 
-    window.validarCurpInput = function() {
-        const val = document.getElementById("altaCurp").value.trim().toUpperCase();
-        const check = document.getElementById("checkCurp");
-        if (/^[A-Z0-9]{18}$/.test(val)) {
-            check.innerHTML = "✅";
-        } else if (val.length === 0) {
-            check.innerHTML = "";
+        if (noLeidos > 0) {
+            badge.innerText = noLeidos;
+            badge.style.display = "inline-block";
         } else {
-            check.innerHTML = "❌";
+            badge.style.display = "none";
         }
     }
 
-    window.validarDocInput = function() {
-        const val = document.getElementById("altaDoc").value.trim();
-        const check = document.getElementById("checkDoc");
-        if (val.length > 0) {
-            check.innerHTML = "✅";
-        } else {
-            check.innerHTML = "❌";
+    window.abrirBuzonMensajes = async function() {
+        const tbody = document.getElementById("tablaBuzonCuerpo");
+        tbody.innerHTML = `<tr><td colspan="6" style="padding: 20px; color: #64748b;">Cargando buzón...</td></tr>`;
+        document.getElementById("modalBuzonMensajes").style.display = "flex";
+
+        try {
+            const snap = await getDocs(collection(db, "mensajes"));
+            listaMensajes = [];
+            snap.forEach(docSnap => {
+                listaMensajes.push({ id: docSnap.id, ...docSnap.data() });
+            });
+
+            actualizarNotificadorBuzon();
+            renderizarTablaBuzon();
+        } catch (e) {
+            console.error("Error cargando mensajes:", e);
         }
     }
 
-    function calcularCategoriaPorFecha(fechaStr) {
-        if (!fechaStr) return null;
-        let strVal = formatearFechaExcel(fechaStr);
-        const parts = strVal.split("-");
-        if (parts.length !== 3) return null;
-        const yyyymmdd = parseInt(parts[0] + parts[1] + parts[2], 10);
-
-        if (isNaN(yyyymmdd) || yyyymmdd < 20000101) return null;
-
-        for (const cat of ordenCategoriasOficial) {
-            const rango = rangosFechasCategorias[cat];
-            if (rango && rango.inicio && rango.fin) {
-                const iniNum = parseInt(rango.inicio.replace(/-/g, ''), 10);
-                const finNum = parseInt(rango.fin.replace(/-/g, ''), 10);
-                if (yyyymmdd >= iniNum && yyyymmdd <= finNum) {
-                    return cat;
-                }
-            }
-        }
-        return null;
+    window.cerrarBuzonMensajes = function() {
+        document.getElementById("modalBuzonMensajes").style.display = "none";
     }
 
-    window.validarFechaAltaBlur = function() {
-        const fecha = document.getElementById("altaNacimiento").value;
-        const selectCat = document.getElementById("altaCategoria");
-        const check = document.getElementById("checkNacimiento");
-        if (!fecha) {
-            if (check) check.innerHTML = "";
-            return;
-        }
-        const categoriaCalculada = calcularCategoriaPorFecha(fecha);
-
-        if (categoriaCalculada) {
-            selectCat.value = categoriaCalculada;
-            if (check) check.innerHTML = "✅";
-        } else {
-            if (check) check.innerHTML = "❌";
-            alert("⚠️ La fecha de nacimiento ingresada no está completa, tiene un año inválido o está fuera de los rangos oficiales.");
-            selectCat.value = "ARDILLA";
-        }
-    }
-
-    window.validarFechaEditBlur = function() {
-        const fecha = document.getElementById("editNacimiento").value;
-        const selectCat = document.getElementById("editCategoria");
-        if (!fecha) return;
-        const categoriaCalculada = calcularCategoriaPorFecha(fecha);
-        if (categoriaCalculada) {
-            selectCat.value = categoriaCalculada;
-        } else {
-            alert("⚠️ La fecha de nacimiento ingresada no está completa o está fuera de los rangos oficiales.");
-        }
-    }
-
-    window.actualizarNombreArchivoAlta = function(event) {
-        const archivo = event.target.files[0];
-        const btn = document.getElementById("btnTextoAltaFoto");
-        if (archivo) {
-            btn.innerHTML = `✅ Lista: ${archivo.name}`;
-            btn.style.background = "linear-gradient(135deg, #16a34a, #15803d)";
-        } else {
-            btn.innerHTML = "📷 Seleccionar Foto";
-            btn.style.background = "";
-        }
-    }
-
-    window.mostrarGuiaFoto = function(inputId) {
-        inputFotoActivoId = inputId;
-        document.getElementById("modalGuiaFoto").style.display = "flex";
-    }
-
-    window.cerrarModalGuiaFoto = function() {
-        document.getElementById("modalGuiaFoto").style.display = "none";
-        inputFotoActivoId = null;
-    }
-
-    window.procederConSubidaFoto = function() {
-        const idToTrigger = inputFotoActivoId;
-        cerrarModalGuiaFoto();
-        if (idToTrigger) {
-            document.getElementById(idToTrigger).click();
-        }
-    }
-
-    window.abrirModalAmpliarFoto = function(fotoUrl, nombreJugador) {
-        const imgModal = document.getElementById("imgAmpliadaModal");
-        const nombreP = document.getElementById("nombreJugadorAmpliado");
-        imgModal.src = fotoUrl || 'https://via.placeholder.com/250x300?text=Sin+Fotografia';
-        nombreP.innerText = nombreJugador || '';
-        document.getElementById("modalAmpliarFoto").style.display = "flex";
-    }
-
-    window.cerrarModalAmpliarFoto = function() {
-        document.getElementById("modalAmpliarFoto").style.display = "none";
-    }
-
-    window.abrirModalGestionFechas = function() {
-        if (rolActual !== "Administrador") return;
-        const tbody = document.getElementById("tablaGestionFechasCuerpo");
+    function renderizarTablaBuzon() {
+        const tbody = document.getElementById("tablaBuzonCuerpo");
         tbody.innerHTML = "";
 
-        const datosCategoriasPost = {
-            "ARDILLA": { nombre: "ARDILLAS", icono: "🐿️" },
-            "HORMIGA": { nombre: "HORMIGAS", icono: "🐜" },
-            "HORMIGUITA": { nombre: "HORMIGUITAS", icono: "🐜✨" },
-            "MOSCO": { nombre: "MOSCOS", icono: "🪰" },
-            "BOTANA": { nombre: "BOTANAS", icono: "🍿" }
-        };
+        let filtrados = [];
+        if (rolActual === "Administrador") {
+            filtrados = [...listaMensajes];
+        } else {
+            filtrados = listaMensajes.filter(m => m.remitente === equipoAsignado || m.destinatario === equipoAsignado);
+        }
 
-        ordenCategoriasOficial.forEach(cat => {
-            const rango = rangosFechasCategorias[cat] || { inicio: "", fin: "" };
-            const info = datosCategoriasPost[cat] || { nombre: cat, icono: "🏈" };
+        filtrados.sort((a, b) => {
+            let tA = a.timestamp ? (a.timestamp.seconds || new Date(a.timestamp).getTime()) : 0;
+            let tB = b.timestamp ? (b.timestamp.seconds || new Date(b.timestamp).getTime()) : 0;
+            return tB - tA;
+        });
+
+        if (filtrados.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" style="padding: 20px; color: #64748b;">No hay mensajes en el buzón.</td></tr>`;
+            return;
+        }
+
+        filtrados.forEach((m, idx) => {
+            let esNuevo = false;
+            if (rolActual === "Administrador" && m.destinatario === "Administrador" && !m.leido) esNuevo = true;
+            if (rolActual === "Equipo" && m.destinatario === equipoAsignado && !m.leido) esNuevo = true;
+
+            let estiloFila = esNuevo ? "font-weight: bold; color: #ffffff; background: rgba(14, 165, 233, 0.15);" : "color: var(--accent-silver);";
+            let estadoTexto = esNuevo ? "<span style='color:#38bdf8; font-weight:bold;'>🔵 Nuevo</span>" : "<span style='color:#94a3b8;'>⚪ Leído</span>";
+            if (rolActual === "Equipo" && m.remitente === equipoAsignado) {
+                estadoTexto = m.leido ? "<span style='color:#16a34a;'>✅ Leído por Admin</span>" : "<span style='color:#94a3b8;'>⏳ Enviado</span>";
+            }
+
+            let banderitaRespondido = m.respondido ? `<span title="Mensaje respondido" style="margin-left: 5px; font-size: 14px;">⛳</span>` : "";
+
             tbody.innerHTML += `
-                <tr>
-                    <td style="text-align: left; padding-left: 12px; font-weight: bold; font-size: 13px;">
-                        <span style="font-size: 18px; margin-right: 6px; vertical-align: middle;">${info.icono}</span> ${info.nombre}
+                <tr style="${estiloFila}">
+                    <td><strong>${idx + 1}</strong> ${banderitaRespondido}</td>
+                    <td>${m.remitente}</td>
+                    <td style="text-align: left; padding-left: 10px; cursor: pointer;" onclick="verDetalleMensaje('${m.id}')">${m.asunto || m.texto.substring(0, 35) + '...'}</td>
+                    <td>${m.fecha || ''} ${m.hora || ''}</td>
+                    <td>${estadoTexto}</td>
+                    <td>
+                        <button class="btn btn-sm btn-celeste" onclick="verDetalleMensaje('${m.id}')">👁️ Ver</button>
                     </td>
-                    <td><input type="date" id="rangoIni_${cat}" value="${rango.inicio}" style="width:100%;"></td>
-                    <td><input type="date" id="rangoFin_${cat}" value="${rango.fin}" style="width:100%;"></td>
                 </tr>
             `;
         });
-        document.getElementById("modalGestionFechas").style.display = "flex";
     }
 
-    window.cerrarModalGestionFechas = function() {
-        document.getElementById("modalGestionFechas").style.display = "none";
-    }
+    window.abrirModalNuevoMensaje = function(destinatarioForzado = null) {
+        document.getElementById("txtContenidoMensaje").value = "";
+        document.getElementById("inputArchivoMensaje").value = "";
+        document.getElementById("lblArchivoSeleccionado").innerText = "";
+        archivoAdjuntoBase64 = null;
+        nombreArchivoAdjunto = "";
+        tipoArchivoAdjunto = "";
+        audioBlobBase64 = null;
+        document.getElementById("audioPlayback").style.display = "none";
+        document.getElementById("lblEstadoGrabacion").innerText = "Grabadora detenida";
+        document.getElementById("btnGrabarAudio").innerText = "🔴 Iniciar Grabación";
+        document.getElementById("btnGrabarAudio").style.background = "";
 
-    window.guardarRangosFechasNube = async function() {
-        if (rolActual !== "Administrador") return;
-        if (!confirm("⚠️ ¿Estás seguro de guardar y actualizar los rangos de fechas oficiales?")) return;
+        const divDest = document.getElementById("divDestinatarioContainer");
+        const selectDest = document.getElementById("selectDestinatario");
 
-        let nuevosRangos = {};
-        for (const cat of ordenCategoriasOficial) {
-            const ini = document.getElementById(`rangoIni_${cat}`).value;
-            const fin = document.getElementById(`rangoFin_${cat}`).value;
-            if (!ini || !fin) {
-                alert(`⚠️ La categoría ${cat} tiene fechas incompletas.`);
-                return;
-            }
-            if (ini > fin) {
-                alert(`⚠️ La fecha inicial de ${cat} no puede ser posterior a la final.`);
-                return;
-            }
-            nuevosRangos[cat] = { inicio: ini, fin: fin };
+        if (rolActual === "Administrador") {
+            divDest.style.display = "block";
+            selectDest.innerHTML = "";
+            listaEquiposOficiales.forEach(eq => {
+                selectDest.innerHTML += `<option value="${eq}">Club ${eq}</option>`;
+            });
+            if (destinatarioForzado) selectDest.value = destinatarioForzado;
+        } else {
+            divDest.style.display = "none";
         }
+
+        document.getElementById("modalNuevoMensaje").style.display = "flex";
+    }
+
+    window.cerrarModalNuevoMensaje = function() {
+        document.getElementById("modalNuevoMensaje").style.display = "none";
+        if (mediaRecorder && mediaRecorder.state === "recording") {
+            mediaRecorder.stop();
+        }
+    }
+
+    window.validarArchivoSeleccionado = function(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const nombre = file.name.toLowerCase();
+        const extensionesBloqueadas = ['.exe', '.bat', '.sh', '.apk', '.msi', '.cmd', '.jar', '.scr', '.js', '.vbs'];
+        for (const ext of extensionesBloqueadas) {
+            if (nombre.endsWith(ext)) {
+                alert("⚠️ Por seguridad, no está permitido enviar aplicaciones ni archivos ejecutables.");
+                event.target.value = "";
+                return;
+            }
+        }
+
+        nombreArchivoAdjunto = file.name;
+        tipoArchivoAdjunto = file.type;
+        document.getElementById("lblArchivoSeleccionado").innerText = `📎 Archivo adjunto: ${file.name}`;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            archivoAdjuntoBase64 = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // GRABADORA DE AUDIO
+    window.toggleGrabacionAudio = async function() {
+        const btn = document.getElementById("btnGrabarAudio");
+        const lbl = document.getElementById("lblEstadoGrabacion");
+        const player = document.getElementById("audioPlayback");
+
+        if (!mediaRecorder || mediaRecorder.state === "inactive") {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                audioChunks = [];
+                mediaRecorder = new MediaRecorder(stream);
+
+                mediaRecorder.ondataavailable = event => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        audioBlobBase64 = e.target.result;
+                        player.src = audioBlobBase64;
+                        player.style.display = "block";
+                    };
+                    reader.readAsDataURL(audioBlob);
+                };
+
+                mediaRecorder.start();
+                btn.innerText = "⏹️ Detener Grabación";
+                btn.style.background = "#dc2626";
+                lbl.innerText = "🔴 Grabando voz...";
+            } catch (e) {
+                console.error("Error al acceder al micrófono:", e);
+                alert("⚠️ No se pudo acceder al micrófono del dispositivo.");
+            }
+        } else {
+            mediaRecorder.stop();
+            btn.innerText = "🔴 Iniciar Grabación";
+            btn.style.background = "";
+            lbl.innerText = "✅ Audio grabado con éxito";
+            // Detener pistas del stream
+            mediaRecorder.stream.getTracks().forEach(track => track.stop());
+        }
+    }
+
+    window.enviarMensajeServidor = async function() {
+        const texto = document.getElementById("txtContenidoMensaje").value.trim();
+        if (!texto && !archivoAdjuntoBase64 && !audioBlobBase64) {
+            alert("⚠️ El mensaje debe contener texto, un archivo adjunto o un audio grabado.");
+            return;
+        }
+
+        const remitente = rolActual === "Administrador" ? "Administrador" : equipoAsignado;
+        let destinatario = "Administrador";
+        if (rolActual === "Administrador") {
+            destinatario = document.getElementById("selectDestinatario").value;
+        }
+
+        const fechaLocalStr = (() => {
+            const d = new Date();
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        })();
+
+        const nuevoMensaje = {
+            remitente,
+            destinatario,
+            texto: texto || "(Archivo o Audio Adjunto)",
+            archivo: archivoAdjuntoBase64 || null,
+            nombreArchivo: nombreArchivoAdjunto || null,
+            tipoArchivo: tipoArchivoAdjunto || null,
+            audio: audioBlobBase64 || null,
+            fecha: fechaLocalStr,
+            hora: new Date().toLocaleTimeString(),
+            timestamp: new Date(),
+            leido: false,
+            respondido: false
+        };
 
         try {
-            await setDoc(doc(db, "configuracion", "rangos_fechas"), nuevosRangos);
-            rangosFechasCategorias = nuevosRangos;
-            cerrarModalGestionFechas();
-            alert("¡Rangos de fechas actualizados y guardados en la nube con éxito!");
+            const docRef = await addDoc(collection(db, "mensajes"), nuevoMensaje);
+            listaMensajes.push({ id: docRef.id, ...nuevoMensaje });
+
+            // ENVIAR ALERTA DE WHATSAPP SI EL DESTINATARIO ES EL ADMIN O SI LO ENVÍA UN CLUB
+            if (rolActual === "Equipo") {
+                notificarWhatsappAdministrador(remitente, texto);
+            }
+
+            cerrarModalNuevoMensaje();
+            abrirBuzonMensajes();
+            alert("✅ ¡Mensaje enviado con éxito!");
         } catch (e) {
-            console.error("Error al guardar rangos de fechas:", e);
+            console.error("Error enviando mensaje:", e);
+            alert("Error al enviar el mensaje a la nube.");
         }
+    }
+
+    function notificarWhatsappAdministrador(nombreClub, textoMsg) {
+        const urlWsp = `https://api.whatsapp.com/send?phone=${numeroWhatsappAdmin}&text=${encodeURIComponent(`🔔 NUEVO MENSAJE EN BUZÓN LIFARCC\nDe: Club ${nombreClub}\nMensaje: ${textoMsg || '(Archivo/Audio)'}`)}`;
+        window.open(urlWsp, '_blank');
+    }
+
+    let idMensajeActivoVisor = null;
+
+    window.verDetalleMensaje = async function(idMsg) {
+        const msg = listaMensajes.find(m => m.id === idMsg);
+        if (!msg) return;
+        idMensajeActivoVisor = idMsg;
+
+        // MARCAR COMO LEÍDO SI CORRESPONDE
+        let esParaMi = (rolActual === "Administrador" && msg.destinatario === "Administrador" && !msg.leido) ||
+                       (rolActual === "Equipo" && msg.destinatario === equipoAsignado && !msg.leido);
+        if (esParaMi) {
+            msg.leido = true;
+            await updateDoc(doc(db, "mensajes", idMsg), { leido: true });
+            actualizarNotificadorBuzon();
+        }
+
+        document.getElementById("visorAsuntoTitulo").innerText = `📄 Mensaje de: ${msg.remitente}`;
+        
+        let contenidoHtml = `
+            <p style="margin: 0 0 8px 0; color: #fbbf24; font-weight: bold;">Enviado el ${msg.fecha} a las ${msg.hora}</p>
+            <p style="margin: 0; white-space: pre-wrap;">${msg.texto}</p>
+        `;
+        document.getElementById("visorContenidoDetalle").innerHTML = contenidoHtml;
+
+        let adjuntoHtml = "";
+        if (msg.audio) {
+            adjuntoHtml += `<div style="margin-top: 10px;"><p style="font-size:11px; font-weight:bold; color:#38bdf8;">🎙️ Audio Adjunto:</p><audio controls src="${msg.audio}" style="width:100%;"></audio></div>`;
+        }
+        if (msg.archivo) {
+            if (msg.tipoArchivo && msg.tipoArchivo.startsWith("image/")) {
+                adjuntoHtml += `<div style="margin-top: 10px;"><p style="font-size:11px; font-weight:bold; color:#38bdf8;">🖼️ Imagen Adjunta:</p><img src="${msg.archivo}" style="max-width:100%; max-height:250px; border-radius:6px;"></div>`;
+            } else {
+                adjuntoHtml += `<div style="margin-top: 10px;"><a href="${msg.archivo}" download="${msg.nombreArchivo || 'documento'}" class="btn btn-success btn-sm">📥 Descargar Archivo (${msg.nombreArchivo || 'Adjunto'})</a></div>`;
+            }
+        }
+        document.getElementById("visorAdjuntoContainer").innerHTML = adjuntoHtml;
+
+        respuestaDestinatarioActual = msg.remitente;
+        document.getElementById("modalVisorMensaje").style.display = "flex";
+        renderizarTablaBuzon();
+    }
+
+    window.cerrarVisorMensaje = function() {
+        document.getElementById("modalVisorMensaje").style.display = "none";
+    }
+
+    window.abrirRespuestaDesdeVisor = async function() {
+        if (!idMensajeActivoVisor) return;
+        const msg = listaMensajes.find(m => m.id === idMensajeActivoVisor);
+        if (msg) {
+            // Marcar como respondido
+            msg.respondido = true;
+            await updateDoc(doc(db, "mensajes", idMensajeActivoVisor), { respondido: true });
+        }
+        cerrarVisorMensaje();
+        abrirModalNuevoMensaje(respuestaDestinatarioActual);
+    }
+
+    window.abrirModalConfigWhatsapp = function() {
+        if (rolActual !== "Administrador") return;
+        document.getElementById("inputNumWhatsapp").value = numeroWhatsappAdmin;
+        document.getElementById("modalConfigWhatsapp").style.display = "flex";
+    }
+
+    window.cerrarModalWhatsapp = function() {
+        document.getElementById("modalConfigWhatsapp").style.display = "none";
+    }
+
+    window.guardarNumeroWhatsappNube = async function() {
+        if (rolActual !== "Administrador") return;
+        const nuevoNum = document.getElementById("inputNumWhatsapp").value.trim();
+        if (!nuevoNum) {
+            alert("⚠️ El número no puede estar vacío.");
+            return;
+        }
+        numeroWhatsappAdmin = nuevoNum;
+        await setDoc(doc(db, "configuracion", "whatsapp_admin"), { numero: nuevoNum });
+        cerrarModalWhatsapp();
+        alert("¡Número de WhatsApp para notificaciones actualizado con éxito!");
     }
 
     window.abrirModalRangosCategorias = function() {
@@ -1768,7 +2008,7 @@
                 <tbody>${filasHtml}</tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.049
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.051
             </div>
         </div>
         </body></html>`;
@@ -1866,7 +2106,6 @@
                 badgeHtml = `<span style="background: #f97316; color: white; border-radius: 50%; padding: 1px 6px; font-size: 10px; font-weight: bold; margin-left: 4px;" title="Total de jugadores registrados">${totalJugadoresEquipo}</span>`;
             }
 
-            // CHEYENNES EN ROJO
             const colorTextoEq = (eq === "CHEYENNES") ? "color: #ef4444;" : "color: inherit;";
 
             container.innerHTML += `<div class="mini-team-badge"><img src="${logo}" alt="${eq}"> <span style="${colorTextoEq}">${eq}</span> ${badgeHtml}</div>`;
@@ -2018,7 +2257,7 @@
         }
 
         if (/[0-9\.]/.test(nombre)) {
-            alert("⚠ El nombre del jugador no debe contener números ni puntos.");
+            alert("⚠️️ El nombre del jugador no debe contener números ni puntos.");
             return;
         }
 
@@ -2174,7 +2413,6 @@
         reader.readAsArrayBuffer(file);
     }
 
-    // ORDENAMIENTO POR FECHA DE NACIMIENTO (MENOR A MAYOR) Y SECUNDARIO POR NOMBRE
     function ordenarJugadoresPorNacimiento(a, b) {
         const nacA = formatearFechaExcel(a.nacimiento) || "";
         const nacB = formatearFechaExcel(b.nacimiento) || "";
@@ -2342,7 +2580,6 @@
 
         let filasHtml = "";
         filtrados.forEach((j, idx) => {
-            // FOTOGRAFÍA DE IMPRESIÓN AMPLIADA 15% (Aprox 86x109px)
             let fotoTd = j.foto ? `<img src="${j.foto}" style="width:86px; height:109px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:8px; color:#64748b;">Sin foto</span>`;
             
             filasHtml += `<tr>
@@ -2414,7 +2651,7 @@
                 <tbody>${filasHtml}</tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.049
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.051
             </div>
         </div>
         </body></html>`;
@@ -2520,7 +2757,7 @@
                         <tbody>${filasHtml}</tbody>
                     </table>
                     <div class="print-footer">
-                        Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.049
+                        Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.051
                     </div>
                 </div>`;
             }
@@ -2647,7 +2884,7 @@
                     <tbody>${filasHtml}</tbody>
                 </table>
                 <div class="print-footer">
-                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.049
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.051
                 </div>
             </div>`;
         });
@@ -2693,7 +2930,7 @@
 
         const curpVal = document.getElementById("editCurp").value.trim().toUpperCase();
         if (curpVal && !/^[A-Z0-9]{18}$/.test(curpVal)) {
-            alert("⚠️ El CURP debe tener exactamente 18 caracteres alfanuméricos.");
+            alert("⚠️️ El CURP debe tener exactamente 18 caracteres alfanuméricos.");
             return;
         }
 
