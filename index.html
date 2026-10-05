@@ -432,7 +432,7 @@
     </div>
     <!-- PIE DE PÁGINA EN PANTALLA DE ACCESO -->
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.053
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.054
     </div>
 </div>
 
@@ -449,7 +449,6 @@
 
     <!-- MENÚ SUPERIOR Y CONTROLES -->
     <div class="top-navbar no-print">
-        <!-- Renglón Superior: Rol, Admin, Botón Buzón Mensajes, Contraseña y Salir -->
         <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 10px; border-bottom: 1px solid #475569; padding-bottom: 8px;">
             <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                 <span id="lblRolActual" style="font-size: 11px; color: #fbbf24; font-weight: bold;"></span>
@@ -458,12 +457,10 @@
                     <option value="reporte">📊 Reporte Semanal</option>
                     <option value="fechas">📅 Fechas Categorías</option>
                     <option value="usuarios">⚙️ Gestionar Usuarios</option>
-                    <option value="whatsapp">📱 Configurar WhatsApp Admin</option>
                     <option value="logs">🕒 Log de Accesos</option>
                 </select>
             </div>
             
-            <!-- ZONA DE BOTONES SUPERIOR (INCLUYE EL BOTÓN CELESTE DE BUZÓN DE MENSAJES) -->
             <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                 <button class="btn btn-celeste btn-sm" id="btnBuzonSuperior" onclick="abrirBuzonMensajes()" title="Buzón de Mensajes">
                     📨 <span id="txtBtnBuzon">Buzón</span>
@@ -474,7 +471,6 @@
             </div>
         </div>
 
-        <!-- Renglón Inferior: Pestañas e Importación -->
         <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 10px; padding-top: 4px;">
             <div class="nav-tabs-group" id="navTabsContainer">
                 <button class="tab-btn active" onclick="cambiarPestaña('rosterTab', this)">📋 Generador de Roster</button>
@@ -495,19 +491,16 @@
 
     <!-- PESTAÑA 1: GENERADOR DE ROSTERS -->
     <div id="rosterTab" class="tab-content active">
-        <!-- 1. INFORMACIÓN DE PERIODO DE REGISTRO -->
         <div class="section-box no-print col-admin" style="background: #1e293b; border: 1px solid var(--bronze-gold);">
             <h4>📅 Periodo de Registro de Jugadores</h4>
             <p style="font-size: 12px; color: #cbd5e1; margin: 0;">El sistema opera de forma <b>automática</b> semanalmente: Los registros para los equipos están abiertos de <b>Lunes a Jueves</b>, cerrándose automáticamente todos los <b>jueves a las 11:59 PM</b> (Viernes, Sábado y Domingo permanece cerrado).</p>
         </div>
 
-        <!-- 2. CONFIGURACIÓN DE LOGOTIPOS -->
         <div class="section-box no-print">
             <h4>🛡️ Configuración de Logotipos de Equipos</h4>
             <div id="teamsPreviewGrid" class="teams-preview-grid"></div>
         </div>
 
-        <!-- 3. SECCIÓN DE REGISTRAR JUGADOR -->
         <div class="section-box" id="seccionAltaIndividual" style="background: #1e293b; border: 1px solid var(--bronze-gold);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px;">
                 <h4 style="margin: 0; color: #f1f5f9; font-size: 15px;">➕ Registrar Jugador de 1 en 1 (Sincronizado en la Nube)</h4>
@@ -520,7 +513,6 @@
                 📅 Periodo de Registro de Jugadores: Abierto de Lunes a Jueves (Cierre Jueves a las 11:59 PM)
             </div>
             
-            <!-- Renglón 1 de Registro -->
             <div class="form-grid-1" style="display: grid; grid-template-columns: 1fr 1fr 2fr; gap: 12px; margin-bottom: 12px;">
                 <div>
                     <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Equipo * (Automático):</label>
@@ -544,7 +536,6 @@
                 </div>
             </div>
 
-            <!-- Renglón 2 de Registro -->
             <div class="form-grid-2" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1.2fr; gap: 12px; margin-bottom: 15px;">
                 <div>
                     <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">
@@ -574,7 +565,6 @@
             <button class="btn btn-purple btn-sm" onclick="registrarJugadorIndividual()">Guardar Jugador en la Nube</button>
         </div>
 
-        <!-- 4. PANEL DE PERFILES DE BÚSQUEDA Y FILTROS -->
         <div class="controls-panel">
             <div class="filter-row">
                 <div class="filter-group">
@@ -615,7 +605,6 @@
             </div>
         </div>
 
-        <!-- 5. TABLA CON LOS DATOS DE LOS JUGADORES -->
         <div class="table-responsive">
             <table>
                 <thead>
@@ -635,7 +624,6 @@
             </table>
         </div>
 
-        <!-- ZONA DE MANTENIMIENTO -->
         <div class="section-box no-print col-admin" style="background: rgba(220, 38, 38, 0.1); border-color: #7f1d1d; margin-top: 25px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
             <div>
                 <strong>⚠️ Zona de Mantenimiento:</strong><br>
@@ -682,7 +670,7 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.053
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.054
     </div>
 </div>
 
@@ -700,9 +688,26 @@
     </div>
 </div>
 
+<!-- MODAL ALERTA MENSAJE NUEVO AL INICIAR SESIÓN -->
+<div id="modalAvisoMensajeLogin" class="modal" style="z-index: 1050;">
+    <div class="modal-content" style="max-width: 400px; text-align: center; border: 2px solid var(--celeste-btn);">
+        <div class="modal-header" style="justify-content: center; border-bottom: 1px solid #334155; padding-bottom: 8px;">
+            <span style="font-size: 18px; color: #38bdf8;">📨 NOTIFICACIÓN OFICIAL</span>
+        </div>
+        <div style="padding: 20px 0;">
+            <p style="font-size: 16px; font-weight: bold; color: #f8fafc; margin-bottom: 10px;">¡UD TIENE UN MENSAJE NUEVO!</p>
+            <p style="font-size: 12px; color: var(--accent-silver);">Hay comunicaciones pendientes en el buzón oficial de LIFARCC.</p>
+        </div>
+        <div style="display: flex; justify-content: center; gap: 12px;">
+            <button class="btn btn-danger btn-sm" onclick="cerrarAvisoLogin()">Cerrar</button>
+            <button class="btn btn-celeste" onclick="irAlBuzonDesdeLogin()">👀 Ver Mensaje</button>
+        </div>
+    </div>
+</div>
+
 <!-- MODAL BUZÓN DE MENSAJES / INBOX -->
 <div id="modalBuzonMensajes" class="modal" style="z-index: 1020;">
-    <div class="modal-content" style="max-width: 750px; background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--celeste-btn);">
+    <div class="modal-content" style="max-width: 780px; background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--celeste-btn);">
         <div class="modal-header" style="border-bottom: 1px solid #334155; padding-bottom: 10px;">
             <span id="tituloBuzonModal">📨 Buzón de Mensajes Oficial</span>
             <span class="close-btn" onclick="cerrarBuzonMensajes()">&times;</span>
@@ -720,7 +725,7 @@
                         <th>Asunto / Mensaje</th>
                         <th style="width: 110px;">Fecha / Hora</th>
                         <th style="width: 90px;">Estado</th>
-                        <th style="width: 80px;">Acción</th>
+                        <th style="width: 100px;">Acciones</th>
                     </tr>
                 </thead>
                 <tbody id="tablaBuzonCuerpo"></tbody>
@@ -784,23 +789,6 @@
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <button class="btn btn-warning btn-sm" onclick="cerrarVisorMensaje()">Cerrar</button>
             <button id="btnResponderVisor" class="btn btn-success" onclick="abrirRespuestaDesdeVisor()">↩️ Responder Mensaje</button>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL CONFIGURAR WHATSAPP ADMIN -->
-<div id="modalConfigWhatsapp" class="modal">
-    <div class="modal-content" style="max-width: 400px;">
-        <div class="modal-header">
-            <span>📱 Configurar Número de WhatsApp Admin</span>
-            <span class="close-btn" onclick="cerrarModalWhatsapp()">&times;</span>
-        </div>
-        <div>
-            <label style="font-size: 11px; font-weight: bold;">Número Telefónico (con Lada, ej. 8661155107):</label>
-            <input type="text" id="inputNumWhatsapp" placeholder="8661155107" style="margin-top: 5px;">
-        </div>
-        <div style="text-align: right; margin-top: 20px;">
-            <button class="btn btn-success" onclick="guardarNumeroWhatsappNube()">💾 Guardar Número</button>
         </div>
     </div>
 </div>
@@ -1121,7 +1109,7 @@
         clearTimeout(inactivityTimer);
         if (document.getElementById("appContainer").style.display !== "none") {
             inactivityTimer = setTimeout(() => {
-                alert("⚠️️ Sesión cerrada automáticamente por 5 minutos de inactividad.");
+                alert("⚠️ Sesión cerrada automáticamente por 5 minutos de inactividad.");
                 cerrarSesion();
             }, 5 * 60 * 1000);
         }
@@ -1131,7 +1119,6 @@
     window.addEventListener('keydown', resetInactivityTimer);
     window.addEventListener('click', resetInactivityTimer);
 
-    // --- FUNCIONES AUXILIARES DE FECHAS, FORMATOS Y VALIDACIÓN ---
     function formatearFechaExcel(fechaStr) {
         if (!fechaStr) return "";
         if (typeof fechaStr === 'number') {
@@ -1175,12 +1162,8 @@
 
     function comprobarEstadoRegistroActivo() {
         const ahora = new Date();
-        const diaSemana = ahora.getDay(); // 0: Dom, 1: Lun, 2: Mar, 3: Mié, 4: Jue, 5: Vie, 6: Sáb
-        // Abierto de Lunes (1) a Jueves (4)
-        if (diaSemana >= 1 && diaSemana <= 4) {
-            return true;
-        }
-        return false;
+        const diaSemana = ahora.getDay();
+        return (diaSemana >= 1 && diaSemana <= 4);
     }
 
     function actualizarBannerFechasRegistro() {
@@ -1211,9 +1194,7 @@
         }
     }
 
-    function verificarAlertasJugadores2013() {
-        // Función de control preventiva
-    }
+    function verificarAlertasJugadores2013() {}
 
     window.validarNombreInput = function() {
         const val = document.getElementById("altaNombre").value;
@@ -1470,6 +1451,31 @@
         aplicarPermisosRol();
         limpiarFormularioAlta();
         await cargarDatosDesdeNube();
+
+        // Verificar si tiene mensajes nuevos al ingresar para mostrar la alerta
+        verificarMensajesPendientesAlLogin();
+    }
+
+    function verificarMensajesPendientesAlLogin() {
+        let hayNuevos = false;
+        if (rolActual === "Administrador") {
+            hayNuevos = listaMensajes.some(m => m.destinatario === "Administrador" && !m.leido);
+        } else {
+            hayNuevos = listaMensajes.some(m => m.destinatario === equipoAsignado && !m.leido);
+        }
+
+        if (hayNuevos) {
+            document.getElementById("modalAvisoMensajeLogin").style.display = "flex";
+        }
+    }
+
+    window.cerrarAvisoLogin = function() {
+        document.getElementById("modalAvisoMensajeLogin").style.display = "none";
+    }
+
+    window.irAlBuzonDesdeLogin = function() {
+        cerrarAvisoLogin();
+        abrirBuzonMensajes();
     }
 
     window.manejarAccionAdmin = function(select) {
@@ -1479,7 +1485,6 @@
         if (accion === "reporte") abrirReporteSemanal();
         else if (accion === "fechas") abrirModalGestionFechas();
         else if (accion === "usuarios") abrirModalAdminUsuarios();
-        else if (accion === "whatsapp") abrirModalConfigWhatsapp();
         else if (accion === "logs") abrirModalLogAccesos();
 
         select.value = "";
@@ -1491,9 +1496,6 @@
             snap.forEach(docSnap => {
                 if (docSnap.id === "credenciales_sistema") {
                     credencialesPasswords = { ...credencialesPasswords, ...docSnap.data() };
-                } else if (docSnap.id === "whatsapp_admin") {
-                    const dat = docSnap.data();
-                    if (dat.numero) numeroWhatsappAdmin = dat.numero;
                 }
             });
         } catch (e) {
@@ -1555,9 +1557,6 @@
                     credencialesPasswords = { ...credencialesPasswords, ...docSnap.data() };
                 } else if (docSnap.id === "rangos_fechas") {
                     rangosFechasCategorias = { ...rangosFechasCategorias, ...docSnap.data() };
-                } else if (docSnap.id === "whatsapp_admin") {
-                    const dat = docSnap.data();
-                    if (dat.numero) numeroWhatsappAdmin = dat.numero;
                 } else if (docSnap.id !== "fechas_sistema") {
                     configEquipos[docSnap.id] = docSnap.data();
                 }
@@ -1649,10 +1648,12 @@
             if (rolActual === "Administrador" && m.destinatario === "Administrador" && !m.leido) esNuevo = true;
             if (rolActual === "Equipo" && m.destinatario === equipoAsignado && !m.leido) esNuevo = true;
 
-            let estiloFila = esNuevo ? "font-weight: bold; color: #ffffff; background: rgba(14, 165, 233, 0.15);" : "color: var(--accent-silver);";
-            let estadoTexto = esNuevo ? "<span style='color:#38bdf8; font-weight:bold;'>🔵 Nuevo</span>" : "<span style='color:#94a3b8;'>⚪ Leído</span>";
+            // ESTILOS Y TEXTO NEGRO VISIBLE PARA MENSAJES NUEVOS
+            let estiloFila = esNuevo ? "font-weight: bold; color: #000000; background: #e0f2fe;" : "color: var(--accent-silver);";
+            
+            let estadoTexto = esNuevo ? "<span style='color:#0284c7; font-weight:bold;'>🔵 Nuevo</span>" : "<span style='color:#16a34a; font-weight:bold;'>🟢 Leído</span>";
             if (rolActual === "Equipo" && m.remitente === equipoAsignado) {
-                estadoTexto = m.leido ? "<span style='color:#16a34a;'>✅ Leído por Admin</span>" : "<span style='color:#94a3b8;'>⏳ Enviado</span>";
+                estadoTexto = m.leido ? "<span style='color:#16a34a; font-weight:bold;'>🟢 Leído por Admin</span>" : "<span style='color:#0284c7; font-weight:bold;'>🔵 Enviado</span>";
             }
 
             let banderitaRespondido = m.respondido ? `<span title="Mensaje respondido" style="margin-left: 5px; font-size: 14px;">⛳</span>` : "";
@@ -1665,11 +1666,26 @@
                     <td>${m.fecha || ''} ${m.hora || ''}</td>
                     <td>${estadoTexto}</td>
                     <td>
-                        <button class="btn btn-sm btn-celeste" onclick="verDetalleMensaje('${m.id}')">👁️ Ver</button>
+                        <button class="btn btn-sm btn-celeste" onclick="verDetalleMensaje('${m.id}')" title="Ver">👁️</button>
+                        <button class="btn btn-sm btn-danger" onclick="eliminarMensajeBuzon('${m.id}')" title="Eliminar mensaje y multimedia">🗑️</button>
                     </td>
                 </tr>
             `;
         });
+    }
+
+    window.eliminarMensajeBuzon = async function(idMsg) {
+        if (!confirm("⚠️ ¿Estás seguro de eliminar este mensaje? Se borrará el texto y los archivos adjuntos o audios multimedia para liberar espacio en la nube.")) return;
+        try {
+            await deleteDoc(doc(db, "mensajes", idMsg));
+            listaMensajes = listaMensajes.filter(m => m.id !== idMsg);
+            actualizarNotificadorBuzon();
+            renderizarTablaBuzon();
+            alert("✅ Mensaje y archivos multimedia eliminados con éxito.");
+        } catch (e) {
+            console.error("Error eliminando mensaje:", e);
+            alert("Error al eliminar el mensaje de la nube.");
+        }
     }
 
     window.abrirModalNuevoMensaje = function(destinatarioForzado = null) {
@@ -1818,10 +1834,6 @@
             const docRef = await addDoc(collection(db, "mensajes"), nuevoMensaje);
             listaMensajes.push({ id: docRef.id, ...nuevoMensaje });
 
-            if (rolActual === "Equipo") {
-                notificarWhatsappAdministrador(remitente, texto);
-            }
-
             cerrarModalNuevoMensaje();
             abrirBuzonMensajes();
             alert("✅ ¡Mensaje enviado con éxito!");
@@ -1829,11 +1841,6 @@
             console.error("Error enviando mensaje:", e);
             alert("Error al enviar el mensaje a la nube.");
         }
-    }
-
-    function notificarWhatsappAdministrador(nombreClub, textoMsg) {
-        const urlWsp = `https://api.whatsapp.com/send?phone=${numeroWhatsappAdmin}&text=${encodeURIComponent(`🔔 NUEVO MENSAJE EN BUZÓN LIFARCC\nDe: Club ${nombreClub}\nMensaje: ${textoMsg || '(Archivo/Audio)'}`)}`;
-        window.open(urlWsp, '_blank');
     }
 
     let idMensajeActivoVisor = null;
@@ -1890,29 +1897,6 @@
         }
         cerrarVisorMensaje();
         abrirModalNuevoMensaje(respuestaDestinatarioActual);
-    }
-
-    window.abrirModalConfigWhatsapp = function() {
-        if (rolActual !== "Administrador") return;
-        document.getElementById("inputNumWhatsapp").value = numeroWhatsappAdmin;
-        document.getElementById("modalConfigWhatsapp").style.display = "flex";
-    }
-
-    window.cerrarModalWhatsapp = function() {
-        document.getElementById("modalConfigWhatsapp").style.display = "none";
-    }
-
-    window.guardarNumeroWhatsappNube = async function() {
-        if (rolActual !== "Administrador") return;
-        const nuevoNum = document.getElementById("inputNumWhatsapp").value.trim();
-        if (!nuevoNum) {
-            alert("⚠️ El número no puede estar vacío.");
-            return;
-        }
-        numeroWhatsappAdmin = nuevoNum;
-        await setDoc(doc(db, "configuracion", "whatsapp_admin"), { numero: nuevoNum });
-        cerrarModalWhatsapp();
-        alert("¡Número de WhatsApp para notificaciones actualizado con éxito!");
     }
 
     window.abrirModalRangosCategorias = function() {
@@ -2184,7 +2168,7 @@
                 <tbody>${filasHtml}</tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.053
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.054
             </div>
         </div>
         </body></html>`;
@@ -2827,7 +2811,7 @@
                 <tbody>${filasHtml}</tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.053
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.054
             </div>
         </div>
         </body></html>`;
@@ -2933,7 +2917,7 @@
                         <tbody>${filasHtml}</tbody>
                     </table>
                     <div class="print-footer">
-                        Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.053
+                        Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.054
                     </div>
                 </div>`;
             }
@@ -3060,7 +3044,7 @@
                     <tbody>${filasHtml}</tbody>
                 </table>
                 <div class="print-footer">
-                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.053
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.054
                 </div>
             </div>`;
         });
