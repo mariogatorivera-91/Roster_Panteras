@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Roster - LIFARCC Monclova</title>
+    <title>Generador de Roster Oficial - LIFARCC Monclova</title>
     <!-- FAVICON OFICIAL: BALÓN DE RUGBY DESDE GITHUB -->
     <link rel="icon" type="image/svg+xml" href="Logos%20Equipos/rugby-ball.svg">
     <!-- SheetJS para importar archivos de Excel -->
@@ -432,7 +432,7 @@
     </div>
     <!-- PIE DE PÁGINA EN PANTALLA DE ACCESO -->
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.052
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.053
     </div>
 </div>
 
@@ -463,7 +463,7 @@
                 </select>
             </div>
             
-            <!-- ZONA DE BOTONES SUPERIOR (INCLUYE EL BOTÓN CELESTE DE BUZÓN DE MENSAJES SOLICITADO) -->
+            <!-- ZONA DE BOTONES SUPERIOR (INCLUYE EL BOTÓN CELESTE DE BUZÓN DE MENSAJES) -->
             <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                 <button class="btn btn-celeste btn-sm" id="btnBuzonSuperior" onclick="abrirBuzonMensajes()" title="Buzón de Mensajes">
                     📨 <span id="txtBtnBuzon">Buzón</span>
@@ -682,7 +682,7 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.052
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.053
     </div>
 </div>
 
@@ -736,7 +736,7 @@
 <div id="modalNuevoMensaje" class="modal" style="z-index: 1030;">
     <div class="modal-content" style="max-width: 520px;">
         <div class="modal-header">
-            <span>✉️️ Enviar Mensaje / Adjuntar Archivo</span>
+            <span>✉ Enviar Mensaje / Adjuntar Archivo</span>
             <span class="close-btn" onclick="cerrarModalNuevoMensaje()">&times;</span>
         </div>
         <div style="display: grid; grid-template-columns: 1fr; gap: 12px;">
@@ -770,7 +770,7 @@
     </div>
 </div>
 
-<!-- MODAL VISOR DE MENSAJE (VENTANA FLOTANTE) -->
+<!-- MODAL VISOR DE MENSAJE -->
 <div id="modalVisorMensaje" class="modal" style="z-index: 1030;">
     <div class="modal-content" style="max-width: 550px;">
         <div class="modal-header">
@@ -1121,7 +1121,7 @@
         clearTimeout(inactivityTimer);
         if (document.getElementById("appContainer").style.display !== "none") {
             inactivityTimer = setTimeout(() => {
-                alert("⚠️ Sesión cerrada automáticamente por 5 minutos de inactividad.");
+                alert("⚠️️ Sesión cerrada automáticamente por 5 minutos de inactividad.");
                 cerrarSesion();
             }, 5 * 60 * 1000);
         }
@@ -1130,6 +1130,186 @@
     window.addEventListener('mousemove', resetInactivityTimer);
     window.addEventListener('keydown', resetInactivityTimer);
     window.addEventListener('click', resetInactivityTimer);
+
+    // --- FUNCIONES AUXILIARES DE FECHAS, FORMATOS Y VALIDACIÓN ---
+    function formatearFechaExcel(fechaStr) {
+        if (!fechaStr) return "";
+        if (typeof fechaStr === 'number') {
+            const d = new Date(Math.round((fechaStr - (25567 + 2)) * 86400 * 1000));
+            return d.toISOString().split('T')[0];
+        }
+        let s = String(fechaStr).trim();
+        if (s.includes('/')) {
+            const partes = s.split('/');
+            if (partes.length === 3) {
+                if (partes[2].length === 4) {
+                    return `${partes[2]}-${partes[1].padStart(2, '0')}-${partes[0].padStart(2, '0')}`;
+                } else if (partes[0].length === 4) {
+                    return `${partes[0]}-${partes[1].padStart(2, '0')}-${partes[2].padStart(2, '0')}`;
+                }
+            }
+        }
+        return s.substring(0, 10);
+    }
+
+    function formatearFechaDDMMYYYY(fechaStr) {
+        if (!fechaStr) return "";
+        const clean = formatearFechaExcel(fechaStr);
+        const partes = clean.split('-');
+        if (partes.length === 3) {
+            return `${partes[2]}-${partes[1]}-${partes[0]}`;
+        }
+        return clean;
+    }
+
+    function calcularCategoriaPorFecha(fechaStr) {
+        const limpia = formatearFechaExcel(fechaStr);
+        if (!limpia) return "";
+        for (const [cat, rango] of Object.entries(rangosFechasCategorias)) {
+            if (limpia >= rango.inicio && limpia <= rango.fin) {
+                return cat;
+            }
+        }
+        return "BOTANA";
+    }
+
+    function comprobarEstadoRegistroActivo() {
+        const ahora = new Date();
+        const diaSemana = ahora.getDay(); // 0: Dom, 1: Lun, 2: Mar, 3: Mié, 4: Jue, 5: Vie, 6: Sáb
+        // Abierto de Lunes (1) a Jueves (4)
+        if (diaSemana >= 1 && diaSemana <= 4) {
+            return true;
+        }
+        return false;
+    }
+
+    function actualizarBannerFechasRegistro() {
+        const activo = comprobarEstadoRegistroActivo();
+        const banner = document.getElementById("bannerPeriodoRegistro");
+        const badgeContainer = document.getElementById("badgeEstadoRegistroContainer");
+        
+        if (banner) {
+            if (activo) {
+                banner.style.background = "rgba(22, 163, 74, 0.2)";
+                banner.style.borderColor = "#16a34a";
+                banner.style.color = "#4ade80";
+                banner.innerHTML = "🟢 Periodo de Registro de Jugadores: ABIERTO (Lunes a Jueves)";
+            } else {
+                banner.style.background = "rgba(220, 38, 38, 0.2)";
+                banner.style.borderColor = "#dc2626";
+                banner.style.color = "#fca5a5";
+                banner.innerHTML = "🔴 Periodo de Registro de Jugadores: CERRADO (Abierto de Lunes a Jueves)";
+            }
+        }
+
+        if (badgeContainer) {
+            if (activo) {
+                badgeContainer.innerHTML = `<span style="background: #16a34a; color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">🟢 Abierto</span>`;
+            } else {
+                badgeContainer.innerHTML = `<span style="background: #dc2626; color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">🔴 Cerrado</span>`;
+            }
+        }
+    }
+
+    function verificarAlertasJugadores2013() {
+        // Función de control preventiva
+    }
+
+    window.validarNombreInput = function() {
+        const val = document.getElementById("altaNombre").value;
+        const check = document.getElementById("checkNombre");
+        if (/[0-9\.]/.test(val)) {
+            check.innerHTML = "❌ (Sin números ni puntos)";
+            check.style.color = "#ef4444";
+        } else if (val.trim().length > 3) {
+            check.innerHTML = "✅";
+            check.style.color = "#16a34a";
+        } else {
+            check.innerHTML = "";
+        }
+    }
+
+    window.validarFechaAltaBlur = function() {
+        const val = document.getElementById("altaNacimiento").value;
+        const check = document.getElementById("checkNacimiento");
+        const catSelect = document.getElementById("altaCategoria");
+        if (val) {
+            const cat = calcularCategoriaPorFecha(val);
+            if (cat) {
+                catSelect.value = cat;
+                check.innerHTML = `✅ (${cat})`;
+                check.style.color = "#16a34a";
+            } else {
+                check.innerHTML = "❌ Fuera de rango";
+                check.style.color = "#ef4444";
+            }
+        }
+    }
+
+    window.validarFechaEditBlur = function() {
+        const val = document.getElementById("editNacimiento").value;
+        const catSelect = document.getElementById("editCategoria");
+        if (val) {
+            const cat = calcularCategoriaPorFecha(val);
+            if (cat) {
+                catSelect.value = cat;
+            }
+        }
+    }
+
+    window.validarCurpInput = function() {
+        const val = document.getElementById("altaCurp").value;
+        const check = document.getElementById("checkCurp");
+        if (val.length === 18) {
+            check.innerHTML = "✅";
+            check.style.color = "#16a34a";
+        } else {
+            check.innerHTML = `(${val.length}/18)`;
+            check.style.color = "#fbbf24";
+        }
+    }
+
+    window.validarDocInput = function() {}
+
+    window.actualizarNombreArchivoAlta = function(event) {
+        const file = event.target.files[0];
+        const btn = document.getElementById("btnTextoAltaFoto");
+        if (file) {
+            btn.innerHTML = `📷 ${file.name}`;
+            btn.style.background = "linear-gradient(135deg, #16a34a, #15803d)";
+        } else {
+            btn.innerHTML = "📷 Seleccionar Foto";
+            btn.style.background = "";
+        }
+    }
+
+    window.mostrarGuiaFoto = function(inputIdTarget) {
+        inputFotoActivoId = inputIdTarget;
+        document.getElementById("modalGuiaFoto").style.display = "flex";
+    }
+
+    window.cerrarModalGuiaFoto = function() {
+        document.getElementById("modalGuiaFoto").style.display = "none";
+    }
+
+    window.procederConSubidaFoto = function() {
+        cerrarModalGuiaFoto();
+        if (inputFotoActivoId === 'altaFoto') {
+            document.getElementById("altaFoto").click();
+        } else if (inputFotoActivoId === 'editFotoFile') {
+            document.getElementById("editFotoFile").click();
+        }
+    }
+
+    window.abrirModalAmpliarFoto = function(fotoSrc, nombreJugador) {
+        document.getElementById("imgAmpliadaModal").src = fotoSrc;
+        document.getElementById("nombreJugadorAmpliado").innerText = nombreJugador;
+        document.getElementById("modalAmpliarFoto").style.display = "flex";
+    }
+
+    window.cerrarModalAmpliarFoto = function() {
+        document.getElementById("modalAmpliarFoto").style.display = "none";
+    }
 
     function actualizarColorGlowClub(nombreEquipo) {
         const overlay = document.querySelector('.moving-light-overlay');
@@ -2004,7 +2184,7 @@
                 <tbody>${filasHtml}</tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.052
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.053
             </div>
         </div>
         </body></html>`;
@@ -2647,7 +2827,7 @@
                 <tbody>${filasHtml}</tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.052
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.053
             </div>
         </div>
         </body></html>`;
@@ -2753,7 +2933,7 @@
                         <tbody>${filasHtml}</tbody>
                     </table>
                     <div class="print-footer">
-                        Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.052
+                        Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.053
                     </div>
                 </div>`;
             }
@@ -2880,7 +3060,7 @@
                     <tbody>${filasHtml}</tbody>
                 </table>
                 <div class="print-footer">
-                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.052
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.053
                 </div>
             </div>`;
         });
