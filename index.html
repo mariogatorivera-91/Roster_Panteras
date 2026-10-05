@@ -89,20 +89,18 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
         }
 
-        /* MENÚ SUPERIOR EN RENGLÓN */
+        /* MENÚ SUPERIOR (CUADRO VERDE) */
         .top-navbar {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
             background: linear-gradient(90deg, #1e293b, #334155);
-            padding: 10px 20px;
+            padding: 12px 20px;
             border-radius: 8px;
             margin-bottom: 20px;
             border: 1px solid #475569;
             gap: 10px;
         }
-        .nav-tabs-group { display: flex; gap: 8px; }
+        .nav-tabs-group { display: flex; gap: 8px; flex-wrap: wrap; }
         .tab-btn {
             background: #0f172a;
             color: var(--accent-silver);
@@ -121,7 +119,7 @@
         }
         .nav-actions-group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 
-        /* HEADER & MINI LOGOS */
+        /* HEADER & MINI LOGOS (CUADRO NARANJA) */
         .header-banner {
             text-align: center;
             margin-bottom: 20px;
@@ -329,8 +327,7 @@
         @media (max-width: 768px) {
             body { padding: 5px; }
             .container { padding: 12px; }
-            .top-navbar { flex-direction: column; align-items: stretch; gap: 10px; padding: 10px; }
-            .nav-tabs-group, .nav-actions-group { justify-content: center; width: 100%; flex-wrap: wrap; }
+            .top-navbar { padding: 10px; }
             .filter-row { flex-direction: column; align-items: stretch; gap: 10px; }
             .filter-group { flex-direction: column; align-items: stretch; width: 100%; }
             .filter-group > div { width: 100%; }
@@ -418,45 +415,12 @@
     </div>
     <!-- PIE DE PÁGINA EN PANTALLA DE ACCESO -->
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.047
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.048
     </div>
 </div>
 
 <div class="container" id="appContainer" style="display: none;">
-    <!-- MENÚ SUPERIOR EN RENGLÓN -->
-    <div class="top-navbar no-print">
-        <div class="nav-tabs-group" id="navTabsContainer">
-            <button class="tab-btn active" onclick="cambiarPestaña('rosterTab', this)">📋 Generador de Roster</button>
-            <button class="tab-btn" id="btnTabDirectorio" onclick="cambiarPestaña('todosTab', this)">📚 Directorio General</button>
-        </div>
-        <div class="nav-actions-group" id="navActionsContainer">
-            <div style="display: flex; align-items: center; gap: 5px; background: #0f172a; padding: 4px 10px; border-radius: 6px; border: 1px solid #475569;">
-                <span style="font-size: 11px; color: #94a3b8;">📥 Importar Excel:</span>
-                <input type="file" id="inputExcel" accept=".xlsx, .xls, .csv" onchange="importarExcel(event)" style="font-size: 11px; width: 150px; padding: 3px;">
-            </div>
-            <div style="display: flex; align-items: center; gap: 5px; background: #0f172a; padding: 4px 10px; border-radius: 6px; border: 1px solid #475569;">
-                <span style="font-size: 11px; color: #94a3b8;">📂 Fotos Masivas:</span>
-                <input type="file" id="inputFotos" multiple accept="image/*" onchange="cargarFotosLocales(event)" style="font-size: 11px; width: 140px; padding: 3px;">
-            </div>
-        </div>
-        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-            <span id="lblRolActual" style="font-size: 11px; color: #fbbf24; font-weight: bold;"></span>
-            <button class="btn btn-warning btn-sm" onclick="abrirModalCambiarPass()">🔑 Contraseña</button>
-            
-            <!-- MENÚ DESPLEGABLE DE ADMINISTRADOR PARA OPTIMIZACIÓN EN CELULARES -->
-            <select id="adminDropdown" class="col-admin" onchange="manejarAccionAdmin(this)" style="display:none; background:#1e293b; color:#fbbf24; border:1px solid #d97706; padding:5px 8px; border-radius:6px; font-size:11px; font-weight:bold; cursor:pointer;">
-                <option value="">⚙️ Menú Admin...</option>
-                <option value="reporte">📊 Reporte Semanal</option>
-                <option value="fechas">📅 Fechas Categorías</option>
-                <option value="usuarios">⚙️ Gestionar Usuarios</option>
-                <option value="logs">🕒 Log de Accesos</option>
-            </select>
-
-            <button class="btn btn-danger btn-sm" onclick="cerrarSesion()">🔒 Salir</button>
-        </div>
-    </div>
-
-    <!-- HEADER & MINI LOGOS -->
+    <!-- HEADER & MINI LOGOS (CUADRO NARANJA - AHORA ARRIBA) -->
     <div class="header-banner">
         <div class="main-title-row">
             <img src="" id="imgEscudoLiga" class="league-logo-badge" alt="LIFARCC" onerror="this.src='https://via.placeholder.com/70?text=LIFARCC'">
@@ -466,11 +430,50 @@
         <div class="mini-teams-header" id="miniTeamsHeaderContainer"></div>
     </div>
 
+    <!-- MENÚ SUPERIOR Y CONTROLES (CUADRO VERDE Y ROJO REORGANIZADOS) -->
+    <div class="top-navbar no-print">
+        <!-- Renglón Superior: Rol, Admin, Contraseña y Salir alineados -->
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 10px; border-bottom: 1px solid #475569; padding-bottom: 8px;">
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <span id="lblRolActual" style="font-size: 11px; color: #fbbf24; font-weight: bold;"></span>
+                <select id="adminDropdown" class="col-admin" onchange="manejarAccionAdmin(this)" style="display:none; background:#1e293b; color:#fbbf24; border:1px solid #d97706; padding:5px 8px; border-radius:6px; font-size:11px; font-weight:bold; cursor:pointer;">
+                    <option value="">⚙️ Menú Admin...</option>
+                    <option value="reporte">📊 Reporte Semanal</option>
+                    <option value="fechas">📅 Fechas Categorías</option>
+                    <option value="usuarios">⚙️ Gestionar Usuarios</option>
+                    <option value="logs">🕒 Log de Accesos</option>
+                </select>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <button class="btn btn-warning btn-sm" onclick="abrirModalCambiarPass()">🔑 Contraseña</button>
+                <button class="btn btn-danger btn-sm" onclick="cerrarSesion()">🔒 Salir</button>
+            </div>
+        </div>
+
+        <!-- Renglón Inferior (Elementos del Cuadro Rojo): Pestañas e Importación -->
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 10px; padding-top: 4px;">
+            <div class="nav-tabs-group" id="navTabsContainer">
+                <button class="tab-btn active" onclick="cambiarPestaña('rosterTab', this)">📋 Generador de Roster</button>
+                <button class="tab-btn" id="btnTabDirectorio" onclick="cambiarPestaña('todosTab', this)">📚 Directorio General</button>
+            </div>
+            <div class="nav-actions-group" id="navActionsContainer" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 5px; background: #0f172a; padding: 4px 10px; border-radius: 6px; border: 1px solid #475569;">
+                    <span style="font-size: 11px; color: #94a3b8;">📥 Importar Excel:</span>
+                    <input type="file" id="inputExcel" accept=".xlsx, .xls, .csv" onchange="importarExcel(event)" style="font-size: 11px; width: 150px; padding: 3px;">
+                </div>
+                <div style="display: flex; align-items: center; gap: 5px; background: #0f172a; padding: 4px 10px; border-radius: 6px; border: 1px solid #475569;">
+                    <span style="font-size: 11px; color: #94a3b8;">📂 Fotos Masivas:</span>
+                    <input type="file" id="inputFotos" multiple accept="image/*" onchange="cargarFotosLocales(event)" style="font-size: 11px; width: 140px; padding: 3px;">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- PESTAÑA 1: GENERADOR DE ROSTERS -->
     <div id="rosterTab" class="tab-content active">
         <!-- 1. INFORMACIÓN DE PERIODO AUTOMÁTICO -->
         <div class="section-box no-print col-admin" style="background: #1e293b; border: 1px solid var(--bronze-gold);">
-            <h4>📅 Configuración Automática de Periodo de Registro</h4>
+            <h4>📅 Periodo de Registro de Jugadores</h4>
             <p style="font-size: 12px; color: #cbd5e1; margin: 0;">El sistema opera de forma <b>automática</b> semanalmente: Los registros para los equipos están abiertos de <b>Lunes a Jueves</b>, cerrándose automáticamente todos los <b>jueves a las 11:59 PM</b> (Viernes, Sábado y Domingo permanece cerrado).</p>
         </div>
 
@@ -490,7 +493,7 @@
                 </div>
             </div>
             <div id="bannerPeriodoRegistro" style="background: rgba(217, 119, 6, 0.2); border: 1px dashed var(--bronze-gold); padding: 8px 12px; border-radius: 6px; margin-bottom: 15px; font-size: 12px; font-weight: bold; color: #fbbf24; text-align: center;">
-                📅 PERIODO AUTOMÁTICO: Abierto de Lunes a Jueves (Cierre Jueves a las 11:59 PM)
+                📅 Periodo de Registro de Jugadores: Abierto de Lunes a Jueves (Cierre Jueves a las 11:59 PM)
             </div>
             
             <!-- Renglón 1 de Registro -->
@@ -615,7 +618,7 @@
                 <span style="font-size: 11px; color: #fca5a5;">Vaciar base de datos en la nube.</span>
             </div>
             <div style="display: flex; gap: 8px;">
-                <button class="btn btn-danger btn-sm" onclick="borrarTodosRegistros()">🗑️️ Borrar Todos</button>
+                <button class="btn btn-danger btn-sm" onclick="borrarTodosRegistros()">🗑️ Borrar Todos</button>
             </div>
         </div>
     </div>
@@ -655,11 +658,11 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.047
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.048
     </div>
 </div>
 
-<!-- MODAL VISTA AMPLIADA DE FOTOGRAFÍA -->
+<!-- MODALES -->
 <div id="modalAmpliarFoto" class="modal" style="z-index: 1010;">
     <div class="modal-content" style="max-width: 400px; text-align: center;">
         <div class="modal-header">
@@ -673,7 +676,6 @@
     </div>
 </div>
 
-<!-- MODAL GESTIÓN Y MANIPULACIÓN DE FECHAS -->
 <div id="modalGestionFechas" class="modal" style="z-index: 1010;">
     <div class="modal-content" style="max-width: 750px; background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--bronze-gold);">
         <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--bronze-gold); padding-bottom: 12px; margin-bottom: 15px;">
@@ -686,9 +688,7 @@
             </div>
             <span class="close-btn" onclick="cerrarModalGestionFechas()" style="font-size: 22px;">&times;</span>
         </div>
-
-        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 12px;">Modifique los rangos de fechas oficiales en el orden reglamentario (Ardillas, Hormigas, Hormiguitas, Moscos, Botanas):</p>
-
+        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 12px;">Modifique los rangos de fechas oficiales en el orden reglamentario:</p>
         <div class="table-responsive">
             <table>
                 <thead>
@@ -701,9 +701,8 @@
                 <tbody id="tablaGestionFechasCuerpo"></tbody>
             </table>
         </div>
-
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
-            <span style="font-size: 10px; color: #fbbf24; font-weight: bold;">🔒 Exclusivo Administrador (Requiere Confirmación)</span>
+            <span style="font-size: 10px; color: #fbbf24; font-weight: bold;">🔒 Exclusivo Administrador</span>
             <div style="display: flex; gap: 8px;">
                 <button class="btn btn-danger btn-sm" onclick="cerrarModalGestionFechas()">Cancelar</button>
                 <button class="btn btn-success" onclick="guardarRangosFechasNube()">💾 Guardar Cambios en la Nube</button>
@@ -712,7 +711,6 @@
     </div>
 </div>
 
-<!-- MODAL RANGOS DE FECHAS POR CATEGORÍA -->
 <div id="modalRangosCategorias" class="modal" style="z-index: 1010;">
     <div class="modal-content" style="max-width: 520px;">
         <div class="modal-header">
@@ -738,18 +736,15 @@
     </div>
 </div>
 
-<!-- MODAL GUÍA DE FOTOGRAFÍA CORRECTA -->
 <div id="modalGuiaFoto" class="modal" style="z-index: 1005;">
     <div class="modal-content" style="max-width: 520px; text-align: center;">
         <div class="modal-header">
             <span>📸 Guía de Fotografía Correcta</span>
             <span class="close-btn" onclick="cerrarModalGuiaFoto()">&times;</span>
         </div>
-        <p style="font-size: 12px; color: var(--accent-silver); margin-bottom: 12px;">
-            Asegúrate de que la fotografía del jugador cumpla con los estándares oficiales antes de cargarla:
-        </p>
+        <p style="font-size: 12px; color: var(--accent-silver); margin-bottom: 12px;">Asegúrate de que la fotografía del jugador cumpla con los estándares oficiales:</p>
         <div style="background: #ffffff; padding: 8px; border-radius: 8px; margin-bottom: 15px; border: 2px solid var(--bronze-gold);">
-            <img src="Logos Equipos/foto correcta.jpg" alt="Guía de Fotografía Correcta" style="max-width: 100%; height: auto; border-radius: 6px; display: block; margin: auto;" onerror="this.src='https://via.placeholder.com/450x550?text=Guia+Fotografia+Correcta+-+Verificar+Imagen'">
+            <img src="Logos Equipos/foto correcta.jpg" alt="Guía de Fotografía Correcta" style="max-width: 100%; height: auto; border-radius: 6px; display: block; margin: auto;" onerror="this.src='https://via.placeholder.com/450x550?text=Guia+Fotografia+Correcta'">
         </div>
         <div style="display: flex; gap: 10px; justify-content: flex-end;">
             <button class="btn btn-danger btn-sm" onclick="cerrarModalGuiaFoto()">Cancelar</button>
@@ -758,7 +753,6 @@
     </div>
 </div>
 
-<!-- MODAL REPORTE SEMANAL -->
 <div id="modalReporteSemanal" class="modal">
     <div class="modal-content" style="max-width: 800px;">
         <div class="modal-header">
@@ -794,14 +788,13 @@
     </div>
 </div>
 
-<!-- MODAL LOG DE ACCESOS -->
 <div id="modalLogAccesos" class="modal">
     <div class="modal-content" style="max-width: 650px;">
         <div class="modal-header">
             <span>🕒 Registro de Accesos al Sistema (Por Día)</span>
             <span class="close-btn" onclick="cerrarModalLogAccesos()">&times;</span>
         </div>
-        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 15px;">Historial de entradas de usuarios y administradores (Excluye acceso con contraseña 'charro').</p>
+        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 15px;">Historial de entradas de usuarios y administradores.</p>
         <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
             <table>
                 <thead>
@@ -822,7 +815,6 @@
     </div>
 </div>
 
-<!-- MODAL EDITAR JUGADOR -->
 <div id="modalEditar" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -861,7 +853,6 @@
     </div>
 </div>
 
-<!-- MODAL CAMBIAR CONTRASEÑA -->
 <div id="modalCambiarPass" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -869,18 +860,9 @@
             <span class="close-btn" onclick="cerrarModalCambiarPass()">&times;</span>
         </div>
         <div style="display: grid; grid-template-columns: 1fr; gap: 10px;">
-            <div>
-                <label style="font-size: 11px; font-weight: bold;">Contraseña Actual:</label>
-                <input type="password" id="passActual" placeholder="Actual..." style="width:100%;">
-            </div>
-            <div>
-                <label style="font-size: 11px; font-weight: bold;">Nueva Contraseña:</label>
-                <input type="password" id="passNueva1" placeholder="Nueva..." style="width:100%;">
-            </div>
-            <div>
-                <label style="font-size: 11px; font-weight: bold;">Confirmar Nueva Contraseña:</label>
-                <input type="password" id="passNueva2" placeholder="Repetir nueva..." style="width:100%;">
-            </div>
+            <div><label style="font-size: 11px; font-weight: bold;">Contraseña Actual:</label><input type="password" id="passActual" style="width:100%;"></div>
+            <div><label style="font-size: 11px; font-weight: bold;">Nueva Contraseña:</label><input type="password" id="passNueva1" style="width:100%;"></div>
+            <div><label style="font-size: 11px; font-weight: bold;">Confirmar Nueva Contraseña:</label><input type="password" id="passNueva2" style="width:100%;"></div>
         </div>
         <div style="text-align: right; margin-top: 20px;">
             <button class="btn btn-success" onclick="ejecutarCambioPassword()">Actualizar Contraseña</button>
@@ -888,14 +870,12 @@
     </div>
 </div>
 
-<!-- MODAL ADMIN DE USUARIOS -->
 <div id="modalAdminUsers" class="modal">
     <div class="modal-content" style="max-width: 600px;">
         <div class="modal-header">
             <span>⚙️ Panel de Control de Usuarios y Contraseñas</span>
             <span class="close-btn" onclick="cerrarModalAdminUsuarios()">&times;</span>
         </div>
-        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 15px;">Visualiza y gestiona las credenciales de acceso de todos los clubes y el administrador.</p>
         <div class="table-responsive">
             <table>
                 <thead>
@@ -912,14 +892,12 @@
     </div>
 </div>
 
-<!-- MODAL VER PLANTILLA COMPLETA -->
 <div id="modalPlantillaEquipo" class="modal">
     <div class="modal-content" style="max-width: 750px;">
         <div class="modal-header">
             <span id="tituloModalPlantilla">📋 Plantilla Completa del Equipo</span>
             <span class="close-btn" onclick="cerrarModalPlantillaEquipo()">&times;</span>
         </div>
-        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 10px;">Vista general de los jugadores registrados (Modo lectura).</p>
         <div class="table-responsive" style="max-height: 420px; overflow-y: auto;">
             <table>
                 <thead>
@@ -946,9 +924,6 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, getDocs, getDoc, addDoc, updateDoc, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // ==========================================
-    // ⚙️ CREDENCIALES DE FIREBASE
-    // ==========================================
     const firebaseConfig = {
         apiKey: "AIzaSyAdiDCvlHGRGppPWAVkq6CE2E-7gKZcLd4",
         authDomain: "lifarcc-monclova.firebaseapp.com",
@@ -1132,7 +1107,6 @@
 
         if (pass !== "charro") {
             try {
-                // CORRECCIÓN DE FECHA LOCAL PARA EVITAR DESFASE UTC CON EL DÍA SIGUIENTE
                 const fechaLocalStr = (() => {
                     const d = new Date();
                     const year = d.getFullYear();
@@ -1178,7 +1152,6 @@
         await cargarDatosDesdeNube();
     }
 
-    // MANEJADOR DEL MENÚ DESPLEGABLE DE ADMINISTRADOR
     window.manejarAccionAdmin = function(select) {
         const accion = select.value;
         if (!accion) return;
@@ -1188,7 +1161,7 @@
         else if (accion === "usuarios") abrirModalAdminUsuarios();
         else if (accion === "logs") abrirModalLogAccesos();
 
-        select.value = ""; // Reiniciar selección
+        select.value = "";
     }
 
     async function cargarCredencialesNube() {
@@ -1278,7 +1251,7 @@
             const j2013 = baseDatos.filter(j => j.equipo === eq && formatearFechaExcel(j.nacimiento).startsWith('2013'));
             if (j2013.length > 1) {
                 const nombres = j2013.map(p => p.nombre).join(', ');
-                alert(`⚠️ ALERTA DE REGISTROS 2013 (CLUB ${eq})\n\nEl equipo tiene ${j2013.length} jugadores registrados del año 2013 (${nombres}).\n\nSolo se permite 1 registro activo del 2013 por equipo. Por favor, envíe mensaje al administrador para la baja de los jugadores extras del 2013.`);
+                alert(`⚠️ ALERTA DE REGISTROS 2013 (CLUB ${eq})\n\nEl equipo tiene ${j2013.length} jugadores registrados del año 2013 (${nombres}).\n\nSolo se permite 1 registro activo del 2013 por equipo.`);
             }
         });
     }
@@ -1293,7 +1266,7 @@
         const banner = document.getElementById("bannerPeriodoRegistro");
         const badgeContainer = document.getElementById("badgeEstadoRegistroContainer");
         if (banner) {
-            banner.innerText = `📅 PERIODO AUTOMÁTICO: Abierto de Lunes a Jueves (Cierre Jueves a las 11:59 PM)`;
+            banner.innerText = `📅 Periodo de Registro de Jugadores: Abierto de Lunes a Jueves (Cierre Jueves a las 11:59 PM)`;
         }
 
         if (badgeContainer) {
@@ -1404,7 +1377,7 @@
             if (check) check.innerHTML = "✅";
         } else {
             if (check) check.innerHTML = "❌";
-            alert("⚠️ La fecha de nacimiento ingresada no está completa, tiene un año inválido o está fuera de los rangos oficiales de LIFARCC.");
+            alert("⚠️ La fecha de nacimiento ingresada no está completa, tiene un año inválido o está fuera de los rangos oficiales.");
             selectCat.value = "ARDILLA";
         }
     }
@@ -1464,10 +1437,7 @@
     }
 
     window.abrirModalGestionFechas = function() {
-        if (rolActual !== "Administrador") {
-            alert("⚠️ Solo el Administrador puede manipular los rangos de fechas.");
-            return;
-        }
+        if (rolActual !== "Administrador") return;
         const tbody = document.getElementById("tablaGestionFechasCuerpo");
         tbody.innerHTML = "";
 
@@ -1501,7 +1471,7 @@
 
     window.guardarRangosFechasNube = async function() {
         if (rolActual !== "Administrador") return;
-        if (!confirm("⚠️️ ¿Estás seguro de guardar y actualizar los rangos de fechas oficiales para las categorías?")) return;
+        if (!confirm("⚠️ ¿Estás seguro de guardar y actualizar los rangos de fechas oficiales?")) return;
 
         let nuevosRangos = {};
         for (const cat of ordenCategoriasOficial) {
@@ -1512,7 +1482,7 @@
                 return;
             }
             if (ini > fin) {
-                alert(`⚠️ La fecha inicial de ${cat} no puede ser posterior a la fecha final.`);
+                alert(`⚠️ La fecha inicial de ${cat} no puede ser posterior a la final.`);
                 return;
             }
             nuevosRangos[cat] = { inicio: ini, fin: fin };
@@ -1576,7 +1546,7 @@
         const passActualReal = credencialesPasswords[usuarioTarget] || usuarioTarget;
 
         if (actual !== passActualReal) {
-            alert("⚠ La contraseña actual es incorrecta.");
+            alert("⚠️ La contraseña actual es incorrecta.");
             return;
         }
         if (!nueva1) {
@@ -1797,7 +1767,7 @@
                 <tbody>${filasHtml}</tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.047
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.048
             </div>
         </div>
         </body></html>`;
@@ -1895,7 +1865,10 @@
                 badgeHtml = `<span style="background: #f97316; color: white; border-radius: 50%; padding: 1px 6px; font-size: 10px; font-weight: bold; margin-left: 4px;" title="Total de jugadores registrados">${totalJugadoresEquipo}</span>`;
             }
 
-            container.innerHTML += `<div class="mini-team-badge"><img src="${logo}" alt="${eq}"> <span>${eq}</span> ${badgeHtml}</div>`;
+            // CHEYENNES EN ROJO
+            const colorTextoEq = (eq === "CHEYENNES") ? "color: #ef4444;" : "color: inherit;";
+
+            container.innerHTML += `<div class="mini-team-badge"><img src="${logo}" alt="${eq}"> <span style="${colorTextoEq}">${eq}</span> ${badgeHtml}</div>`;
         });
     }
 
@@ -1919,10 +1892,12 @@
                 imgAttrs = `alt="${eq}" title="Logotipo del equipo" style="cursor: default;"`;
             }
 
+            const colorTextoEq = (eq === "CHEYENNES") ? "color: #ef4444;" : "color: white;";
+
             grid.innerHTML += `<div class="team-card">
                 <img src="${logo}" ${imgAttrs}>
                 <div class="team-card-info">
-                    <h5>${eq}</h5>
+                    <h5 style="${colorTextoEq}">${eq}</h5>
                     ${btnHtml}
                 </div>
             </div>`;
@@ -1941,9 +1916,7 @@
             comprimirYConvertirImagen(archivo, async function(base64) {
                 if (!configEquipos[equipoSeleccionadoDirecto]) configEquipos[equipoSeleccionadoDirecto] = {};
                 configEquipos[equipoSeleccionadoDirecto].logo = base64;
-
                 await setDoc(doc(db, "configuracion", equipoSeleccionadoDirecto), configEquipos[equipoSeleccionadoDirecto]);
-
                 renderizarMiniLogosHeader();
                 renderizarVistaPreviaEquipos();
                 renderizarRoster();
@@ -1958,14 +1931,13 @@
         const campo = document.getElementById("inputCampo").value;
         if (!configEquipos[eq]) configEquipos[eq] = {};
         configEquipos[eq].campo = campo;
-
         await setDoc(doc(db, "configuracion", eq), configEquipos[eq]);
     }
 
     window.abrirGoogleMapsCampo = function() {
         const campoInput = document.getElementById("inputCampo").value.trim();
         if (!campoInput) {
-            alert("⚠️ No hay ninguna dirección de campo especificada para buscar en Google Maps.");
+            alert("⚠️ No hay ninguna dirección de campo especificada.");
             return;
         }
         const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(campoInput)}`;
@@ -2013,7 +1985,7 @@
             const existentes2013 = baseDatos.filter(j => j.equipo === equipo && formatearFechaExcel(j.nacimiento).startsWith('2013'));
             if (existentes2013.length >= 1) {
                 const nombres = existentes2013.map(p => p.nombre).join(', ');
-                alert(`⚠️ LÍMITE DE JUGADORES 2013 EXCEDIDO\n\nEl club ${equipo} ya cuenta con un jugador registrado del año 2013 (${nombres}).\n\nSolo se permite 1 registro activo del año 2013 por equipo. Por favor, envíe mensaje al administrador para la baja del jugador extra.`);
+                alert(`⚠️ LÍMITE DE JUGADORES 2013 EXCEDIDO\n\nEl club ${equipo} ya cuenta con un jugador registrado del año 2013 (${nombres}).`);
                 return false;
             }
         }
@@ -2023,7 +1995,7 @@
     window.registrarJugadorIndividual = async function() {
         if (rolActual === "Equipo") {
             if (!comprobarEstadoRegistroActivo()) {
-                alert("⚠️ El periodo de registro se encuentra cerrado. Los registros sólo están abiertos de Lunes a Jueves (hasta las 11:59 PM).");
+                alert("⚠️ El periodo de registro se encuentra cerrado. Los registros sólo están abiertos de Lunes a Jueves.");
                 return;
             }
         }
@@ -2040,12 +2012,7 @@
         const fileInput = document.getElementById("altaFoto");
 
         if (!equipo || !nacimiento || !categoria || !nombre || !curp || !fileInput.files || !fileInput.files[0]) {
-            alert("⚠️ Todos los campos son obligatorios: Equipo, Fecha de nacimiento válida, Nombre completo, CURP (18 dígitos) y Fotografía.");
-            return;
-        }
-
-        if (!categoria) {
-            alert("⚠️ La fecha de nacimiento no corresponde a ninguna categoría oficial de LIFARCC.");
+            alert("⚠️ Todos los campos son obligatorios.");
             return;
         }
 
@@ -2055,7 +2022,7 @@
         }
 
         if (!/^[A-Z0-9]{18}$/.test(curp)) {
-            alert("⚠ El CURP debe tener exactamente 18 caracteres alfanuméricos.");
+            alert("⚠️ El CURP debe tener exactamente 18 caracteres alfanuméricos.");
             return;
         }
 
@@ -2113,7 +2080,7 @@
             });
         }
         renderizarRoster();
-        alert(`¡${count} fotografía(s) guardadas en la nube correctamente asociadas al nombre del jugador!`);
+        alert(`¡${count} fotografía(s) guardadas en la nube correctamente asociadas!`);
         event.target.value = "";
     }
 
@@ -2200,7 +2167,7 @@
             }
             actualizarSelectsEquipos();
             renderizarRoster();
-            alert(`¡Importación masiva completada! Se guardaron ${importados} registros en la nube (respetando restricciones del 2013).`);
+            alert(`¡Importación masiva completada! Se guardaron ${importados} registros.`);
             event.target.value = "";
         };
         reader.readAsArrayBuffer(file);
@@ -2246,7 +2213,7 @@
             if (rolActual === "Administrador") {
                 accionesHtml = `
                     <button class="btn btn-sm" onclick="abrirModal('${jugador.id}')" title="Editar">✏️</button>
-                    <button class="btn btn-danger btn-sm" onclick="eliminarJugador('${jugador.id}')" title="Eliminar">🗑️️</button>
+                    <button class="btn btn-danger btn-sm" onclick="eliminarJugador('${jugador.id}')" title="Eliminar">🗑️</button>
                 `;
             } else {
                 accionesHtml = `<span style="font-size: 10px; color: #94a3b8; font-weight: bold;">Registrado (Bloqueado)</span>`;
@@ -2305,7 +2272,7 @@
                 <td><code style="font-size: 11px;">${jugador.curp || ''}</code></td>
                 <td>${jugador.doc || ''}</td>
                 <td>
-                    <button class="btn btn-sm" onclick="abrirModal('${jugador.id}')" title="Editar">✏</button>
+                    <button class="btn btn-sm" onclick="abrirModal('${jugador.id}')" title="Editar">✏️</button>
                     <button class="btn btn-danger btn-sm" onclick="eliminarJugador('${jugador.id}')" title="Eliminar">🗑️</button>
                 </td>
             </tr>`;
@@ -2325,7 +2292,7 @@
         tbody.innerHTML = "";
 
         if (filtrados.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="6" style="padding: 20px; color: #64748b;">No hay jugadores registrados para el club ${eqTarget}.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="6" style="padding: 20px; color: #64748b;">No hay jugadores registrados.</td></tr>`;
         } else {
             filtrados.forEach((j, i) => {
                 let fotoTd = j.foto ? `<img src="${j.foto}" onclick="abrirModalAmpliarFoto('${j.foto}', '${j.nombre}')" style="width:35px; height:45px; object-fit:cover; border-radius:3px; cursor:pointer;" title="Ver fotografía ampliada">` : `<span style="font-size:7px; color:#64748b;">Sin foto</span>`;
@@ -2435,7 +2402,7 @@
                 <tbody>${filasHtml}</tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.047
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.048
             </div>
         </div>
         </body></html>`;
@@ -2541,7 +2508,7 @@
                         <tbody>${filasHtml}</tbody>
                     </table>
                     <div class="print-footer">
-                        Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.047
+                        Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.048
                     </div>
                 </div>`;
             }
@@ -2668,7 +2635,7 @@
                     <tbody>${filasHtml}</tbody>
                 </table>
                 <div class="print-footer">
-                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.047
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.048
                 </div>
             </div>`;
         });
@@ -2684,7 +2651,7 @@
 
     window.abrirModal = function(idJugador) {
         if (rolActual !== "Administrador") {
-            alert("Solo el Administrador puede editar registros una vez guardados.");
+            alert("Solo el Administrador puede editar registros.");
             return;
         }
         const j = baseDatos.find(item => item.id === idJugador);
@@ -2732,10 +2699,6 @@
             fotoUrl = previewImg.src;
         }
 
-        await ejecutarGuardadoEdicion(idJugador, jugador, fotoUrl, categoriaCalculada);
-    }
-
-    async function ejecutarGuardadoEdicion(idJugador, jugador, fotoUrl, categoriaCalculada) {
         const datosActualizados = {
             nombre: document.getElementById("editNombre").value.trim().toUpperCase(),
             equipo: document.getElementById("editEquipoSelect").value,
@@ -2751,15 +2714,12 @@
 
         cerrarModal();
         renderizarRoster();
-        alert("¡Jugador actualizado y reasignado a su categoría oficial en la nube!");
+        alert("¡Jugador actualizado en la nube!");
     }
 
     window.eliminarJugador = async function(idJugador) {
-        if (rolActual !== "Administrador") {
-            alert("Solo el Administrador puede eliminar registros una vez guardados.");
-            return;
-        }
-        if (confirm("¿Estás seguro de eliminar este jugador de la base de datos en la nube?")) {
+        if (rolActual !== "Administrador") return;
+        if (confirm("¿Estás seguro de eliminar este jugador?")) {
             await deleteDoc(doc(db, "jugadores", idJugador));
             baseDatos = baseDatos.filter(j => j.id !== idJugador);
             renderizarRoster();
@@ -2768,13 +2728,13 @@
 
     window.borrarTodosRegistros = async function() {
         if (rolActual !== "Administrador") return;
-        if (confirm("⚠️ ¿Estás seguro de borrar TODOS los jugadores de la base de datos en la nube?")) {
+        if (confirm("⚠️ ¿Estás seguro de borrar TODOS los jugadores?")) {
             for (const j of baseDatos) {
                 await deleteDoc(doc(db, "jugadores", j.id));
             }
             baseDatos = [];
             renderizarRoster();
-            alert("Se han borrado todos los registros de la nube.");
+            alert("Se han borrado todos los registros.");
         }
     }
 
