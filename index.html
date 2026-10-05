@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de Roster Oficial - LIFARCC Monclova</title>
+    <title>Roster - LIFARCC Monclova</title>
     <!-- FAVICON OFICIAL: BALÓN DE FÚTBOL AMERICANO -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><ellipse cx='32' cy='32' rx='22' ry='30' fill='%233b82f6' stroke='%231d4ed8' stroke-width='3'/><path d='M16 32h32M32 16v32' stroke='%23ffffff' stroke-width='3' stroke-linecap='round'/></svg>">
     <!-- SheetJS para importar archivos de Excel -->
@@ -89,7 +89,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
         }
 
-        /* MENÚ SUPERIOR (CUADRO VERDE) */
+        /* MENÚ SUPERIOR */
         .top-navbar {
             display: flex;
             flex-direction: column;
@@ -119,7 +119,7 @@
         }
         .nav-actions-group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 
-        /* HEADER & MINI LOGOS (CUADRO NARANJA) */
+        /* HEADER & MINI LOGOS */
         .header-banner {
             text-align: center;
             margin-bottom: 20px;
@@ -267,9 +267,10 @@
         }
         tr:nth-child(even) { background-color: #f8fafc; }
         
+        /* FOTOGRAFÍA AMPLIADA UN 15% */
         .player-photo-container {
-            width: 35px;
-            height: 45px;
+            width: 40px;
+            height: 52px;
             margin: auto;
             border: 1px solid #cbd5e1;
             border-radius: 4px;
@@ -415,12 +416,12 @@
     </div>
     <!-- PIE DE PÁGINA EN PANTALLA DE ACCESO -->
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.048
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.049
     </div>
 </div>
 
 <div class="container" id="appContainer" style="display: none;">
-    <!-- HEADER & MINI LOGOS (CUADRO NARANJA - AHORA ARRIBA) -->
+    <!-- HEADER & MINI LOGOS -->
     <div class="header-banner">
         <div class="main-title-row">
             <img src="" id="imgEscudoLiga" class="league-logo-badge" alt="LIFARCC" onerror="this.src='https://via.placeholder.com/70?text=LIFARCC'">
@@ -430,7 +431,7 @@
         <div class="mini-teams-header" id="miniTeamsHeaderContainer"></div>
     </div>
 
-    <!-- MENÚ SUPERIOR Y CONTROLES (CUADRO VERDE Y ROJO REORGANIZADOS) -->
+    <!-- MENÚ SUPERIOR Y CONTROLES -->
     <div class="top-navbar no-print">
         <!-- Renglón Superior: Rol, Admin, Contraseña y Salir alineados -->
         <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 10px; border-bottom: 1px solid #475569; padding-bottom: 8px;">
@@ -450,7 +451,7 @@
             </div>
         </div>
 
-        <!-- Renglón Inferior (Elementos del Cuadro Rojo): Pestañas e Importación -->
+        <!-- Renglón Inferior: Pestañas e Importación -->
         <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 10px; padding-top: 4px;">
             <div class="nav-tabs-group" id="navTabsContainer">
                 <button class="tab-btn active" onclick="cambiarPestaña('rosterTab', this)">📋 Generador de Roster</button>
@@ -471,7 +472,7 @@
 
     <!-- PESTAÑA 1: GENERADOR DE ROSTERS -->
     <div id="rosterTab" class="tab-content active">
-        <!-- 1. INFORMACIÓN DE PERIODO AUTOMÁTICO -->
+        <!-- 1. INFORMACIÓN DE PERIODO DE REGISTRO -->
         <div class="section-box no-print col-admin" style="background: #1e293b; border: 1px solid var(--bronze-gold);">
             <h4>📅 Periodo de Registro de Jugadores</h4>
             <p style="font-size: 12px; color: #cbd5e1; margin: 0;">El sistema opera de forma <b>automática</b> semanalmente: Los registros para los equipos están abiertos de <b>Lunes a Jueves</b>, cerrándose automáticamente todos los <b>jueves a las 11:59 PM</b> (Viernes, Sábado y Domingo permanece cerrado).</p>
@@ -586,7 +587,7 @@
                 <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                     <button class="btn btn-warning" onclick="mostrarPlantillaEquipo()">📋 Ver Plantilla</button>
                     <button class="btn btn-success" onclick="imprimirRosterActual()">🖨️ Imprimir Roster Seleccionado</button>
-                    <button class="btn btn-info" onclick="imprimirRosterCompletoEquipoSeleccionado()" title="Imprimir rosters de todas las categorías del equipo seleccionado">🖨️ Imprimir Equipo Completo</button>
+                    <button class="btn btn-info" onclick="imprimirRosterCompletoEquipoSeleccionado()" title="Imprimir rosters de todas las categorías del equipo seleccionado">🖨️️ Imprimir Equipo Completo</button>
                 </div>
             </div>
         </div>
@@ -597,7 +598,7 @@
                 <thead>
                     <tr>
                         <th style="width: 40px;">N°</th>
-                        <th style="width: 75px;">Foto</th>
+                        <th style="width: 85px;">Foto</th>
                         <th>Nombre del Jugador</th>
                         <th style="width: 90px;">Categoría</th>
                         <th style="width: 110px;">Fecha Nac.</th>
@@ -628,7 +629,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
             <div>
                 <h3 style="margin: 0; color: #f8fafc;">📚 Directorio General</h3>
-                <p style="font-size: 12px; color: var(--accent-silver); margin: 2px 0 0 0;">Ordenado estrictamente por Equipo, Categoría y Alfabéticamente.</p>
+                <p style="font-size: 12px; color: var(--accent-silver); margin: 2px 0 0 0;">Ordenado por Equipo, Categoría y por Fecha de Nacimiento.</p>
             </div>
             <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                 <input type="text" id="buscadorDirectorioGeneral" placeholder="🔍 Buscar jugador..." oninput="renderizarDirectorioGeneral()" style="width: 220px;">
@@ -641,7 +642,7 @@
                 <thead>
                     <tr>
                         <th style="width: 40px;">N°</th>
-                        <th style="width: 70px;">Foto</th>
+                        <th style="width: 80px;">Foto</th>
                         <th style="width: 110px;">Equipo</th>
                         <th>Nombre del Jugador</th>
                         <th style="width: 100px;">Categoría</th>
@@ -658,7 +659,7 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.048
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.049
     </div>
 </div>
 
@@ -839,7 +840,7 @@
             <div><label style="font-size: 11px; font-weight: bold;">CURP (18 Dígitos):</label><input type="text" id="editCurp" maxlength="18" style="width:100%;"></div>
             <div><label style="font-size: 11px; font-weight: bold;">Documento:</label><input type="text" id="editDoc" style="width:100%;"></div>
             <div style="display: flex; align-items: center; gap: 10px; margin-top: 5px;">
-                <div id="modalFotoPreview" class="player-photo-container" style="width: 45px; height: 55px;"></div>
+                <div id="modalFotoPreview" class="player-photo-container" style="width: 52px; height: 63px;"></div>
                 <div>
                     <label style="font-size: 11px; font-weight: bold; display: block;">Cambiar Foto:</label>
                     <button type="button" class="btn btn-warning btn-sm" onclick="mostrarGuiaFoto('editFotoFile')">📷 Cambiar Foto</button>
@@ -1767,7 +1768,7 @@
                 <tbody>${filasHtml}</tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.048
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.049
             </div>
         </div>
         </body></html>`;
@@ -2017,7 +2018,7 @@
         }
 
         if (/[0-9\.]/.test(nombre)) {
-            alert("⚠️️ El nombre del jugador no debe contener números ni puntos.");
+            alert("⚠ El nombre del jugador no debe contener números ni puntos.");
             return;
         }
 
@@ -2173,6 +2174,16 @@
         reader.readAsArrayBuffer(file);
     }
 
+    // ORDENAMIENTO POR FECHA DE NACIMIENTO (MENOR A MAYOR) Y SECUNDARIO POR NOMBRE
+    function ordenarJugadoresPorNacimiento(a, b) {
+        const nacA = formatearFechaExcel(a.nacimiento) || "";
+        const nacB = formatearFechaExcel(b.nacimiento) || "";
+        if (nacA !== nacB) {
+            return nacA.localeCompare(nacB);
+        }
+        return a.nombre.localeCompare(b.nombre);
+    }
+
     window.renderizarRoster = function() {
         const equipoSelect = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
         const categoriaSelect = document.getElementById("filtroCategoria").value;
@@ -2197,7 +2208,7 @@
             if (coincide) filtrados.push(j);
         });
 
-        filtrados.sort((a, b) => a.nombre.localeCompare(b.nombre));
+        filtrados.sort(ordenarJugadoresPorNacimiento);
 
         if (filtrados.length === 0) {
             tbody.innerHTML = `<tr><td colspan="9" style="padding: 20px; color: #64748b;">No hay jugadores registrados para este equipo y categoría.</td></tr>`;
@@ -2244,7 +2255,7 @@
         listaOrdenada.sort((a, b) => {
             if (a.equipo !== b.equipo) return a.equipo.localeCompare(b.equipo);
             if (a.categoria !== b.categoria) return a.categoria.localeCompare(b.categoria);
-            return a.nombre.localeCompare(b.nombre);
+            return ordenarJugadoresPorNacimiento(a, b);
         });
 
         const filtrados = listaOrdenada.filter(j => {
@@ -2259,8 +2270,8 @@
 
         filtrados.forEach((jugador, index) => {
             let htmlFoto = jugador.foto ? 
-                `<div class="player-photo-container" onclick="abrirModalAmpliarFoto('${jugador.foto}', '${jugador.nombre}')" style="width:30px; height:40px;" title="Ver fotografía ampliada"><img src="${jugador.foto}" style="width:100%; height:100%; object-fit:cover;"></div>` : 
-                `<div class="player-photo-container" style="width:30px; height:40px;" title="Sin fotografía"><span style="font-size:7px;">Sin foto</span></div>`;
+                `<div class="player-photo-container" onclick="abrirModalAmpliarFoto('${jugador.foto}', '${jugador.nombre}')" style="width:35px; height:46px;" title="Ver fotografía ampliada"><img src="${jugador.foto}" style="width:100%; height:100%; object-fit:cover;"></div>` : 
+                `<div class="player-photo-container" style="width:35px; height:46px;" title="Sin fotografía"><span style="font-size:7px;">Sin foto</span></div>`;
 
             tbody.innerHTML += `<tr>
                 <td><strong>${index + 1}</strong></td>
@@ -2284,7 +2295,7 @@
         const filtrados = baseDatos.filter(j => j.equipo === eqTarget);
         filtrados.sort((a, b) => {
             if (a.categoria !== b.categoria) return a.categoria.localeCompare(b.categoria);
-            return a.nombre.localeCompare(b.nombre);
+            return ordenarJugadoresPorNacimiento(a, b);
         });
 
         document.getElementById("tituloModalPlantilla").innerText = `📋 Plantilla Completa - Club ${eqTarget} (${filtrados.length} jugadores)`;
@@ -2295,7 +2306,7 @@
             tbody.innerHTML = `<tr><td colspan="6" style="padding: 20px; color: #64748b;">No hay jugadores registrados.</td></tr>`;
         } else {
             filtrados.forEach((j, i) => {
-                let fotoTd = j.foto ? `<img src="${j.foto}" onclick="abrirModalAmpliarFoto('${j.foto}', '${j.nombre}')" style="width:35px; height:45px; object-fit:cover; border-radius:3px; cursor:pointer;" title="Ver fotografía ampliada">` : `<span style="font-size:7px; color:#64748b;">Sin foto</span>`;
+                let fotoTd = j.foto ? `<img src="${j.foto}" onclick="abrirModalAmpliarFoto('${j.foto}', '${j.nombre}')" style="width:40px; height:52px; object-fit:cover; border-radius:3px; cursor:pointer;" title="Ver fotografía ampliada">` : `<span style="font-size:7px; color:#64748b;">Sin foto</span>`;
                 tbody.innerHTML += `<tr>
                     <td><strong>${i + 1}</strong></td>
                     <td>${fotoTd}</td>
@@ -2322,7 +2333,7 @@
         const logoLiga = logoLigaGlobal || logoLifarccDefault;
 
         const filtrados = baseDatos.filter(j => j.equipo === equipoSelect && j.categoria === categoriaSelect);
-        filtrados.sort((a, b) => a.nombre.localeCompare(b.nombre));
+        filtrados.sort(ordenarJugadoresPorNacimiento);
 
         if (filtrados.length === 0) {
             alert("No hay jugadores en este roster para imprimir.");
@@ -2331,7 +2342,8 @@
 
         let filasHtml = "";
         filtrados.forEach((j, idx) => {
-            let fotoTd = j.foto ? `<img src="${j.foto}" style="width:75px; height:95px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:8px; color:#64748b;">Sin foto</span>`;
+            // FOTOGRAFÍA DE IMPRESIÓN AMPLIADA 15% (Aprox 86x109px)
+            let fotoTd = j.foto ? `<img src="${j.foto}" style="width:86px; height:109px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:8px; color:#64748b;">Sin foto</span>`;
             
             filasHtml += `<tr>
                 <td><strong>${idx + 1}</strong></td>
@@ -2391,7 +2403,7 @@
                     </tr>
                     <tr>
                         <th style="width: 35px;">N°</th>
-                        <th style="width: 80px;">Foto</th>
+                        <th style="width: 90px;">Foto</th>
                         <th>Nombre Completo</th>
                         <th style="width: 90px;">Fecha Nac.</th>
                         <th style="width: 135px;">CURP</th>
@@ -2402,7 +2414,7 @@
                 <tbody>${filasHtml}</tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.048
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.049
             </div>
         </div>
         </body></html>`;
@@ -2450,11 +2462,11 @@
             const filtradosCat = jugadoresEquipo.filter(j => j.categoria === cat);
             if (filtradosCat.length > 0) {
                 hayHojas = true;
-                filtradosCat.sort((a, b) => a.nombre.localeCompare(b.nombre));
+                filtradosCat.sort(ordenarJugadoresPorNacimiento);
 
                 let filasHtml = "";
                 filtradosCat.forEach((j, idx) => {
-                    let fotoTd = j.foto ? `<img src="${j.foto}" style="width:75px; height:95px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:8px; color:#64748b;">Sin foto</span>`;
+                    let fotoTd = j.foto ? `<img src="${j.foto}" style="width:86px; height:109px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:8px; color:#64748b;">Sin foto</span>`;
                     
                     filasHtml += `<tr>
                         <td><strong>${idx + 1}</strong></td>
@@ -2497,7 +2509,7 @@
                             </tr>
                             <tr>
                                 <th style="width: 35px;">N°</th>
-                                <th style="width: 80px;">Foto</th>
+                                <th style="width: 90px;">Foto</th>
                                 <th>Nombre Completo</th>
                                 <th style="width: 90px;">Fecha Nac.</th>
                                 <th style="width: 135px;">CURP</th>
@@ -2508,7 +2520,7 @@
                         <tbody>${filasHtml}</tbody>
                     </table>
                     <div class="print-footer">
-                        Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.048
+                        Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.049
                     </div>
                 </div>`;
             }
@@ -2573,7 +2585,7 @@
 
         keysOrdenadas.forEach(key => {
             const grupo = combinaciones[key];
-            grupo.jugadores.sort((a, b) => a.nombre.localeCompare(b.nombre));
+            grupo.jugadores.sort(ordenarJugadoresPorNacimiento);
 
             const conf = configEquipos[grupo.equipo] || {};
             const logoEq = conf.logo || logosPorDefecto[grupo.equipo] || 'https://via.placeholder.com/100?text=EQUIPO';
@@ -2581,7 +2593,7 @@
 
             let filasHtml = "";
             grupo.jugadores.forEach((j, idx) => {
-                let fotoTd = j.foto ? `<img src="${j.foto}" style="width:75px; height:95px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:8px; color:#64748b;">Sin foto</span>`;
+                let fotoTd = j.foto ? `<img src="${j.foto}" style="width:86px; height:109px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:8px; color:#64748b;">Sin foto</span>`;
                 
                 filasHtml += `<tr>
                     <td><strong>${idx + 1}</strong></td>
@@ -2624,7 +2636,7 @@
                         </tr>
                         <tr>
                             <th style="width: 35px;">N°</th>
-                            <th style="width: 80px;">Foto</th>
+                            <th style="width: 90px;">Foto</th>
                             <th>Nombre Completo</th>
                             <th style="width: 90px;">Fecha Nac.</th>
                             <th style="width: 135px;">CURP</th>
@@ -2635,7 +2647,7 @@
                     <tbody>${filasHtml}</tbody>
                 </table>
                 <div class="print-footer">
-                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.048
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.049
                 </div>
             </div>`;
         });
