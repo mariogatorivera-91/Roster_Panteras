@@ -283,7 +283,6 @@
         }
         tr:nth-child(even) { background-color: #f8fafc; }
         
-        /* FOTOGRAFÍA AMPLIADA UN 15% */
         .player-photo-container {
             width: 40px;
             height: 52px;
@@ -340,7 +339,6 @@
             padding-top: 10px;
         }
 
-        /* 📱 MEDIA QUERIES PARA OPTIMIZACIÓN MÓVIL */
         @media (max-width: 768px) {
             body { padding: 5px; }
             .container { padding: 12px; }
@@ -430,9 +428,8 @@
         </div>
         <button class="btn btn-warning" style="width: 100%; justify-content: center;" onclick="intentarLogin()">Ingresar al Sistema</button>
     </div>
-    <!-- PIE DE PÁGINA EN PANTALLA DE ACCESO -->
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.054
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.055
     </div>
 </div>
 
@@ -670,7 +667,7 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.054
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.055
     </div>
 </div>
 
@@ -705,24 +702,51 @@
     </div>
 </div>
 
+<!-- MODAL ALERTA LÍMITE 2013 EXCEDIDO -->
+<div id="modalAlerta2013" class="modal" style="z-index: 1060;">
+    <div class="modal-content" style="max-width: 440px; text-align: center; border: 2px solid #dc2626; background: linear-gradient(135deg, #0f172a, #1e293b);">
+        <div class="modal-header" style="justify-content: center; border-bottom: 1px solid #334155; padding-bottom: 8px;">
+            <span style="font-size: 18px; color: #ef4444;">⚠️ LÍMITE DE JUGADORES 2013 EXCEDIDO</span>
+        </div>
+        <div style="padding: 15px 0;">
+            <p id="textoAlerta2013" style="font-size: 13px; color: #f8fafc; line-height: 1.5; margin-bottom: 15px;"></p>
+            <p style="font-size: 11px; color: var(--accent-silver);">Cada club sólo puede registrar máximo un jugador del año 2013.</p>
+        </div>
+        <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+            <button class="btn btn-danger btn-sm" onclick="cerrarAlerta2013()">Entendido</button>
+            <button class="btn btn-celeste btn-sm" onclick="abrirContactoAdminDesde2013()">✉️ Contactar al Administrador</button>
+        </div>
+    </div>
+</div>
+
 <!-- MODAL BUZÓN DE MENSAJES / INBOX -->
 <div id="modalBuzonMensajes" class="modal" style="z-index: 1020;">
-    <div class="modal-content" style="max-width: 780px; background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--celeste-btn);">
+    <div class="modal-content" style="max-width: 820px; background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--celeste-btn);">
         <div class="modal-header" style="border-bottom: 1px solid #334155; padding-bottom: 10px;">
             <span id="tituloBuzonModal">📨 Buzón de Mensajes Oficial</span>
             <span class="close-btn" onclick="cerrarBuzonMensajes()">&times;</span>
         </div>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
-            <span style="font-size: 11px; color: var(--accent-silver);">Historial de comunicaciones entre Clubes y Administrador:</span>
-            <button class="btn btn-celeste btn-sm" onclick="abrirModalNuevoMensaje()">✉️ Redactar Nuevo Mensaje</button>
+        
+        <!-- PESTAÑAS DE BUZÓN (RECIBIDOS / ENVIADOS) Y BUSCADOR -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+            <div style="display: flex; gap: 6px;">
+                <button id="btnTabRecibidos" class="tab-btn active" onclick="cambiarBuzonTab('recibidos')">📥 Recibidos</button>
+                <button id="btnTabEnviados" class="tab-btn" onclick="cambiarBuzonTab('enviados')">📤 Enviados</button>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <input type="text" id="buscadorBuzon" placeholder="🔍 Buscar por asunto o texto..." oninput="renderizarTablaBuzon()" style="width: 200px; font-size: 11px; padding: 5px;">
+                <button class="btn btn-celeste btn-sm" onclick="abrirModalNuevoMensaje()">✉️ Redactar</button>
+            </div>
         </div>
-        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+
+        <div class="table-responsive" style="max-height: 380px; overflow-y: auto;">
             <table>
                 <thead>
                     <tr>
                         <th style="width: 40px;">N°</th>
-                        <th style="width: 120px;">Remitente</th>
+                        <th id="thRemitentePara" style="width: 120px;">Remitente</th>
                         <th>Asunto / Mensaje</th>
+                        <th style="width: 75px;">📎 Adjuntos</th>
                         <th style="width: 110px;">Fecha / Hora</th>
                         <th style="width: 90px;">Estado</th>
                         <th style="width: 100px;">Acciones</th>
@@ -1086,13 +1110,14 @@
         "PANTERAS": "PANTERAS",
         "ZORROS": "ZORROS"
     };
-    let numeroWhatsappAdmin = "8661155107";
     let logoLigaGlobal = logoLifarccDefault;
     let rolActual = "Administrador"; 
     let equipoAsignado = null;
     let equipoSeleccionadoDirecto = null;
     let jugadorSeleccionadoId = null;
     let inputFotoActivoId = null; 
+
+    let buzonTabActual = "recibidos"; // 'recibidos' o 'enviados'
 
     // Variables de Grabación de Audio
     let mediaRecorder = null;
@@ -1193,8 +1218,6 @@
             }
         }
     }
-
-    function verificarAlertasJugadores2013() {}
 
     window.validarNombreInput = function() {
         const val = document.getElementById("altaNombre").value;
@@ -1451,8 +1474,6 @@
         aplicarPermisosRol();
         limpiarFormularioAlta();
         await cargarDatosDesdeNube();
-
-        // Verificar si tiene mensajes nuevos al ingresar para mostrar la alerta
         verificarMensajesPendientesAlLogin();
     }
 
@@ -1570,7 +1591,6 @@
                 if (!configEquipos[eq].logo) configEquipos[eq].logo = logosPorDefecto[eq] || '';
             });
 
-            verificarAlertasJugadores2013();
             inicializarSistema();
         } catch (e) {
             console.error("Error al conectar con Firestore:", e);
@@ -1599,8 +1619,8 @@
     }
 
     window.abrirBuzonMensajes = async function() {
-        const tbody = document.getElementById("tablaBuzonCuerpo");
-        tbody.innerHTML = `<tr><td colspan="6" style="padding: 20px; color: #64748b;">Cargando buzón...</td></tr>`;
+        buzonTabActual = "recibidos";
+        actualizarEstilosBuzonTabs();
         document.getElementById("modalBuzonMensajes").style.display = "flex";
 
         try {
@@ -1621,15 +1641,49 @@
         document.getElementById("modalBuzonMensajes").style.display = "none";
     }
 
+    window.cambiarBuzonTab = function(tab) {
+        buzonTabActual = tab;
+        actualizarEstilosBuzonTabs();
+        renderizarTablaBuzon();
+    }
+
+    function actualizarEstilosBuzonTabs() {
+        const btnRec = document.getElementById("btnTabRecibidos");
+        const btnEnv = document.getElementById("btnTabEnviados");
+        const thRP = document.getElementById("thRemitentePara");
+
+        if (buzonTabActual === "recibidos") {
+            btnRec.classList.add("active");
+            btnEnv.classList.remove("active");
+            thRP.innerText = "Remitente";
+        } else {
+            btnEnv.classList.add("active");
+            btnRec.classList.remove("active");
+            thRP.innerText = "Destinatario (Para)";
+        }
+    }
+
     function renderizarTablaBuzon() {
         const tbody = document.getElementById("tablaBuzonCuerpo");
+        const textoBusqueda = document.getElementById("buscadorBuzon").value.trim().toUpperCase();
         tbody.innerHTML = "";
 
         let filtrados = [];
-        if (rolActual === "Administrador") {
-            filtrados = [...listaMensajes];
+        const usuarioActual = rolActual === "Administrador" ? "Administrador" : equipoAsignado;
+
+        if (buzonTabActual === "recibidos") {
+            filtrados = listaMensajes.filter(m => m.destinatario === usuarioActual);
         } else {
-            filtrados = listaMensajes.filter(m => m.remitente === equipoAsignado || m.destinatario === equipoAsignado);
+            filtrados = listaMensajes.filter(m => m.remitente === usuarioActual);
+        }
+
+        // Búsqueda por texto o asunto
+        if (textoBusqueda !== "") {
+            filtrados = filtrados.filter(m => {
+                const asuntoTexto = (m.asunto || m.texto || "").toUpperCase();
+                const remitentePara = (buzonTabActual === "recibidos" ? m.remitente : m.destinatario).toUpperCase();
+                return asuntoTexto.includes(textoBusqueda) || remitentePara.includes(textoBusqueda);
+            });
         }
 
         filtrados.sort((a, b) => {
@@ -1639,30 +1693,31 @@
         });
 
         if (filtrados.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="6" style="padding: 20px; color: #64748b;">No hay mensajes en el buzón.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="7" style="padding: 20px; color: #64748b;">No hay mensajes en esta sección.</td></tr>`;
             return;
         }
 
         filtrados.forEach((m, idx) => {
-            let esNuevo = false;
-            if (rolActual === "Administrador" && m.destinatario === "Administrador" && !m.leido) esNuevo = true;
-            if (rolActual === "Equipo" && m.destinatario === equipoAsignado && !m.leido) esNuevo = true;
-
-            // ESTILOS Y TEXTO NEGRO VISIBLE PARA MENSAJES NUEVOS
+            let esNuevo = (buzonTabActual === "recibidos" && !m.leido);
             let estiloFila = esNuevo ? "font-weight: bold; color: #000000; background: #e0f2fe;" : "color: var(--accent-silver);";
             
-            let estadoTexto = esNuevo ? "<span style='color:#0284c7; font-weight:bold;'>🔵 Nuevo</span>" : "<span style='color:#16a34a; font-weight:bold;'>🟢 Leído</span>";
-            if (rolActual === "Equipo" && m.remitente === equipoAsignado) {
-                estadoTexto = m.leido ? "<span style='color:#16a34a; font-weight:bold;'>🟢 Leído por Admin</span>" : "<span style='color:#0284c7; font-weight:bold;'>🔵 Enviado</span>";
+            let estadoTexto = "";
+            if (buzonTabActual === "recibidos") {
+                estadoTexto = m.leido ? "<span style='color:#16a34a; font-weight:bold;'>🟢 Leído</span>" : "<span style='color:#0284c7; font-weight:bold;'>🔵 Nuevo</span>";
+            } else {
+                estadoTexto = m.leido ? "<span style='color:#16a34a; font-weight:bold;'>🟢 Leído por Dest.</span>" : "<span style='color:#0284c7; font-weight:bold;'>🔵 Enviado</span>";
             }
 
+            let columnaRemitentePara = buzonTabActual === "recibidos" ? m.remitente : m.destinatario;
+            let tieneAdjunto = (m.archivo || m.audio) ? `<span style="font-size:16px; color:#0284c7;" title="Contiene archivo adjunto o audio">📎</span>` : `<span style="color:#64748b;">-</span>`;
             let banderitaRespondido = m.respondido ? `<span title="Mensaje respondido" style="margin-left: 5px; font-size: 14px;">⛳</span>` : "";
 
             tbody.innerHTML += `
                 <tr style="${estiloFila}">
                     <td><strong>${idx + 1}</strong> ${banderitaRespondido}</td>
-                    <td>${m.remitente}</td>
-                    <td style="text-align: left; padding-left: 10px; cursor: pointer;" onclick="verDetalleMensaje('${m.id}')">${m.asunto || m.texto.substring(0, 35) + '...'}</td>
+                    <td>${columnaRemitentePara}</td>
+                    <td style="text-align: left; padding-left: 10px; cursor: pointer;" onclick="verDetalleMensaje('${m.id}')">${m.asunto || m.texto.substring(0, 30) + '...'}</td>
+                    <td>${tieneAdjunto}</td>
                     <td>${m.fecha || ''} ${m.hora || ''}</td>
                     <td>${estadoTexto}</td>
                     <td>
@@ -1750,7 +1805,6 @@
         reader.readAsDataURL(file);
     }
 
-    // GRABADORA DE AUDIO
     window.toggleGrabacionAudio = async function() {
         const btn = document.getElementById("btnGrabarAudio");
         const lbl = document.getElementById("lblEstadoGrabacion");
@@ -1858,7 +1912,7 @@
             actualizarNotificadorBuzon();
         }
 
-        document.getElementById("visorAsuntoTitulo").innerText = `📄 Mensaje de: ${msg.remitente}`;
+        document.getElementById("visorAsuntoTitulo").innerText = `📄 Detalle del Mensaje (${msg.remitente} ➔ ${msg.destinatario})`;
         
         let contenidoHtml = `
             <p style="margin: 0 0 8px 0; color: #fbbf24; font-weight: bold;">Enviado el ${msg.fecha} a las ${msg.hora}</p>
@@ -1879,7 +1933,7 @@
         }
         document.getElementById("visorAdjuntoContainer").innerHTML = adjuntoHtml;
 
-        respuestaDestinatarioActual = msg.remitente;
+        respuestaDestinatarioActual = msg.remitente === (rolActual === "Administrador" ? "Administrador" : equipoAsignado) ? msg.destinatario : msg.remitente;
         document.getElementById("modalVisorMensaje").style.display = "flex";
         renderizarTablaBuzon();
     }
@@ -1897,6 +1951,31 @@
         }
         cerrarVisorMensaje();
         abrirModalNuevoMensaje(respuestaDestinatarioActual);
+    }
+
+    // --- ALERTA 2013 CON BOTÓN DE CONTACTO ---
+    function verificarLimite2013(equipo, fechaNac) {
+        const anio = formatearFechaExcel(fechaNac).split('-')[0];
+        if (anio === '2013') {
+            const existentes2013 = baseDatos.filter(j => j.equipo === equipo && formatearFechaExcel(j.nacimiento).startsWith('2013'));
+            if (existentes2013.length >= 1) {
+                const nombres = existentes2013.map(p => p.nombre).join(', ');
+                document.getElementById("textoAlerta2013").innerHTML = `El club <b>${equipo}</b> ya cuenta con un jugador registrado del año 2013 (<b>${nombres}</b>).`;
+                document.getElementById("modalAlerta2013").style.display = "flex";
+                return false;
+            }
+        }
+        return true;
+    }
+
+    window.cerrarAlerta2013 = function() {
+        document.getElementById("modalAlerta2013").style.display = "none";
+    }
+
+    window.abrirContactoAdminDesde2013 = function() {
+        cerrarAlerta2013();
+        abrirModalNuevoMensaje("Administrador");
+        document.getElementById("txtContenidoMensaje").value = "Solicitud especial sobre el límite de jugadores del año 2013:";
     }
 
     window.abrirModalRangosCategorias = function() {
@@ -2168,7 +2247,7 @@
                 <tbody>${filasHtml}</tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.054
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.055
             </div>
         </div>
         </body></html>`;
@@ -2188,7 +2267,7 @@
             btn.innerText = "🙈";
         } else {
             input.type = "password";
-            btn.innerText = "👁️";
+            btn.innerText = "👁️️";
         }
     }
 
@@ -2377,19 +2456,6 @@
             img.src = e.target.result;
         };
         reader.readAsDataURL(file);
-    }
-
-    function verificarLimite2013(equipo, fechaNac) {
-        const anio = formatearFechaExcel(fechaNac).split('-')[0];
-        if (anio === '2013') {
-            const existentes2013 = baseDatos.filter(j => j.equipo === equipo && formatearFechaExcel(j.nacimiento).startsWith('2013'));
-            if (existentes2013.length >= 1) {
-                const nombres = existentes2013.map(p => p.nombre).join(', ');
-                alert(`⚠️ LÍMITE DE JUGADORES 2013 EXCEDIDO\n\nEl club ${equipo} ya cuenta con un jugador registrado del año 2013 (${nombres}).`);
-                return false;
-            }
-        }
-        return true;
     }
 
     window.registrarJugadorIndividual = async function() {
@@ -2811,7 +2877,7 @@
                 <tbody>${filasHtml}</tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.054
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.055
             </div>
         </div>
         </body></html>`;
@@ -2917,7 +2983,7 @@
                         <tbody>${filasHtml}</tbody>
                     </table>
                     <div class="print-footer">
-                        Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.054
+                        Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.055
                     </div>
                 </div>`;
             }
@@ -3044,7 +3110,7 @@
                     <tbody>${filasHtml}</tbody>
                 </table>
                 <div class="print-footer">
-                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.054
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.055
                 </div>
             </div>`;
         });
