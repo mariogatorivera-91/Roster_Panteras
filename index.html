@@ -418,7 +418,7 @@
     </div>
     <!-- PIE DE PÁGINA EN PANTALLA DE ACCESO -->
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.046
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.047
     </div>
 </div>
 
@@ -439,13 +439,19 @@
                 <input type="file" id="inputFotos" multiple accept="image/*" onchange="cargarFotosLocales(event)" style="font-size: 11px; width: 140px; padding: 3px;">
             </div>
         </div>
-        <div style="display: flex; align-items: center; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
             <span id="lblRolActual" style="font-size: 11px; color: #fbbf24; font-weight: bold;"></span>
             <button class="btn btn-warning btn-sm" onclick="abrirModalCambiarPass()">🔑 Contraseña</button>
-            <button class="btn btn-success btn-sm col-admin" onclick="abrirReporteSemanal()" id="btnReporteSemanal" style="display:none;">📊 Reporte Semanal</button>
-            <button class="btn btn-warning btn-sm col-admin" onclick="abrirModalGestionFechas()" id="btnGestionFechas" style="display:none;">📅 Fechas Categorías</button>
-            <button class="btn btn-purple btn-sm col-admin" onclick="abrirModalAdminUsuarios()" id="btnAdminUsers" style="display:none;">⚙️ Usuarios</button>
-            <button class="btn btn-info btn-sm col-admin" onclick="abrirModalLogAccesos()" id="btnLogAccesos" style="display:none;">🕒 Log Accesos</button>
+            
+            <!-- MENÚ DESPLEGABLE DE ADMINISTRADOR PARA OPTIMIZACIÓN EN CELULARES -->
+            <select id="adminDropdown" class="col-admin" onchange="manejarAccionAdmin(this)" style="display:none; background:#1e293b; color:#fbbf24; border:1px solid #d97706; padding:5px 8px; border-radius:6px; font-size:11px; font-weight:bold; cursor:pointer;">
+                <option value="">⚙️ Menú Admin...</option>
+                <option value="reporte">📊 Reporte Semanal</option>
+                <option value="fechas">📅 Fechas Categorías</option>
+                <option value="usuarios">⚙️ Gestionar Usuarios</option>
+                <option value="logs">🕒 Log de Accesos</option>
+            </select>
+
             <button class="btn btn-danger btn-sm" onclick="cerrarSesion()">🔒 Salir</button>
         </div>
     </div>
@@ -609,7 +615,7 @@
                 <span style="font-size: 11px; color: #fca5a5;">Vaciar base de datos en la nube.</span>
             </div>
             <div style="display: flex; gap: 8px;">
-                <button class="btn btn-danger btn-sm" onclick="borrarTodosRegistros()">🗑️ Borrar Todos</button>
+                <button class="btn btn-danger btn-sm" onclick="borrarTodosRegistros()">🗑️️ Borrar Todos</button>
             </div>
         </div>
     </div>
@@ -649,7 +655,7 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.046
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.047
     </div>
 </div>
 
@@ -1069,15 +1075,12 @@
             equipoAsignado = savedEquipo ? savedEquipo : null;
             document.getElementById("loginOverlay").style.display = "none";
             document.getElementById("appContainer").style.display = "block";
-            document.getElementById("lblRolActual").innerText = rolActual === "Administrador" ? "Rol: Administrador" : `Club: ${equipoAsignado}`;
+            document.getElementById("lblRolActual").innerText = rolActual === "Administrador" ? "Rol: Admin" : `Club: ${equipoAsignado}`;
             
             actualizarColorGlowClub(rolActual === "Administrador" ? "Administrador" : equipoAsignado);
 
             if (rolActual === "Administrador") {
-                document.getElementById("btnAdminUsers").style.display = "inline-flex";
-                document.getElementById("btnReporteSemanal").style.display = "inline-flex";
-                document.getElementById("btnGestionFechas").style.display = "inline-flex";
-                document.getElementById("btnLogAccesos").style.display = "inline-flex";
+                document.getElementById("adminDropdown").style.display = "inline-block";
             }
             aplicarPermisosRol();
             limpiarFormularioAlta();
@@ -1129,9 +1132,18 @@
 
         if (pass !== "charro") {
             try {
+                // CORRECCIÓN DE FECHA LOCAL PARA EVITAR DESFASE UTC CON EL DÍA SIGUIENTE
+                const fechaLocalStr = (() => {
+                    const d = new Date();
+                    const year = d.getFullYear();
+                    const month = String(d.getMonth() + 1).padStart(2, '0');
+                    const day = String(d.getDate()).padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                })();
+
                 await addDoc(collection(db, "log_accesos"), {
                     usuario: selectVal,
-                    fecha: new Date().toISOString().split('T')[0],
+                    fecha: fechaLocalStr,
                     hora: new Date().toLocaleTimeString(),
                     timestamp: new Date()
                 });
@@ -1155,18 +1167,28 @@
 
         document.getElementById("loginOverlay").style.display = "none";
         document.getElementById("appContainer").style.display = "block";
-        document.getElementById("lblRolActual").innerText = rolActual === "Administrador" ? "Rol: Administrador" : `Club: ${equipoAsignado}`;
+        document.getElementById("lblRolActual").innerText = rolActual === "Administrador" ? "Rol: Admin" : `Club: ${equipoAsignado}`;
         
         if (rolActual === "Administrador") {
-            document.getElementById("btnAdminUsers").style.display = "inline-flex";
-            document.getElementById("btnReporteSemanal").style.display = "inline-flex";
-            document.getElementById("btnGestionFechas").style.display = "inline-flex";
-            document.getElementById("btnLogAccesos").style.display = "inline-flex";
+            document.getElementById("adminDropdown").style.display = "inline-block";
         }
 
         aplicarPermisosRol();
         limpiarFormularioAlta();
         await cargarDatosDesdeNube();
+    }
+
+    // MANEJADOR DEL MENÚ DESPLEGABLE DE ADMINISTRADOR
+    window.manejarAccionAdmin = function(select) {
+        const accion = select.value;
+        if (!accion) return;
+        
+        if (accion === "reporte") abrirReporteSemanal();
+        else if (accion === "fechas") abrirModalGestionFechas();
+        else if (accion === "usuarios") abrirModalAdminUsuarios();
+        else if (accion === "logs") abrirModalLogAccesos();
+
+        select.value = ""; // Reiniciar selección
     }
 
     async function cargarCredencialesNube() {
@@ -1479,7 +1501,7 @@
 
     window.guardarRangosFechasNube = async function() {
         if (rolActual !== "Administrador") return;
-        if (!confirm("⚠️ ¿Estás seguro de guardar y actualizar los rangos de fechas oficiales para las categorías?")) return;
+        if (!confirm("⚠️️ ¿Estás seguro de guardar y actualizar los rangos de fechas oficiales para las categorías?")) return;
 
         let nuevosRangos = {};
         for (const cat of ordenCategoriasOficial) {
@@ -1775,7 +1797,7 @@
                 <tbody>${filasHtml}</tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.046
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.047
             </div>
         </div>
         </body></html>`;
@@ -2028,12 +2050,12 @@
         }
 
         if (/[0-9\.]/.test(nombre)) {
-            alert("⚠️ El nombre del jugador no debe contener números ni puntos.");
+            alert("⚠️️ El nombre del jugador no debe contener números ni puntos.");
             return;
         }
 
         if (!/^[A-Z0-9]{18}$/.test(curp)) {
-            alert("⚠️️ El CURP debe tener exactamente 18 caracteres alfanuméricos.");
+            alert("⚠ El CURP debe tener exactamente 18 caracteres alfanuméricos.");
             return;
         }
 
@@ -2043,7 +2065,14 @@
     }
 
     async function guardarJugadorInFirestore(equipo, categoria, nombre, nacimiento, curp, docText, fotoBase64) {
-        const fechaActualStr = new Date().toISOString().split('T')[0];
+        const fechaActualStr = (() => {
+            const d = new Date();
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        })();
+
         const nuevoJ = { 
             equipo, 
             categoria, 
@@ -2124,7 +2153,14 @@
             const worksheet = workbook.Sheets[sheetName];
             const json = XLSX.utils.sheet_to_json(worksheet);
 
-            const fechaActualStr = new Date().toISOString().split('T')[0];
+            const fechaActualStr = (() => {
+                const d = new Date();
+                const year = d.getFullYear();
+                const month = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            })();
+
             let importados = 0;
             for (const row of json) {
                 let eq = String(row['CLUB'] || row['Equipo'] || row['equipo'] || '').trim().toUpperCase();
@@ -2210,7 +2246,7 @@
             if (rolActual === "Administrador") {
                 accionesHtml = `
                     <button class="btn btn-sm" onclick="abrirModal('${jugador.id}')" title="Editar">✏️</button>
-                    <button class="btn btn-danger btn-sm" onclick="eliminarJugador('${jugador.id}')" title="Eliminar">🗑️</button>
+                    <button class="btn btn-danger btn-sm" onclick="eliminarJugador('${jugador.id}')" title="Eliminar">🗑️️</button>
                 `;
             } else {
                 accionesHtml = `<span style="font-size: 10px; color: #94a3b8; font-weight: bold;">Registrado (Bloqueado)</span>`;
@@ -2269,7 +2305,7 @@
                 <td><code style="font-size: 11px;">${jugador.curp || ''}</code></td>
                 <td>${jugador.doc || ''}</td>
                 <td>
-                    <button class="btn btn-sm" onclick="abrirModal('${jugador.id}')" title="Editar">✏️️</button>
+                    <button class="btn btn-sm" onclick="abrirModal('${jugador.id}')" title="Editar">✏</button>
                     <button class="btn btn-danger btn-sm" onclick="eliminarJugador('${jugador.id}')" title="Eliminar">🗑️</button>
                 </td>
             </tr>`;
@@ -2399,7 +2435,7 @@
                 <tbody>${filasHtml}</tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.046
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.047
             </div>
         </div>
         </body></html>`;
@@ -2505,7 +2541,7 @@
                         <tbody>${filasHtml}</tbody>
                     </table>
                     <div class="print-footer">
-                        Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.046
+                        Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.047
                     </div>
                 </div>`;
             }
@@ -2632,7 +2668,7 @@
                     <tbody>${filasHtml}</tbody>
                 </table>
                 <div class="print-footer">
-                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.046
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.047
                 </div>
             </div>`;
         });
