@@ -429,7 +429,7 @@
         <button class="btn btn-warning" style="width: 100%; justify-content: center;" onclick="intentarLogin()">Ingresar al Sistema</button>
     </div>
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.056
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.058
     </div>
 </div>
 
@@ -614,7 +614,7 @@
                         <th style="width: 160px;">CURP</th>
                         <th style="width: 120px;">Documento</th>
                         <th class="no-print col-admin" style="width: 75px;">Equipo</th>
-                        <th class="no-print" style="width: 85px;">Acciones</th>
+                        <th class="no-print" style="width: 150px;">Acciones</th>
                     </tr>
                 </thead>
                 <tbody id="tablaCuerpo"></tbody>
@@ -667,7 +667,7 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.056
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.058
     </div>
 </div>
 
@@ -818,6 +818,7 @@
     </div>
 </div>
 
+<!-- MODAL GESTIÓN FECHAS CATEGORÍAS (ADMIN) -->
 <div id="modalGestionFechas" class="modal" style="z-index: 1010;">
     <div class="modal-content" style="max-width: 750px; background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--bronze-gold);">
         <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--bronze-gold); padding-bottom: 12px; margin-bottom: 15px;">
@@ -1599,6 +1600,52 @@
         }
     }
 
+    // --- GESTIÓN DE FECHAS Y RANGOS (ADMIN) ---
+    window.abrirModalGestionFechas = function() {
+        if (rolActual !== "Administrador") return;
+        const tbody = document.getElementById("tablaGestionFechasCuerpo");
+        tbody.innerHTML = "";
+        const nombresDisplay = {
+            "ARDILLA": "ARDILLAS",
+            "HORMIGA": "HORMIGAS",
+            "HORMIGUITA": "HORMIGUITAS",
+            "MOSCO": "MOSCOS",
+            "BOTANA": "BOTANAS"
+        };
+
+        ordenCategoriasOficial.forEach(cat => {
+            const r = rangosFechasCategorias[cat] || { inicio: "", fin: "" };
+            tbody.innerHTML += `
+                <tr>
+                    <td style="text-align: left; padding-left: 12px;"><strong>${nombresDisplay[cat]}</strong></td>
+                    <td><input type="date" id="rangoInicio_${cat}" value="${r.inicio}" style="width:140px;"></td>
+                    <td><input type="date" id="rangoFin_${cat}" value="${r.fin}" style="width:140px;"></td>
+                </tr>
+            `;
+        });
+        document.getElementById("modalGestionFechas").style.display = "flex";
+    }
+
+    window.cerrarModalGestionFechas = function() {
+        document.getElementById("modalGestionFechas").style.display = "none";
+    }
+
+    window.guardarRangosFechasNube = async function() {
+        if (rolActual !== "Administrador") return;
+        let nuevosRangos = {};
+        ordenCategoriasOficial.forEach(cat => {
+            const ini = document.getElementById(`rangoInicio_${cat}`).value;
+            const fin = document.getElementById(`rangoFin_${cat}`).value;
+            nuevosRangos[cat] = { inicio: ini, fin: fin };
+        });
+
+        rangosFechasCategorias = nuevosRangos;
+        await setDoc(doc(db, "configuracion", "rangos_fechas"), nuevosRangos);
+        alert("¡Rangos de fechas actualizados y guardados en la nube con éxito!");
+        cerrarModalGestionFechas();
+        renderizarRoster();
+    }
+
     // --- LÓGICA DE MENSAJERÍA Y BUZÓN ---
     function actualizarNotificadorBuzon() {
         const badge = document.getElementById("badgeBuzonCount");
@@ -1678,7 +1725,6 @@
             filtrados = listaMensajes.filter(m => m.remitente === usuarioActual);
         }
 
-        // Búsqueda por texto o asunto
         if (textoBusqueda !== "") {
             filtrados = filtrados.filter(m => {
                 const asuntoTexto = (m.asunto || m.texto || "").toUpperCase();
@@ -1954,6 +2000,12 @@
         abrirModalNuevoMensaje(respuestaDestinatarioActual);
     }
 
+    // --- SOLICITAR CAMBIO DESDE LA TABLA PARA CLUBS ---
+    window.solicitarCambioJugadorDesdeTabla = function(nombreJugador) {
+        abrirModalNuevoMensaje("Administrador");
+        document.getElementById("txtContenidoMensaje").value = `Solicito un cambio o correccion del jugador: ${nombreJugador}\n\nDetalles del cambio requerido: `;
+    }
+
     // --- VERIFICACIÓN DE LÍMITE Y EXCEDENTES 2013 (CON BLOQUEO Y ALERTA) ---
     function verificarYMostrarExcedentes2013(equipo, categoria) {
         const jugadores2013 = baseDatos.filter(j => j.equipo === equipo && j.categoria === categoria && formatearFechaExcel(j.nacimiento).startsWith('2013'));
@@ -1962,7 +2014,7 @@
             const nombresLista = jugadores2013.map(p => `• ${p.nombre}`).join('<br>');
             document.getElementById("textoAlerta2013").innerHTML = `El club <b>${equipo}</b> en la categoría <b>${categoria}</b> tiene <b>${jugadores2013.length} jugadores</b> registrados del año 2013 (máximo permitido: 1).<br><br><b>Jugadores registrados:</b><br>${nombresLista}<br><br><i>Debe eliminar a los excedentes para poder continuar registrando.</i>`;
             document.getElementById("modalAlerta2013").style.display = "flex";
-            return true; // Hay exceso y bloqueo
+            return true;
         }
         return false;
     }
@@ -2039,7 +2091,7 @@
         const passActualReal = credencialesPasswords[usuarioTarget] || usuarioTarget;
 
         if (actual !== passActualReal) {
-            alert("⚠️️ La contraseña actual es incorrecta.");
+            alert("⚠️ La contraseña actual es incorrecta.");
             return;
         }
         if (!nueva1) {
@@ -2260,7 +2312,7 @@
                 <tbody>${filasHtml}</tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.056
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.058
             </div>
         </div>
         </body></html>`;
@@ -2486,7 +2538,6 @@
         const nacimiento = document.getElementById("altaNacimiento").value;
         const categoria = calcularCategoriaPorFecha(nacimiento);
 
-        // Verificar si ya tiene excedentes bloqueantes
         if (verificarYMostrarExcedentes2013(equipo, categoria)) {
             alert("⚠️ El club tiene un exceso de jugadores del año 2013 en esta categoría. El registro está bloqueado hasta corregirlo.");
             return;
@@ -2715,7 +2766,7 @@
                     <button class="btn btn-danger btn-sm" onclick="eliminarJugador('${jugador.id}')" title="Eliminar">🗑️</button>
                 `;
             } else {
-                accionesHtml = `<span style="font-size: 10px; color: #94a3b8; font-weight: bold;">Registrado (Bloqueado)</span>`;
+                accionesHtml = `<button class="btn btn-sm btn-celeste" onclick="solicitarCambioJugadorDesdeTabla('${jugador.nombre.replace(/'/g, "\\'")}')" title="Solicitar cambio o corrección al Administrador">Solicitar cambio al Admin.</button>`;
             }
 
             tbody.innerHTML += `<tr>
@@ -2901,7 +2952,7 @@
                 <tbody>${filasHtml}</tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.056
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.058
             </div>
         </div>
         </body></html>`;
@@ -3007,7 +3058,7 @@
                         <tbody>${filasHtml}</tbody>
                     </table>
                     <div class="print-footer">
-                        Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.056
+                        Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.058
                     </div>
                 </div>`;
             }
@@ -3134,7 +3185,7 @@
                     <tbody>${filasHtml}</tbody>
                 </table>
                 <div class="print-footer">
-                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.056
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.058
                 </div>
             </div>`;
         });
@@ -3180,7 +3231,7 @@
 
         const curpVal = document.getElementById("editCurp").value.trim().toUpperCase();
         if (curpVal && !/^[A-Z0-9]{18}$/.test(curpVal)) {
-            alert("⚠ El CURP debe tener exactamente 18 caracteres alfanuméricos.");
+            alert("⚠️ El CURP debe tener exactamente 18 caracteres alfanuméricos.");
             return;
         }
 
