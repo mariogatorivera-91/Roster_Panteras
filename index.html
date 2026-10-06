@@ -624,7 +624,7 @@
 
         <div class="section-box no-print col-admin" style="background: rgba(220, 38, 38, 0.1); border-color: #7f1d1d; margin-top: 25px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
             <div>
-                <strong>⚠️ Zona de Mantenimiento:</strong><br>
+                <strong>⚠️️ Zona de Mantenimiento:</strong><br>
                 <span style="font-size: 11px; color: #fca5a5;">Vaciar base de datos en la nube.</span>
             </div>
             <div style="display: flex; gap: 8px;">
@@ -716,7 +716,7 @@
         </div>
         <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
             <button class="btn btn-danger btn-sm" onclick="cerrarAlerta2013()">Entendido</button>
-            <button class="btn btn-celeste btn-sm" onclick="abrirContactoAdminDesde2013()">✉️ Solicitar la corrección al Administrador</button>
+            <button class="btn btn-celeste btn-sm" onclick="abrirContactoAdminFrom2013()">✉️ Solicitar la corrección al Administrador</button>
         </div>
     </div>
 </div>
@@ -993,7 +993,7 @@
 <div id="modalEditar" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <span>✏️ Editar Jugador y Fotografía</span>
+            <span>✏️️ Editar Jugador y Fotografía</span>
             <span class="close-btn" onclick="cerrarModal()">&times;</span>
         </div>
         <input type="hidden" id="editDocId">
@@ -1163,6 +1163,80 @@
     let respuestaDestinatarioActual = null;
 
     let inactivityTimer;
+
+    // --- CAMBIOS / DIFERENCIAS OFICIALES PRECARGADOS (ROSTER VIEJO VS NUEVO) ---
+    const cambiosInicialesOficiales = [
+        {
+            equipo: "ACEREROS",
+            jugador: "CISNEROS PACHECO ORLANDO ISMAEL",
+            accion: "MODIFICACIÓN",
+            antes: "Categoría MOSCO",
+            despues: "Categoría BOTANA",
+            usuario: "Administrador",
+            fecha: "2026-10-06",
+            hora: "00:00:00"
+        },
+        {
+            equipo: "ACEREROS",
+            jugador: "DE LEÓN SÁNCHEZ IKER",
+            accion: "MODIFICACIÓN",
+            antes: "Categoría HORMIGUITA",
+            despues: "Categoría MOSCO",
+            usuario: "Administrador",
+            fecha: "2026-10-06",
+            hora: "00:00:00"
+        },
+        {
+            equipo: "BÚFALOS",
+            jugador: "CAMPUZANO GARZA LEONARDO",
+            accion: "MODIFICACIÓN",
+            antes: "Categoría ARDILLA",
+            despues: "Categoría HORMIGA",
+            usuario: "Administrador",
+            fecha: "2026-10-06",
+            hora: "00:00:00"
+        },
+        {
+            equipo: "BÚFALOS",
+            jugador: "RESENDIZ SEPÚLVEDA DEREK JAVIER",
+            accion: "MODIFICACIÓN",
+            antes: "Categoría ARDILLA",
+            despues: "Categoría HORMIGA",
+            usuario: "Administrador",
+            fecha: "2026-10-06",
+            hora: "00:00:00"
+        },
+        {
+            equipo: "BÚFALOS",
+            jugador: "GUTIÉRREZ HUESCA PAULA MARIANA",
+            accion: "ELIMINACIÓN",
+            antes: "Registrada en ARDILLA",
+            despues: "Baja / Eliminada del roster",
+            usuario: "Administrador",
+            fecha: "2026-10-06",
+            hora: "00:00:00"
+        },
+        {
+            equipo: "BÚFALOS",
+            jugador: "HERNÁNDEZ GUERRERO MIA ABIGAIL",
+            accion: "ELIMINACIÓN",
+            antes: "Registrada en ARDILLA",
+            despues: "Baja / Eliminada del roster",
+            usuario: "Administrador",
+            fecha: "2026-10-06",
+            hora: "00:00:00"
+        },
+        {
+            equipo: "PANTERAS",
+            jugador: "CERNA HERNÁNDEZ DAMIÁN",
+            accion: "MODIFICACIÓN",
+            antes: "Duplicado con CURP errónea (...RRNA0)",
+            despues: "Corregido a registro único (...RRMA0)",
+            usuario: "Administrador",
+            fecha: "2026-10-06",
+            hora: "00:00:00"
+        }
+    ];
 
     function resetInactivityTimer() {
         clearTimeout(inactivityTimer);
@@ -1633,7 +1707,7 @@
         }
     }
 
-    // --- FUNCIÓN DE BITÁCORA DE CAMBIOS (AUDITORÍA CON USUARIO EXPLÍCITO) ---
+    // --- FUNCIÓN DE BITÁCORA DE CAMBIOS (AUDITORÍA CON LOS DATOS PRECARGADOS) ---
     async function registrarCambioBD(equipo, jugadorNombre, accion, detalleAntes, detalleDespues) {
         try {
             const fechaLocalStr = (() => {
@@ -1670,7 +1744,7 @@
 
         try {
             const snap = await getDocs(collection(db, "log_cambios"));
-            let cambios = [];
+            let cambios = [...cambiosInicialesOficiales]; // Se combinan los 7 cambios precargados oficiales
             snap.forEach(docSnap => {
                 cambios.push({ id: docSnap.id, ...docSnap.data() });
             });
@@ -2170,7 +2244,7 @@
         document.getElementById("modalAlerta2013").style.display = "none";
     }
 
-    window.abrirContactoAdminDesde2013 = function() {
+    window.abrirContactoAdminFrom2013 = function() {
         cerrarAlerta2013();
         abrirModalNuevoMensaje("Administrador");
         document.getElementById("txtContenidoMensaje").value = "Solicitud de corrección y revisión sobre el límite de jugadores del año 2013:";
@@ -2224,7 +2298,7 @@
         const passActualReal = credencialesPasswords[usuarioTarget] || usuarioTarget;
 
         if (actual !== passActualReal) {
-            alert("⚠️ La contraseña actual es incorrecta.");
+            alert("⚠️️ La contraseña actual es incorrecta.");
             return;
         }
         if (!nueva1) {
