@@ -429,7 +429,7 @@
         <button class="btn btn-warning" style="width: 100%; justify-content: center;" onclick="intentarLogin()">Ingresar al Sistema</button>
     </div>
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.058
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.059
     </div>
 </div>
 
@@ -453,6 +453,7 @@
                     <option value="">⚙️ Menú Admin...</option>
                     <option value="reporte">📊 Reporte Semanal</option>
                     <option value="fechas">📅 Fechas Categorías</option>
+                    <option value="cambios">📋 Cambios Realizados</option>
                     <option value="usuarios">⚙️ Gestionar Usuarios</option>
                     <option value="logs">🕒 Log de Accesos</option>
                 </select>
@@ -494,7 +495,7 @@
         </div>
 
         <div class="section-box no-print">
-            <h4>🛡️ Configuración de Logotipos de Equipos</h4>
+            <h4>🛡️️ Configuración de Logotipos de Equipos</h4>
             <div id="teamsPreviewGrid" class="teams-preview-grid"></div>
         </div>
 
@@ -667,7 +668,7 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.058
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.059
     </div>
 </div>
 
@@ -854,6 +855,36 @@
     </div>
 </div>
 
+<!-- MODAL CAMBIOS REALIZADOS (BITÁCORA ADMIN) -->
+<div id="modalCambiosRealizados" class="modal" style="z-index: 1015;">
+    <div class="modal-content" style="max-width: 850px; background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--bronze-gold);">
+        <div class="modal-header" style="border-bottom: 2px solid var(--bronze-gold); padding-bottom: 10px;">
+            <span style="color: #fbbf24;">📋 Historial de Cambios Realizados en la Base de Datos</span>
+            <span class="close-btn" onclick="cerrarModalCambiosRealizados()">&times;</span>
+        </div>
+        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 12px;">Registro detallado de altas, modificaciones (con comparativa de qué decía antes y después) y eliminaciones:</p>
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 40px;">N°</th>
+                        <th style="width: 110px;">Fecha / Hora</th>
+                        <th style="width: 90px;">Equipo</th>
+                        <th style="width: 130px;">Jugador</th>
+                        <th style="width: 95px;">Acción</th>
+                        <th>Detalle (Qué decía y qué dice)</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaCambiosRealizadosCuerpo"></tbody>
+            </table>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; border-top: 1px solid #334155; padding-top: 12px;">
+            <button class="btn btn-danger btn-sm" onclick="borrarLogCambiosNube()">🗑️ Borrar Historial</button>
+            <button class="btn btn-warning btn-sm" onclick="cerrarModalCambiosRealizados()">Cerrar</button>
+        </div>
+    </div>
+</div>
+
 <div id="modalRangosCategorias" class="modal" style="z-index: 1010;">
     <div class="modal-content" style="max-width: 520px;">
         <div class="modal-header">
@@ -1016,7 +1047,7 @@
 <div id="modalAdminUsers" class="modal">
     <div class="modal-content" style="max-width: 600px;">
         <div class="modal-header">
-            <span>⚙️ Panel de Control de Usuarios y Contraseñas</span>
+            <span>⚙️️ Panel de Control de Usuarios y Contraseñas</span>
             <span class="close-btn" onclick="cerrarModalAdminUsuarios()">&times;</span>
         </div>
         <div class="table-responsive">
@@ -1507,6 +1538,7 @@
         
         if (accion === "reporte") abrirReporteSemanal();
         else if (accion === "fechas") abrirModalGestionFechas();
+        else if (accion === "cambios") abrirModalCambiosRealizados();
         else if (accion === "usuarios") abrirModalAdminUsuarios();
         else if (accion === "logs") abrirModalLogAccesos();
 
@@ -1597,6 +1629,104 @@
         } catch (e) {
             console.error("Error al conectar con Firestore:", e);
             alert("Error al conectar con la base de datos en la nube.");
+        }
+    }
+
+    // --- FUNCIÓN DE BITÁCORA DE CAMBIOS (AUDITORÍA) ---
+    async function registrarCambioBD(equipo, jugadorNombre, accion, detalleAntes, detalleDespues) {
+        try {
+            const fechaLocalStr = (() => {
+                const d = new Date();
+                const year = d.getFullYear();
+                const month = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            })();
+
+            await addDoc(collection(db, "log_cambios"), {
+                equipo: equipo || "GENERAL",
+                jugador: jugadorNombre || "N/A",
+                accion: accion, // "REGISTRO NUEVO", "MODIFICACIÓN", "ELIMINACIÓN"
+                antes: detalleAntes || "-",
+                despues: detalleDespues || "-",
+                usuario: rolActual === "Administrador" ? "Administrador" : equipoAsignado,
+                fecha: fechaLocalStr,
+                hora: new Date().toLocaleTimeString(),
+                timestamp: new Date()
+            });
+        } catch (e) {
+            console.error("Error registrando cambio en la nube:", e);
+        }
+    }
+
+    window.abrirModalCambiosRealizados = async function() {
+        if (rolActual !== "Administrador") return;
+        const tbody = document.getElementById("tablaCambiosRealizadosCuerpo");
+        tbody.innerHTML = `<tr><td colspan="6" style="padding: 20px; color: #64748b;">Cargando cambios realizados...</td></tr>`;
+        document.getElementById("modalCambiosRealizados").style.display = "flex";
+
+        try {
+            const snap = await getDocs(collection(db, "log_cambios"));
+            let cambios = [];
+            snap.forEach(docSnap => {
+                cambios.push({ id: docSnap.id, ...docSnap.data() });
+            });
+
+            cambios.sort((a, b) => {
+                let tA = a.timestamp ? (a.timestamp.seconds || new Date(a.timestamp).getTime()) : 0;
+                let tB = b.timestamp ? (b.timestamp.seconds || new Date(b.timestamp).getTime()) : 0;
+                return tB - tA;
+            });
+
+            tbody.innerHTML = "";
+            if (cambios.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="padding: 20px; color: #64748b;">No hay cambios registrados en la base de datos todavía.</td></tr>`;
+                return;
+            }
+
+            cambios.forEach((item, idx) => {
+                let colorAccion = "#0284c7";
+                if (item.accion === "REGISTRO NUEVO") colorAccion = "#16a34a";
+                else if (item.accion === "ELIMINACIÓN") colorAccion = "#dc2626";
+                else if (item.accion === "MODIFICACIÓN") colorAccion = "#d97706";
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${idx + 1}</strong></td>
+                        <td>${item.fecha || ''} <br><span style="font-size: 10px; color: #64748b;">${item.hora || ''}</span></td>
+                        <td><span style="font-size: 10px; background: #e2e8f0; color:#1e293b; padding: 2px 5px; border-radius: 4px; font-weight: bold;">${item.equipo}</span></td>
+                        <td style="text-align: left; font-weight: bold; padding-left: 8px;">${item.jugador}</td>
+                        <td><span style="color: ${colorAccion}; font-weight: bold; font-size: 11px;">${item.accion}</span></td>
+                        <td style="text-align: left; font-size: 11px; line-height: 1.4; padding: 8px;">
+                            <div style="color: #fca5a5;"><b>Antes:</b> ${item.antes}</div>
+                            <div style="color: #4ade80; margin-top: 3px;"><b>Después:</b> ${item.despues}</div>
+                            <div style="font-size: 9px; color: var(--accent-silver); margin-top: 2px; text-align: right;">Usuario: ${item.usuario}</div>
+                        </td>
+                    </tr>
+                `;
+            });
+        } catch (e) {
+            console.error("Error cargando log de cambios:", e);
+            tbody.innerHTML = `<tr><td colspan="6" style="padding: 20px; color: #ef4444;">Error al cargar los cambios de la nube.</td></tr>`;
+        }
+    }
+
+    window.cerrarModalCambiosRealizados = function() {
+        document.getElementById("modalCambiosRealizados").style.display = "none";
+    }
+
+    window.borrarLogCambiosNube = async function() {
+        if (rolActual !== "Administrador") return;
+        if (!confirm("⚠️ ¿Estás seguro de vaciar todo el historial de cambios realizados?")) return;
+        try {
+            const snap = await getDocs(collection(db, "log_cambios"));
+            for (const docSnap of snap.docs) {
+                await deleteDoc(doc(db, "log_cambios", docSnap.id));
+            }
+            abrirModalCambiosRealizados();
+            alert("Historial de cambios vaciado con éxito.");
+        } catch (e) {
+            console.error("Error borrando log de cambios:", e);
         }
     }
 
@@ -2312,7 +2442,7 @@
                 <tbody>${filasHtml}</tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.058
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.059
             </div>
         </div>
         </body></html>`;
@@ -2551,7 +2681,7 @@
         const fileInput = document.getElementById("altaFoto");
 
         if (!equipo || !nacimiento || !categoria || !nombre || !curp || !fileInput.files || !fileInput.files[0]) {
-            alert("⚠️ Todos los campos son obligatorios.");
+            alert("⚠️️ Todos los campos son obligatorios.");
             return;
         }
 
@@ -2591,6 +2721,9 @@
         };
         const docRef = await addDoc(collection(db, "jugadores"), nuevoJ);
         baseDatos.push({ id: docRef.id, ...nuevoJ });
+
+        // Registrar en la bitácora de cambios
+        await registrarCambioBD(equipo, nombre, "REGISTRO NUEVO", "-", `Cat: ${categoria}, Nac: ${nacimiento}, CURP: ${curp}`);
 
         limpiarFormularioAlta();
         renderizarRoster();
@@ -2952,7 +3085,7 @@
                 <tbody>${filasHtml}</tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.058
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.059
             </div>
         </div>
         </body></html>`;
@@ -3058,7 +3191,7 @@
                         <tbody>${filasHtml}</tbody>
                     </table>
                     <div class="print-footer">
-                        Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.058
+                        Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.059
                     </div>
                 </div>`;
             }
@@ -3185,7 +3318,7 @@
                     <tbody>${filasHtml}</tbody>
                 </table>
                 <div class="print-footer">
-                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.058
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.059
                 </div>
             </div>`;
         });
@@ -3259,7 +3392,27 @@
             foto: fotoUrl
         };
 
+        // Detectar cambios antes y después para la bitácora
+        let listaDiferencias = [];
+        if (jugador.nombre !== datosActualizados.nombre) listaDiferencias.push(`Nombre: [${jugador.nombre}] ➔ [${datosActualizados.nombre}]`);
+        if (jugador.equipo !== datosActualizados.equipo) listaDiferencias.push(`Equipo: [${jugador.equipo}] ➔ [${datosActualizados.equipo}]`);
+        if (jugador.categoria !== datosActualizados.categoria) listaDiferencias.push(`Categoría: [${jugador.categoria}] ➔ [${datosActualizados.categoria}]`);
+        if (jugador.nacimiento !== datosActualizados.nacimiento) listaDiferencias.push(`Nacimiento: [${jugador.nacimiento}] ➔ [${datosActualizados.nacimiento}]`);
+        if (jugador.curp !== datosActualizados.curp) listaDiferencias.push(`CURP: [${jugador.curp}] ➔ [${datosActualizados.curp}]`);
+        if (jugador.doc !== datosActualizados.doc) listaDiferencias.push(`Documento: [${jugador.doc}] ➔ [${datosActualizados.doc}]`);
+
         await updateDoc(doc(db, "jugadores", idJugador), datosActualizados);
+
+        if (listaDiferencias.length > 0) {
+            await registrarCambioBD(
+                datosActualizados.equipo, 
+                datosActualizados.nombre, 
+                "MODIFICACIÓN", 
+                `Anterior (${jugador.nombre} / ${jugador.equipo})`, 
+                listaDiferencias.join('<br>')
+            );
+        }
+
         Object.assign(jugador, datosActualizados);
 
         cerrarModal();
@@ -3269,18 +3422,24 @@
 
     window.eliminarJugador = async function(idJugador) {
         if (rolActual !== "Administrador") return;
-        if (confirm("¿Estás seguro de eliminar este jugador?")) {
+        const j = baseDatos.find(item => item.id === idJugador);
+        if (!j) return;
+
+        if (confirm(`¿Estás seguro de eliminar al jugador ${j.nombre} del equipo ${j.equipo}?`)) {
             await deleteDoc(doc(db, "jugadores", idJugador));
-            baseDatos = baseDatos.filter(j => j.id !== idJugador);
+            await registrarCambioBD(j.equipo, j.nombre, "ELIMINACIÓN", `Cat: ${j.categoria}, Nac: ${j.nacimiento}, CURP: ${j.curp}`, "Jugador borrado de la base de datos");
+            baseDatos = baseDatos.filter(item => item.id !== idJugador);
             renderizarRoster();
+            alert("Jugador eliminado con éxito.");
         }
     }
 
     window.borrarTodosRegistros = async function() {
         if (rolActual !== "Administrador") return;
-        if (confirm("⚠️ ¿Estás seguro de borrar TODOS los jugadores?")) {
+        if (confirm("⚠️ ¿Estás seguro de borrar TODOS los jugadores de la base de datos?")) {
             for (const j of baseDatos) {
                 await deleteDoc(doc(db, "jugadores", j.id));
+                await registrarCambioBD(j.equipo, j.nombre, "ELIMINACIÓN", "Borrado masivo", "Eliminado de la base de datos");
             }
             baseDatos = [];
             renderizarRoster();
