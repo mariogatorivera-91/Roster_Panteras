@@ -1476,7 +1476,7 @@
         if (!msg.leido && msg.destinatario === (rolActual === "Administrador" ? "Administrador" : equipoAsignado)) {
             msg.leido = true; await updateDoc(doc(db, "mensajes", idMsg), { leido: true });
         }
-        document.getElementById("visorContenidoDetalle.innerHTML = `<p><b>De:</b> ${msg.remitente} | <b>Fecha:</b> ${msg.fecha}</p><p>${msg.texto}</p>`;
+        document.getElementById("visorContenidoDetalle").innerHTML = `<p><b>De:</b> ${msg.remitente} | <b>Fecha:</b> ${msg.fecha}</p><p>${msg.texto}</p>`;
         document.getElementById("modalVisorMensaje").style.display = "flex";
     }
     window.cerrarVisorMensaje = function() { document.getElementById("modalVisorMensaje").style.display = "none"; }
