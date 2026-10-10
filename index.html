@@ -32,14 +32,14 @@
         }
         .header-container {
             text-align: center;
-            padding: 10px 20px 0 20px;
+            padding: 8px 20px 0 20px;
         }
-        /* Logo principal actualizado (logolinfarcc2.png) */
+        /* Logo principal en PNG y a 180px */
         .main-league-logo {
             height: 180px;
             object-fit: contain;
             display: inline-block;
-            filter: drop-shadow(0 4px 12px rgba(14, 165, 233, 0.5));
+            filter: drop-shadow(0 4px 15px rgba(14, 165, 233, 0.6));
             margin-bottom: 2px;
         }
         p.subtitle {
@@ -50,7 +50,7 @@
             margin: 0;
             font-weight: 600;
         }
-        /* Banner de equipos sin rectángulo azul, más abajo, 15% más grandes y separados */
+        /* Banner de equipos libre (sin rectángulo azul), más abajo, más grandes y con colores de brillo específicos */
         .teams-banner {
             width: 95%;
             max-width: 900px;
@@ -59,10 +59,10 @@
             align-items: center;
             gap: 30px;
             flex-wrap: wrap;
-            margin: 35px auto 15px auto; /* 4 líneas más abajo */
+            margin: 25px auto 10px auto;
         }
         .team-logo-item {
-            width: 82px; /* 15% más grandes (~82px) */
+            width: 82px;
             height: 82px;
             background: #ffffff;
             border-radius: 50%;
@@ -233,8 +233,8 @@
 <body>
 
     <div class="header-container">
-        <!-- Logo principal actualizado: logolinfarcc2.jpeg -->
-        <img src="Logos Equipos/logolinfarcc2.jpeg" alt="LIFARCC Monclova" class="main-league-logo" onerror="this.onerror=null; this.src='Logos Equipos/lifarcc.jpg';">
+        <!-- Logo principal en formato PNG y a 180px -->
+        <img src="Logos Equipos/logolinfarcc2.png" alt="LIFARCC Monclova" class="main-league-logo" onerror="this.onerror=null; this.src='Logos Equipos/lifarcc.jpg';">
         <p class="subtitle">Liga Infantil y Juvenil de Fútbol Americano de la Región Centro de Coahuila</p>
     </div>
 
@@ -299,7 +299,7 @@
     </div>
 
     <footer>
-        Página Creada por <span>Carrivers Desing</span> - Todos los Derechos Reservados © - V.3.0.2
+        Página Creada por <span>Carrivers Desing</span> - Todos los Derechos Reservados © - V.3.0.1
     </footer>
 
     <!-- Indicador de conexión Firebase -->
