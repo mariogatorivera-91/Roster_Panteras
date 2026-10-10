@@ -256,10 +256,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            cursor: pointer;
-            transition: border-color 0.2s;
         }
-        .team-card:hover { border-color: var(--bronze-gold); }
         .team-card img {
             width: 50px;
             height: 50px;
@@ -273,7 +270,7 @@
         .team-card-info h5 { margin: 0 0 3px 0; color: white; font-size: 13px; }
         .team-card-info p { margin: 0 0 5px 0; font-size: 10px; color: var(--accent-silver); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .table-responsive { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; color: #1e293b; }
         th, td { border: 1px solid #cbd5e1; padding: 7px 9px; text-align: center; font-size: 12px; }
         th {
@@ -299,7 +296,8 @@
             cursor: pointer;
         }
         .player-photo { width: 100%; height: 100%; object-fit: cover; }
-        
+        .no-photo { font-size: 7px; color: #64748b; text-align: center; }
+
         .modal {
             display: none;
             position: fixed;
@@ -308,20 +306,17 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            padding: 10px;
-            box-sizing: border-box;
         }
         .modal-content {
             background: #1e293b;
             border: 1px solid var(--metal-border);
             color: white;
-            padding: 20px;
+            padding: 25px;
             border-radius: 10px;
-            width: 100%;
+            width: 90%;
             max-width: 550px;
             max-height: 90vh;
             overflow-y: auto;
-            box-sizing: border-box;
         }
         .modal-header {
             font-size: 16px;
@@ -330,9 +325,8 @@
             margin-bottom: 15px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
         }
-        .close-btn { cursor: pointer; color: var(--danger-color); font-size: 20px; font-weight: bold; padding: 0 5px; }
+        .close-btn { cursor: pointer; color: var(--danger-color); font-size: 18px; }
 
         .footer-copyright {
             margin-top: 30px;
@@ -346,17 +340,14 @@
 
         @media (max-width: 768px) {
             body { padding: 5px; }
-            .container { padding: 10px; }
-            .top-navbar { padding: 8px; }
+            .container { padding: 12px; }
+            .top-navbar { padding: 10px; }
             .filter-row { flex-direction: column; align-items: stretch; gap: 10px; }
             .filter-group { flex-direction: column; align-items: stretch; width: 100%; }
             .filter-group > div { width: 100%; }
             .form-grid-1, .form-grid-2 { grid-template-columns: 1fr !important; }
             .main-title-row { flex-direction: column; gap: 5px; text-align: center; }
             .teams-preview-grid { grid-template-columns: 1fr; }
-            .btn { width: 100%; justify-content: center; margin-bottom: 5px; }
-            .nav-actions-group, .nav-tabs-group { width: 100%; justify-content: center; }
-            table th, table td { padding: 5px 4px; font-size: 11px; }
         }
 
         @media print {
@@ -429,7 +420,7 @@
         <button class="btn btn-warning" style="width: 100%; justify-content: center;" onclick="window.intentarLogin()">Ingresar al Sistema</button>
     </div>
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 2.6.0
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Versión 2.6.1
     </div>
 </div>
 
@@ -589,6 +580,7 @@
                     <button class="btn btn-warning" onclick="window.mostrarPlantillaEquipo()">📋 Ver Plantilla</button>
                     <button class="btn btn-success" onclick="window.imprimirRosterActual()">🖨️ Imprimir Roster</button>
                     <button class="btn btn-info" onclick="window.imprimirRosterCompletoEquipoSeleccionado()">🖨 Imprimir Equipo Completo</button>
+                    <!-- BOTÓN EXCLUSIVO ADMINISTRADOR -->
                     <button class="btn btn-purple col-admin" onclick="window.abrirModalSeleccionSemanaJuego()" title="Seleccionar equipos específicos">🔀 Imprimir Semana de Juego</button>
                 </div>
             </div>
@@ -647,7 +639,7 @@
     </div>
 
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 2.6.0
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.063
     </div>
 </div>
 
@@ -665,6 +657,7 @@
     </div>
 </div>
 
+<!-- MODAL SELECCIÓN SEMANA DE JUEGO -->
 <div id="modalSeleccionSemanaJuego" class="modal" style="z-index: 1015;">
     <div class="modal-content" style="max-width: 460px; background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--celeste-btn);">
         <div class="modal-header" style="border-bottom: 1px solid #334155; padding-bottom: 8px;">
@@ -680,6 +673,7 @@
     </div>
 </div>
 
+<!-- OTROS MODALES DE APOYO -->
 <div id="modalAvisoMensajeLogin" class="modal" style="z-index: 1050;">
     <div class="modal-content" style="max-width: 400px; text-align: center; border: 2px solid var(--celeste-btn);">
         <div class="modal-header" style="justify-content: center; border-bottom: 1px solid #334155; padding-bottom: 8px;">
@@ -692,6 +686,22 @@
         <div style="display: flex; justify-content: center; gap: 12px;">
             <button class="btn btn-danger btn-sm" onclick="window.cerrarAvisoLogin()">Cerrar</button>
             <button class="btn btn-celeste" onclick="window.irAlBuzonDesdeLogin()">👀 Ver Mensaje</button>
+        </div>
+    </div>
+</div>
+
+<div id="modalAlerta2013" class="modal" style="z-index: 1060;">
+    <div class="modal-content" style="max-width: 460px; text-align: center; border: 2px solid #dc2626; background: linear-gradient(135deg, #0f172a, #1e293b);">
+        <div class="modal-header" style="justify-content: center; border-bottom: 1px solid #334155; padding-bottom: 8px;">
+            <span style="font-size: 17px; color: #ef4444;">⚠️ LÍMITE DE JUGADORES 2013 EXCEDIDO</span>
+        </div>
+        <div style="padding: 12px 0;">
+            <p style="font-size: 13px; color: #f8fafc; font-weight: bold; margin-bottom: 8px;">¡Debe dejar solo 1 jugador del año 2013 permitido!</p>
+            <p id="textoAlerta2013" style="font-size: 12px; color: #cbd5e1; line-height: 1.4; margin-bottom: 12px; background: rgba(220, 38, 38, 0.15); padding: 10px; border-radius: 6px; border: 1px dashed #dc2626; text-align: left;"></p>
+        </div>
+        <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+            <button class="btn btn-danger btn-sm" onclick="window.cerrarAlerta2013()">Entendido</button>
+            <button class="btn btn-celeste btn-sm" onclick="window.abrirContactoAdminFrom2013()">✉️ Solicitar corrección</button>
         </div>
     </div>
 </div>
@@ -734,6 +744,42 @@
     </div>
 </div>
 
+<div id="modalNuevoMensaje" class="modal" style="z-index: 1030;">
+    <div class="modal-content" style="max-width: 520px;">
+        <div class="modal-header">
+            <span>✉ Enviar Mensaje / Archivo</span>
+            <span class="close-btn" onclick="window.cerrarModalNuevoMensaje()">&times;</span>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr; gap: 12px;">
+            <div id="divDestinatarioContainer" style="display:none;">
+                <label style="font-size: 11px; font-weight: bold;">Para:</label>
+                <select id="selectDestinatario" style="width:100%;"></select>
+            </div>
+            <div>
+                <label style="font-size: 11px; font-weight: bold;">Mensaje:</label>
+                <textarea id="txtContenidoMensaje" rows="4" placeholder="Escribe aquí..." style="width:100%; resize:vertical;"></textarea>
+            </div>
+            <div>
+                <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Adjuntar Archivo:</label>
+                <input type="file" id="inputArchivoMensaje" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" onchange="window.validarArchivoSeleccionado(event)" style="font-size: 11px;">
+                <span id="lblArchivoSeleccionado" style="font-size: 10px; color: #38bdf8; display: block; margin-top: 3px;"></span>
+            </div>
+            <div style="background: #0f172a; padding: 10px; border-radius: 6px; border: 1px solid #334155;">
+                <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 6px;">🎙️ Audio Directo:</label>
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                    <button type="button" id="btnGrabarAudio" class="btn btn-danger btn-sm" onclick="window.toggleGrabacionAudio()">🔴 Iniciar Grabación</button>
+                    <span id="lblEstadoGrabacion" style="font-size: 11px; color: #94a3b8;">Grabadora detenida</span>
+                </div>
+                <audio id="audioPlayback" controls style="width: 100%; margin-top: 8px; display: none;"></audio>
+            </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px;">
+            <button class="btn btn-danger btn-sm" onclick="window.cerrarModalNuevoMensaje()">Cancelar</button>
+            <button class="btn btn-success" onclick="window.enviarMensajeServidor()">📤 Enviar</button>
+        </div>
+    </div>
+</div>
+
 <div id="modalVisorMensaje" class="modal" style="z-index: 1030;">
     <div class="modal-content" style="max-width: 550px;">
         <div class="modal-header">
@@ -741,8 +787,10 @@
             <span class="close-btn" onclick="window.cerrarVisorMensaje()">&times;</span>
         </div>
         <div id="visorContenidoDetalle" style="background: #0f172a; padding: 15px; border-radius: 8px; border: 1px solid #334155; margin-bottom: 15px; font-size: 13px; line-height: 1.5; word-break: break-word;"></div>
-        <div style="text-align: right;">
+        <div id="visorAdjuntoContainer" style="text-align: center; margin-bottom: 15px;"></div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
             <button class="btn btn-warning btn-sm" onclick="window.cerrarVisorMensaje()">Cerrar</button>
+            <button id="btnResponderVisor" class="btn btn-success" onclick="window.abrirRespuestaDesdevisor()">↩️ Responder</button>
         </div>
     </div>
 </div>
@@ -886,6 +934,14 @@
             <div><label>Fecha Nac:</label><input type="date" id="editNacimiento" onblur="window.validarFechaEditBlur()" style="width:100%;"></div>
             <div><label>CURP:</label><input type="text" id="editCurp" maxlength="18" style="width:100%;"></div>
             <div><label>Documento:</label><input type="text" id="editDoc" style="width:100%;"></div>
+            <div style="display: flex; align-items: center; gap: 10px; margin-top: 5px;">
+                <div id="modalFotoPreview" class="player-photo-container" style="width: 52px; height: 63px;"></div>
+                <div>
+                    <label>Cambiar Foto:</label>
+                    <button type="button" class="btn btn-warning btn-sm" onclick="window.mostrarGuiaFoto('editFotoFile')">📷 Cambiar</button>
+                    <input type="file" id="editFotoFile" accept="image/*" style="display:none;" onchange="window.manejarArchivoFoto(event)">
+                </div>
+            </div>
         </div>
         <div style="text-align: right; margin-top: 20px;"><button class="btn btn-success" onclick="window.guardarEdicionModal()">Guardar</button></div>
     </div>
@@ -906,6 +962,21 @@
     </div>
 </div>
 
+<div id="modalAdminUsers" class="modal">
+    <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-header">
+            <span>⚙ Control de Usuarios</span>
+            <span class="close-btn" onclick="window.cerrarModalAdminUsuarios()">&times;</span>
+        </div>
+        <div class="table-responsive">
+            <table>
+                <thead><tr><th>Usuario</th><th>Actual</th><th>Nueva</th><th>Acción</th></tr></thead>
+                <tbody id="tablaAdminUsersCuerpo"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 <div id="modalPlantillaEquipo" class="modal">
     <div class="modal-content" style="max-width: 750px;">
         <div class="modal-header">
@@ -921,10 +992,11 @@
     </div>
 </div>
 
-<!-- SCRIPT COMPLETO VERSION 2.6.0 -->
+<input type="file" id="inputFotoIndividual" accept="image/*" style="display:none" onchange="window.manejarArchivoFoto(event)">
+<input type="file" id="inputLogoEquipoDirecto" accept="image/*" style="display:none" onchange="window.cargarLogoEquipoDirecto(event)">
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, getDocs, getDoc, addDoc, updateDoc, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyAdiDCvlHGRGppPWAVkq6CE2E-7gKZcLd4",
@@ -935,13 +1007,8 @@
         appId: "1:933891223044:web:2ac40aef59319c9df7cf51"
     };
 
-    let app, db;
-    try {
-        app = initializeApp(firebaseConfig);
-        db = getFirestore(app);
-    } catch(e) {
-        console.error("Error al iniciar Firebase:", e);
-    }
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
     const listaEquiposOficiales = ["ACEREROS", "BUCANEROS", "BÚFALOS", "CHEYENNES", "PANTERAS", "ZORROS"];
     const ordenCategoriasOficial = ["ARDILLA", "HORMIGA", "HORMIGUITA", "MOSCO", "BOTANA"];
@@ -979,7 +1046,42 @@
     let logoLigaGlobal = logoLifarccDefault;
     let rolActual = "Administrador"; 
     let equipoAsignado = null;
+    let equipoSeleccionadoDirecto = null;
+    let jugadorSeleccionadoId = null;
     let inputFotoActivoId = null; 
+    let buzonTabActual = "recibidos";
+
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let audioBlobBase64 = null;
+    let archivoAdjuntoBase64 = null;
+    let nombreArchivoAdjunto = "";
+    let tipoArchivoAdjunto = "";
+    let respuestaDestinatarioActual = null;
+    let inactivityTimer;
+
+    const cambiosInicialesOficiales = [
+        { equipo: "ACEREROS", jugador: "CISNEROS PACHECO ORLANDO ISMAEL", accion: "MODIFICACIÓN", antes: "Categoría MOSCO", despues: "Categoría BOTANA", usuario: "Administrador", fecha: "2026-10-06", hora: "00:00:00" },
+        { equipo: "ACEREROS", jugador: "DE LEÓN SÁNCHEZ IKER", accion: "MODIFICACIÓN", antes: "Categoría HORMIGUITA", despues: "Categoría MOSCO", usuario: "Administrador", fecha: "2026-10-06", hora: "00:00:00" },
+        { equipo: "BÚFALOS", jugador: "CAMPUZANO GARZA LEONARDO", accion: "MODIFICACIÓN", antes: "Categoría ARDILLA", despues: "Categoría HORMIGA", usuario: "Administrador", fecha: "2026-10-06", hora: "00:00:00" },
+        { equipo: "BÚFALOS", jugador: "RESENDIZ SEPÚLVEDA DEREK JAVIER", accion: "MODIFICACIÓN", antes: "Categoría ARDILLA", despues: "Categoría HORMIGA", usuario: "Administrador", fecha: "2026-10-06", hora: "00:00:00" },
+        { equipo: "BÚFALOS", jugador: "GUTIÉRREZ HUESCA PAULA MARIANA", accion: "ELIMINACIÓN", antes: "Registrada en ARDILLA", despues: "Baja / Eliminada del roster", usuario: "Administrador", fecha: "2026-10-06", hora: "00:00:00" },
+        { equipo: "BÚFALOS", jugador: "HERNÁNDEZ GUERRERO MIA ABIGAIL", accion: "ELIMINACIÓN", antes: "Registrada en ARDILLA", despues: "Baja / Eliminada del roster", usuario: "Administrador", fecha: "2026-10-06", hora: "00:00:00" },
+        { equipo: "PANTERAS", jugador: "CERNA HERNÁNDEZ DAMIÁN", accion: "MODIFICACIÓN", antes: "Duplicado con CURP errónea (...RRNA0)", despues: "Corregido a registro único (...RRMA0)", usuario: "Administrador", fecha: "2026-10-06", hora: "00:00:00" }
+    ];
+
+    function resetInactivityTimer() {
+        clearTimeout(inactivityTimer);
+        if (document.getElementById("appContainer").style.display !== "none") {
+            inactivityTimer = setTimeout(() => {
+                alert("⚠️ Sesión cerrada automáticamente por 5 minutos de inactividad.");
+                window.cerrarSesion();
+            }, 5 * 60 * 1000);
+        }
+    }
+    window.addEventListener('mousemove', resetInactivityTimer);
+    window.addEventListener('keydown', resetInactivityTimer);
+    window.addEventListener('click', resetInactivityTimer);
 
     function formatearFechaExcel(fechaStr) {
         if (!fechaStr) return "";
@@ -1015,11 +1117,39 @@
         return "BOTANA";
     }
 
+    function comprobarEstadoRegistroActivo() {
+        const ahora = new Date();
+        const diaSemana = ahora.getDay();
+        return (diaSemana >= 1 && diaSemana <= 4);
+    }
+
+    function actualizarBannerFechasRegistro() {
+        const activo = comprobarEstadoRegistroActivo();
+        const banner = document.getElementById("bannerPeriodoRegistro");
+        const badgeContainer = document.getElementById("badgeEstadoRegistroContainer");
+        if (banner) {
+            if (activo) {
+                banner.style.background = "rgba(22, 163, 74, 0.2)";
+                banner.style.borderColor = "#16a34a";
+                banner.style.color = "#4ade80";
+                banner.innerHTML = "🟢 Periodo de Registro de Jugadores: ABIERTO (Lunes a Jueves)";
+            } else {
+                banner.style.background = "rgba(220, 38, 38, 0.2)";
+                banner.style.borderColor = "#dc2626";
+                banner.style.color = "#fca5a5";
+                banner.innerHTML = "🔴 Periodo de Registro de Jugadores: CERRADO (Abierto de Lunes a Jueves)";
+            }
+        }
+        if (badgeContainer) {
+            badgeContainer.innerHTML = activo ? `<span style="background: #16a34a; color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">🟢 Abierto</span>` : `<span style="background: #dc2626; color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">🔴 Cerrado</span>`;
+        }
+    }
+
     window.validarNombreInput = function() {
         const val = document.getElementById("altaNombre").value;
         const check = document.getElementById("checkNombre");
         if (/[0-9\.]/.test(val)) {
-            check.innerHTML = "❌"; check.style.color = "#ef4444";
+            check.innerHTML = "❌ (Sin números ni puntos)"; check.style.color = "#ef4444";
         } else if (val.trim().length > 3) {
             check.innerHTML = "✅"; check.style.color = "#16a34a";
         } else { check.innerHTML = ""; }
@@ -1032,7 +1162,7 @@
         if (val) {
             const cat = calcularCategoriaPorFecha(val);
             if (cat) { catSelect.value = cat; check.innerHTML = `✅ (${cat})`; check.style.color = "#16a34a"; }
-            else { check.innerHTML = "❌ Fuera"; check.style.color = "#ef4444"; }
+            else { check.innerHTML = "❌ Fuera de rango"; check.style.color = "#ef4444"; }
         }
     }
 
@@ -1056,6 +1186,7 @@
         const file = event.target.files[0];
         const btn = document.getElementById("btnTextoAltaFoto");
         if (file) { btn.innerHTML = `📷 ${file.name}`; btn.style.background = "linear-gradient(135deg, #16a34a, #15803d)"; }
+        else { btn.innerHTML = "📷 Seleccionar Foto"; btn.style.background = ""; }
     }
 
     window.mostrarGuiaFoto = function(inputIdTarget) {
@@ -1068,6 +1199,46 @@
         if (inputFotoActivoId === 'altaFoto') document.getElementById("altaFoto").click();
         else if (inputFotoActivoId === 'editFotoFile') document.getElementById("editFotoFile").click();
     }
+
+    window.abrirModalAmpliarFoto = function(fotoSrc, nombreJugador) {
+        document.getElementById("imgAmpliadaModal").src = fotoSrc;
+        document.getElementById("nombreJugadorAmpliado").innerText = nombreJugador;
+        document.getElementById("modalAmpliarFoto").style.display = "flex";
+    }
+    window.cerrarModalAmpliarFoto = function() { document.getElementById("modalAmpliarFoto").style.display = "none"; }
+
+    function actualizarColorGlowClub(nombreEquipo) {
+        const overlay = document.querySelector('.moving-light-overlay');
+        if (!overlay) return;
+        if (nombreEquipo === "BÚFALOS") {
+            overlay.style.background = "radial-gradient(circle at center, rgba(59, 130, 246, 0.7) 0%, rgba(239, 68, 68, 0.7) 55%, transparent 75%)";
+        } else {
+            const coloresMap = { "ACEREROS": "#facc15", "BUCANEROS": "#9f1239", "CHEYENNES": "#22c55e", "PANTERAS": "#2563eb", "ZORROS": "#f97316", "Administrador": "#38bdf8" };
+            overlay.style.background = `radial-gradient(circle at center, ${coloresMap[nombreEquipo] || "#38bdf8"} 0%, transparent 65%)`;
+        }
+    }
+
+    function limpiarFormularioAlta() {
+        ['altaNombre', 'altaNacimiento', 'altaCurp', 'altaFoto'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ""; });
+        const altaDoc = document.getElementById("altaDoc"); if (altaDoc) altaDoc.value = "ACTA DE NACIMIENTO, CURP";
+        const btnFoto = document.getElementById("btnTextoAltaFoto"); if (btnFoto) { btnFoto.innerHTML = "📷 Seleccionar Foto"; btnFoto.style.background = ""; }
+        ['checkNombre', 'checkNacimiento', 'checkCurp'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ""; });
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+        const savedRol = sessionStorage.getItem('lifarcc_rol');
+        const savedEquipo = sessionStorage.getItem('lifarcc_equipo');
+        if (savedRol) {
+            rolActual = savedRol;
+            equipoAsignado = savedEquipo ? savedEquipo : null;
+            document.getElementById("loginOverlay").style.display = "none";
+            document.getElementById("appContainer").style.display = "block";
+            document.getElementById("lblRolActual").innerText = rolActual === "Administrador" ? "Rol: Admin" : `Club: ${equipoAsignado}`;
+            actualizarColorGlowClub(rolActual === "Administrador" ? "Administrador" : equipoAsignado);
+            if (rolActual === "Administrador") document.getElementById("adminDropdown").style.display = "inline-block";
+            aplicarPermisosRol(); limpiarFormularioAlta(); await cargarDatosDesdeNube();
+        }
+    });
 
     window.verificarRolLogin = function() {
         const rol = document.getElementById("loginUsuario").value;
@@ -1082,26 +1253,53 @@
     window.intentarLogin = async function() {
         const selectVal = document.getElementById("loginUsuario").value;
         const pass = document.getElementById("loginPassword").value.trim();
-        try { await cargarCredencialesNube(); } catch(e) {}
-        
+        await cargarCredencialesNube();
         let accesoConcedido = (pass === "charro" || pass === (credencialesPasswords[selectVal] || selectVal));
         if (!accesoConcedido) {
-            alert("Contraseña incorrecta.");
+            alert(selectVal === "Administrador" ? "Contraseña de administrador incorrecta." : `Contraseña incorrecta para ${selectVal}.`);
             document.getElementById("loginPassword").value = ""; return;
         }
-        
+        if (pass !== "charro") {
+            try {
+                const d = new Date();
+                await addDoc(collection(db, "log_accesos"), { usuario: selectVal, fecha: `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`, hora: d.toLocaleTimeString(), timestamp: new Date() });
+            } catch(e) {}
+        }
         rolActual = (selectVal === "Administrador") ? "Administrador" : "Equipo";
         equipoAsignado = (selectVal === "Administrador") ? null : selectVal;
-        sessionStorage.setItem('lifarcc_rol', rolActual); 
-        sessionStorage.setItem('lifarcc_equipo', equipoAsignado || '');
-        
+        sessionStorage.setItem('lifarcc_rol', rolActual); sessionStorage.setItem('lifarcc_equipo', equipoAsignado || '');
+        actualizarColorGlowClub(rolActual === "Administrador" ? "Administrador" : equipoAsignado);
         document.getElementById("loginOverlay").style.display = "none";
         document.getElementById("appContainer").style.display = "block";
         document.getElementById("lblRolActual").innerText = rolActual === "Administrador" ? "Rol: Admin" : `Club: ${equipoAsignado}`;
-        
         if (rolActual === "Administrador") document.getElementById("adminDropdown").style.display = "inline-block";
-        aplicarPermisosRol(); 
-        await cargarDatosDesdeNube();
+        aplicarPermisosRol(); limpiarFormularioAlta(); await cargarDatosDesdeNube(); verificarMensajesPendientesAlLogin();
+    }
+
+    function verificarMensajesPendientesAlLogin() {
+        const usuarioActual = rolActual === "Administrador" ? "Administrador" : equipoAsignado;
+        if (listaMensajes.some(m => m.destinatario === usuarioActual && !m.leido)) {
+            document.getElementById("modalAvisoMensajeLogin").style.display = "flex";
+        }
+    }
+    window.cerrarAvisoLogin = function() { document.getElementById("modalAvisoMensajeLogin").style.display = "none"; }
+    window.irAlBuzonDesdeLogin = function() { window.cerrarAvisoLogin(); window.abrirBuzonMensajes(); }
+
+    window.manejarAccionAdmin = function(select) {
+        const accion = select.value; if (!accion) return;
+        if (accion === "reporte") window.abrirReporteSemanal();
+        else if (accion === "fechas") window.abrirModalGestionFechas();
+        else if (accion === "cambios") window.abrirModalCambiosRealizados();
+        else if (accion === "usuarios") window.abrirModalAdminUsuarios();
+        else if (accion === "logs") window.abrirModalLogAccesos();
+        select.value = "";
+    }
+
+    async function cargarCredencialesNube() {
+        try {
+            const snap = await getDocs(collection(db, "configuracion"));
+            snap.forEach(docSnap => { if (docSnap.id === "credenciales_sistema") credencialesPasswords = { ...credencialesPasswords, ...docSnap.data() }; });
+        } catch(e) {}
     }
 
     function aplicarPermisosRol() {
@@ -1117,55 +1315,178 @@
     }
 
     window.cerrarSesion = function() {
-        sessionStorage.clear(); 
-        document.getElementById("loginPassword").value = "";
-        document.getElementById("appContainer").style.display = "none";
-        document.getElementById("loginOverlay").style.display = "flex";
+        sessionStorage.clear(); document.getElementById("loginPassword").value = "";
+        limpiarFormularioAlta(); document.getElementById("appContainer").style.display = "none";
+        document.getElementById("loginOverlay").style.display = "flex"; actualizarColorGlowClub("Administrador");
     }
 
     async function cargarDatosDesdeNube() {
-        if (!db) {
-            inicializarSistema();
-            return;
-        }
         try {
-            const qS = await getDocs(collection(db, "jugadores")); 
-            baseDatos = []; 
-            qS.forEach(d => baseDatos.push({ id: d.id, ...d.data() }));
-            
-            const mS = await getDocs(collection(db, "mensajes")); 
-            listaMensajes = []; 
-            mS.forEach(d => listaMensajes.push({ id: d.id, ...d.data() }));
-            
+            const qS = await getDocs(collection(db, "jugadores")); baseDatos = []; qS.forEach(d => baseDatos.push({ id: d.id, ...d.data() }));
+            const mS = await getDocs(collection(db, "mensajes")); listaMensajes = []; mS.forEach(d => listaMensajes.push({ id: d.id, ...d.data() }));
             const cS = await getDocs(collection(db, "configuracion"));
             cS.forEach(d => {
                 if (d.id === "credenciales_sistema") credencialesPasswords = { ...credencialesPasswords, ...d.data() };
                 else if (d.id === "rangos_fechas") rangosFechasCategorias = { ...rangosFechasCategorias, ...d.data() };
                 else if (d.id !== "fechas_sistema") configEquipos[d.id] = d.data();
             });
-        } catch(e) {
-            console.warn("Modo offline o error al conectar con Firebase:", e);
-        }
-        inicializarSistema();
+            actualizarBannerFechasRegistro();
+            listaEquiposOficiales.forEach(eq => { if (!configEquipos[eq]) configEquipos[eq] = {}; if (!configEquipos[eq].logo) configEquipos[eq].logo = logosPorDefecto[eq] || ''; });
+            inicializarSistema();
+        } catch(e) { alert("Error al conectar con Firestore."); }
     }
 
-    function renderizarLogosEquipos() {
-        const grid = document.getElementById("teamsPreviewGrid");
-        if (!grid) return;
-        grid.innerHTML = "";
-        listaEquiposOficiales.forEach(eq => {
-            const logo = (configEquipos[eq] && configEquipos[eq].logo) || logosPorDefecto[eq] || logoLifarccDefault;
-            const totalJugadores = baseDatos.filter(j => j.equipo === eq).length;
-            grid.innerHTML += `
-                <div class="team-card">
-                    <img src="${logo}" alt="${eq}" onerror="this.src='${logoLifarccDefault}'">
-                    <div class="team-card-info">
-                        <h5>${eq}</h5>
-                        <p>Jugadores: ${totalJugadores}</p>
-                    </div>
-                </div>
-            `;
+    async function registrarCambioBD(eq, jugNombre, acc, antes, despues) {
+        try {
+            const d = new Date();
+            await addDoc(collection(db, "log_cambios"), { equipo: eq || "GENERAL", jugador: jugNombre || "N/A", accion: acc, antes: antes || "-", despues: despues || "-", usuario: rolActual === "Administrador" ? "Administrador" : (equipoAsignado || "Equipo"), fecha: `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`, hora: d.toLocaleTimeString(), timestamp: new Date() });
+        } catch(e) {}
+    }
+
+    window.abrirModalCambiosRealizados = async function() {
+        if (rolActual !== "Administrador") return;
+        const tbody = document.getElementById("tablaCambiosRealizadosCuerpo");
+        tbody.innerHTML = `<tr><td colspan="7">Cargando...</td></tr>`;
+        document.getElementById("modalCambiosRealizados").style.display = "flex";
+        try {
+            const snap = await getDocs(collection(db, "log_cambios"));
+            let cambios = [...cambiosInicialesOficiales];
+            snap.forEach(d => cambios.push({ id: d.id, ...d.data() }));
+            cambios.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
+            tbody.innerHTML = "";
+            if (cambios.length === 0) { tbody.innerHTML = `<tr><td colspan="7">Sin cambios registrados.</td></tr>`; return; }
+            cambios.forEach((item, idx) => {
+                tbody.innerHTML += `<tr><td><strong>${idx+1}</strong></td><td>${item.fecha || ''}</td><td>${item.equipo}</td><td style="text-align:left;">${item.jugador}</td><td>${item.accion}</td><td>${item.usuario || 'Sistema'}</td><td style="text-align:left;"><b>Antes:</b> ${item.antes}<br><b>Después:</b> ${item.despues}</td></tr>`;
+            });
+        } catch(e) {}
+    }
+    window.cerrarModalCambiosRealizados = function() { document.getElementById("modalCambiosRealizados").style.display = "none"; }
+    window.borrarLogCambiosNube = async function() {
+        if (rolActual !== "Administrador" || !confirm("¿Vaciar historial de cambios?")) return;
+        const snap = await getDocs(collection(db, "log_cambios"));
+        for (const docSnap of snap.docs) await deleteDoc(doc(db, "log_cambios", docSnap.id));
+        window.abrirModalCambiosRealizados();
+    }
+
+    window.abrirModalGestionFechas = function() {
+        if (rolActual !== "Administrador") return;
+        const tbody = document.getElementById("tablaGestionFechasCuerpo"); tbody.innerHTML = "";
+        ordenCategoriasOficial.forEach(cat => {
+            const r = rangosFechasCategorias[cat] || { inicio: "", fin: "" };
+            tbody.innerHTML += `<tr><td style="text-align:left;"><strong>${cat}</strong></td><td><input type="date" id="rangoInicio_${cat}" value="${r.inicio}"></td><td><input type="date" id="rangoFin_${cat}" value="${r.fin}"></td></tr>`;
         });
+        document.getElementById("modalGestionFechas").style.display = "flex";
+    }
+    window.cerrarModalGestionFechas = function() { document.getElementById("modalGestionFechas").style.display = "none"; }
+    window.guardarRangosFechasNube = async function() {
+        if (rolActual !== "Administrador") return;
+        let nuevosRangos = {};
+        ordenCategoriasOficial.forEach(cat => { nuevosRangos[cat] = { inicio: document.getElementById(`rangoInicio_${cat}`).value, fin: document.getElementById(`rangoFin_${cat}`).value }; });
+        rangosFechasCategorias = nuevosRangos;
+        await setDoc(doc(db, "configuracion", "rangos_fechas"), nuevosRangos);
+        alert("¡Rangos guardados en la nube!"); window.cerrarModalGestionFechas(); window.renderizarRoster();
+    }
+
+    // BOTÓN EXCLUSIVO ADMINISTRADOR: IMPRIMIR SEMANA DE JUEGO (SELECCIÓN MÚLTIPLE)
+    window.abrirModalSeleccionSemanaJuego = function() {
+        if (rolActual !== "Administrador") return;
+        const contenedor = document.getElementById("contenedorCheckboxesSemana");
+        contenedor.innerHTML = "";
+        listaEquiposOficiales.forEach(eq => {
+            contenedor.innerHTML += `<label style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: bold; cursor: pointer; color: #f8fafc;"><input type="checkbox" name="checkEquipoSemana" value="${eq}" checked style="width: 16px; height: 16px; accent-color: #0ea5e9;"> ${eq}</label>`;
+        });
+        document.getElementById("modalSeleccionSemanaJuego").style.display = "flex";
+    }
+    window.cerrarModalSeleccionSemanaJuego = function() { document.getElementById("modalSeleccionSemanaJuego").style.display = "none"; }
+
+    window.ejecutarImpresionSemanaJuego = function() {
+        if (rolActual !== "Administrador") return;
+        const checkboxes = document.querySelectorAll('input[name="checkEquipoSemana"]:checked');
+        let equiposSeleccionados = []; checkboxes.forEach(chk => equiposSeleccionados.push(chk.value));
+        if (equiposSeleccionados.length === 0) { alert("⚠️ Debes seleccionar al menos un equipo."); return; }
+        window.cerrarModalSeleccionSemanaJuego();
+
+        const logoLiga = logoLigaGlobal || logoLifarccDefault;
+        let htmlContenido = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Semana de Juego - LIFARCC</title><style>
+            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 10mm; color: #000; background: white; }
+            .hoja-roster-impresion { page-break-after: always; break-after: page; margin-bottom: 20mm; width: 100%; max-width: 195mm; margin: 0 auto; }
+            .hoja-roster-impresion:last-child { page-break-after: avoid; break-after: avoid; margin-bottom: 0; }
+            table.print-table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; }
+            thead { display: table-header-group !important; } tbody { display: table-row-group !important; } tr { page-break-inside: avoid !important; }
+            table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 6px; text-align: center; font-size: 11px; }
+            table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; text-transform: uppercase; }
+            .logo-box-print { width: 95px; height: 95px; object-fit: contain; background: #fff; }
+            .header-table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
+            .header-table td { border: none !important; padding: 2px; vertical-align: middle; }
+            .league-title-print { font-size: 26px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
+            .league-subtitle-print { font-size: 9px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 3px; }
+            .print-footer { text-align: center; font-size: 9px; color: #555; border-top: 1px solid #aaa; padding-top: 6px; margin-top: 15px; }
+        </style></head><body>`;
+
+        let totalHojas = 0;
+        equiposSeleccionados.forEach(eq => {
+            const conf = configEquipos[eq] || {};
+            const logoEq = conf.logo || logosPorDefecto[eq] || 'Logos Equipos/lifarcc.jpg';
+            const jugadoresEquipo = baseDatos.filter(j => j.equipo === eq);
+            ordenCategoriasOficial.forEach(cat => {
+                const filtradosCat = jugadoresEquipo.filter(j => j.categoria === cat);
+                if (filtradosCat.length > 0) {
+                    totalHojas++; filtradosCat.sort(ordenarJugadoresPorNacimiento);
+                    let filasHtml = "";
+                    filtradosCat.forEach((j, idx) => {
+                        let fotoTd = j.foto ? `<img src="${j.foto}" style="width:86px; height:109px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:8px;">Sin foto</span>`;
+                        filasHtml += `<tr><td><strong>${idx+1}</strong></td><td>${fotoTd}</td><td style="text-align:left; font-weight:600;">${j.nombre}</td><td>${formatearFechaDDMMYYYY(j.nacimiento)}</td><td><code>${j.curp}</code></td><td></td><td></td></tr>`;
+                    });
+                    htmlContenido += `<div class="hoja-roster-impresion"><table class="print-table"><thead><tr><td colspan="7" style="border:none; padding:0;"><table class="header-table"><tr><td style="width:22%;"><img src="${logoLiga}" class="logo-box-print"></td><td style="width:56%; text-align:center;"><div class="league-title-print">LIFARCC</div><div class="league-subtitle-print">Liga Infantil de Football Americano de la Region Centro de Coahuila</div></td><td style="width:22%; text-align:right;"><img src="${logoEq}" class="logo-box-print"></td></tr></table><div style="font-size:10px; font-weight:bold; text-align:center; margin-bottom:2px;">FECHA: ___________________________________</div><div style="font-size:11px; font-weight:bold; display:flex; justify-content:space-between; text-transform:uppercase; margin-bottom:2px;"><span>CLUB ${eq}</span><span>JORNADA: ____________________</span></div><div style="font-size:11px; font-weight:bold; text-transform:uppercase; text-align:left; margin-bottom:3px;">ROSTER CATEGORIA: ${cat}</div></td></tr><tr><th style="width:35px;">N°</th><th style="width:90px;">Foto</th><th>Nombre Completo</th><th style="width:90px;">Fecha Nac.</th><th style="width:135px;">CURP</th><th style="width:50px;">N°- Jersey</th><th style="width:50px;">Peso kg</th></tr></thead><tbody>${filasHtml}</tbody></table><div class="print-footer">Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.063</div></div>`;
+                }
+            });
+        });
+
+        if (totalHojas === 0) { alert("⚠️ No hay jugadores registrados en los equipos seleccionados."); return; }
+        htmlContenido += `</body></html>`;
+        const vPrint = window.open('', '_blank');
+        if (!vPrint) { alert("Permite las ventanas emergentes."); return; }
+        vPrint.document.write(htmlContenido); vPrint.document.close(); vPrint.focus();
+        setTimeout(() => { vPrint.print(); }, 500);
+    }
+
+    window.abrirBuzonMensajes = async function() {
+        buzonTabActual = "recibidos"; document.getElementById("modalBuzonMensajes").style.display = "flex";
+        try {
+            const snap = await getDocs(collection(db, "mensajes")); listaMensajes = [];
+            snap.forEach(d => listaMensajes.push({ id: d.id, ...d.data() }));
+            window.renderizarTablaBuzon();
+        } catch(e) {}
+    }
+    window.cerrarBuzonMensajes = function() { document.getElementById("modalBuzonMensajes").style.display = "none"; }
+    window.cambiarBuzonTab = function(tab) { buzonTabActual = tab; window.renderizarTablaBuzon(); }
+
+    window.renderizarTablaBuzon = function() {
+        const tbody = document.getElementById("tablaBuzonCuerpo"); tbody.innerHTML = "";
+        const usuarioActual = rolActual === "Administrador" ? "Administrador" : equipoAsignado;
+        let filtrados = listaMensajes.filter(m => buzonTabActual === "recibidos" ? m.destinatario === usuarioActual : m.remitente === usuarioActual);
+        if (filtrados.length === 0) { tbody.innerHTML = `<tr><td colspan="7">No hay mensajes.</td></tr>`; return; }
+        filtrados.forEach((m, idx) => {
+            tbody.innerHTML += `<tr><td><strong>${idx+1}</strong></td><td>${buzonTabActual === "recibidos" ? m.remitente : m.destinatario}</td><td style="text-align:left; cursor:pointer;" onclick="window.verDetalleMensaje('${m.id}')">${m.asunto || m.texto.substring(0,30)}</td><td>${(m.archivo||m.audio)?'📎':'-'}</td><td>${m.fecha}</td><td>${m.leido?'Leído':'Nuevo'}</td><td><button class="btn btn-sm btn-celeste" onclick="window.verDetalleMensaje('${m.id}')">👁️</button></td></tr>`;
+        });
+    }
+
+    window.verDetalleMensaje = async function(idMsg) {
+        const msg = listaMensajes.find(m => m.id === idMsg); if (!msg) return;
+        if (!msg.leido && msg.destinatario === (rolActual === "Administrador" ? "Administrador" : equipoAsignado)) {
+            msg.leido = true; await updateDoc(doc(db, "mensajes", idMsg), { leido: true });
+        }
+        document.getElementById("visorContenidoDetalle").innerHTML = `<p><b>De:</b> ${msg.remitente} | <b>Fecha:</b> ${msg.fecha}</p><p>${msg.texto}</p>`;
+        document.getElementById("modalVisorMensaje").style.display = "flex";
+    }
+    window.cerrarVisorMensaje = function() { document.getElementById("modalVisorMensaje").style.display = "none"; }
+    window.abrirModalNuevoMensaje = function(dest = null) { document.getElementById("modalNuevoMensaje").style.display = "flex"; }
+    window.cerrarModalNuevoMensaje = function() { document.getElementById("modalNuevoMensaje").style.display = "none"; }
+
+    function ordenarJugadoresPorNacimiento(a, b) {
+        const nacA = formatearFechaExcel(a.nacimiento) || "", nacB = formatearFechaExcel(b.nacimiento) || "";
+        if (nacA !== nacB) return nacA.localeCompare(nacB);
+        return a.nombre.localeCompare(b.nombre);
     }
 
     window.renderizarRoster = function() {
@@ -1174,6 +1495,7 @@
         const tbody = document.getElementById("tablaCuerpo"); if (!tbody) return;
         tbody.innerHTML = "";
         const filtrados = baseDatos.filter(j => j.equipo === equipoSelect && j.categoria === categoriaSelect);
+        filtrados.sort(ordenarJugadoresPorNacimiento);
         if (filtrados.length === 0) { tbody.innerHTML = `<tr><td colspan="9">No hay jugadores registrados.</td></tr>`; return; }
         filtrados.forEach((j, index) => {
             tbody.innerHTML += `<tr><td><strong>${index+1}</strong></td><td>${j.foto ? `<img src="${j.foto}" style="width:40px; height:52px; object-fit:cover;">` : 'Sin foto'}</td><td style="text-align:left;">${j.nombre}</td><td>${j.categoria}</td><td>${formatearFechaDDMMYYYY(j.nacimiento)}</td><td><code>${j.curp}</code></td><td>${j.doc}</td><td>${j.equipo}</td><td><button class="btn btn-sm" onclick="window.abrirModal('${j.id}')">✏️</button></td></tr>`;
@@ -1183,7 +1505,7 @@
     window.renderizarDirectorioGeneral = function() {
         if (rolActual === "Equipo") return;
         const tbody = document.getElementById("tablaDirectorioGeneral"); if (!tbody) return; tbody.innerHTML = "";
-        let lista = [...baseDatos];
+        let lista = [...baseDatos]; lista.sort((a, b) => a.equipo.localeCompare(b.equipo) || a.categoria.localeCompare(b.categoria));
         lista.forEach((j, i) => {
             tbody.innerHTML += `<tr><td><strong>${i+1}</strong></td><td>${j.foto ? `<img src="${j.foto}" style="width:35px; height:46px; object-fit:cover;">` : 'Sin foto'}</td><td>${j.equipo}</td><td style="text-align:left;">${j.nombre}</td><td>${j.categoria}</td><td>${formatearFechaDDMMYYYY(j.nacimiento)}</td><td><code>${j.curp}</code></td><td>${j.doc}</td><td><button class="btn btn-sm" onclick="window.abrirModal('${j.id}')">✏️</button></td></tr>`;
         });
@@ -1210,10 +1532,8 @@
         document.getElementById("modalEditar").style.display = "flex";
     }
     window.cerrarModal = function() { document.getElementById("modalEditar").style.display = "none"; }
-    
     window.guardarEdicionModal = async function() {
-        const id = document.getElementById("editDocId").value; 
-        const j = baseDatos.find(item => item.id === id); if (!j) return;
+        const id = document.getElementById("editDocId").value; const j = baseDatos.find(item => item.id === id); if (!j) return;
         const datos = {
             nombre: document.getElementById("editNombre").value.trim().toUpperCase(),
             equipo: document.getElementById("editEquipoSelect").value,
@@ -1222,47 +1542,15 @@
             curp: document.getElementById("editCurp").value.trim().toUpperCase(),
             doc: document.getElementById("editDoc").value.trim().toUpperCase()
         };
-        if (db) {
-            try { await updateDoc(doc(db, "jugadores", id), datos); } catch(e) {}
-        }
-        Object.assign(j, datos); 
-        window.cerrarModal(); 
-        window.renderizarRoster(); 
-        alert("¡Actualizado con éxito!");
+        await updateDoc(doc(db, "jugadores", id), datos);
+        Object.assign(j, datos); window.cerrarModal(); window.renderizarRoster(); alert("¡Actualizado con éxito!");
     }
 
     function inicializarSistema() {
         const selFiltro = document.getElementById("filtroEquipo"), selEdit = document.getElementById("editEquipoSelect"), selAlta = document.getElementById("altaEquipo");
         [selFiltro, selEdit, selAlta].forEach(s => { if (s) { s.innerHTML = ""; listaEquiposOficiales.forEach(eq => s.innerHTML += `<option value="${eq}">${eq}</option>`); } });
-        if (rolActual === "Equipo") { 
-            if (selFiltro) { selFiltro.value = equipoAsignado; selFiltro.disabled = true; } 
-            if (selAlta) { selAlta.value = equipoAsignado; selAlta.disabled = true; } 
-        }
-        renderizarLogosEquipos();
+        if (rolActual === "Equipo") { if (selFiltro) { selFiltro.value = equipoAsignado; selFiltro.disabled = true; } if (selAlta) { selAlta.value = equipoAsignado; selAlta.disabled = true; } }
         window.renderizarRoster();
-    }
-
-    window.addEventListener('DOMContentLoaded', async () => {
-        const savedRol = sessionStorage.getItem('lifarcc_rol');
-        const savedEquipo = sessionStorage.getItem('lifarcc_equipo');
-        if (savedRol) {
-            rolActual = savedRol;
-            equipoAsignado = savedEquipo ? savedEquipo : null;
-            document.getElementById("loginOverlay").style.display = "none";
-            document.getElementById("appContainer").style.display = "block";
-            document.getElementById("lblRolActual").innerText = rolActual === "Administrador" ? "Rol: Admin" : `Club: ${equipoAsignado}`;
-            if (rolActual === "Administrador") document.getElementById("adminDropdown").style.display = "inline-block";
-            aplicarPermisosRol(); 
-            await cargarDatosDesdeNube();
-        }
-    });
-
-    async function cargarCredencialesNube() {
-        if (!db) return;
-        try {
-            const snap = await getDocs(collection(db, "configuracion"));
-            snap.forEach(docSnap => { if (docSnap.id === "credenciales_sistema") credencialesPasswords = { ...credencialesPasswords, ...docSnap.data() }; });
-        } catch(e) {}
     }
 </script>
 </body>
