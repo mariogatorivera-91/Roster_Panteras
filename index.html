@@ -14,6 +14,7 @@
             --accent-blue: #0ea5e9;
             --accent-purple: #8b5cf6;
         }
+        /* Pantalla fija sin barras de desplazamiento */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.95)), url('Logos Equipos/lifarcc.jpg') no-repeat center center fixed;
@@ -21,119 +22,121 @@
             color: var(--text-main);
             margin: 0;
             padding: 0;
-            min-height: 100vh;
+            height: 100vh;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
+            box-sizing: border-box;
         }
         .header-container {
             text-align: center;
-            padding: 30px 20px 10px 20px;
+            padding: 15px 20px 5px 20px;
+        }
+        /* Contenedor limpio para el logo */
+        .logo-wrapper {
+            background: #ffffff;
+            border-radius: 50%;
+            padding: 6px;
+            display: inline-block;
+            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.4);
+            margin-bottom: 6px;
         }
         .main-league-logo {
-            max-height: 85px;
+            height: 65px;
+            width: 65px;
             object-fit: contain;
-            margin-bottom: 8px;
-            filter: drop-shadow(0 4px 12px rgba(14, 165, 233, 0.4));
+            display: block;
         }
         p.subtitle {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 1.5px;
             margin: 0;
             font-weight: 600;
         }
-        /* Contenedor de los logos de los equipos (Zona del rectángulo azul) */
+        /* Banner de equipos */
         .teams-banner {
             width: 90%;
-            max-width: 780px;
+            max-width: 720px;
             background: rgba(15, 23, 42, 0.85);
             backdrop-filter: blur(6px);
             border: 2px solid var(--accent-blue);
-            border-radius: 14px;
-            padding: 12px 20px;
+            border-radius: 12px;
+            padding: 8px 15px;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
             flex-wrap: wrap;
-            margin: 15px auto 25px auto;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            margin: 10px auto;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
         }
         .team-logo-item {
-            width: 65px;
-            height: 65px;
+            width: 50px;
+            height: 50px;
             background: #ffffff;
             border-radius: 50%;
-            padding: 4px;
+            padding: 3px;
             object-fit: contain;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease;
         }
         .team-logo-item:hover {
-            transform: scale(1.12);
-            box-shadow: 0 6px 18px rgba(14, 165, 233, 0.6);
+            transform: scale(1.1);
         }
         .main-content {
             width: 100%;
-            max-width: 900px;
-            padding: 0 20px 20px 20px;
+            max-width: 850px;
+            padding: 0 20px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
             box-sizing: border-box;
-            margin: auto;
+            margin: auto 0;
         }
         .card {
             background: var(--bg-card);
             backdrop-filter: blur(8px);
             border: 2px solid var(--border-color);
             border-radius: 16px;
-            padding: 30px;
+            padding: 25px;
             text-align: center;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent-blue);
-            box-shadow: 0 15px 35px rgba(14, 165, 233, 0.25);
-        }
-        .card.juvenil:hover {
-            border-color: var(--accent-purple);
-            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.25);
-        }
         .card h2 {
-            font-size: 22px;
+            font-size: 20px;
             margin-top: 0;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
         .card p {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-muted);
-            line-height: 1.5;
-            margin-bottom: 20px;
+            line-height: 1.4;
+            margin-bottom: 15px;
         }
         .categories-badge {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 6px;
-            margin-bottom: 25px;
+            gap: 5px;
+            margin-bottom: 20px;
         }
         .badge {
             background: #0f172a;
             border: 1px solid var(--border-color);
-            padding: 4px 10px;
+            padding: 3px 8px;
             border-radius: 20px;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: bold;
             color: #38bdf8;
             text-transform: uppercase;
@@ -146,29 +149,54 @@
             background: linear-gradient(135deg, #0284c7, #0ea5e9);
             color: white;
             text-decoration: none;
-            padding: 12px 25px;
+            padding: 10px 22px;
             border-radius: 8px;
             font-weight: bold;
-            font-size: 13px;
+            font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            transition: background 0.2s;
             box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
         }
-        .btn-enter:hover {
-            background: linear-gradient(135deg, #0369a1, #0284c7);
-        }
+        /* Estilo para botón juvenil desactivado */
         .card.juvenil .btn-enter {
-            background: linear-gradient(135deg, #7c3aed, #8b5cf6);
-            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+            background: linear-gradient(135deg, #475569, #64748b);
+            pointer-events: none;
+            opacity: 0.35;
+            box-shadow: none;
         }
-        .card.juvenil .btn-enter:hover {
-            background: linear-gradient(135deg, #6d28d9, #7c3aed);
+        /* Capa superpuesta "Próximamente" */
+        .overlay-proximamente {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.86);
+            backdrop-filter: blur(3px);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            border-radius: 16px;
+        }
+        .badge-proximamente {
+            background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+            color: white;
+            padding: 8px 22px;
+            border-radius: 30px;
+            font-weight: 900;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.5);
+            border: 2px solid #c084fc;
+            transform: rotate(-3deg);
         }
         footer {
             text-align: center;
-            padding: 20px;
-            font-size: 11px;
+            padding: 12px;
+            font-size: 10px;
             color: var(--text-muted);
             border-top: 1px solid var(--border-color);
             width: 100%;
@@ -178,17 +206,44 @@
             color: #38bdf8;
             font-weight: bold;
         }
+        /* Indicador de conexión Firebase */
+        .firebase-status {
+            position: fixed;
+            bottom: 10px;
+            right: 15px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid #334155;
+            padding: 3px 9px;
+            border-radius: 20px;
+            font-size: 9px;
+            font-weight: bold;
+            color: #4ade80;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        }
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: #4ade80;
+            border-radius: 50%;
+            box-shadow: 0 0 6px #4ade80;
+        }
     </style>
 </head>
 <body>
 
     <div class="header-container">
-        <!-- Logotipo oficial de la liga (lifarcc_logo) -->
-        <img src="Logos Equipos/lifarcc_logo.jpg" alt="LIFARCC Monclova" class="main-league-logo" onerror="this.onerror=null; this.src='Logos Equipos/lifarcc.jpg';">
+        <!-- Logo limpio en contenedor circular -->
+        <div class="logo-wrapper">
+            <img src="Logos Equipos/lifarcc_logo.jpg" alt="LIFARCC Monclova" class="main-league-logo" onerror="this.onerror=null; this.src='Logos Equipos/lifarcc.jpg';">
+        </div>
         <p class="subtitle">Liga Infantil y Juvenil de Fútbol Americano de la Región Centro de Coahuila</p>
     </div>
 
-    <!-- Banner con los logos de los 6 equipos de la liga -->
+    <!-- Banner con los logos de los 6 equipos -->
     <div class="teams-banner">
         <img src="Logos Equipos/acereros.jpg" alt="Acereros" class="team-logo-item" title="Club Acereros" onerror="this.style.display='none'">
         <img src="Logos Equipos/bucaneros.jpg" alt="Bucaneros" class="team-logo-item" title="Club Bucaneros" onerror="this.style.display='none'">
@@ -199,7 +254,7 @@
     </div>
 
     <div class="main-content">
-        <!-- Tarjeta Liga Infantil -->
+        <!-- Tarjeta Liga Infantil (Activa) -->
         <div class="card">
             <div>
                 <h2>🏈 Liga Infantil</h2>
@@ -217,8 +272,14 @@
             </div>
         </div>
 
-        <!-- Tarjeta Liga Juvenil -->
+        <!-- Tarjeta Liga Juvenil (Bloqueada con Próximamente / Vínculo intacto) -->
         <div class="card juvenil">
+            <!-- Letrero de Próximamente cruzado -->
+            <div class="overlay-proximamente">
+                <div class="badge-proximamente">🚀 Próximamente</div>
+                <p style="font-size: 11px; color: #cbd5e1; margin-top: 10px; text-transform: uppercase; font-weight: bold;">Temporada Juvenil</p>
+            </div>
+
             <div>
                 <h2>🛡️ Liga Juvenil</h2>
                 <p>Sistema especializado en la administración de plantillas, validación de edades y generación de rosters para categorías mayores.</p>
@@ -229,6 +290,7 @@
                 </div>
             </div>
             <div>
+                <!-- El enlace sigue guardado y funcional en el código para activarse después -->
                 <a href="juvenil.html" class="btn-enter">Ingresar a Juvenil</a>
             </div>
         </div>
@@ -237,6 +299,11 @@
     <footer>
         Página Creada por <span>Carrivers Desing</span> - Todos los Derechos Reservados © - V.3.0.1
     </footer>
+
+    <!-- Indicador de conexión Firebase -->
+    <div class="firebase-status">
+        <span class="status-dot"></span> Conectado
+    </div>
 
 </body>
 </html>
