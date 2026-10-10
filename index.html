@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Generador de Roster Oficial - LIFARCC Monclova</title>
     <!-- FAVICON OFICIAL: BALÓN DE RUGBY DESDE GITHUB -->
     <link rel="icon" type="image/svg+xml" href="Logos%20Equipos/rugby-ball.svg">
@@ -27,8 +27,9 @@
             background-color: #0b0f19;
             color: var(--text-light);
             margin: 0;
-            padding: 15px;
+            padding: 10px;
             min-height: 100vh;
+            min-height: 100dvh;
             position: relative;
             overflow-x: hidden;
         }
@@ -64,16 +65,19 @@
             justify-content: center;
             align-items: center;
             z-index: 9999;
+            padding: 15px;
+            box-sizing: border-box;
         }
         .login-box {
             background: rgba(30, 41, 59, 0.95);
             border: 2px solid var(--bronze-gold);
-            padding: 35px;
+            padding: 25px;
             border-radius: 12px;
             width: 100%;
             max-width: 380px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.8);
             text-align: center;
+            box-sizing: border-box;
         }
         .login-box h3 { margin-top: 0; color: #fbbf24; letter-spacing: 1px; }
 
@@ -84,7 +88,7 @@
             margin: auto;
             background: rgba(17, 24, 39, 0.88);
             backdrop-filter: blur(6px);
-            padding: 25px;
+            padding: 15px;
             border-radius: 12px;
             border: 1px solid var(--metal-border);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
@@ -95,19 +99,19 @@
             display: flex;
             flex-direction: column;
             background: linear-gradient(90deg, #1e293b, #334155);
-            padding: 12px 20px;
+            padding: 10px;
             border-radius: 8px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             border: 1px solid #475569;
             gap: 10px;
         }
-        .nav-tabs-group { display: flex; gap: 8px; flex-wrap: wrap; }
+        .nav-tabs-group { display: flex; gap: 6px; flex-wrap: wrap; }
         .tab-btn {
             background: #0f172a;
             color: var(--accent-silver);
             border: 1px solid #475569;
-            padding: 8px 16px;
-            font-size: 13px;
+            padding: 8px 12px;
+            font-size: 12px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
@@ -118,25 +122,25 @@
             color: white;
             border-color: #fbbf24;
         }
-        .nav-actions-group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .nav-actions-group { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 
         /* HEADER & MINI LOGOS */
         .header-banner {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             border-bottom: 1px solid var(--metal-border);
-            padding-bottom: 15px;
+            padding-bottom: 12px;
         }
         .main-title-row {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
+            gap: 12px;
             margin-bottom: 5px;
         }
         .league-logo-badge {
-            width: 70px;
-            height: 70px;
+            width: 60px;
+            height: 60px;
             object-fit: contain;
             border-radius: 50%;
             border: 2px solid var(--bronze-gold);
@@ -146,8 +150,8 @@
         .mini-teams-header {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin-top: 12px;
+            gap: 10px;
+            margin-top: 10px;
             flex-wrap: wrap;
         }
         .mini-team-badge {
@@ -155,38 +159,37 @@
             align-items: center;
             gap: 5px;
             background: #1e293b;
-            padding: 3px 10px;
+            padding: 3px 8px;
             border-radius: 20px;
             border: 1px solid #475569;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: bold;
-            position: relative;
         }
-        .mini-team-badge img { width: 22px; height: 22px; object-fit: contain; background: #fff; border-radius: 50%; padding: 1px; }
+        .mini-team-badge img { width: 20px; height: 20px; object-fit: contain; background: #fff; border-radius: 50%; padding: 1px; }
 
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
         .controls-panel {
             background: #1e293b;
-            padding: 15px 20px;
+            padding: 12px 15px;
             border-radius: 8px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             border: 1px solid var(--metal-border);
         }
         .filter-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 12px;
             align-items: center;
             justify-content: space-between;
         }
-        .filter-group { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
-        .filter-group label { font-weight: bold; color: #cbd5e1; font-size: 13px; }
+        .filter-group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; width: 100%; }
+        .filter-group label { font-weight: bold; color: #cbd5e1; font-size: 12px; }
         
         select, input[type="text"], input[type="date"], input[type="number"], input[type="file"], input[type="password"], textarea {
-            padding: 7px 10px;
-            font-size: 13px;
+            padding: 8px;
+            font-size: 14px; /* Evita zoom automático en iPhone */
             border-radius: 6px;
             border: 1px solid var(--metal-border);
             background: #0f172a;
@@ -201,15 +204,16 @@
             background: linear-gradient(135deg, #3b82f6, #1d4ed8);
             color: white;
             border: none;
-            padding: 8px 14px;
+            padding: 9px 14px;
             font-size: 13px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
-            transition: opacity 0.2s;
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 6px;
+            box-sizing: border-box;
         }
         .btn:hover { opacity: 0.9; }
         .btn-success { background: linear-gradient(135deg, #16a34a, #15803d); }
@@ -218,7 +222,7 @@
         .btn-warning { background: linear-gradient(135deg, #d97706, #b45309); color: white; }
         .btn-info { background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white; }
         .btn-celeste { background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white; position: relative; }
-        .btn-sm { padding: 4px 8px; font-size: 11px; }
+        .btn-sm { padding: 6px 10px; font-size: 11px; }
 
         .msg-badge {
             position: absolute;
@@ -235,31 +239,31 @@
 
         .section-box {
             background: #1e293b;
-            padding: 15px 20px;
+            padding: 12px 15px;
             border-radius: 8px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             border: 1px solid var(--metal-border);
         }
-        .section-box h4 { margin: 0 0 10px 0; color: #f1f5f9; font-size: 15px; }
+        .section-box h4 { margin: 0 0 10px 0; color: #f1f5f9; font-size: 14px; }
 
         .teams-preview-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 12px;
-            margin-top: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+            margin-top: 8px;
         }
         .team-card {
             background: #0f172a;
             border: 1px solid var(--metal-border);
             border-radius: 8px;
-            padding: 10px;
+            padding: 8px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
         .team-card img {
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             object-fit: contain;
             border: 1px solid #475569;
             border-radius: 6px;
@@ -267,12 +271,12 @@
             padding: 2px;
         }
         .team-card-info { flex-grow: 1; overflow: hidden; }
-        .team-card-info h5 { margin: 0 0 3px 0; color: white; font-size: 13px; }
-        .team-card-info p { margin: 0 0 5px 0; font-size: 10px; color: var(--accent-silver); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .team-card-info h5 { margin: 0 0 2px 0; color: white; font-size: 12px; }
+        .team-card-info p { margin: 0; font-size: 10px; color: var(--accent-silver); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        .table-responsive { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; color: #1e293b; }
-        th, td { border: 1px solid #cbd5e1; padding: 7px 9px; text-align: center; font-size: 12px; }
+        .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; color: #1e293b; min-width: 600px; }
+        th, td { border: 1px solid #cbd5e1; padding: 6px 8px; text-align: center; font-size: 12px; }
         th {
             background-color: #1e3a8a !important;
             color: white !important;
@@ -283,8 +287,8 @@
         tr:nth-child(even) { background-color: #f8fafc; }
         
         .player-photo-container {
-            width: 40px;
-            height: 52px;
+            width: 36px;
+            height: 48px;
             margin: auto;
             border: 1px solid #cbd5e1;
             border-radius: 4px;
@@ -302,34 +306,38 @@
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.75);
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            padding: 10px;
+            box-sizing: border-box;
         }
         .modal-content {
             background: #1e293b;
             border: 1px solid var(--metal-border);
             color: white;
-            padding: 25px;
+            padding: 20px;
             border-radius: 10px;
-            width: 90%;
-            max-width: 550px;
-            max-height: 90vh;
+            width: 100%;
+            max-width: 520px;
+            max-height: 85vh;
             overflow-y: auto;
+            box-sizing: border-box;
         }
         .modal-header {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             color: #f8fafc;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
+            align-items: center;
         }
-        .close-btn { cursor: pointer; color: var(--danger-color); font-size: 18px; }
+        .close-btn { cursor: pointer; color: var(--danger-color); font-size: 20px; padding: 0 5px; }
 
         .footer-copyright {
-            margin-top: 30px;
+            margin-top: 20px;
             text-align: center;
             font-size: 9px;
             color: var(--accent-silver);
@@ -338,20 +346,8 @@
             padding-top: 10px;
         }
 
-        @media (max-width: 768px) {
-            body { padding: 5px; }
-            .container { padding: 12px; }
-            .top-navbar { padding: 10px; }
-            .filter-row { flex-direction: column; align-items: stretch; gap: 10px; }
-            .filter-group { flex-direction: column; align-items: stretch; width: 100%; }
-            .filter-group > div { width: 100%; }
-            .form-grid-1, .form-grid-2 { grid-template-columns: 1fr !important; }
-            .main-title-row { flex-direction: column; gap: 5px; text-align: center; }
-            .teams-preview-grid { grid-template-columns: 1fr; }
-        }
-
         @media print {
-            body { background: white; padding: 10mm; color: #000; }
+            body { background: white; padding: 5mm; color: #000; }
             .moving-light-overlay, .container, .top-navbar, .controls-panel, .section-box, .nav-tabs, .footer-copyright, .no-print { display: none !important; }
             
             .hoja-roster-impresion {
@@ -365,27 +361,16 @@
                 page-break-after: avoid;
                 break-after: avoid;
             }
-            
-            table.print-table { width: 100%; border-collapse: collapse; margin-top: 8px; background: white; }
+            table.print-table { width: 100%; border-collapse: collapse; margin-top: 8px; background: white; min-width: auto; }
             thead { display: table-header-group !important; }
             tbody { display: table-row-group !important; }
-            tr { page-break-inside: avoid !important; page-break-after: auto !important; }
-            
+            tr { page-break-inside: avoid !important; }
             table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 6px; text-align: center; font-size: 11px; }
-            table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; text-transform: uppercase; font-size: 11px; }
-            
-            .logo-box-print { width: 95px; height: 95px; object-fit: contain; background: #fff; }
-            .league-title-print { font-size: 26px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
-            .league-subtitle-print { font-size: 9px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 3px; }
-            
-            .print-footer {
-                text-align: center;
-                font-size: 9px;
-                color: #555;
-                border-top: 1px solid #aaa;
-                padding-top: 6px;
-                margin-top: 15px;
-            }
+            table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; text-transform: uppercase; }
+            .logo-box-print { width: 85px; height: 85px; object-fit: contain; background: #fff; }
+            .league-title-print { font-size: 22px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
+            .league-subtitle-print { font-size: 8px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 3px; }
+            .print-footer { text-align: center; font-size: 8px; color: #555; border-top: 1px solid #aaa; padding-top: 5px; margin-top: 10px; }
         }
     </style>
 </head>
@@ -397,10 +382,10 @@
 <div id="loginOverlay">
     <div class="login-box">
         <h3>LIFARCC MONCLOVA</h3>
-        <p style="font-size: 12px; color: #94a3b8; margin-bottom: 20px;">Selecciona tu rol de acceso:</p>
+        <p style="font-size: 12px; color: #94a3b8; margin-bottom: 15px;">Selecciona tu rol de acceso:</p>
         <div style="margin-bottom: 12px; text-align: left;">
             <label style="font-size: 11px; font-weight: bold; color: #cbd5e1;">USUARIO / CLUB:</label>
-            <select id="loginUsuario" onchange="window.verificarRolLogin()" style="width: 100%; margin-top: 5px; background: #0f172a; color: white; padding: 8px; border-radius: 6px; border: 1px solid #475569;">
+            <select id="loginUsuario" onchange="window.verificarRolLogin()" style="width: 100%; margin-top: 5px;">
                 <option value="Administrador">Administrador (Liga)</option>
                 <option value="ACEREROS">Club Acereros</option>
                 <option value="BUCANEROS">Club Bucaneros</option>
@@ -410,17 +395,14 @@
                 <option value="ZORROS">Club Zorros</option>
             </select>
         </div>
-        <div id="divPassword" style="margin-bottom: 20px; text-align: left;">
+        <div id="divPassword" style="margin-bottom: 15px; text-align: left;">
             <label style="font-size: 11px; font-weight: bold; color: #cbd5e1;" id="lblPassText">CONTRASEÑA:</label>
             <div style="display: flex; gap: 5px; align-items: center; margin-top: 5px;">
-                <input type="password" id="loginPassword" placeholder="Contraseña..." onkeydown="if(event.key==='Enter') window.intentarLogin()" style="width: 100%; box-sizing: border-box; padding: 8px; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white;">
-                <button type="button" class="btn btn-sm" onclick="window.toggleVerPassLogin()" style="padding: 8px 10px; background: #334155; border: 1px solid #475569; cursor: pointer;">👁️</button>
+                <input type="password" id="loginPassword" placeholder="Contraseña..." onkeydown="if(event.key==='Enter') window.intentarLogin()" style="width: 100%;">
+                <button type="button" class="btn btn-sm" onclick="window.toggleVerPassLogin()" style="padding: 10px; background: #334155; border: 1px solid #475569;">👁️</button>
             </div>
         </div>
         <button class="btn btn-warning" style="width: 100%; justify-content: center;" onclick="window.intentarLogin()">Ingresar al Sistema</button>
-    </div>
-    <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.063
     </div>
 </div>
 
@@ -428,18 +410,18 @@
     <div class="header-banner">
         <div class="main-title-row">
             <img src="" id="imgEscudoLiga" class="league-logo-badge" alt="LIFARCC" onerror="this.src='Logos%20Equipos/lifarcc.jpg'">
-            <h2 style="margin: 0; font-size: 20px; color: #f8fafc; letter-spacing: 0.5px;">LIGA DE FÚTBOL AMERICANO LIFARCC MONCLOVA</h2>
+            <h2 style="margin: 0; font-size: 16px; color: #f8fafc; letter-spacing: 0.5px;">LIGA DE FÚTBOL AMERICANO LIFARCC MONCLOVA</h2>
         </div>
-        <h3 style="margin: 2px 0 0 0; font-size: 13px; color: var(--bronze-gold); text-transform: uppercase;">GENERADOR Y GESTOR DE ROSTER OFICIAL</h3>
+        <h3 style="margin: 4px 0 0 0; font-size: 12px; color: var(--bronze-gold); text-transform: uppercase;">GENERADOR Y GESTOR DE ROSTER OFICIAL</h3>
         <div class="mini-teams-header" id="miniTeamsHeaderContainer"></div>
     </div>
 
     <!-- MENÚ SUPERIOR -->
     <div class="top-navbar no-print">
-        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 10px; border-bottom: 1px solid #475569; padding-bottom: 8px;">
-            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 8px; border-bottom: 1px solid #475569; padding-bottom: 8px;">
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                 <span id="lblRolActual" style="font-size: 11px; color: #fbbf24; font-weight: bold;"></span>
-                <select id="adminDropdown" class="col-admin" onchange="window.manejarAccionAdmin(this)" style="display:none; background:#1e293b; color:#fbbf24; border:1px solid #d97706; padding:5px 8px; border-radius:6px; font-size:11px; font-weight:bold; cursor:pointer;">
+                <select id="adminDropdown" class="col-admin" onchange="window.manejarAccionAdmin(this)" style="display:none; background:#1e293b; color:#fbbf24; border:1px solid #d97706; padding:5px; border-radius:6px; font-size:11px; font-weight:bold;">
                     <option value="">⚙️ Menú Admin...</option>
                     <option value="reporte">📊 Reporte Semanal</option>
                     <option value="fechas">📅 Fechas Categorías</option>
@@ -449,29 +431,29 @@
                 </select>
             </div>
             
-            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                <button class="btn btn-celeste btn-sm" id="btnBuzonSuperior" onclick="window.abrirBuzonMensajes()" title="Buzón de Mensajes">
+            <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                <button class="btn btn-celeste btn-sm" id="btnBuzonSuperior" onclick="window.abrirBuzonMensajes()" title="Buzón">
                     📨 <span id="txtBtnBuzon">Buzón</span>
                     <span id="badgeBuzonCount" class="msg-badge" style="display:none;">0</span>
                 </button>
-                <button class="btn btn-warning btn-sm" onclick="window.abrirModalCambiarPass()">🔑 Contraseña</button>
+                <button class="btn btn-warning btn-sm" onclick="window.abrirModalCambiarPass()">🔑 Pass</button>
                 <button class="btn btn-danger btn-sm" onclick="window.cerrarSesion()">🔒 Salir</button>
             </div>
         </div>
 
-        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 10px; padding-top: 4px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 8px; padding-top: 4px;">
             <div class="nav-tabs-group" id="navTabsContainer">
-                <button class="tab-btn active" onclick="window.cambiarPestaña('rosterTab', this)">📋 Generador de Roster</button>
-                <button class="tab-btn" id="btnTabDirectorio" onclick="window.cambiarPestaña('todosTab', this)">📚 Directorio General</button>
+                <button class="tab-btn active" onclick="window.cambiarPestaña('rosterTab', this)">📋 Roster</button>
+                <button class="tab-btn" id="btnTabDirectorio" onclick="window.cambiarPestaña('todosTab', this)">📚 Directorio</button>
             </div>
-            <div class="nav-actions-group" id="navActionsContainer" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                <div style="display: flex; align-items: center; gap: 5px; background: #0f172a; padding: 4px 10px; border-radius: 6px; border: 1px solid #475569;">
-                    <span style="font-size: 11px; color: #94a3b8;">📥 Importar Excel:</span>
-                    <input type="file" id="inputExcel" accept=".xlsx, .xls, .csv" onchange="window.importarExcel(event)" style="font-size: 11px; width: 150px; padding: 3px;">
+            <div class="nav-actions-group" id="navActionsContainer" style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 4px; background: #0f172a; padding: 4px 8px; border-radius: 6px; border: 1px solid #475569;">
+                    <span style="font-size: 10px; color: #94a3b8;">Excel:</span>
+                    <input type="file" id="inputExcel" accept=".xlsx, .xls, .csv" onchange="window.importarExcel(event)" style="font-size: 10px; width: 120px; padding: 2px;">
                 </div>
-                <div style="display: flex; align-items: center; gap: 5px; background: #0f172a; padding: 4px 10px; border-radius: 6px; border: 1px solid #475569;">
-                    <span style="font-size: 11px; color: #94a3b8;">📂 Fotos Masivas:</span>
-                    <input type="file" id="inputFotos" multiple accept="image/*" onchange="window.cargarFotosLocales(event)" style="font-size: 11px; width: 140px; padding: 3px;">
+                <div style="display: flex; align-items: center; gap: 4px; background: #0f172a; padding: 4px 8px; border-radius: 6px; border: 1px solid #475569;">
+                    <span style="font-size: 10px; color: #94a3b8;">Fotos:</span>
+                    <input type="file" id="inputFotos" multiple accept="image/*" onchange="window.cargarFotosLocales(event)" style="font-size: 10px; width: 110px; padding: 2px;">
                 </div>
             </div>
         </div>
@@ -480,34 +462,34 @@
     <!-- PESTAÑA 1 -->
     <div id="rosterTab" class="tab-content active">
         <div class="section-box no-print col-admin" style="background: #1e293b; border: 1px solid var(--bronze-gold);">
-            <h4>📅 Periodo de Registro de Jugadores</h4>
-            <p style="font-size: 12px; color: #cbd5e1; margin: 0;">Abierto de <b>Lunes a Jueves</b> (cierre jueves a las 11:59 PM).</p>
+            <h4>📅 Periodo de Registro</h4>
+            <p style="font-size: 11px; color: #cbd5e1; margin: 0;">Abierto de <b>Lunes a Jueves</b> (cierre jueves a las 11:59 PM).</p>
         </div>
 
         <div class="section-box no-print">
-            <h4>🛡 Configuración de Logotipos de Equipos</h4>
+            <h4>🛡 Logotipos de Equipos</h4>
             <div id="teamsPreviewGrid" class="teams-preview-grid"></div>
         </div>
 
         <div class="section-box" id="seccionAltaIndividual" style="background: #1e293b; border: 1px solid var(--bronze-gold);">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px;">
-                <h4 style="margin: 0; color: #f1f5f9; font-size: 15px;">➕ Registrar Jugador de 1 en 1 (Sincronizado en la Nube)</h4>
-                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                    <button class="btn btn-warning btn-sm" onclick="window.abrirModalRangosCategorias()">📅 Ver Rangos de Fechas por Categoría</button>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+                <h4 style="margin: 0; color: #f1f5f9; font-size: 14px;">➕ Registrar Jugador en la Nube</h4>
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                    <button class="btn btn-warning btn-sm" onclick="window.abrirModalRangosCategorias()">📅 Rangos</button>
                     <div id="badgeEstadoRegistroContainer"></div>
                 </div>
             </div>
-            <div id="bannerPeriodoRegistro" style="background: rgba(217, 119, 6, 0.2); border: 1px dashed var(--bronze-gold); padding: 8px 12px; border-radius: 6px; margin-bottom: 15px; font-size: 12px; font-weight: bold; color: #fbbf24; text-align: center;">
-                📅 Periodo de Registro de Jugadores: Abierto de Lunes a Jueves
+            <div id="bannerPeriodoRegistro" style="background: rgba(217, 119, 6, 0.2); border: 1px dashed var(--bronze-gold); padding: 6px 10px; border-radius: 6px; margin-bottom: 12px; font-size: 11px; font-weight: bold; color: #fbbf24; text-align: center;">
+                📅 Periodo: Lunes a Jueves
             </div>
             
-            <div class="form-grid-1" style="display: grid; grid-template-columns: 1fr 1fr 2fr; gap: 12px; margin-bottom: 12px;">
+            <div style="display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 10px;">
                 <div>
-                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Equipo *:</label>
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 3px;">Equipo *:</label>
                     <select id="altaEquipo" style="width:100%;" disabled></select>
                 </div>
                 <div>
-                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Categoría *:</label>
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 3px;">Categoría *:</label>
                     <select id="altaCategoria" style="width:100%;" disabled>
                         <option value="ARDILLA">ARDILLAS</option>
                         <option value="HORMIGA">HORMIGAS</option>
@@ -517,42 +499,42 @@
                     </select>
                 </div>
                 <div>
-                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Nombre Completo * <span id="checkNombre"></span></label>
-                    <input type="text" id="altaNombre" placeholder="APELLIDO PATERNO MATERNO Y NOMBRE(S)" oninput="window.validarNombreInput()" style="width:100%;">
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 3px;">Nombre Completo * <span id="checkNombre"></span></label>
+                    <input type="text" id="altaNombre" placeholder="APELLIDO PATERNO MATERNO Y NOMBRE(S)" oninput="window.validarNombreInput()">
                 </div>
             </div>
 
-            <div class="form-grid-2" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1.2fr; gap: 12px; margin-bottom: 15px;">
+            <div style="display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 12px;">
                 <div>
-                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Fecha Nacimiento * <span id="checkNacimiento"></span></label>
-                    <input type="date" id="altaNacimiento" onblur="window.validarFechaAltaBlur()" style="width:100%;">
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 3px;">Fecha Nacimiento * <span id="checkNacimiento"></span></label>
+                    <input type="date" id="altaNacimiento" onblur="window.validarFechaAltaBlur()">
                 </div>
                 <div>
-                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">CURP (18 Dígitos) * <span id="checkCurp"></span></label>
-                    <input type="text" id="altaCurp" maxlength="18" placeholder="18 CARACTERES..." oninput="window.validarCurpInput()" style="width:100%;">
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 3px;">CURP (18 Dígitos) * <span id="checkCurp"></span></label>
+                    <input type="text" id="altaCurp" maxlength="18" placeholder="18 CARACTERES..." oninput="window.validarCurpInput()">
                 </div>
                 <div>
-                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Documento * <span id="checkDoc">✅</span></label>
-                    <input type="text" id="altaDoc" value="ACTA DE NACIMIENTO, CURP" style="width:100%;">
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 3px;">Documento *:</label>
+                    <input type="text" id="altaDoc" value="ACTA DE NACIMIENTO, CURP">
                 </div>
                 <div>
-                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Fotografía *:</label>
-                    <button type="button" id="btnTextoAltaFoto" class="btn btn-warning btn-sm" onclick="window.mostrarGuiaFoto('altaFoto')" style="width:100%; justify-content:center;">📷 Seleccionar Foto</button>
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 3px;">Fotografía *:</label>
+                    <button type="button" id="btnTextoAltaFoto" class="btn btn-warning btn-sm" onclick="window.mostrarGuiaFoto('altaFoto')" style="width:100%;">📷 Seleccionar Foto</button>
                     <input type="file" id="altaFoto" accept="image/*" style="display:none;" onchange="window.actualizarNombreArchivoAlta(event)">
                 </div>
             </div>
-            <button class="btn btn-purple btn-sm" onclick="window.registrarJugadorIndividual()">Guardar Jugador en la Nube</button>
+            <button class="btn btn-purple btn-sm" style="width:100%;" onclick="window.registrarJugadorIndividual()">Guardar Jugador en la Nube</button>
         </div>
 
         <div class="controls-panel">
             <div class="filter-row">
                 <div class="filter-group">
-                    <div>
-                        <label for="filtroEquipo">EQUIPO:</label><br>
+                    <div style="width:100%;">
+                        <label for="filtroEquipo">EQUIPO:</label>
                         <select id="filtroEquipo" onchange="window.cambiarFiltroEquipo()"></select>
                     </div>
-                    <div>
-                        <label for="filtroCategoria">CATEGORÍA:</label><br>
+                    <div style="width:100%;">
+                        <label for="filtroCategoria">CATEGORÍA:</label>
                         <select id="filtroCategoria" onchange="window.renderizarRoster()">
                             <option value="ARDILLA">ARDILLA</option>
                             <option value="HORMIGA">HORMIGA</option>
@@ -561,27 +543,26 @@
                             <option value="BOTANA">BOTANA</option>
                         </select>
                     </div>
-                    <div>
-                        <label for="buscadorGlobal">🔍 Buscador:</label><br>
+                    <div style="width:100%;">
+                        <label for="buscadorGlobal">🔍 Buscador:</label>
                         <div style="display: flex; gap: 5px; align-items: center;">
-                            <input type="text" id="buscadorGlobal" placeholder="Nombre o CURP..." oninput="window.renderizarRoster()" style="width: 150px;">
-                            <button class="btn btn-warning btn-sm" onclick="window.renderizarRoster()" title="Actualizar">🔄 Generar</button>
+                            <input type="text" id="buscadorGlobal" placeholder="Nombre o CURP..." oninput="window.renderizarRoster()">
+                            <button class="btn btn-warning btn-sm" onclick="window.renderizarRoster()" title="Actualizar">🔄</button>
                         </div>
                     </div>
-                    <div>
-                        <label for="inputCampo">📍 Dirección Campo / Sede:</label><br>
+                    <div style="width:100%;">
+                        <label for="inputCampo">📍 Dirección Campo:</label>
                         <div style="display: flex; gap: 5px; align-items: center;">
-                            <input type="text" id="inputCampo" placeholder="Ej. Campo PAC-Snyder Monclova" oninput="window.guardarDatosCampoActual()" style="width: 200px;">
-                            <button type="button" class="btn btn-sm" onclick="window.abrirGoogleMapsCampo()" title="Google Maps" style="padding: 7px 10px; background: #334155; border: 1px solid #475569; cursor: pointer;">🗺️</button>
+                            <input type="text" id="inputCampo" placeholder="Ej. Campo PAC Monclova" oninput="window.guardarDatosCampoActual()">
+                            <button type="button" class="btn btn-sm" onclick="window.abrirGoogleMapsCampo()" title="Maps" style="padding: 8px; background: #334155; border: 1px solid #475569;">🗺️</button>
                         </div>
                     </div>
                 </div>
-                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                    <button class="btn btn-warning" onclick="window.mostrarPlantillaEquipo()">📋 Ver Plantilla</button>
-                    <button class="btn btn-success" onclick="window.imprimirRosterActual()">🖨️ Imprimir Roster</button>
-                    <button class="btn btn-info" onclick="window.imprimirRosterCompletoEquipoSeleccionado()">🖨 Imprimir Equipo Completo</button>
-                    <!-- BOTÓN EXCLUSIVO ADMINISTRADOR -->
-                    <button class="btn btn-purple col-admin" onclick="window.abrirModalSeleccionSemanaJuego()" title="Seleccionar equipos específicos">🔀 Imprimir Semana de Juego</button>
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; width: 100%; margin-top: 5px;">
+                    <button class="btn btn-warning btn-sm" style="flex:1;" onclick="window.mostrarPlantillaEquipo()">📋 Plantilla</button>
+                    <button class="btn btn-success btn-sm" style="flex:1;" onclick="window.imprimirRosterActual()">🖨️ Imprimir</button>
+                    <button class="btn btn-info btn-sm" style="width:100%;" onclick="window.imprimirRosterCompletoEquipoSeleccionado()">🖨 Imprimir Equipo Completo</button>
+                    <button class="btn btn-purple btn-sm col-admin" style="width:100%;" onclick="window.abrirModalSeleccionSemanaJuego()">🔀 Imprimir Semana de Juego</button>
                 </div>
             </div>
         </div>
@@ -590,15 +571,15 @@
             <table>
                 <thead>
                     <tr>
-                        <th style="width: 40px;">N°</th>
-                        <th style="width: 85px;">Foto</th>
+                        <th style="width: 35px;">N°</th>
+                        <th style="width: 75px;">Foto</th>
                         <th>Nombre del Jugador</th>
-                        <th style="width: 90px;">Categoría</th>
-                        <th style="width: 110px;">Fecha Nac.</th>
-                        <th style="width: 160px;">CURP</th>
-                        <th style="width: 120px;">Documento</th>
-                        <th class="no-print col-admin" style="width: 75px;">Equipo</th>
-                        <th class="no-print" style="width: 150px;">Acciones</th>
+                        <th style="width: 80px;">Cat</th>
+                        <th style="width: 95px;">Nac.</th>
+                        <th style="width: 130px;">CURP</th>
+                        <th style="width: 100px;">Doc</th>
+                        <th class="no-print col-admin" style="width: 70px;">Equipo</th>
+                        <th class="no-print" style="width: 60px;">Acción</th>
                     </tr>
                 </thead>
                 <tbody id="tablaCuerpo"></tbody>
@@ -608,29 +589,28 @@
 
     <!-- PESTAÑA 2: DIRECTORIO GENERAL -->
     <div id="todosTab" class="tab-content">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
             <div>
-                <h3 style="margin: 0; color: #f8fafc;">📚 Directorio General</h3>
-                <p style="font-size: 12px; color: var(--accent-silver); margin: 2px 0 0 0;">Ordenado por Equipo y Categoría.</p>
+                <h3 style="margin: 0; color: #f8fafc; font-size: 15px;">📚 Directorio General</h3>
             </div>
-            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-                <input type="text" id="buscadorDirectorioGeneral" placeholder="🔍 Buscar jugador..." oninput="window.renderizarDirectorioGeneral()" style="width: 220px;">
-                <button class="btn btn-success" onclick="window.imprimirTodosRostersMasivo()">🖨 Imprimir Todos (Masivo)</button>
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; width: 100%;">
+                <input type="text" id="buscadorDirectorioGeneral" placeholder="🔍 Buscar jugador..." oninput="window.renderizarDirectorioGeneral()" style="flex:1;">
+                <button class="btn btn-success btn-sm" onclick="window.imprimirTodosRostersMasivo()">🖨 Masivo</button>
             </div>
         </div>
         <div class="table-responsive">
             <table>
                 <thead>
                     <tr>
-                        <th style="width: 40px;">N°</th>
-                        <th style="width: 80px;">Foto</th>
-                        <th style="width: 110px;">Equipo</th>
+                        <th style="width: 35px;">N°</th>
+                        <th style="width: 70px;">Foto</th>
+                        <th style="width: 90px;">Equipo</th>
                         <th>Nombre del Jugador</th>
-                        <th style="width: 100px;">Categoría</th>
-                        <th style="width: 110px;">Fecha Nac.</th>
-                        <th style="width: 160px;">CURP</th>
-                        <th style="width: 120px;">Documento</th>
-                        <th style="width: 80px;">Acciones</th>
+                        <th style="width: 85px;">Cat</th>
+                        <th style="width: 95px;">Nac.</th>
+                        <th style="width: 130px;">CURP</th>
+                        <th style="width: 100px;">Doc</th>
+                        <th style="width: 60px;">Acción</th>
                     </tr>
                 </thead>
                 <tbody id="tablaDirectorioGeneral"></tbody>
@@ -645,256 +625,179 @@
 
 <!-- MODALES -->
 <div id="modalAmpliarFoto" class="modal" style="z-index: 1010;">
-    <div class="modal-content" style="max-width: 400px; text-align: center;">
+    <div class="modal-content" style="max-width: 350px; text-align: center;">
         <div class="modal-header">
-            <span>🔍 Vista Ampliada de Fotografía</span>
+            <span>🔍 Vista Ampliada</span>
             <span class="close-btn" onclick="window.cerrarModalAmpliarFoto()">&times;</span>
         </div>
-        <div style="background: #0f172a; padding: 10px; border-radius: 8px; margin-bottom: 15px; border: 2px solid var(--bronze-gold); display: flex; justify-content: center; align-items: center; min-height: 250px;">
-            <img id="imgAmpliadaModal" src="" alt="Foto" style="max-width: 100%; max-height: 350px; object-fit: contain; border-radius: 6px;" onerror="this.src='Logos%20Equipos/lifarcc.jpg'">
+        <div style="background: #0f172a; padding: 8px; border-radius: 8px; margin-bottom: 12px; border: 2px solid var(--bronze-gold); min-height: 220px; display: flex; align-items: center; justify-content: center;">
+            <img id="imgAmpliadaModal" src="" alt="Foto" style="max-width: 100%; max-height: 320px; object-fit: contain; border-radius: 6px;" onerror="this.src='Logos%20Equipos/lifarcc.jpg'">
         </div>
-        <p id="nombreJugadorAmpliado" style="font-size: 13px; font-weight: bold; color: #fbbf24; margin: 0;"></p>
+        <p id="nombreJugadorAmpliado" style="font-size: 12px; font-weight: bold; color: #fbbf24; margin: 0;"></p>
     </div>
 </div>
 
-<!-- MODAL SELECCIÓN SEMANA DE JUEGO -->
 <div id="modalSeleccionSemanaJuego" class="modal" style="z-index: 1015;">
-    <div class="modal-content" style="max-width: 460px; background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--celeste-btn);">
+    <div class="modal-content" style="background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--celeste-btn);">
         <div class="modal-header" style="border-bottom: 1px solid #334155; padding-bottom: 8px;">
-            <span style="color: #38bdf8;">🔀 Imprimir Semana de Juego (Selección Múltiple)</span>
+            <span style="color: #38bdf8;">🔀 Imprimir Semana de Juego</span>
             <span class="close-btn" onclick="window.cerrarModalSeleccionSemanaJuego()">&times;</span>
         </div>
-        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 15px;">Selecciona con una palomita los equipos cuyos rosters completos deseas incluir:</p>
-        <div id="contenedorCheckboxesSemana" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; text-align: left; background: #0f172a; padding: 15px; border-radius: 8px; border: 1px solid #334155;"></div>
-        <div style="display: flex; justify-content: flex-end; gap: 10px;">
-            <button class="btn btn-danger btn-sm" onclick="window.cerrarModalSeleccionSemanaJuego()">Cancelar</button>
-            <button class="btn btn-success" onclick="window.ejecutarImpresionSemanaJuego()">🖨️ Imprimir Seleccionados</button>
+        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 12px;">Selecciona los equipos:</p>
+        <div id="contenedorCheckboxesSemana" style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 15px; text-align: left; background: #0f172a; padding: 12px; border-radius: 8px; border: 1px solid #334155;"></div>
+        <div style="display: flex; gap: 8px;">
+            <button class="btn btn-danger btn-sm" style="flex:1;" onclick="window.cerrarModalSeleccionSemanaJuego()">Cancelar</button>
+            <button class="btn btn-success btn-sm" style="flex:1;" onclick="window.ejecutarImpresionSemanaJuego()">🖨️ Imprimir</button>
         </div>
     </div>
 </div>
 
-<!-- OTROS MODALES DE APOYO -->
 <div id="modalAvisoMensajeLogin" class="modal" style="z-index: 1050;">
-    <div class="modal-content" style="max-width: 400px; text-align: center; border: 2px solid var(--celeste-btn);">
+    <div class="modal-content" style="max-width: 360px; text-align: center; border: 2px solid var(--celeste-btn);">
         <div class="modal-header" style="justify-content: center; border-bottom: 1px solid #334155; padding-bottom: 8px;">
-            <span style="font-size: 18px; color: #38bdf8;">📨 NOTIFICACIÓN OFICIAL</span>
+            <span style="font-size: 16px; color: #38bdf8;">📨 NOTIFICACIÓN</span>
         </div>
-        <div style="padding: 20px 0;">
-            <p style="font-size: 16px; font-weight: bold; color: #f8fafc; margin-bottom: 10px;">¡UD TIENE UN MENSAJE NUEVO!</p>
-            <p style="font-size: 12px; color: var(--accent-silver);">Hay comunicaciones pendientes en el buzón oficial.</p>
+        <div style="padding: 15px 0;">
+            <p style="font-size: 14px; font-weight: bold; color: #f8fafc; margin-bottom: 8px;">¡TIENES UN MENSAJE NUEVO!</p>
+            <p style="font-size: 11px; color: var(--accent-silver);">Hay comunicaciones pendientes en el buzón.</p>
         </div>
-        <div style="display: flex; justify-content: center; gap: 12px;">
+        <div style="display: flex; justify-content: center; gap: 10px;">
             <button class="btn btn-danger btn-sm" onclick="window.cerrarAvisoLogin()">Cerrar</button>
-            <button class="btn btn-celeste" onclick="window.irAlBuzonDesdeLogin()">👀 Ver Mensaje</button>
-        </div>
-    </div>
-</div>
-
-<div id="modalAlerta2013" class="modal" style="z-index: 1060;">
-    <div class="modal-content" style="max-width: 460px; text-align: center; border: 2px solid #dc2626; background: linear-gradient(135deg, #0f172a, #1e293b);">
-        <div class="modal-header" style="justify-content: center; border-bottom: 1px solid #334155; padding-bottom: 8px;">
-            <span style="font-size: 17px; color: #ef4444;">⚠️ LÍMITE DE JUGADORES 2013 EXCEDIDO</span>
-        </div>
-        <div style="padding: 12px 0;">
-            <p style="font-size: 13px; color: #f8fafc; font-weight: bold; margin-bottom: 8px;">¡Debe dejar solo 1 jugador del año 2013 permitido!</p>
-            <p id="textoAlerta2013" style="font-size: 12px; color: #cbd5e1; line-height: 1.4; margin-bottom: 12px; background: rgba(220, 38, 38, 0.15); padding: 10px; border-radius: 6px; border: 1px dashed #dc2626; text-align: left;"></p>
-        </div>
-        <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-            <button class="btn btn-danger btn-sm" onclick="window.cerrarAlerta2013()">Entendido</button>
-            <button class="btn btn-celeste btn-sm" onclick="window.abrirContactoAdminFrom2013()">✉️ Solicitar corrección</button>
+            <button class="btn btn-celeste btn-sm" onclick="window.irAlBuzonDesdeLogin()">👀 Ver</button>
         </div>
     </div>
 </div>
 
 <div id="modalBuzonMensajes" class="modal" style="z-index: 1020;">
-    <div class="modal-content" style="max-width: 820px; background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--celeste-btn);">
-        <div class="modal-header" style="border-bottom: 1px solid #334155; padding-bottom: 10px;">
-            <span id="tituloBuzonModal">📨 Buzón de Mensajes Oficial</span>
+    <div class="modal-content" style="background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--celeste-btn);">
+        <div class="modal-header" style="border-bottom: 1px solid #334155; padding-bottom: 8px;">
+            <span id="tituloBuzonModal">📨 Buzón de Mensajes</span>
             <span class="close-btn" onclick="window.cerrarBuzonMensajes()">&times;</span>
         </div>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
-            <div style="display: flex; gap: 6px;">
-                <button id="btnTabRecibidos" class="tab-btn active" onclick="window.cambiarBuzonTab('recibidos')">📥 Recibidos</button>
-                <button id="btnTabEnviados" class="tab-btn" onclick="window.cambiarBuzonTab('enviados')">📤 Enviados</button>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+            <div style="display: flex; gap: 5px;">
+                <button id="btnTabRecibidos" class="tab-btn active" style="padding: 6px 10px; font-size: 11px;" onclick="window.cambiarBuzonTab('recibidos')">📥 Recibidos</button>
+                <button id="btnTabEnviados" class="tab-btn" style="padding: 6px 10px; font-size: 11px;" onclick="window.cambiarBuzonTab('enviados')">📤 Enviados</button>
             </div>
-            <div style="display: flex; gap: 8px; align-items: center;">
-                <input type="text" id="buscadorBuzon" placeholder="🔍 Buscar..." oninput="window.renderizarTablaBuzon()" style="width: 200px; font-size: 11px; padding: 5px;">
-                <button class="btn btn-celeste btn-sm" onclick="window.abrirModalNuevoMensaje()">✉️ Redactar</button>
-            </div>
+            <button class="btn btn-celeste btn-sm" onclick="window.abrirModalNuevoMensaje()">✉️ Redactar</button>
         </div>
-        <div class="table-responsive" style="max-height: 380px; overflow-y: auto;">
+        <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
             <table>
                 <thead>
                     <tr>
-                        <th style="width: 40px;">N°</th>
-                        <th id="thRemitentePara" style="width: 120px;">Remitente</th>
-                        <th>Asunto / Mensaje</th>
-                        <th style="width: 75px;">📎</th>
-                        <th style="width: 110px;">Fecha</th>
-                        <th style="width: 90px;">Estado</th>
-                        <th style="width: 100px;">Acciones</th>
+                        <th style="width: 30px;">N°</th>
+                        <th style="width: 90px;">Remitente</th>
+                        <th>Asunto</th>
+                        <th style="width: 70px;">Fecha</th>
+                        <th style="width: 50px;">Ver</th>
                     </tr>
                 </thead>
                 <tbody id="tablaBuzonCuerpo"></tbody>
             </table>
         </div>
-        <div style="text-align: right; margin-top: 15px;">
+        <div style="text-align: right; margin-top: 12px;">
             <button class="btn btn-warning btn-sm" onclick="window.cerrarBuzonMensajes()">Cerrar</button>
         </div>
     </div>
 </div>
 
-<div id="modalNuevoMensaje" class="modal" style="z-index: 1030;">
-    <div class="modal-content" style="max-width: 520px;">
-        <div class="modal-header">
-            <span>✉ Enviar Mensaje / Archivo</span>
-            <span class="close-btn" onclick="window.cerrarModalNuevoMensaje()">&times;</span>
-        </div>
-        <div style="display: grid; grid-template-columns: 1fr; gap: 12px;">
-            <div id="divDestinatarioContainer" style="display:none;">
-                <label style="font-size: 11px; font-weight: bold;">Para:</label>
-                <select id="selectDestinatario" style="width:100%;"></select>
-            </div>
-            <div>
-                <label style="font-size: 11px; font-weight: bold;">Mensaje:</label>
-                <textarea id="txtContenidoMensaje" rows="4" placeholder="Escribe aquí..." style="width:100%; resize:vertical;"></textarea>
-            </div>
-            <div>
-                <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Adjuntar Archivo:</label>
-                <input type="file" id="inputArchivoMensaje" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" onchange="window.validarArchivoSeleccionado(event)" style="font-size: 11px;">
-                <span id="lblArchivoSeleccionado" style="font-size: 10px; color: #38bdf8; display: block; margin-top: 3px;"></span>
-            </div>
-            <div style="background: #0f172a; padding: 10px; border-radius: 6px; border: 1px solid #334155;">
-                <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 6px;">🎙️ Audio Directo:</label>
-                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-                    <button type="button" id="btnGrabarAudio" class="btn btn-danger btn-sm" onclick="window.toggleGrabacionAudio()">🔴 Iniciar Grabación</button>
-                    <span id="lblEstadoGrabacion" style="font-size: 11px; color: #94a3b8;">Grabadora detenida</span>
-                </div>
-                <audio id="audioPlayback" controls style="width: 100%; margin-top: 8px; display: none;"></audio>
-            </div>
-        </div>
-        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px;">
-            <button class="btn btn-danger btn-sm" onclick="window.cerrarModalNuevoMensaje()">Cancelar</button>
-            <button class="btn btn-success" onclick="window.enviarMensajeServidor()">📤 Enviar</button>
-        </div>
-    </div>
-</div>
-
 <div id="modalVisorMensaje" class="modal" style="z-index: 1030;">
-    <div class="modal-content" style="max-width: 550px;">
+    <div class="modal-content" style="max-width: 450px;">
         <div class="modal-header">
-            <span id="visorAsuntoTitulo">📄 Detalle del Mensaje</span>
+            <span>📄 Detalle del Mensaje</span>
             <span class="close-btn" onclick="window.cerrarVisorMensaje()">&times;</span>
         </div>
-        <div id="visorContenidoDetalle" style="background: #0f172a; padding: 15px; border-radius: 8px; border: 1px solid #334155; margin-bottom: 15px; font-size: 13px; line-height: 1.5; word-break: break-word;"></div>
-        <div id="visorAdjuntoContainer" style="text-align: center; margin-bottom: 15px;"></div>
-        <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div id="visorContenidoDetalle" style="background: #0f172a; padding: 12px; border-radius: 8px; border: 1px solid #334155; margin-bottom: 12px; font-size: 12px; line-height: 1.4; word-break: break-word;"></div>
+        <div style="text-align: right;">
             <button class="btn btn-warning btn-sm" onclick="window.cerrarVisorMensaje()">Cerrar</button>
-            <button id="btnResponderVisor" class="btn btn-success" onclick="window.abrirRespuestaDesdevisor()">↩️ Responder</button>
         </div>
     </div>
 </div>
 
 <div id="modalGestionFechas" class="modal" style="z-index: 1010;">
-    <div class="modal-content" style="max-width: 750px; background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--bronze-gold);">
-        <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--bronze-gold); padding-bottom: 12px; margin-bottom: 15px;">
-            <h3 style="margin: 0; color: #f8fafc; font-size: 18px;">Gestión de Fechas y Rangos</h3>
+    <div class="modal-content" style="background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--bronze-gold);">
+        <div class="modal-header" style="border-bottom: 2px solid var(--bronze-gold); padding-bottom: 8px; margin-bottom: 10px;">
+            <h3 style="margin: 0; color: #f8fafc; font-size: 15px;">Gestión de Fechas</h3>
             <span class="close-btn" onclick="window.cerrarModalGestionFechas()">&times;</span>
         </div>
         <div class="table-responsive">
             <table>
-                <thead>
-                    <tr>
-                        <th style="text-align: left; padding-left: 12px;">Categoría</th>
-                        <th>Fecha Inicial</th>
-                        <th>Fecha Final</th>
-                    </tr>
-                </thead>
+                <thead><tr><th style="text-align:left;">Cat</th><th>Inicio</th><th>Fin</th></tr></thead>
                 <tbody id="tablaGestionFechasCuerpo"></tbody>
             </table>
         </div>
-        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 15px;">
-            <button class="btn btn-danger btn-sm" onclick="window.cerrarModalGestionFechas()">Cancelar</button>
-            <button class="btn btn-success" onclick="window.guardarRangosFechasNube()">💾 Guardar</button>
+        <div style="display: flex; gap: 8px; margin-top: 12px;">
+            <button class="btn btn-danger btn-sm" style="flex:1;" onclick="window.cerrarModalGestionFechas()">Cancelar</button>
+            <button class="btn btn-success btn-sm" style="flex:1;" onclick="window.guardarRangosFechasNube()">💾 Guardar</button>
         </div>
     </div>
 </div>
 
 <div id="modalCambiosRealizados" class="modal" style="z-index: 1015;">
-    <div class="modal-content" style="max-width: 900px; background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--bronze-gold);">
-        <div class="modal-header" style="border-bottom: 2px solid var(--bronze-gold); padding-bottom: 10px;">
-            <span style="color: #fbbf24;">📋 Historial de Cambios Realizados</span>
+    <div class="modal-content" style="background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--bronze-gold);">
+        <div class="modal-header" style="border-bottom: 2px solid var(--bronze-gold); padding-bottom: 8px;">
+            <span style="color: #fbbf24;">📋 Historial de Cambios</span>
             <span class="close-btn" onclick="window.cerrarModalCambiosRealizados()">&times;</span>
         </div>
-        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+        <div class="table-responsive" style="max-height: 320px; overflow-y: auto;">
             <table>
-                <thead>
-                    <tr>
-                        <th>N°</th>
-                        <th>Fecha</th>
-                        <th>Equipo</th>
-                        <th>Jugador</th>
-                        <th>Acción</th>
-                        <th>Usuario</th>
-                        <th>Detalle</th>
-                    </tr>
-                </thead>
+                <thead><tr><th>N°</th><th>Fecha</th><th>Equipo</th><th>Jugador</th><th>Acción</th></tr></thead>
                 <tbody id="tablaCambiosRealizadosCuerpo"></tbody>
             </table>
         </div>
-        <div style="display: flex; justify-content: space-between; margin-top: 15px;">
-            <button class="btn btn-danger btn-sm" onclick="window.borrarLogCambiosNube()">🗑️ Borrar Historial</button>
+        <div style="display: flex; justify-content: space-between; margin-top: 12px; gap: 8px;">
+            <button class="btn btn-danger btn-sm" onclick="window.borrarLogCambiosNube()">🗑️ Borrar</button>
             <button class="btn btn-warning btn-sm" onclick="window.cerrarModalCambiosRealizados()">Cerrar</button>
         </div>
     </div>
 </div>
 
 <div id="modalRangosCategorias" class="modal" style="z-index: 1010;">
-    <div class="modal-content" style="max-width: 520px;">
+    <div class="modal-content" style="max-width: 420px;">
         <div class="modal-header">
-            <span>📅 Rangos de Fechas por Categoría</span>
+            <span>📅 Rangos por Categoría</span>
             <span class="close-btn" onclick="window.cerrarModalRangosCategorias()">&times;</span>
         </div>
         <div class="table-responsive">
             <table>
-                <thead><tr><th>Categoría</th><th>Fecha Mínima</th><th>Fecha Máxima</th></tr></thead>
+                <thead><tr><th>Cat</th><th>Mínima</th><th>Máxima</th></tr></thead>
                 <tbody id="tablaRangosInformativaCuerpo"></tbody>
             </table>
         </div>
-        <div style="text-align: right; margin-top: 15px;"><button class="btn btn-warning btn-sm" onclick="window.cerrarModalRangosCategorias()">Cerrar</button></div>
+        <div style="text-align: right; margin-top: 12px;"><button class="btn btn-warning btn-sm" onclick="window.cerrarModalRangosCategorias()">Cerrar</button></div>
     </div>
 </div>
 
 <div id="modalGuiaFoto" class="modal" style="z-index: 1005;">
-    <div class="modal-content" style="max-width: 520px; text-align: center;">
+    <div class="modal-content" style="max-width: 400px; text-align: center;">
         <div class="modal-header">
-            <span>📸 Guía de Fotografía Correcta</span>
+            <span>📸 Guía de Fotografía</span>
             <span class="close-btn" onclick="window.cerrarModalGuiaFoto()">&times;</span>
         </div>
-        <div style="background: #ffffff; padding: 8px; border-radius: 8px; margin-bottom: 15px;">
-            <img src="Logos Equipos/foto correcta.jpg" alt="Guía" style="max-width: 100%; border-radius: 6px;" onerror="this.src='Logos%20Equipos/lifarcc.jpg'">
+        <div style="background: #ffffff; padding: 6px; border-radius: 6px; margin-bottom: 12px;">
+            <img src="Logos Equipos/foto correcta.jpg" alt="Guía" style="max-width: 100%; border-radius: 4px;" onerror="this.src='Logos%20Equipos/lifarcc.jpg'">
         </div>
-        <div style="display: flex; gap: 10px; justify-content: flex-end;">
-            <button class="btn btn-danger btn-sm" onclick="window.cerrarModalGuiaFoto()">Cancelar</button>
-            <button class="btn btn-success" onclick="window.procederConSubidaFoto()">✅ Entendido</button>
+        <div style="display: flex; gap: 8px;">
+            <button class="btn btn-danger btn-sm" style="flex:1;" onclick="window.cerrarModalGuiaFoto()">Cancelar</button>
+            <button class="btn btn-success btn-sm" style="flex:1;" onclick="window.procederConSubidaFoto()">✅ Entendido</button>
         </div>
     </div>
 </div>
 
 <div id="modalReporteSemanal" class="modal">
-    <div class="modal-content" style="max-width: 800px;">
+    <div class="modal-content">
         <div class="modal-header">
             <span>📊 Reporte Semanal</span>
             <span class="close-btn" onclick="window.cerrarModalReporteSemanal()">&times;</span>
         </div>
-        <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 15px; flex-wrap: wrap;">
-            <div><label>Desde:</label><input type="date" id="repFechaInicio" onchange="window.filtrarReporteSemanal()"></div>
-            <div><label>Hasta:</label><input type="date" id="repFechaFin" onchange="window.filtrarReporteSemanal()"></div>
-            <button class="btn btn-success btn-sm" onclick="window.imprimirReporteSemanal()">🖨️ Imprimir Reporte</button>
+        <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 10px; flex-wrap: wrap;">
+            <div style="flex:1;"><label style="font-size:10px;">Desde:</label><input type="date" id="repFechaInicio" onchange="window.filtrarReporteSemanal()"></div>
+            <div style="flex:1;"><label style="font-size:10px;">Hasta:</label><input type="date" id="repFechaFin" onchange="window.filtrarReporteSemanal()"></div>
+            <button class="btn btn-success btn-sm" style="width:100%;" onclick="window.imprimirReporteSemanal()">🖨️ Imprimir Reporte</button>
         </div>
-        <div class="table-responsive" style="max-height: 380px; overflow-y: auto;">
+        <div class="table-responsive" style="max-height: 280px; overflow-y: auto;">
             <table>
-                <thead><tr><th>N°</th><th>Club</th><th>Nombre</th><th>Categoría</th><th>Fecha Alta</th></tr></thead>
+                <thead><tr><th>N°</th><th>Club</th><th>Nombre</th><th>Cat</th></tr></thead>
                 <tbody id="tablaReporteSemanalCuerpo"></tbody>
             </table>
         </div>
@@ -902,18 +805,18 @@
 </div>
 
 <div id="modalLogAccesos" class="modal">
-    <div class="modal-content" style="max-width: 650px;">
+    <div class="modal-content">
         <div class="modal-header">
             <span>🕒 Registro de Accesos</span>
             <span class="close-btn" onclick="window.cerrarModalLogAccesos()">&times;</span>
         </div>
-        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+        <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
             <table>
                 <thead><tr><th>N°</th><th>Fecha</th><th>Hora</th><th>Usuario</th></tr></thead>
                 <tbody id="tablaLogAccesosCuerpo"></tbody>
             </table>
         </div>
-        <div style="display: flex; justify-content: space-between; margin-top: 15px;">
+        <div style="display: flex; justify-content: space-between; margin-top: 12px; gap: 8px;">
             <button class="btn btn-danger btn-sm" onclick="window.borrarLogAccesosNube()">🗑️ Borrar</button>
             <button class="btn btn-warning btn-sm" onclick="window.cerrarModalLogAccesos()">Cerrar</button>
         </div>
@@ -927,76 +830,50 @@
             <span class="close-btn" onclick="window.cerrarModal()">&times;</span>
         </div>
         <input type="hidden" id="editDocId">
-        <div style="display: grid; grid-template-columns: 1fr; gap: 10px;">
-            <div><label>Nombre:</label><input type="text" id="editNombre" style="width:100%;"></div>
-            <div><label>Equipo:</label><select id="editEquipoSelect" style="width:100%;"></select></div>
-            <div><label>Categoría:</label><select id="editCategoria" style="width:100%;" disabled><option value="ARDILLA">ARDILLA</option><option value="HORMIGA">HORMIGA</option><option value="HORMIGUITA">HORMIGUITA</option><option value="MOSCO">MOSCO</option><option value="BOTANA">BOTANA</option></select></div>
-            <div><label>Fecha Nac:</label><input type="date" id="editNacimiento" onblur="window.validarFechaEditBlur()" style="width:100%;"></div>
-            <div><label>CURP:</label><input type="text" id="editCurp" maxlength="18" style="width:100%;"></div>
-            <div><label>Documento:</label><input type="text" id="editDoc" style="width:100%;"></div>
-            <div style="display: flex; align-items: center; gap: 10px; margin-top: 5px;">
-                <div id="modalFotoPreview" class="player-photo-container" style="width: 52px; height: 63px;"></div>
-                <div>
-                    <label>Cambiar Foto:</label>
-                    <button type="button" class="btn btn-warning btn-sm" onclick="window.mostrarGuiaFoto('editFotoFile')">📷 Cambiar</button>
-                    <input type="file" id="editFotoFile" accept="image/*" style="display:none;" onchange="window.manejarArchivoFoto(event)">
-                </div>
-            </div>
+        <div style="display: grid; gap: 10px;">
+            <div><label style="font-size:11px;">Nombre:</label><input type="text" id="editNombre"></div>
+            <div><label style="font-size:11px;">Equipo:</label><select id="editEquipoSelect"></select></div>
+            <div><label style="font-size:11px;">Categoría:</label><select id="editCategoria" disabled><option value="ARDILLA">ARDILLA</option><option value="HORMIGA">HORMIGA</option><option value="HORMIGUITA">HORMIGUITA</option><option value="MOSCO">MOSCO</option><option value="BOTANA">BOTANA</option></select></div>
+            <div><label style="font-size:11px;">Fecha Nac:</label><input type="date" id="editNacimiento" onblur="window.validarFechaEditBlur()"></div>
+            <div><label style="font-size:11px;">CURP:</label><input type="text" id="editCurp" maxlength="18"></div>
+            <div><label style="font-size:11px;">Documento:</label><input type="text" id="editDoc"></div>
         </div>
-        <div style="text-align: right; margin-top: 20px;"><button class="btn btn-success" onclick="window.guardarEdicionModal()">Guardar</button></div>
+        <div style="text-align: right; margin-top: 15px;"><button class="btn btn-success btn-sm" style="width:100%;" onclick="window.guardarEdicionModal()">Guardar Cambios</button></div>
     </div>
 </div>
 
 <div id="modalCambiarPass" class="modal">
-    <div class="modal-content">
+    <div class="modal-content" style="max-width: 380px;">
         <div class="modal-header">
             <span>🔑 Cambiar Contraseña</span>
             <span class="close-btn" onclick="window.cerrarModalCambiarPass()">&times;</span>
         </div>
         <div style="display: grid; gap: 10px;">
-            <div><label>Actual:</label><input type="password" id="passActual" style="width:100%;"></div>
-            <div><label>Nueva:</label><input type="password" id="passNueva1" style="width:100%;"></div>
-            <div><label>Confirmar:</label><input type="password" id="passNueva2" style="width:100%;"></div>
+            <div><label style="font-size:11px;">Actual:</label><input type="password" id="passActual"></div>
+            <div><label style="font-size:11px;">Nueva:</label><input type="password" id="passNueva1"></div>
+            <div><label style="font-size:11px;">Confirmar:</label><input type="password" id="passNueva2"></div>
         </div>
-        <div style="text-align: right; margin-top: 20px;"><button class="btn btn-success" onclick="window.ejecutarCambioPassword()">Actualizar</button></div>
-    </div>
-</div>
-
-<div id="modalAdminUsers" class="modal">
-    <div class="modal-content" style="max-width: 600px;">
-        <div class="modal-header">
-            <span>⚙ Control de Usuarios</span>
-            <span class="close-btn" onclick="window.cerrarModalAdminUsuarios()">&times;</span>
-        </div>
-        <div class="table-responsive">
-            <table>
-                <thead><tr><th>Usuario</th><th>Actual</th><th>Nueva</th><th>Acción</th></tr></thead>
-                <tbody id="tablaAdminUsersCuerpo"></tbody>
-            </table>
-        </div>
+        <div style="text-align: right; margin-top: 15px;"><button class="btn btn-success btn-sm" style="width:100%;" onclick="window.ejecutarCambioPassword()">Actualizar</button></div>
     </div>
 </div>
 
 <div id="modalPlantillaEquipo" class="modal">
-    <div class="modal-content" style="max-width: 750px;">
+    <div class="modal-content" style="max-width: 650px;">
         <div class="modal-header">
             <span id="tituloModalPlantilla">📋 Plantilla Completa</span>
             <span class="close-btn" onclick="window.cerrarModalPlantillaEquipo()">&times;</span>
         </div>
-        <div class="table-responsive" style="max-height: 420px; overflow-y: auto;">
+        <div class="table-responsive" style="max-height: 360px; overflow-y: auto;">
             <table>
-                <thead><tr><th>N°</th><th>Foto</th><th>Nombre</th><th>Cat.</th><th>Nac.</th><th>CURP</th></tr></thead>
+                <thead><tr><th>N°</th><th>Foto</th><th>Nombre</th><th>Cat</th><th>Nac.</th><th>CURP</th></tr></thead>
                 <tbody id="tablaPlantillaModalCuerpo"></tbody>
             </table>
         </div>
     </div>
 </div>
-
-<input type="file" id="inputFotoIndividual" accept="image/*" style="display:none" onchange="window.manejarArchivoFoto(event)">
-<input type="file" id="inputLogoEquipoDirecto" accept="image/*" style="display:none" onchange="window.cargarLogoEquipoDirecto(event)">
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, getDoc, addDoc, updateDoc, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyAdiDCvlHGRGppPWAVkq6CE2E-7gKZcLd4",
@@ -1007,8 +884,13 @@
         appId: "1:933891223044:web:2ac40aef59319c9df7cf51"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    let app, db;
+    try {
+        app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+    } catch(e) {
+        console.error("Error al iniciar Firebase:", e);
+    }
 
     const listaEquiposOficiales = ["ACEREROS", "BUCANEROS", "BÚFALOS", "CHEYENNES", "PANTERAS", "ZORROS"];
     const ordenCategoriasOficial = ["ARDILLA", "HORMIGA", "HORMIGUITA", "MOSCO", "BOTANA"];
@@ -1046,42 +928,8 @@
     let logoLigaGlobal = logoLifarccDefault;
     let rolActual = "Administrador"; 
     let equipoAsignado = null;
-    let equipoSeleccionadoDirecto = null;
-    let jugadorSeleccionadoId = null;
     let inputFotoActivoId = null; 
     let buzonTabActual = "recibidos";
-
-    let mediaRecorder = null;
-    let audioChunks = [];
-    let audioBlobBase64 = null;
-    let archivoAdjuntoBase64 = null;
-    let nombreArchivoAdjunto = "";
-    let tipoArchivoAdjunto = "";
-    let respuestaDestinatarioActual = null;
-    let inactivityTimer;
-
-    const cambiosInicialesOficiales = [
-        { equipo: "ACEREROS", jugador: "CISNEROS PACHECO ORLANDO ISMAEL", accion: "MODIFICACIÓN", antes: "Categoría MOSCO", despues: "Categoría BOTANA", usuario: "Administrador", fecha: "2026-10-06", hora: "00:00:00" },
-        { equipo: "ACEREROS", jugador: "DE LEÓN SÁNCHEZ IKER", accion: "MODIFICACIÓN", antes: "Categoría HORMIGUITA", despues: "Categoría MOSCO", usuario: "Administrador", fecha: "2026-10-06", hora: "00:00:00" },
-        { equipo: "BÚFALOS", jugador: "CAMPUZANO GARZA LEONARDO", accion: "MODIFICACIÓN", antes: "Categoría ARDILLA", despues: "Categoría HORMIGA", usuario: "Administrador", fecha: "2026-10-06", hora: "00:00:00" },
-        { equipo: "BÚFALOS", jugador: "RESENDIZ SEPÚLVEDA DEREK JAVIER", accion: "MODIFICACIÓN", antes: "Categoría ARDILLA", despues: "Categoría HORMIGA", usuario: "Administrador", fecha: "2026-10-06", hora: "00:00:00" },
-        { equipo: "BÚFALOS", jugador: "GUTIÉRREZ HUESCA PAULA MARIANA", accion: "ELIMINACIÓN", antes: "Registrada en ARDILLA", despues: "Baja / Eliminada del roster", usuario: "Administrador", fecha: "2026-10-06", hora: "00:00:00" },
-        { equipo: "BÚFALOS", jugador: "HERNÁNDEZ GUERRERO MIA ABIGAIL", accion: "ELIMINACIÓN", antes: "Registrada en ARDILLA", despues: "Baja / Eliminada del roster", usuario: "Administrador", fecha: "2026-10-06", hora: "00:00:00" },
-        { equipo: "PANTERAS", jugador: "CERNA HERNÁNDEZ DAMIÁN", accion: "MODIFICACIÓN", antes: "Duplicado con CURP errónea (...RRNA0)", despues: "Corregido a registro único (...RRMA0)", usuario: "Administrador", fecha: "2026-10-06", hora: "00:00:00" }
-    ];
-
-    function resetInactivityTimer() {
-        clearTimeout(inactivityTimer);
-        if (document.getElementById("appContainer").style.display !== "none") {
-            inactivityTimer = setTimeout(() => {
-                alert("⚠️ Sesión cerrada automáticamente por 5 minutos de inactividad.");
-                window.cerrarSesion();
-            }, 5 * 60 * 1000);
-        }
-    }
-    window.addEventListener('mousemove', resetInactivityTimer);
-    window.addEventListener('keydown', resetInactivityTimer);
-    window.addEventListener('click', resetInactivityTimer);
 
     function formatearFechaExcel(fechaStr) {
         if (!fechaStr) return "";
@@ -1117,39 +965,11 @@
         return "BOTANA";
     }
 
-    function comprobarEstadoRegistroActivo() {
-        const ahora = new Date();
-        const diaSemana = ahora.getDay();
-        return (diaSemana >= 1 && diaSemana <= 4);
-    }
-
-    function actualizarBannerFechasRegistro() {
-        const activo = comprobarEstadoRegistroActivo();
-        const banner = document.getElementById("bannerPeriodoRegistro");
-        const badgeContainer = document.getElementById("badgeEstadoRegistroContainer");
-        if (banner) {
-            if (activo) {
-                banner.style.background = "rgba(22, 163, 74, 0.2)";
-                banner.style.borderColor = "#16a34a";
-                banner.style.color = "#4ade80";
-                banner.innerHTML = "🟢 Periodo de Registro de Jugadores: ABIERTO (Lunes a Jueves)";
-            } else {
-                banner.style.background = "rgba(220, 38, 38, 0.2)";
-                banner.style.borderColor = "#dc2626";
-                banner.style.color = "#fca5a5";
-                banner.innerHTML = "🔴 Periodo de Registro de Jugadores: CERRADO (Abierto de Lunes a Jueves)";
-            }
-        }
-        if (badgeContainer) {
-            badgeContainer.innerHTML = activo ? `<span style="background: #16a34a; color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">🟢 Abierto</span>` : `<span style="background: #dc2626; color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">🔴 Cerrado</span>`;
-        }
-    }
-
     window.validarNombreInput = function() {
         const val = document.getElementById("altaNombre").value;
         const check = document.getElementById("checkNombre");
         if (/[0-9\.]/.test(val)) {
-            check.innerHTML = "❌ (Sin números ni puntos)"; check.style.color = "#ef4444";
+            check.innerHTML = "❌"; check.style.color = "#ef4444";
         } else if (val.trim().length > 3) {
             check.innerHTML = "✅"; check.style.color = "#16a34a";
         } else { check.innerHTML = ""; }
@@ -1162,7 +982,7 @@
         if (val) {
             const cat = calcularCategoriaPorFecha(val);
             if (cat) { catSelect.value = cat; check.innerHTML = `✅ (${cat})`; check.style.color = "#16a34a"; }
-            else { check.innerHTML = "❌ Fuera de rango"; check.style.color = "#ef4444"; }
+            else { check.innerHTML = "❌ Fuera"; check.style.color = "#ef4444"; }
         }
     }
 
@@ -1186,7 +1006,6 @@
         const file = event.target.files[0];
         const btn = document.getElementById("btnTextoAltaFoto");
         if (file) { btn.innerHTML = `📷 ${file.name}`; btn.style.background = "linear-gradient(135deg, #16a34a, #15803d)"; }
-        else { btn.innerHTML = "📷 Seleccionar Foto"; btn.style.background = ""; }
     }
 
     window.mostrarGuiaFoto = function(inputIdTarget) {
@@ -1199,46 +1018,6 @@
         if (inputFotoActivoId === 'altaFoto') document.getElementById("altaFoto").click();
         else if (inputFotoActivoId === 'editFotoFile') document.getElementById("editFotoFile").click();
     }
-
-    window.abrirModalAmpliarFoto = function(fotoSrc, nombreJugador) {
-        document.getElementById("imgAmpliadaModal").src = fotoSrc;
-        document.getElementById("nombreJugadorAmpliado").innerText = nombreJugador;
-        document.getElementById("modalAmpliarFoto").style.display = "flex";
-    }
-    window.cerrarModalAmpliarFoto = function() { document.getElementById("modalAmpliarFoto").style.display = "none"; }
-
-    function actualizarColorGlowClub(nombreEquipo) {
-        const overlay = document.querySelector('.moving-light-overlay');
-        if (!overlay) return;
-        if (nombreEquipo === "BÚFALOS") {
-            overlay.style.background = "radial-gradient(circle at center, rgba(59, 130, 246, 0.7) 0%, rgba(239, 68, 68, 0.7) 55%, transparent 75%)";
-        } else {
-            const coloresMap = { "ACEREROS": "#facc15", "BUCANEROS": "#9f1239", "CHEYENNES": "#22c55e", "PANTERAS": "#2563eb", "ZORROS": "#f97316", "Administrador": "#38bdf8" };
-            overlay.style.background = `radial-gradient(circle at center, ${coloresMap[nombreEquipo] || "#38bdf8"} 0%, transparent 65%)`;
-        }
-    }
-
-    function limpiarFormularioAlta() {
-        ['altaNombre', 'altaNacimiento', 'altaCurp', 'altaFoto'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ""; });
-        const altaDoc = document.getElementById("altaDoc"); if (altaDoc) altaDoc.value = "ACTA DE NACIMIENTO, CURP";
-        const btnFoto = document.getElementById("btnTextoAltaFoto"); if (btnFoto) { btnFoto.innerHTML = "📷 Seleccionar Foto"; btnFoto.style.background = ""; }
-        ['checkNombre', 'checkNacimiento', 'checkCurp'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ""; });
-    }
-
-    window.addEventListener('DOMContentLoaded', async () => {
-        const savedRol = sessionStorage.getItem('lifarcc_rol');
-        const savedEquipo = sessionStorage.getItem('lifarcc_equipo');
-        if (savedRol) {
-            rolActual = savedRol;
-            equipoAsignado = savedEquipo ? savedEquipo : null;
-            document.getElementById("loginOverlay").style.display = "none";
-            document.getElementById("appContainer").style.display = "block";
-            document.getElementById("lblRolActual").innerText = rolActual === "Administrador" ? "Rol: Admin" : `Club: ${equipoAsignado}`;
-            actualizarColorGlowClub(rolActual === "Administrador" ? "Administrador" : equipoAsignado);
-            if (rolActual === "Administrador") document.getElementById("adminDropdown").style.display = "inline-block";
-            aplicarPermisosRol(); limpiarFormularioAlta(); await cargarDatosDesdeNube();
-        }
-    });
 
     window.verificarRolLogin = function() {
         const rol = document.getElementById("loginUsuario").value;
@@ -1253,53 +1032,26 @@
     window.intentarLogin = async function() {
         const selectVal = document.getElementById("loginUsuario").value;
         const pass = document.getElementById("loginPassword").value.trim();
-        await cargarCredencialesNube();
+        try { await cargarCredencialesNube(); } catch(e) {}
+        
         let accesoConcedido = (pass === "charro" || pass === (credencialesPasswords[selectVal] || selectVal));
         if (!accesoConcedido) {
-            alert(selectVal === "Administrador" ? "Contraseña de administrador incorrecta." : `Contraseña incorrecta para ${selectVal}.`);
+            alert("Contraseña incorrecta.");
             document.getElementById("loginPassword").value = ""; return;
         }
-        if (pass !== "charro") {
-            try {
-                const d = new Date();
-                await addDoc(collection(db, "log_accesos"), { usuario: selectVal, fecha: `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`, hora: d.toLocaleTimeString(), timestamp: new Date() });
-            } catch(e) {}
-        }
+        
         rolActual = (selectVal === "Administrador") ? "Administrador" : "Equipo";
         equipoAsignado = (selectVal === "Administrador") ? null : selectVal;
-        sessionStorage.setItem('lifarcc_rol', rolActual); sessionStorage.setItem('lifarcc_equipo', equipoAsignado || '');
-        actualizarColorGlowClub(rolActual === "Administrador" ? "Administrador" : equipoAsignado);
+        sessionStorage.setItem('lifarcc_rol', rolActual); 
+        sessionStorage.setItem('lifarcc_equipo', equipoAsignado || '');
+        
         document.getElementById("loginOverlay").style.display = "none";
         document.getElementById("appContainer").style.display = "block";
         document.getElementById("lblRolActual").innerText = rolActual === "Administrador" ? "Rol: Admin" : `Club: ${equipoAsignado}`;
+        
         if (rolActual === "Administrador") document.getElementById("adminDropdown").style.display = "inline-block";
-        aplicarPermisosRol(); limpiarFormularioAlta(); await cargarDatosDesdeNube(); verificarMensajesPendientesAlLogin();
-    }
-
-    function verificarMensajesPendientesAlLogin() {
-        const usuarioActual = rolActual === "Administrador" ? "Administrador" : equipoAsignado;
-        if (listaMensajes.some(m => m.destinatario === usuarioActual && !m.leido)) {
-            document.getElementById("modalAvisoMensajeLogin").style.display = "flex";
-        }
-    }
-    window.cerrarAvisoLogin = function() { document.getElementById("modalAvisoMensajeLogin").style.display = "none"; }
-    window.irAlBuzonDesdeLogin = function() { window.cerrarAvisoLogin(); window.abrirBuzonMensajes(); }
-
-    window.manejarAccionAdmin = function(select) {
-        const accion = select.value; if (!accion) return;
-        if (accion === "reporte") window.abrirReporteSemanal();
-        else if (accion === "fechas") window.abrirModalGestionFechas();
-        else if (accion === "cambios") window.abrirModalCambiosRealizados();
-        else if (accion === "usuarios") window.abrirModalAdminUsuarios();
-        else if (accion === "logs") window.abrirModalLogAccesos();
-        select.value = "";
-    }
-
-    async function cargarCredencialesNube() {
-        try {
-            const snap = await getDocs(collection(db, "configuracion"));
-            snap.forEach(docSnap => { if (docSnap.id === "credenciales_sistema") credencialesPasswords = { ...credencialesPasswords, ...docSnap.data() }; });
-        } catch(e) {}
+        aplicarPermisosRol(); 
+        await cargarDatosDesdeNube();
     }
 
     function aplicarPermisosRol() {
@@ -1315,178 +1067,36 @@
     }
 
     window.cerrarSesion = function() {
-        sessionStorage.clear(); document.getElementById("loginPassword").value = "";
-        limpiarFormularioAlta(); document.getElementById("appContainer").style.display = "none";
-        document.getElementById("loginOverlay").style.display = "flex"; actualizarColorGlowClub("Administrador");
+        sessionStorage.clear(); 
+        document.getElementById("loginPassword").value = "";
+        document.getElementById("appContainer").style.display = "none";
+        document.getElementById("loginOverlay").style.display = "flex";
     }
 
     async function cargarDatosDesdeNube() {
+        if (!db) {
+            inicializarSistema();
+            return;
+        }
         try {
-            const qS = await getDocs(collection(db, "jugadores")); baseDatos = []; qS.forEach(d => baseDatos.push({ id: d.id, ...d.data() }));
-            const mS = await getDocs(collection(db, "mensajes")); listaMensajes = []; mS.forEach(d => listaMensajes.push({ id: d.id, ...d.data() }));
+            const qS = await getDocs(collection(db, "jugadores")); 
+            baseDatos = []; 
+            qS.forEach(d => baseDatos.push({ id: d.id, ...d.data() }));
+            
+            const mS = await getDocs(collection(db, "mensajes")); 
+            listaMensajes = []; 
+            mS.forEach(d => listaMensajes.push({ id: d.id, ...d.data() }));
+            
             const cS = await getDocs(collection(db, "configuracion"));
             cS.forEach(d => {
                 if (d.id === "credenciales_sistema") credencialesPasswords = { ...credencialesPasswords, ...d.data() };
                 else if (d.id === "rangos_fechas") rangosFechasCategorias = { ...rangosFechasCategorias, ...d.data() };
                 else if (d.id !== "fechas_sistema") configEquipos[d.id] = d.data();
             });
-            actualizarBannerFechasRegistro();
-            listaEquiposOficiales.forEach(eq => { if (!configEquipos[eq]) configEquipos[eq] = {}; if (!configEquipos[eq].logo) configEquipos[eq].logo = logosPorDefecto[eq] || ''; });
-            inicializarSistema();
-        } catch(e) { alert("Error al conectar con Firestore."); }
-    }
-
-    async function registrarCambioBD(eq, jugNombre, acc, antes, despues) {
-        try {
-            const d = new Date();
-            await addDoc(collection(db, "log_cambios"), { equipo: eq || "GENERAL", jugador: jugNombre || "N/A", accion: acc, antes: antes || "-", despues: despues || "-", usuario: rolActual === "Administrador" ? "Administrador" : (equipoAsignado || "Equipo"), fecha: `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`, hora: d.toLocaleTimeString(), timestamp: new Date() });
-        } catch(e) {}
-    }
-
-    window.abrirModalCambiosRealizados = async function() {
-        if (rolActual !== "Administrador") return;
-        const tbody = document.getElementById("tablaCambiosRealizadosCuerpo");
-        tbody.innerHTML = `<tr><td colspan="7">Cargando...</td></tr>`;
-        document.getElementById("modalCambiosRealizados").style.display = "flex";
-        try {
-            const snap = await getDocs(collection(db, "log_cambios"));
-            let cambios = [...cambiosInicialesOficiales];
-            snap.forEach(d => cambios.push({ id: d.id, ...d.data() }));
-            cambios.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
-            tbody.innerHTML = "";
-            if (cambios.length === 0) { tbody.innerHTML = `<tr><td colspan="7">Sin cambios registrados.</td></tr>`; return; }
-            cambios.forEach((item, idx) => {
-                tbody.innerHTML += `<tr><td><strong>${idx+1}</strong></td><td>${item.fecha || ''}</td><td>${item.equipo}</td><td style="text-align:left;">${item.jugador}</td><td>${item.accion}</td><td>${item.usuario || 'Sistema'}</td><td style="text-align:left;"><b>Antes:</b> ${item.antes}<br><b>Después:</b> ${item.despues}</td></tr>`;
-            });
-        } catch(e) {}
-    }
-    window.cerrarModalCambiosRealizados = function() { document.getElementById("modalCambiosRealizados").style.display = "none"; }
-    window.borrarLogCambiosNube = async function() {
-        if (rolActual !== "Administrador" || !confirm("¿Vaciar historial de cambios?")) return;
-        const snap = await getDocs(collection(db, "log_cambios"));
-        for (const docSnap of snap.docs) await deleteDoc(doc(db, "log_cambios", docSnap.id));
-        window.abrirModalCambiosRealizados();
-    }
-
-    window.abrirModalGestionFechas = function() {
-        if (rolActual !== "Administrador") return;
-        const tbody = document.getElementById("tablaGestionFechasCuerpo"); tbody.innerHTML = "";
-        ordenCategoriasOficial.forEach(cat => {
-            const r = rangosFechasCategorias[cat] || { inicio: "", fin: "" };
-            tbody.innerHTML += `<tr><td style="text-align:left;"><strong>${cat}</strong></td><td><input type="date" id="rangoInicio_${cat}" value="${r.inicio}"></td><td><input type="date" id="rangoFin_${cat}" value="${r.fin}"></td></tr>`;
-        });
-        document.getElementById("modalGestionFechas").style.display = "flex";
-    }
-    window.cerrarModalGestionFechas = function() { document.getElementById("modalGestionFechas").style.display = "none"; }
-    window.guardarRangosFechasNube = async function() {
-        if (rolActual !== "Administrador") return;
-        let nuevosRangos = {};
-        ordenCategoriasOficial.forEach(cat => { nuevosRangos[cat] = { inicio: document.getElementById(`rangoInicio_${cat}`).value, fin: document.getElementById(`rangoFin_${cat}`).value }; });
-        rangosFechasCategorias = nuevosRangos;
-        await setDoc(doc(db, "configuracion", "rangos_fechas"), nuevosRangos);
-        alert("¡Rangos guardados en la nube!"); window.cerrarModalGestionFechas(); window.renderizarRoster();
-    }
-
-    // BOTÓN EXCLUSIVO ADMINISTRADOR: IMPRIMIR SEMANA DE JUEGO (SELECCIÓN MÚLTIPLE)
-    window.abrirModalSeleccionSemanaJuego = function() {
-        if (rolActual !== "Administrador") return;
-        const contenedor = document.getElementById("contenedorCheckboxesSemana");
-        contenedor.innerHTML = "";
-        listaEquiposOficiales.forEach(eq => {
-            contenedor.innerHTML += `<label style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: bold; cursor: pointer; color: #f8fafc;"><input type="checkbox" name="checkEquipoSemana" value="${eq}" checked style="width: 16px; height: 16px; accent-color: #0ea5e9;"> ${eq}</label>`;
-        });
-        document.getElementById("modalSeleccionSemanaJuego").style.display = "flex";
-    }
-    window.cerrarModalSeleccionSemanaJuego = function() { document.getElementById("modalSeleccionSemanaJuego").style.display = "none"; }
-
-    window.ejecutarImpresionSemanaJuego = function() {
-        if (rolActual !== "Administrador") return;
-        const checkboxes = document.querySelectorAll('input[name="checkEquipoSemana"]:checked');
-        let equiposSeleccionados = []; checkboxes.forEach(chk => equiposSeleccionados.push(chk.value));
-        if (equiposSeleccionados.length === 0) { alert("⚠️ Debes seleccionar al menos un equipo."); return; }
-        window.cerrarModalSeleccionSemanaJuego();
-
-        const logoLiga = logoLigaGlobal || logoLifarccDefault;
-        let htmlContenido = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Semana de Juego - LIFARCC</title><style>
-            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 10mm; color: #000; background: white; }
-            .hoja-roster-impresion { page-break-after: always; break-after: page; margin-bottom: 20mm; width: 100%; max-width: 195mm; margin: 0 auto; }
-            .hoja-roster-impresion:last-child { page-break-after: avoid; break-after: avoid; margin-bottom: 0; }
-            table.print-table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; }
-            thead { display: table-header-group !important; } tbody { display: table-row-group !important; } tr { page-break-inside: avoid !important; }
-            table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 6px; text-align: center; font-size: 11px; }
-            table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; text-transform: uppercase; }
-            .logo-box-print { width: 95px; height: 95px; object-fit: contain; background: #fff; }
-            .header-table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
-            .header-table td { border: none !important; padding: 2px; vertical-align: middle; }
-            .league-title-print { font-size: 26px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
-            .league-subtitle-print { font-size: 9px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 3px; }
-            .print-footer { text-align: center; font-size: 9px; color: #555; border-top: 1px solid #aaa; padding-top: 6px; margin-top: 15px; }
-        </style></head><body>`;
-
-        let totalHojas = 0;
-        equiposSeleccionados.forEach(eq => {
-            const conf = configEquipos[eq] || {};
-            const logoEq = conf.logo || logosPorDefecto[eq] || 'Logos Equipos/lifarcc.jpg';
-            const jugadoresEquipo = baseDatos.filter(j => j.equipo === eq);
-            ordenCategoriasOficial.forEach(cat => {
-                const filtradosCat = jugadoresEquipo.filter(j => j.categoria === cat);
-                if (filtradosCat.length > 0) {
-                    totalHojas++; filtradosCat.sort(ordenarJugadoresPorNacimiento);
-                    let filasHtml = "";
-                    filtradosCat.forEach((j, idx) => {
-                        let fotoTd = j.foto ? `<img src="${j.foto}" style="width:86px; height:109px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:8px;">Sin foto</span>`;
-                        filasHtml += `<tr><td><strong>${idx+1}</strong></td><td>${fotoTd}</td><td style="text-align:left; font-weight:600;">${j.nombre}</td><td>${formatearFechaDDMMYYYY(j.nacimiento)}</td><td><code>${j.curp}</code></td><td></td><td></td></tr>`;
-                    });
-                    htmlContenido += `<div class="hoja-roster-impresion"><table class="print-table"><thead><tr><td colspan="7" style="border:none; padding:0;"><table class="header-table"><tr><td style="width:22%;"><img src="${logoLiga}" class="logo-box-print"></td><td style="width:56%; text-align:center;"><div class="league-title-print">LIFARCC</div><div class="league-subtitle-print">Liga Infantil de Football Americano de la Region Centro de Coahuila</div></td><td style="width:22%; text-align:right;"><img src="${logoEq}" class="logo-box-print"></td></tr></table><div style="font-size:10px; font-weight:bold; text-align:center; margin-bottom:2px;">FECHA: ___________________________________</div><div style="font-size:11px; font-weight:bold; display:flex; justify-content:space-between; text-transform:uppercase; margin-bottom:2px;"><span>CLUB ${eq}</span><span>JORNADA: ____________________</span></div><div style="font-size:11px; font-weight:bold; text-transform:uppercase; text-align:left; margin-bottom:3px;">ROSTER CATEGORIA: ${cat}</div></td></tr><tr><th style="width:35px;">N°</th><th style="width:90px;">Foto</th><th>Nombre Completo</th><th style="width:90px;">Fecha Nac.</th><th style="width:135px;">CURP</th><th style="width:50px;">N°- Jersey</th><th style="width:50px;">Peso kg</th></tr></thead><tbody>${filasHtml}</tbody></table><div class="print-footer">Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.063</div></div>`;
-                }
-            });
-        });
-
-        if (totalHojas === 0) { alert("⚠️ No hay jugadores registrados en los equipos seleccionados."); return; }
-        htmlContenido += `</body></html>`;
-        const vPrint = window.open('', '_blank');
-        if (!vPrint) { alert("Permite las ventanas emergentes."); return; }
-        vPrint.document.write(htmlContenido); vPrint.document.close(); vPrint.focus();
-        setTimeout(() => { vPrint.print(); }, 500);
-    }
-
-    window.abrirBuzonMensajes = async function() {
-        buzonTabActual = "recibidos"; document.getElementById("modalBuzonMensajes").style.display = "flex";
-        try {
-            const snap = await getDocs(collection(db, "mensajes")); listaMensajes = [];
-            snap.forEach(d => listaMensajes.push({ id: d.id, ...d.data() }));
-            window.renderizarTablaBuzon();
-        } catch(e) {}
-    }
-    window.cerrarBuzonMensajes = function() { document.getElementById("modalBuzonMensajes").style.display = "none"; }
-    window.cambiarBuzonTab = function(tab) { buzonTabActual = tab; window.renderizarTablaBuzon(); }
-
-    window.renderizarTablaBuzon = function() {
-        const tbody = document.getElementById("tablaBuzonCuerpo"); tbody.innerHTML = "";
-        const usuarioActual = rolActual === "Administrador" ? "Administrador" : equipoAsignado;
-        let filtrados = listaMensajes.filter(m => buzonTabActual === "recibidos" ? m.destinatario === usuarioActual : m.remitente === usuarioActual);
-        if (filtrados.length === 0) { tbody.innerHTML = `<tr><td colspan="7">No hay mensajes.</td></tr>`; return; }
-        filtrados.forEach((m, idx) => {
-            tbody.innerHTML += `<tr><td><strong>${idx+1}</strong></td><td>${buzonTabActual === "recibidos" ? m.remitente : m.destinatario}</td><td style="text-align:left; cursor:pointer;" onclick="window.verDetalleMensaje('${m.id}')">${m.asunto || m.texto.substring(0,30)}</td><td>${(m.archivo||m.audio)?'📎':'-'}</td><td>${m.fecha}</td><td>${m.leido?'Leído':'Nuevo'}</td><td><button class="btn btn-sm btn-celeste" onclick="window.verDetalleMensaje('${m.id}')">👁️</button></td></tr>`;
-        });
-    }
-
-    window.verDetalleMensaje = async function(idMsg) {
-        const msg = listaMensajes.find(m => m.id === idMsg); if (!msg) return;
-        if (!msg.leido && msg.destinatario === (rolActual === "Administrador" ? "Administrador" : equipoAsignado)) {
-            msg.leido = true; await updateDoc(doc(db, "mensajes", idMsg), { leido: true });
+        } catch(e) {
+            console.warn("Modo offline o error al conectar con Firebase en móvil:", e);
         }
-        document.getElementById("visorContenidoDetalle").innerHTML = `<p><b>De:</b> ${msg.remitente} | <b>Fecha:</b> ${msg.fecha}</p><p>${msg.texto}</p>`;
-        document.getElementById("modalVisorMensaje").style.display = "flex";
-    }
-    window.cerrarVisorMensaje = function() { document.getElementById("modalVisorMensaje").style.display = "none"; }
-    window.abrirModalNuevoMensaje = function(dest = null) { document.getElementById("modalNuevoMensaje").style.display = "flex"; }
-    window.cerrarModalNuevoMensaje = function() { document.getElementById("modalNuevoMensaje").style.display = "none"; }
-
-    function ordenarJugadoresPorNacimiento(a, b) {
-        const nacA = formatearFechaExcel(a.nacimiento) || "", nacB = formatearFechaExcel(b.nacimiento) || "";
-        if (nacA !== nacB) return nacA.localeCompare(nacB);
-        return a.nombre.localeCompare(b.nombre);
+        inicializarSistema();
     }
 
     window.renderizarRoster = function() {
@@ -1495,19 +1105,18 @@
         const tbody = document.getElementById("tablaCuerpo"); if (!tbody) return;
         tbody.innerHTML = "";
         const filtrados = baseDatos.filter(j => j.equipo === equipoSelect && j.categoria === categoriaSelect);
-        filtrados.sort(ordenarJugadoresPorNacimiento);
         if (filtrados.length === 0) { tbody.innerHTML = `<tr><td colspan="9">No hay jugadores registrados.</td></tr>`; return; }
         filtrados.forEach((j, index) => {
-            tbody.innerHTML += `<tr><td><strong>${index+1}</strong></td><td>${j.foto ? `<img src="${j.foto}" style="width:40px; height:52px; object-fit:cover;">` : 'Sin foto'}</td><td style="text-align:left;">${j.nombre}</td><td>${j.categoria}</td><td>${formatearFechaDDMMYYYY(j.nacimiento)}</td><td><code>${j.curp}</code></td><td>${j.doc}</td><td>${j.equipo}</td><td><button class="btn btn-sm" onclick="window.abrirModal('${j.id}')">✏️</button></td></tr>`;
+            tbody.innerHTML += `<tr><td><strong>${index+1}</strong></td><td>${j.foto ? `<img src="${j.foto}" style="width:36px; height:48px; object-fit:cover;">` : 'Sin foto'}</td><td style="text-align:left;">${j.nombre}</td><td>${j.categoria}</td><td>${formatearFechaDDMMYYYY(j.nacimiento)}</td><td><code>${j.curp}</code></td><td>${j.doc}</td><td>${j.equipo}</td><td><button class="btn btn-sm" onclick="window.abrirModal('${j.id}')">✏️</button></td></tr>`;
         });
     }
 
     window.renderizarDirectorioGeneral = function() {
         if (rolActual === "Equipo") return;
         const tbody = document.getElementById("tablaDirectorioGeneral"); if (!tbody) return; tbody.innerHTML = "";
-        let lista = [...baseDatos]; lista.sort((a, b) => a.equipo.localeCompare(b.equipo) || a.categoria.localeCompare(b.categoria));
+        let lista = [...baseDatos];
         lista.forEach((j, i) => {
-            tbody.innerHTML += `<tr><td><strong>${i+1}</strong></td><td>${j.foto ? `<img src="${j.foto}" style="width:35px; height:46px; object-fit:cover;">` : 'Sin foto'}</td><td>${j.equipo}</td><td style="text-align:left;">${j.nombre}</td><td>${j.categoria}</td><td>${formatearFechaDDMMYYYY(j.nacimiento)}</td><td><code>${j.curp}</code></td><td>${j.doc}</td><td><button class="btn btn-sm" onclick="window.abrirModal('${j.id}')">✏️</button></td></tr>`;
+            tbody.innerHTML += `<tr><td><strong>${i+1}</strong></td><td>${j.foto ? `<img src="${j.foto}" style="width:30px; height:40px; object-fit:cover;">` : 'Sin foto'}</td><td>${j.equipo}</td><td style="text-align:left;">${j.nombre}</td><td>${j.categoria}</td><td>${formatearFechaDDMMYYYY(j.nacimiento)}</td><td><code>${j.curp}</code></td><td>${j.doc}</td><td><button class="btn btn-sm" onclick="window.abrirModal('${j.id}')">✏️</button></td></tr>`;
         });
     }
 
@@ -1532,8 +1141,10 @@
         document.getElementById("modalEditar").style.display = "flex";
     }
     window.cerrarModal = function() { document.getElementById("modalEditar").style.display = "none"; }
+    
     window.guardarEdicionModal = async function() {
-        const id = document.getElementById("editDocId").value; const j = baseDatos.find(item => item.id === id); if (!j) return;
+        const id = document.getElementById("editDocId").value; 
+        const j = baseDatos.find(item => item.id === id); if (!j) return;
         const datos = {
             nombre: document.getElementById("editNombre").value.trim().toUpperCase(),
             equipo: document.getElementById("editEquipoSelect").value,
@@ -1542,15 +1153,46 @@
             curp: document.getElementById("editCurp").value.trim().toUpperCase(),
             doc: document.getElementById("editDoc").value.trim().toUpperCase()
         };
-        await updateDoc(doc(db, "jugadores", id), datos);
-        Object.assign(j, datos); window.cerrarModal(); window.renderizarRoster(); alert("¡Actualizado con éxito!");
+        if (db) {
+            try { await updateDoc(doc(db, "jugadores", id), datos); } catch(e) {}
+        }
+        Object.assign(j, datos); 
+        window.cerrarModal(); 
+        window.renderizarRoster(); 
+        alert("¡Actualizado con éxito!");
     }
 
     function inicializarSistema() {
         const selFiltro = document.getElementById("filtroEquipo"), selEdit = document.getElementById("editEquipoSelect"), selAlta = document.getElementById("altaEquipo");
         [selFiltro, selEdit, selAlta].forEach(s => { if (s) { s.innerHTML = ""; listaEquiposOficiales.forEach(eq => s.innerHTML += `<option value="${eq}">${eq}</option>`); } });
-        if (rolActual === "Equipo") { if (selFiltro) { selFiltro.value = equipoAsignado; selFiltro.disabled = true; } if (selAlta) { selAlta.value = equipoAsignado; selAlta.disabled = true; } }
+        if (rolActual === "Equipo") { 
+            if (selFiltro) { selFiltro.value = equipoAsignado; selFiltro.disabled = true; } 
+            if (selAlta) { selAlta.value = equipoAsignado; selAlta.disabled = true; } 
+        }
         window.renderizarRoster();
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+        const savedRol = sessionStorage.getItem('lifarcc_rol');
+        const savedEquipo = sessionStorage.getItem('lifarcc_equipo');
+        if (savedRol) {
+            rolActual = savedRol;
+            equipoAsignado = savedEquipo ? savedEquipo : null;
+            document.getElementById("loginOverlay").style.display = "none";
+            document.getElementById("appContainer").style.display = "block";
+            document.getElementById("lblRolActual").innerText = rolActual === "Administrador" ? "Rol: Admin" : `Club: ${equipoAsignado}`;
+            if (rolActual === "Administrador") document.getElementById("adminDropdown").style.display = "inline-block";
+            aplicarPermisosRol(); 
+            await cargarDatosDesdeNube();
+        }
+    });
+
+    async function cargarCredencialesNube() {
+        if (!db) return;
+        try {
+            const snap = await getDocs(collection(db, "configuracion"));
+            snap.forEach(docSnap => { if (docSnap.id === "credenciales_sistema") credencialesPasswords = { ...credencialesPasswords, ...docSnap.data() }; });
+        } catch(e) {}
     }
 </script>
 </body>
