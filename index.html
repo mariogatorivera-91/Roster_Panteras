@@ -32,22 +32,15 @@
         }
         .header-container {
             text-align: center;
-            padding: 15px 20px 5px 20px;
+            padding: 12px 20px 2px 20px;
         }
-        /* Contenedor limpio para el logo */
-        .logo-wrapper {
-            background: #ffffff;
-            border-radius: 50%;
-            padding: 6px;
-            display: inline-block;
-            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.4);
-            margin-bottom: 6px;
-        }
+        /* Logo limpio sin círculo */
         .main-league-logo {
-            height: 65px;
-            width: 65px;
+            height: 75px;
             object-fit: contain;
-            display: block;
+            display: inline-block;
+            filter: drop-shadow(0 4px 12px rgba(14, 165, 233, 0.5));
+            margin-bottom: 4px;
         }
         p.subtitle {
             font-size: 10px;
@@ -57,35 +50,36 @@
             margin: 0;
             font-weight: 600;
         }
-        /* Banner de equipos */
+        /* Banner de equipos más amplio y logos grandes con brillo/zoom */
         .teams-banner {
-            width: 90%;
-            max-width: 720px;
+            width: 92%;
+            max-width: 820px;
             background: rgba(15, 23, 42, 0.85);
             backdrop-filter: blur(6px);
             border: 2px solid var(--accent-blue);
-            border-radius: 12px;
-            padding: 8px 15px;
+            border-radius: 14px;
+            padding: 10px 20px;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 12px;
+            gap: 18px;
             flex-wrap: wrap;
-            margin: 10px auto;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+            margin: 8px auto;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
         }
         .team-logo-item {
-            width: 50px;
-            height: 50px;
+            width: 70px;
+            height: 70px;
             background: #ffffff;
             border-radius: 50%;
-            padding: 3px;
+            padding: 4px;
             object-fit: contain;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
-            transition: transform 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
         }
         .team-logo-item:hover {
-            transform: scale(1.1);
+            transform: scale(1.18);
+            box-shadow: 0 0 20px rgba(14, 165, 233, 0.8), 0 6px 15px rgba(0, 0, 0, 0.6);
         }
         .main-content {
             width: 100%;
@@ -195,7 +189,7 @@
         }
         footer {
             text-align: center;
-            padding: 12px;
+            padding: 10px;
             font-size: 10px;
             color: var(--text-muted);
             border-top: 1px solid var(--border-color);
@@ -209,8 +203,8 @@
         /* Indicador de conexión Firebase */
         .firebase-status {
             position: fixed;
-            bottom: 10px;
-            right: 15px;
+            bottom: 8px;
+            right: 12px;
             background: rgba(15, 23, 42, 0.9);
             border: 1px solid #334155;
             padding: 3px 9px;
@@ -236,14 +230,12 @@
 <body>
 
     <div class="header-container">
-        <!-- Logo limpio en contenedor circular -->
-        <div class="logo-wrapper">
-            <img src="Logos Equipos/lifarcc_logo.jpg" alt="LIFARCC Monclova" class="main-league-logo" onerror="this.onerror=null; this.src='Logos Equipos/lifarcc.jpg';">
-        </div>
+        <!-- Logo principal sin contenedor blanco -->
+        <img src="Logos Equipos/lifarcc_logo.jpg" alt="LIFARCC Monclova" class="main-league-logo" onerror="this.onerror=null; this.src='Logos Equipos/lifarcc.jpg';">
         <p class="subtitle">Liga Infantil y Juvenil de Fútbol Americano de la Región Centro de Coahuila</p>
     </div>
 
-    <!-- Banner con los logos de los 6 equipos -->
+    <!-- Banner con los logos de los 6 equipos (Grandes y con efecto hover) -->
     <div class="teams-banner">
         <img src="Logos Equipos/acereros.jpg" alt="Acereros" class="team-logo-item" title="Club Acereros" onerror="this.style.display='none'">
         <img src="Logos Equipos/bucaneros.jpg" alt="Bucaneros" class="team-logo-item" title="Club Bucaneros" onerror="this.style.display='none'">
@@ -274,7 +266,6 @@
 
         <!-- Tarjeta Liga Juvenil (Bloqueada con Próximamente / Vínculo intacto) -->
         <div class="card juvenil">
-            <!-- Letrero de Próximamente cruzado -->
             <div class="overlay-proximamente">
                 <div class="badge-proximamente">🚀 Próximamente</div>
                 <p style="font-size: 11px; color: #cbd5e1; margin-top: 10px; text-transform: uppercase; font-weight: bold;">Temporada Juvenil</p>
@@ -290,7 +281,6 @@
                 </div>
             </div>
             <div>
-                <!-- El enlace sigue guardado y funcional en el código para activarse después -->
                 <a href="juvenil.html" class="btn-enter">Ingresar a Juvenil</a>
             </div>
         </div>
