@@ -32,15 +32,15 @@
         }
         .header-container {
             text-align: center;
-            padding: 12px 20px 2px 20px;
+            padding: 10px 20px 0 20px;
         }
-        /* Logo limpio sin círculo */
+        /* Logo principal actualizado (logolinfarcc2.jpeg) */
         .main-league-logo {
             height: 75px;
             object-fit: contain;
             display: inline-block;
             filter: drop-shadow(0 4px 12px rgba(14, 165, 233, 0.5));
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         p.subtitle {
             font-size: 10px;
@@ -50,37 +50,36 @@
             margin: 0;
             font-weight: 600;
         }
-        /* Banner de equipos más amplio y logos grandes con brillo/zoom */
+        /* Banner de equipos sin rectángulo azul, más abajo, 15% más grandes y separados */
         .teams-banner {
-            width: 92%;
-            max-width: 820px;
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(6px);
-            border: 2px solid var(--accent-blue);
-            border-radius: 14px;
-            padding: 10px 20px;
+            width: 95%;
+            max-width: 900px;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 18px;
+            gap: 30px;
             flex-wrap: wrap;
-            margin: 8px auto;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            margin: 35px auto 15px auto; /* 4 líneas más abajo */
         }
         .team-logo-item {
-            width: 70px;
-            height: 70px;
+            width: 82px; /* 15% más grandes (~82px) */
+            height: 82px;
             background: #ffffff;
             border-radius: 50%;
             padding: 4px;
             object-fit: contain;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
         }
-        .team-logo-item:hover {
-            transform: scale(1.18);
-            box-shadow: 0 0 20px rgba(14, 165, 233, 0.8), 0 6px 15px rgba(0, 0, 0, 0.6);
-        }
+
+        /* Brillos específicos de izquierda a derecha por cada equipo */
+        .team-logo-item:nth-child(1):hover { transform: scale(1.18); box-shadow: 0 0 28px #eab308, 0 6px 15px rgba(0,0,0,0.6); } /* 1. Amarillo */
+        .team-logo-item:nth-child(2):hover { transform: scale(1.18); box-shadow: 0 0 28px #ef4444, 0 6px 15px rgba(0,0,0,0.6); } /* 2. Rojo */
+        .team-logo-item:nth-child(3):hover { transform: scale(1.18); box-shadow: 0 0 28px #3b82f6, 0 6px 15px rgba(0,0,0,0.6); } /* 3. Azul */
+        .team-logo-item:nth-child(4):hover { transform: scale(1.18); box-shadow: 0 0 28px #22c55e, 0 6px 15px rgba(0,0,0,0.6); } /* 4. Verde */
+        .team-logo-item:nth-child(5):hover { transform: scale(1.18); box-shadow: 0 0 28px #000000, 0 0 12px #ffffff; }     /* 5. Negro con halo blanco */
+        .team-logo-item:nth-child(6):hover { transform: scale(1.18); box-shadow: 0 0 28px #f97316, 0 6px 15px rgba(0,0,0,0.6); } /* 6. Naranja */
+
         .main-content {
             width: 100%;
             max-width: 850px;
@@ -111,6 +110,10 @@
             margin-bottom: 12px;
             text-transform: uppercase;
             letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         .card p {
             font-size: 12px;
@@ -230,12 +233,12 @@
 <body>
 
     <div class="header-container">
-        <!-- Logo principal sin contenedor blanco -->
-        <img src="Logos Equipos/lifarcc_logo.jpg" alt="LIFARCC Monclova" class="main-league-logo" onerror="this.onerror=null; this.src='Logos Equipos/lifarcc.jpg';">
+        <!-- Logo principal actualizado: logolinfarcc2.jpeg -->
+        <img src="Logos Equipos/logolinfarcc2.jpeg" alt="LIFARCC Monclova" class="main-league-logo" onerror="this.onerror=null; this.src='Logos Equipos/lifarcc.jpg';">
         <p class="subtitle">Liga Infantil y Juvenil de Fútbol Americano de la Región Centro de Coahuila</p>
     </div>
 
-    <!-- Banner con los logos de los 6 equipos (Grandes y con efecto hover) -->
+    <!-- Banner de equipos libre (sin rectángulo azul), más abajo, más grandes y con colores de brillo específicos -->
     <div class="teams-banner">
         <img src="Logos Equipos/acereros.jpg" alt="Acereros" class="team-logo-item" title="Club Acereros" onerror="this.style.display='none'">
         <img src="Logos Equipos/bucaneros.jpg" alt="Bucaneros" class="team-logo-item" title="Club Bucaneros" onerror="this.style.display='none'">
@@ -249,7 +252,10 @@
         <!-- Tarjeta Liga Infantil (Activa) -->
         <div class="card">
             <div>
-                <h2>🏈 Liga Infantil</h2>
+                <h2>
+                    <svg style="width:26px; height:26px; fill:#38bdf8;" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12C20,14.2 19.1,16.2 17.7,17.7C17.4,17.4 17,17.2 16.5,17.2C15.4,17.2 14.5,18.1 14.5,19.2C14.5,19.3 14.5,19.5 14.6,19.6C13.8,19.8 12.9,20 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M15,9A1,1 0 0,0 14,10A1,1 0 0,0 15,11A1,1 0 0,0 16,10A1,1 0 0,0 15,9M9,9A1,1 0 0,0 8,10A1,1 0 0,0 9,11A1,1 0 0,0 10,10A1,1 0 0,0 9,9M15,13.5C14.17,13.5 13.5,14.17 13.5,15C13.5,15.83 14.17,16.5 15,16.5H18V13.5H15Z"/></svg>
+                    Liga Infantil
+                </h2>
                 <p>Plataforma de registro, gestión de rosters, control de peso e impresión de plantillas oficiales para categorías menores.</p>
                 <div class="categories-badge">
                     <span class="badge">Ardilla</span>
@@ -264,7 +270,7 @@
             </div>
         </div>
 
-        <!-- Tarjeta Liga Juvenil (Bloqueada con Próximamente / Vínculo intacto) -->
+        <!-- Tarjeta Liga Juvenil (Casco y Próximamente) -->
         <div class="card juvenil">
             <div class="overlay-proximamente">
                 <div class="badge-proximamente">🚀 Próximamente</div>
@@ -272,7 +278,13 @@
             </div>
 
             <div>
-                <h2>🛡️ Liga Juvenil</h2>
+                <h2>
+                    <!-- Icono de Casco de Fútbol Americano Vectorial -->
+                    <svg style="width:28px; height:28px; fill:#c084fc;" viewBox="0 0 24 24">
+                        <path d="M12,2A10,10 0 0,0 2,12C2,17.5 6.5,22 12,22C13.8,22 15.5,21.5 17,20.6C16.3,19.6 15.9,18.4 15.9,17C15.9,14.8 17.7,13 19.9,13C20.3,13 20.7,13.1 21,13.2C20.8,8.1 16.9,4 12,4V2M12,6C15.9,6 19,9.1 19,13C19,13.3 19,13.6 18.9,13.9C18.4,13.3 17.7,13 16.9,13C14.7,13 12.9,14.8 12.9,17C12.9,18.4 13.7,19.7 14.8,20.4C13.8,20.8 12.9,21 12,21C7.6,21 4,17.4 4,13C4,8.6 7.6,5 12,5V6Z"/>
+                    </svg>
+                    Liga Juvenil
+                </h2>
                 <p>Sistema especializado en la administración de plantillas, validación de edades y generación de rosters para categorías mayores.</p>
                 <div class="categories-badge">
                     <span class="badge">Pee Wee</span>
@@ -287,7 +299,7 @@
     </div>
 
     <footer>
-        Página Creada por <span>Carrivers Desing</span> - Todos los Derechos Reservados © - V.3.0.1
+        Página Creada por <span>Carrivers Desing</span> - Todos los Derechos Reservados © - V.3.0.2
     </footer>
 
     <!-- Indicador de conexión Firebase -->
