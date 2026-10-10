@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generador de Roster Oficial - LIFARCC Monclova</title>
     <!-- FAVICON OFICIAL: BALÓN DE RUGBY DESDE GITHUB -->
     <link rel="icon" type="image/svg+xml" href="Logos%20Equipos/rugby-ball.svg">
@@ -27,9 +27,8 @@
             background-color: #0b0f19;
             color: var(--text-light);
             margin: 0;
-            padding: 10px;
+            padding: 15px;
             min-height: 100vh;
-            min-height: 100dvh;
             position: relative;
             overflow-x: hidden;
         }
@@ -65,19 +64,16 @@
             justify-content: center;
             align-items: center;
             z-index: 9999;
-            padding: 15px;
-            box-sizing: border-box;
         }
         .login-box {
             background: rgba(30, 41, 59, 0.95);
             border: 2px solid var(--bronze-gold);
-            padding: 25px;
+            padding: 35px;
             border-radius: 12px;
             width: 100%;
             max-width: 380px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.8);
             text-align: center;
-            box-sizing: border-box;
         }
         .login-box h3 { margin-top: 0; color: #fbbf24; letter-spacing: 1px; }
 
@@ -88,7 +84,7 @@
             margin: auto;
             background: rgba(17, 24, 39, 0.88);
             backdrop-filter: blur(6px);
-            padding: 15px;
+            padding: 25px;
             border-radius: 12px;
             border: 1px solid var(--metal-border);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
@@ -99,19 +95,19 @@
             display: flex;
             flex-direction: column;
             background: linear-gradient(90deg, #1e293b, #334155);
-            padding: 10px;
+            padding: 12px 20px;
             border-radius: 8px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             border: 1px solid #475569;
             gap: 10px;
         }
-        .nav-tabs-group { display: flex; gap: 6px; flex-wrap: wrap; }
+        .nav-tabs-group { display: flex; gap: 8px; flex-wrap: wrap; }
         .tab-btn {
             background: #0f172a;
             color: var(--accent-silver);
             border: 1px solid #475569;
-            padding: 8px 12px;
-            font-size: 12px;
+            padding: 8px 16px;
+            font-size: 13px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
@@ -122,25 +118,25 @@
             color: white;
             border-color: #fbbf24;
         }
-        .nav-actions-group { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+        .nav-actions-group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 
         /* HEADER & MINI LOGOS */
         .header-banner {
             text-align: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             border-bottom: 1px solid var(--metal-border);
-            padding-bottom: 12px;
+            padding-bottom: 15px;
         }
         .main-title-row {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 15px;
             margin-bottom: 5px;
         }
         .league-logo-badge {
-            width: 60px;
-            height: 60px;
+            width: 70px;
+            height: 70px;
             object-fit: contain;
             border-radius: 50%;
             border: 2px solid var(--bronze-gold);
@@ -150,8 +146,8 @@
         .mini-teams-header {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
+            gap: 15px;
+            margin-top: 12px;
             flex-wrap: wrap;
         }
         .mini-team-badge {
@@ -159,37 +155,37 @@
             align-items: center;
             gap: 5px;
             background: #1e293b;
-            padding: 3px 8px;
+            padding: 3px 10px;
             border-radius: 20px;
             border: 1px solid #475569;
-            font-size: 10px;
+            font-size: 11px;
             font-weight: bold;
         }
-        .mini-team-badge img { width: 20px; height: 20px; object-fit: contain; background: #fff; border-radius: 50%; padding: 1px; }
+        .mini-team-badge img { width: 22px; height: 22px; object-fit: contain; background: #fff; border-radius: 50%; padding: 1px; }
 
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
         .controls-panel {
             background: #1e293b;
-            padding: 12px 15px;
+            padding: 15px 20px;
             border-radius: 8px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             border: 1px solid var(--metal-border);
         }
         .filter-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 15px;
             align-items: center;
             justify-content: space-between;
         }
-        .filter-group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; width: 100%; }
-        .filter-group label { font-weight: bold; color: #cbd5e1; font-size: 12px; }
+        .filter-group { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
+        .filter-group label { font-weight: bold; color: #cbd5e1; font-size: 13px; }
         
         select, input[type="text"], input[type="date"], input[type="number"], input[type="file"], input[type="password"], textarea {
-            padding: 8px;
-            font-size: 14px; /* Evita zoom automático en iPhone */
+            padding: 7px 10px;
+            font-size: 13px;
             border-radius: 6px;
             border: 1px solid var(--metal-border);
             background: #0f172a;
@@ -204,16 +200,15 @@
             background: linear-gradient(135deg, #3b82f6, #1d4ed8);
             color: white;
             border: none;
-            padding: 9px 14px;
+            padding: 8px 14px;
             font-size: 13px;
             border-radius: 6px;
             cursor: pointer;
             font-weight: 600;
+            transition: opacity 0.2s;
             display: inline-flex;
             align-items: center;
-            justify-content: center;
             gap: 6px;
-            box-sizing: border-box;
         }
         .btn:hover { opacity: 0.9; }
         .btn-success { background: linear-gradient(135deg, #16a34a, #15803d); }
@@ -222,7 +217,7 @@
         .btn-warning { background: linear-gradient(135deg, #d97706, #b45309); color: white; }
         .btn-info { background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white; }
         .btn-celeste { background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white; position: relative; }
-        .btn-sm { padding: 6px 10px; font-size: 11px; }
+        .btn-sm { padding: 4px 8px; font-size: 11px; }
 
         .msg-badge {
             position: absolute;
@@ -239,31 +234,31 @@
 
         .section-box {
             background: #1e293b;
-            padding: 12px 15px;
+            padding: 15px 20px;
             border-radius: 8px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             border: 1px solid var(--metal-border);
         }
-        .section-box h4 { margin: 0 0 10px 0; color: #f1f5f9; font-size: 14px; }
+        .section-box h4 { margin: 0 0 10px 0; color: #f1f5f9; font-size: 15px; }
 
         .teams-preview-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 10px;
-            margin-top: 8px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 12px;
+            margin-top: 10px;
         }
         .team-card {
             background: #0f172a;
             border: 1px solid var(--metal-border);
             border-radius: 8px;
-            padding: 8px;
+            padding: 10px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
         .team-card img {
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             object-fit: contain;
             border: 1px solid #475569;
             border-radius: 6px;
@@ -271,12 +266,12 @@
             padding: 2px;
         }
         .team-card-info { flex-grow: 1; overflow: hidden; }
-        .team-card-info h5 { margin: 0 0 2px 0; color: white; font-size: 12px; }
-        .team-card-info p { margin: 0; font-size: 10px; color: var(--accent-silver); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .team-card-info h5 { margin: 0 0 3px 0; color: white; font-size: 13px; }
+        .team-card-info p { margin: 0 0 5px 0; font-size: 10px; color: var(--accent-silver); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-        table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; color: #1e293b; min-width: 600px; }
-        th, td { border: 1px solid #cbd5e1; padding: 6px 8px; text-align: center; font-size: 12px; }
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; color: #1e293b; }
+        th, td { border: 1px solid #cbd5e1; padding: 7px 9px; text-align: center; font-size: 12px; }
         th {
             background-color: #1e3a8a !important;
             color: white !important;
@@ -287,8 +282,8 @@
         tr:nth-child(even) { background-color: #f8fafc; }
         
         .player-photo-container {
-            width: 36px;
-            height: 48px;
+            width: 40px;
+            height: 52px;
             margin: auto;
             border: 1px solid #cbd5e1;
             border-radius: 4px;
@@ -306,38 +301,34 @@
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.75);
+            background: rgba(0,0,0,0.7);
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            padding: 10px;
-            box-sizing: border-box;
         }
         .modal-content {
             background: #1e293b;
             border: 1px solid var(--metal-border);
             color: white;
-            padding: 20px;
+            padding: 25px;
             border-radius: 10px;
-            width: 100%;
-            max-width: 520px;
-            max-height: 85vh;
+            width: 90%;
+            max-width: 550px;
+            max-height: 90vh;
             overflow-y: auto;
-            box-sizing: border-box;
         }
         .modal-header {
-            font-size: 15px;
+            font-size: 16px;
             font-weight: bold;
             color: #f8fafc;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
         }
-        .close-btn { cursor: pointer; color: var(--danger-color); font-size: 20px; padding: 0 5px; }
+        .close-btn { cursor: pointer; color: var(--danger-color); font-size: 18px; }
 
         .footer-copyright {
-            margin-top: 20px;
+            margin-top: 30px;
             text-align: center;
             font-size: 9px;
             color: var(--accent-silver);
@@ -346,8 +337,20 @@
             padding-top: 10px;
         }
 
+        @media (max-width: 768px) {
+            body { padding: 5px; }
+            .container { padding: 12px; }
+            .top-navbar { padding: 10px; }
+            .filter-row { flex-direction: column; align-items: stretch; gap: 10px; }
+            .filter-group { flex-direction: column; align-items: stretch; width: 100%; }
+            .filter-group > div { width: 100%; }
+            .form-grid-1, .form-grid-2 { grid-template-columns: 1fr !important; }
+            .main-title-row { flex-direction: column; gap: 5px; text-align: center; }
+            .teams-preview-grid { grid-template-columns: 1fr; }
+        }
+
         @media print {
-            body { background: white; padding: 5mm; color: #000; }
+            body { background: white; padding: 10mm; color: #000; }
             .moving-light-overlay, .container, .top-navbar, .controls-panel, .section-box, .nav-tabs, .footer-copyright, .no-print { display: none !important; }
             
             .hoja-roster-impresion {
@@ -361,16 +364,27 @@
                 page-break-after: avoid;
                 break-after: avoid;
             }
-            table.print-table { width: 100%; border-collapse: collapse; margin-top: 8px; background: white; min-width: auto; }
+            
+            table.print-table { width: 100%; border-collapse: collapse; margin-top: 8px; background: white; }
             thead { display: table-header-group !important; }
             tbody { display: table-row-group !important; }
-            tr { page-break-inside: avoid !important; }
+            tr { page-break-inside: avoid !important; page-break-after: auto !important; }
+            
             table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 6px; text-align: center; font-size: 11px; }
-            table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; text-transform: uppercase; }
-            .logo-box-print { width: 85px; height: 85px; object-fit: contain; background: #fff; }
-            .league-title-print { font-size: 22px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
-            .league-subtitle-print { font-size: 8px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 3px; }
-            .print-footer { text-align: center; font-size: 8px; color: #555; border-top: 1px solid #aaa; padding-top: 5px; margin-top: 10px; }
+            table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; text-transform: uppercase; font-size: 11px; }
+            
+            .logo-box-print { width: 95px; height: 95px; object-fit: contain; background: #fff; }
+            .league-title-print { font-size: 26px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
+            .league-subtitle-print { font-size: 9px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 3px; }
+            
+            .print-footer {
+                text-align: center;
+                font-size: 9px;
+                color: #555;
+                border-top: 1px solid #aaa;
+                padding-top: 6px;
+                margin-top: 15px;
+            }
         }
     </style>
 </head>
@@ -382,10 +396,10 @@
 <div id="loginOverlay">
     <div class="login-box">
         <h3>LIFARCC MONCLOVA</h3>
-        <p style="font-size: 12px; color: #94a3b8; margin-bottom: 15px;">Selecciona tu rol de acceso:</p>
+        <p style="font-size: 12px; color: #94a3b8; margin-bottom: 20px;">Selecciona tu rol de acceso:</p>
         <div style="margin-bottom: 12px; text-align: left;">
             <label style="font-size: 11px; font-weight: bold; color: #cbd5e1;">USUARIO / CLUB:</label>
-            <select id="loginUsuario" onchange="window.verificarRolLogin()" style="width: 100%; margin-top: 5px;">
+            <select id="loginUsuario" onchange="window.verificarRolLogin()" style="width: 100%; margin-top: 5px; background: #0f172a; color: white; padding: 8px; border-radius: 6px; border: 1px solid #475569;">
                 <option value="Administrador">Administrador (Liga)</option>
                 <option value="ACEREROS">Club Acereros</option>
                 <option value="BUCANEROS">Club Bucaneros</option>
@@ -395,14 +409,17 @@
                 <option value="ZORROS">Club Zorros</option>
             </select>
         </div>
-        <div id="divPassword" style="margin-bottom: 15px; text-align: left;">
+        <div id="divPassword" style="margin-bottom: 20px; text-align: left;">
             <label style="font-size: 11px; font-weight: bold; color: #cbd5e1;" id="lblPassText">CONTRASEÑA:</label>
             <div style="display: flex; gap: 5px; align-items: center; margin-top: 5px;">
-                <input type="password" id="loginPassword" placeholder="Contraseña..." onkeydown="if(event.key==='Enter') window.intentarLogin()" style="width: 100%;">
-                <button type="button" class="btn btn-sm" onclick="window.toggleVerPassLogin()" style="padding: 10px; background: #334155; border: 1px solid #475569;">👁️</button>
+                <input type="password" id="loginPassword" placeholder="Contraseña..." onkeydown="if(event.key==='Enter') window.intentarLogin()" style="width: 100%; box-sizing: border-box; padding: 8px; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white;">
+                <button type="button" class="btn btn-sm" onclick="window.toggleVerPassLogin()" style="padding: 8px 10px; background: #334155; border: 1px solid #475569; cursor: pointer;">👁️</button>
             </div>
         </div>
         <button class="btn btn-warning" style="width: 100%; justify-content: center;" onclick="window.intentarLogin()">Ingresar al Sistema</button>
+    </div>
+    <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.063
     </div>
 </div>
 
@@ -410,18 +427,18 @@
     <div class="header-banner">
         <div class="main-title-row">
             <img src="" id="imgEscudoLiga" class="league-logo-badge" alt="LIFARCC" onerror="this.src='Logos%20Equipos/lifarcc.jpg'">
-            <h2 style="margin: 0; font-size: 16px; color: #f8fafc; letter-spacing: 0.5px;">LIGA DE FÚTBOL AMERICANO LIFARCC MONCLOVA</h2>
+            <h2 style="margin: 0; font-size: 20px; color: #f8fafc; letter-spacing: 0.5px;">LIGA DE FÚTBOL AMERICANO LIFARCC MONCLOVA</h2>
         </div>
-        <h3 style="margin: 4px 0 0 0; font-size: 12px; color: var(--bronze-gold); text-transform: uppercase;">GENERADOR Y GESTOR DE ROSTER OFICIAL</h3>
+        <h3 style="margin: 2px 0 0 0; font-size: 13px; color: var(--bronze-gold); text-transform: uppercase;">GENERADOR Y GESTOR DE ROSTER OFICIAL</h3>
         <div class="mini-teams-header" id="miniTeamsHeaderContainer"></div>
     </div>
 
     <!-- MENÚ SUPERIOR -->
     <div class="top-navbar no-print">
-        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 8px; border-bottom: 1px solid #475569; padding-bottom: 8px;">
-            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 10px; border-bottom: 1px solid #475569; padding-bottom: 8px;">
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                 <span id="lblRolActual" style="font-size: 11px; color: #fbbf24; font-weight: bold;"></span>
-                <select id="adminDropdown" class="col-admin" onchange="window.manejarAccionAdmin(this)" style="display:none; background:#1e293b; color:#fbbf24; border:1px solid #d97706; padding:5px; border-radius:6px; font-size:11px; font-weight:bold;">
+                <select id="adminDropdown" class="col-admin" onchange="window.manejarAccionAdmin(this)" style="display:none; background:#1e293b; color:#fbbf24; border:1px solid #d97706; padding:5px 8px; border-radius:6px; font-size:11px; font-weight:bold; cursor:pointer;">
                     <option value="">⚙️ Menú Admin...</option>
                     <option value="reporte">📊 Reporte Semanal</option>
                     <option value="fechas">📅 Fechas Categorías</option>
@@ -431,29 +448,29 @@
                 </select>
             </div>
             
-            <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-                <button class="btn btn-celeste btn-sm" id="btnBuzonSuperior" onclick="window.abrirBuzonMensajes()" title="Buzón">
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <button class="btn btn-celeste btn-sm" id="btnBuzonSuperior" onclick="window.abrirBuzonMensajes()" title="Buzón de Mensajes">
                     📨 <span id="txtBtnBuzon">Buzón</span>
                     <span id="badgeBuzonCount" class="msg-badge" style="display:none;">0</span>
                 </button>
-                <button class="btn btn-warning btn-sm" onclick="window.abrirModalCambiarPass()">🔑 Pass</button>
+                <button class="btn btn-warning btn-sm" onclick="window.abrirModalCambiarPass()">🔑 Contraseña</button>
                 <button class="btn btn-danger btn-sm" onclick="window.cerrarSesion()">🔒 Salir</button>
             </div>
         </div>
 
-        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 8px; padding-top: 4px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 10px; padding-top: 4px;">
             <div class="nav-tabs-group" id="navTabsContainer">
-                <button class="tab-btn active" onclick="window.cambiarPestaña('rosterTab', this)">📋 Roster</button>
-                <button class="tab-btn" id="btnTabDirectorio" onclick="window.cambiarPestaña('todosTab', this)">📚 Directorio</button>
+                <button class="tab-btn active" onclick="window.cambiarPestaña('rosterTab', this)">📋 Generador de Roster</button>
+                <button class="tab-btn" id="btnTabDirectorio" onclick="window.cambiarPestaña('todosTab', this)">📚 Directorio General</button>
             </div>
-            <div class="nav-actions-group" id="navActionsContainer" style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
-                <div style="display: flex; align-items: center; gap: 4px; background: #0f172a; padding: 4px 8px; border-radius: 6px; border: 1px solid #475569;">
-                    <span style="font-size: 10px; color: #94a3b8;">Excel:</span>
-                    <input type="file" id="inputExcel" accept=".xlsx, .xls, .csv" onchange="window.importarExcel(event)" style="font-size: 10px; width: 120px; padding: 2px;">
+            <div class="nav-actions-group" id="navActionsContainer" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 5px; background: #0f172a; padding: 4px 10px; border-radius: 6px; border: 1px solid #475569;">
+                    <span style="font-size: 11px; color: #94a3b8;">📥 Importar Excel:</span>
+                    <input type="file" id="inputExcel" accept=".xlsx, .xls, .csv" onchange="window.importarExcel(event)" style="font-size: 11px; width: 150px; padding: 3px;">
                 </div>
-                <div style="display: flex; align-items: center; gap: 4px; background: #0f172a; padding: 4px 8px; border-radius: 6px; border: 1px solid #475569;">
-                    <span style="font-size: 10px; color: #94a3b8;">Fotos:</span>
-                    <input type="file" id="inputFotos" multiple accept="image/*" onchange="window.cargarFotosLocales(event)" style="font-size: 10px; width: 110px; padding: 2px;">
+                <div style="display: flex; align-items: center; gap: 5px; background: #0f172a; padding: 4px 10px; border-radius: 6px; border: 1px solid #475569;">
+                    <span style="font-size: 11px; color: #94a3b8;">📂 Fotos Masivas:</span>
+                    <input type="file" id="inputFotos" multiple accept="image/*" onchange="window.cargarFotosLocales(event)" style="font-size: 11px; width: 140px; padding: 3px;">
                 </div>
             </div>
         </div>
@@ -462,34 +479,34 @@
     <!-- PESTAÑA 1 -->
     <div id="rosterTab" class="tab-content active">
         <div class="section-box no-print col-admin" style="background: #1e293b; border: 1px solid var(--bronze-gold);">
-            <h4>📅 Periodo de Registro</h4>
-            <p style="font-size: 11px; color: #cbd5e1; margin: 0;">Abierto de <b>Lunes a Jueves</b> (cierre jueves a las 11:59 PM).</p>
+            <h4>📅 Periodo de Registro de Jugadores</h4>
+            <p style="font-size: 12px; color: #cbd5e1; margin: 0;">Abierto de <b>Lunes a Jueves</b> (cierre jueves a las 11:59 PM).</p>
         </div>
 
         <div class="section-box no-print">
-            <h4>🛡 Logotipos de Equipos</h4>
+            <h4>🛡 Configuración de Logotipos de Equipos</h4>
             <div id="teamsPreviewGrid" class="teams-preview-grid"></div>
         </div>
 
         <div class="section-box" id="seccionAltaIndividual" style="background: #1e293b; border: 1px solid var(--bronze-gold);">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
-                <h4 style="margin: 0; color: #f1f5f9; font-size: 14px;">➕ Registrar Jugador en la Nube</h4>
-                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-                    <button class="btn btn-warning btn-sm" onclick="window.abrirModalRangosCategorias()">📅 Rangos</button>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px;">
+                <h4 style="margin: 0; color: #f1f5f9; font-size: 15px;">➕ Registrar Jugador de 1 en 1 (Sincronizado en la Nube)</h4>
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <button class="btn btn-warning btn-sm" onclick="window.abrirModalRangosCategorias()">📅 Ver Rangos de Fechas por Categoría</button>
                     <div id="badgeEstadoRegistroContainer"></div>
                 </div>
             </div>
-            <div id="bannerPeriodoRegistro" style="background: rgba(217, 119, 6, 0.2); border: 1px dashed var(--bronze-gold); padding: 6px 10px; border-radius: 6px; margin-bottom: 12px; font-size: 11px; font-weight: bold; color: #fbbf24; text-align: center;">
-                📅 Periodo: Lunes a Jueves
+            <div id="bannerPeriodoRegistro" style="background: rgba(217, 119, 6, 0.2); border: 1px dashed var(--bronze-gold); padding: 8px 12px; border-radius: 6px; margin-bottom: 15px; font-size: 12px; font-weight: bold; color: #fbbf24; text-align: center;">
+                📅 Periodo de Registro de Jugadores: Abierto de Lunes a Jueves
             </div>
             
-            <div style="display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 10px;">
+            <div class="form-grid-1" style="display: grid; grid-template-columns: 1fr 1fr 2fr; gap: 12px; margin-bottom: 12px;">
                 <div>
-                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 3px;">Equipo *:</label>
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Equipo *:</label>
                     <select id="altaEquipo" style="width:100%;" disabled></select>
                 </div>
                 <div>
-                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 3px;">Categoría *:</label>
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Categoría *:</label>
                     <select id="altaCategoria" style="width:100%;" disabled>
                         <option value="ARDILLA">ARDILLAS</option>
                         <option value="HORMIGA">HORMIGAS</option>
@@ -499,42 +516,42 @@
                     </select>
                 </div>
                 <div>
-                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 3px;">Nombre Completo * <span id="checkNombre"></span></label>
-                    <input type="text" id="altaNombre" placeholder="APELLIDO PATERNO MATERNO Y NOMBRE(S)" oninput="window.validarNombreInput()">
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Nombre Completo * <span id="checkNombre"></span></label>
+                    <input type="text" id="altaNombre" placeholder="APELLIDO PATERNO MATERNO Y NOMBRE(S)" oninput="window.validarNombreInput()" style="width:100%;">
                 </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 12px;">
+            <div class="form-grid-2" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1.2fr; gap: 12px; margin-bottom: 15px;">
                 <div>
-                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 3px;">Fecha Nacimiento * <span id="checkNacimiento"></span></label>
-                    <input type="date" id="altaNacimiento" onblur="window.validarFechaAltaBlur()">
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Fecha Nacimiento * <span id="checkNacimiento"></span></label>
+                    <input type="date" id="altaNacimiento" onblur="window.validarFechaAltaBlur()" style="width:100%;">
                 </div>
                 <div>
-                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 3px;">CURP (18 Dígitos) * <span id="checkCurp"></span></label>
-                    <input type="text" id="altaCurp" maxlength="18" placeholder="18 CARACTERES..." oninput="window.validarCurpInput()">
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">CURP (18 Dígitos) * <span id="checkCurp"></span></label>
+                    <input type="text" id="altaCurp" maxlength="18" placeholder="18 CARACTERES..." oninput="window.validarCurpInput()" style="width:100%;">
                 </div>
                 <div>
-                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 3px;">Documento *:</label>
-                    <input type="text" id="altaDoc" value="ACTA DE NACIMIENTO, CURP">
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Documento * <span id="checkDoc">✅</span></label>
+                    <input type="text" id="altaDoc" value="ACTA DE NACIMIENTO, CURP" style="width:100%;">
                 </div>
                 <div>
-                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 3px;">Fotografía *:</label>
-                    <button type="button" id="btnTextoAltaFoto" class="btn btn-warning btn-sm" onclick="window.mostrarGuiaFoto('altaFoto')" style="width:100%;">📷 Seleccionar Foto</button>
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Fotografía *:</label>
+                    <button type="button" id="btnTextoAltaFoto" class="btn btn-warning btn-sm" onclick="window.mostrarGuiaFoto('altaFoto')" style="width:100%; justify-content:center;">📷 Seleccionar Foto</button>
                     <input type="file" id="altaFoto" accept="image/*" style="display:none;" onchange="window.actualizarNombreArchivoAlta(event)">
                 </div>
             </div>
-            <button class="btn btn-purple btn-sm" style="width:100%;" onclick="window.registrarJugadorIndividual()">Guardar Jugador en la Nube</button>
+            <button class="btn btn-purple btn-sm" onclick="window.registrarJugadorIndividual()">Guardar Jugador en la Nube</button>
         </div>
 
         <div class="controls-panel">
             <div class="filter-row">
                 <div class="filter-group">
-                    <div style="width:100%;">
-                        <label for="filtroEquipo">EQUIPO:</label>
+                    <div>
+                        <label for="filtroEquipo">EQUIPO:</label><br>
                         <select id="filtroEquipo" onchange="window.cambiarFiltroEquipo()"></select>
                     </div>
-                    <div style="width:100%;">
-                        <label for="filtroCategoria">CATEGORÍA:</label>
+                    <div>
+                        <label for="filtroCategoria">CATEGORÍA:</label><br>
                         <select id="filtroCategoria" onchange="window.renderizarRoster()">
                             <option value="ARDILLA">ARDILLA</option>
                             <option value="HORMIGA">HORMIGA</option>
@@ -543,26 +560,26 @@
                             <option value="BOTANA">BOTANA</option>
                         </select>
                     </div>
-                    <div style="width:100%;">
-                        <label for="buscadorGlobal">🔍 Buscador:</label>
+                    <div>
+                        <label for="buscadorGlobal">🔍 Buscador:</label><br>
                         <div style="display: flex; gap: 5px; align-items: center;">
-                            <input type="text" id="buscadorGlobal" placeholder="Nombre o CURP..." oninput="window.renderizarRoster()">
-                            <button class="btn btn-warning btn-sm" onclick="window.renderizarRoster()" title="Actualizar">🔄</button>
+                            <input type="text" id="buscadorGlobal" placeholder="Nombre o CURP..." oninput="window.renderizarRoster()" style="width: 150px;">
+                            <button class="btn btn-warning btn-sm" onclick="window.renderizarRoster()" title="Actualizar">🔄 Generar</button>
                         </div>
                     </div>
-                    <div style="width:100%;">
-                        <label for="inputCampo">📍 Dirección Campo:</label>
+                    <div>
+                        <label for="inputCampo">📍 Dirección Campo / Sede:</label><br>
                         <div style="display: flex; gap: 5px; align-items: center;">
-                            <input type="text" id="inputCampo" placeholder="Ej. Campo PAC Monclova" oninput="window.guardarDatosCampoActual()">
-                            <button type="button" class="btn btn-sm" onclick="window.abrirGoogleMapsCampo()" title="Maps" style="padding: 8px; background: #334155; border: 1px solid #475569;">🗺️</button>
+                            <input type="text" id="inputCampo" placeholder="Ej. Campo PAC-Snyder Monclova" oninput="window.guardarDatosCampoActual()" style="width: 200px;">
+                            <button type="button" class="btn btn-sm" onclick="window.abrirGoogleMapsCampo()" title="Google Maps" style="padding: 7px 10px; background: #334155; border: 1px solid #475569; cursor: pointer;">🗺️</button>
                         </div>
                     </div>
                 </div>
-                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; width: 100%; margin-top: 5px;">
-                    <button class="btn btn-warning btn-sm" style="flex:1;" onclick="window.mostrarPlantillaEquipo()">📋 Plantilla</button>
-                    <button class="btn btn-success btn-sm" style="flex:1;" onclick="window.imprimirRosterActual()">🖨️ Imprimir</button>
-                    <button class="btn btn-info btn-sm" style="width:100%;" onclick="window.imprimirRosterCompletoEquipoSeleccionado()">🖨 Imprimir Equipo Completo</button>
-                    <button class="btn btn-purple btn-sm col-admin" style="width:100%;" onclick="window.abrirModalSeleccionSemanaJuego()">🔀 Imprimir Semana de Juego</button>
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <button class="btn btn-warning" onclick="window.mostrarPlantillaEquipo()">📋 Ver Plantilla</button>
+                    <button class="btn btn-success" onclick="window.imprimirRosterActual()">🖨️ Imprimir Roster</button>
+                    <button class="btn btn-info" onclick="window.imprimirRosterCompletoEquipoSeleccionado()">🖨 Imprimir Equipo Completo</button>
+                    <button class="btn btn-purple col-admin" onclick="window.abrirModalSeleccionSemanaJuego()" title="Seleccionar equipos específicos">🔀 Imprimir Semana de Juego</button>
                 </div>
             </div>
         </div>
@@ -571,15 +588,15 @@
             <table>
                 <thead>
                     <tr>
-                        <th style="width: 35px;">N°</th>
-                        <th style="width: 75px;">Foto</th>
+                        <th style="width: 40px;">N°</th>
+                        <th style="width: 85px;">Foto</th>
                         <th>Nombre del Jugador</th>
-                        <th style="width: 80px;">Cat</th>
-                        <th style="width: 95px;">Nac.</th>
-                        <th style="width: 130px;">CURP</th>
-                        <th style="width: 100px;">Doc</th>
-                        <th class="no-print col-admin" style="width: 70px;">Equipo</th>
-                        <th class="no-print" style="width: 60px;">Acción</th>
+                        <th style="width: 90px;">Categoría</th>
+                        <th style="width: 110px;">Fecha Nac.</th>
+                        <th style="width: 160px;">CURP</th>
+                        <th style="width: 120px;">Documento</th>
+                        <th class="no-print col-admin" style="width: 75px;">Equipo</th>
+                        <th class="no-print" style="width: 150px;">Acciones</th>
                     </tr>
                 </thead>
                 <tbody id="tablaCuerpo"></tbody>
@@ -589,28 +606,29 @@
 
     <!-- PESTAÑA 2: DIRECTORIO GENERAL -->
     <div id="todosTab" class="tab-content">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
             <div>
-                <h3 style="margin: 0; color: #f8fafc; font-size: 15px;">📚 Directorio General</h3>
+                <h3 style="margin: 0; color: #f8fafc;">📚 Directorio General</h3>
+                <p style="font-size: 12px; color: var(--accent-silver); margin: 2px 0 0 0;">Ordenado por Equipo y Categoría.</p>
             </div>
-            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; width: 100%;">
-                <input type="text" id="buscadorDirectorioGeneral" placeholder="🔍 Buscar jugador..." oninput="window.renderizarDirectorioGeneral()" style="flex:1;">
-                <button class="btn btn-success btn-sm" onclick="window.imprimirTodosRostersMasivo()">🖨 Masivo</button>
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <input type="text" id="buscadorDirectorioGeneral" placeholder="🔍 Buscar jugador..." oninput="window.renderizarDirectorioGeneral()" style="width: 220px;">
+                <button class="btn btn-success" onclick="window.imprimirTodosRostersMasivo()">🖨 Imprimir Todos (Masivo)</button>
             </div>
         </div>
         <div class="table-responsive">
             <table>
                 <thead>
                     <tr>
-                        <th style="width: 35px;">N°</th>
-                        <th style="width: 70px;">Foto</th>
-                        <th style="width: 90px;">Equipo</th>
+                        <th style="width: 40px;">N°</th>
+                        <th style="width: 80px;">Foto</th>
+                        <th style="width: 110px;">Equipo</th>
                         <th>Nombre del Jugador</th>
-                        <th style="width: 85px;">Cat</th>
-                        <th style="width: 95px;">Nac.</th>
-                        <th style="width: 130px;">CURP</th>
-                        <th style="width: 100px;">Doc</th>
-                        <th style="width: 60px;">Acción</th>
+                        <th style="width: 100px;">Categoría</th>
+                        <th style="width: 110px;">Fecha Nac.</th>
+                        <th style="width: 160px;">CURP</th>
+                        <th style="width: 120px;">Documento</th>
+                        <th style="width: 80px;">Acciones</th>
                     </tr>
                 </thead>
                 <tbody id="tablaDirectorioGeneral"></tbody>
@@ -625,89 +643,94 @@
 
 <!-- MODALES -->
 <div id="modalAmpliarFoto" class="modal" style="z-index: 1010;">
-    <div class="modal-content" style="max-width: 350px; text-align: center;">
+    <div class="modal-content" style="max-width: 400px; text-align: center;">
         <div class="modal-header">
-            <span>🔍 Vista Ampliada</span>
+            <span>🔍 Vista Ampliada de Fotografía</span>
             <span class="close-btn" onclick="window.cerrarModalAmpliarFoto()">&times;</span>
         </div>
-        <div style="background: #0f172a; padding: 8px; border-radius: 8px; margin-bottom: 12px; border: 2px solid var(--bronze-gold); min-height: 220px; display: flex; align-items: center; justify-content: center;">
-            <img id="imgAmpliadaModal" src="" alt="Foto" style="max-width: 100%; max-height: 320px; object-fit: contain; border-radius: 6px;" onerror="this.src='Logos%20Equipos/lifarcc.jpg'">
+        <div style="background: #0f172a; padding: 10px; border-radius: 8px; margin-bottom: 15px; border: 2px solid var(--bronze-gold); display: flex; justify-content: center; align-items: center; min-height: 250px;">
+            <img id="imgAmpliadaModal" src="" alt="Foto" style="max-width: 100%; max-height: 350px; object-fit: contain; border-radius: 6px;" onerror="this.src='Logos%20Equipos/lifarcc.jpg'">
         </div>
-        <p id="nombreJugadorAmpliado" style="font-size: 12px; font-weight: bold; color: #fbbf24; margin: 0;"></p>
+        <p id="nombreJugadorAmpliado" style="font-size: 13px; font-weight: bold; color: #fbbf24; margin: 0;"></p>
     </div>
 </div>
 
 <div id="modalSeleccionSemanaJuego" class="modal" style="z-index: 1015;">
-    <div class="modal-content" style="background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--celeste-btn);">
+    <div class="modal-content" style="max-width: 460px; background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--celeste-btn);">
         <div class="modal-header" style="border-bottom: 1px solid #334155; padding-bottom: 8px;">
-            <span style="color: #38bdf8;">🔀 Imprimir Semana de Juego</span>
+            <span style="color: #38bdf8;">🔀 Imprimir Semana de Juego (Selección Múltiple)</span>
             <span class="close-btn" onclick="window.cerrarModalSeleccionSemanaJuego()">&times;</span>
         </div>
-        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 12px;">Selecciona los equipos:</p>
-        <div id="contenedorCheckboxesSemana" style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 15px; text-align: left; background: #0f172a; padding: 12px; border-radius: 8px; border: 1px solid #334155;"></div>
-        <div style="display: flex; gap: 8px;">
-            <button class="btn btn-danger btn-sm" style="flex:1;" onclick="window.cerrarModalSeleccionSemanaJuego()">Cancelar</button>
-            <button class="btn btn-success btn-sm" style="flex:1;" onclick="window.ejecutarImpresionSemanaJuego()">🖨️ Imprimir</button>
+        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 15px;">Selecciona con una palomita los equipos cuyos rosters completos deseas incluir:</p>
+        <div id="contenedorCheckboxesSemana" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; text-align: left; background: #0f172a; padding: 15px; border-radius: 8px; border: 1px solid #334155;"></div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+            <button class="btn btn-danger btn-sm" onclick="window.cerrarModalSeleccionSemanaJuego()">Cancelar</button>
+            <button class="btn btn-success" onclick="window.ejecutarImpresionSemanaJuego()">🖨️ Imprimir Seleccionados</button>
         </div>
     </div>
 </div>
 
 <div id="modalAvisoMensajeLogin" class="modal" style="z-index: 1050;">
-    <div class="modal-content" style="max-width: 360px; text-align: center; border: 2px solid var(--celeste-btn);">
+    <div class="modal-content" style="max-width: 400px; text-align: center; border: 2px solid var(--celeste-btn);">
         <div class="modal-header" style="justify-content: center; border-bottom: 1px solid #334155; padding-bottom: 8px;">
-            <span style="font-size: 16px; color: #38bdf8;">📨 NOTIFICACIÓN</span>
+            <span style="font-size: 18px; color: #38bdf8;">📨 NOTIFICACIÓN OFICIAL</span>
         </div>
-        <div style="padding: 15px 0;">
-            <p style="font-size: 14px; font-weight: bold; color: #f8fafc; margin-bottom: 8px;">¡TIENES UN MENSAJE NUEVO!</p>
-            <p style="font-size: 11px; color: var(--accent-silver);">Hay comunicaciones pendientes en el buzón.</p>
+        <div style="padding: 20px 0;">
+            <p style="font-size: 16px; font-weight: bold; color: #f8fafc; margin-bottom: 10px;">¡UD TIENE UN MENSAJE NUEVO!</p>
+            <p style="font-size: 12px; color: var(--accent-silver);">Hay comunicaciones pendientes en el buzón oficial.</p>
         </div>
-        <div style="display: flex; justify-content: center; gap: 10px;">
+        <div style="display: flex; justify-content: center; gap: 12px;">
             <button class="btn btn-danger btn-sm" onclick="window.cerrarAvisoLogin()">Cerrar</button>
-            <button class="btn btn-celeste btn-sm" onclick="window.irAlBuzonDesdeLogin()">👀 Ver</button>
+            <button class="btn btn-celeste" onclick="window.irAlBuzonDesdeLogin()">👀 Ver Mensaje</button>
         </div>
     </div>
 </div>
 
 <div id="modalBuzonMensajes" class="modal" style="z-index: 1020;">
-    <div class="modal-content" style="background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--celeste-btn);">
-        <div class="modal-header" style="border-bottom: 1px solid #334155; padding-bottom: 8px;">
-            <span id="tituloBuzonModal">📨 Buzón de Mensajes</span>
+    <div class="modal-content" style="max-width: 820px; background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--celeste-btn);">
+        <div class="modal-header" style="border-bottom: 1px solid #334155; padding-bottom: 10px;">
+            <span id="tituloBuzonModal">📨 Buzón de Mensajes Oficial</span>
             <span class="close-btn" onclick="window.cerrarBuzonMensajes()">&times;</span>
         </div>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
-            <div style="display: flex; gap: 5px;">
-                <button id="btnTabRecibidos" class="tab-btn active" style="padding: 6px 10px; font-size: 11px;" onclick="window.cambiarBuzonTab('recibidos')">📥 Recibidos</button>
-                <button id="btnTabEnviados" class="tab-btn" style="padding: 6px 10px; font-size: 11px;" onclick="window.cambiarBuzonTab('enviados')">📤 Enviados</button>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+            <div style="display: flex; gap: 6px;">
+                <button id="btnTabRecibidos" class="tab-btn active" onclick="window.cambiarBuzonTab('recibidos')">📥 Recibidos</button>
+                <button id="btnTabEnviados" class="tab-btn" onclick="window.cambiarBuzonTab('enviados')">📤 Enviados</button>
             </div>
-            <button class="btn btn-celeste btn-sm" onclick="window.abrirModalNuevoMensaje()">✉️ Redactar</button>
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <input type="text" id="buscadorBuzon" placeholder="🔍 Buscar..." oninput="window.renderizarTablaBuzon()" style="width: 200px; font-size: 11px; padding: 5px;">
+                <button class="btn btn-celeste btn-sm" onclick="window.abrirModalNuevoMensaje()">✉️ Redactar</button>
+            </div>
         </div>
-        <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+        <div class="table-responsive" style="max-height: 380px; overflow-y: auto;">
             <table>
                 <thead>
                     <tr>
-                        <th style="width: 30px;">N°</th>
-                        <th style="width: 90px;">Remitente</th>
-                        <th>Asunto</th>
-                        <th style="width: 70px;">Fecha</th>
-                        <th style="width: 50px;">Ver</th>
+                        <th style="width: 40px;">N°</th>
+                        <th id="thRemitentePara" style="width: 120px;">Remitente</th>
+                        <th>Asunto / Mensaje</th>
+                        <th style="width: 75px;">📎</th>
+                        <th style="width: 110px;">Fecha</th>
+                        <th style="width: 90px;">Estado</th>
+                        <th style="width: 100px;">Acciones</th>
                     </tr>
                 </thead>
                 <tbody id="tablaBuzonCuerpo"></tbody>
             </table>
         </div>
-        <div style="text-align: right; margin-top: 12px;">
+        <div style="text-align: right; margin-top: 15px;">
             <button class="btn btn-warning btn-sm" onclick="window.cerrarBuzonMensajes()">Cerrar</button>
         </div>
     </div>
 </div>
 
 <div id="modalVisorMensaje" class="modal" style="z-index: 1030;">
-    <div class="modal-content" style="max-width: 450px;">
+    <div class="modal-content" style="max-width: 550px;">
         <div class="modal-header">
-            <span>📄 Detalle del Mensaje</span>
+            <span id="visorAsuntoTitulo">📄 Detalle del Mensaje</span>
             <span class="close-btn" onclick="window.cerrarVisorMensaje()">&times;</span>
         </div>
-        <div id="visorContenidoDetalle" style="background: #0f172a; padding: 12px; border-radius: 8px; border: 1px solid #334155; margin-bottom: 12px; font-size: 12px; line-height: 1.4; word-break: break-word;"></div>
+        <div id="visorContenidoDetalle" style="background: #0f172a; padding: 15px; border-radius: 8px; border: 1px solid #334155; margin-bottom: 15px; font-size: 13px; line-height: 1.5; word-break: break-word;"></div>
         <div style="text-align: right;">
             <button class="btn btn-warning btn-sm" onclick="window.cerrarVisorMensaje()">Cerrar</button>
         </div>
@@ -715,89 +738,105 @@
 </div>
 
 <div id="modalGestionFechas" class="modal" style="z-index: 1010;">
-    <div class="modal-content" style="background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--bronze-gold);">
-        <div class="modal-header" style="border-bottom: 2px solid var(--bronze-gold); padding-bottom: 8px; margin-bottom: 10px;">
-            <h3 style="margin: 0; color: #f8fafc; font-size: 15px;">Gestión de Fechas</h3>
+    <div class="modal-content" style="max-width: 750px; background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--bronze-gold);">
+        <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--bronze-gold); padding-bottom: 12px; margin-bottom: 15px;">
+            <h3 style="margin: 0; color: #f8fafc; font-size: 18px;">Gestión de Fechas y Rangos</h3>
             <span class="close-btn" onclick="window.cerrarModalGestionFechas()">&times;</span>
         </div>
         <div class="table-responsive">
             <table>
-                <thead><tr><th style="text-align:left;">Cat</th><th>Inicio</th><th>Fin</th></tr></thead>
+                <thead>
+                    <tr>
+                        <th style="text-align: left; padding-left: 12px;">Categoría</th>
+                        <th>Fecha Inicial</th>
+                        <th>Fecha Final</th>
+                    </tr>
+                </thead>
                 <tbody id="tablaGestionFechasCuerpo"></tbody>
             </table>
         </div>
-        <div style="display: flex; gap: 8px; margin-top: 12px;">
-            <button class="btn btn-danger btn-sm" style="flex:1;" onclick="window.cerrarModalGestionFechas()">Cancelar</button>
-            <button class="btn btn-success btn-sm" style="flex:1;" onclick="window.guardarRangosFechasNube()">💾 Guardar</button>
+        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 15px;">
+            <button class="btn btn-danger btn-sm" onclick="window.cerrarModalGestionFechas()">Cancelar</button>
+            <button class="btn btn-success" onclick="window.guardarRangosFechasNube()">💾 Guardar</button>
         </div>
     </div>
 </div>
 
 <div id="modalCambiosRealizados" class="modal" style="z-index: 1015;">
-    <div class="modal-content" style="background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--bronze-gold);">
-        <div class="modal-header" style="border-bottom: 2px solid var(--bronze-gold); padding-bottom: 8px;">
-            <span style="color: #fbbf24;">📋 Historial de Cambios</span>
+    <div class="modal-content" style="max-width: 900px; background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--bronze-gold);">
+        <div class="modal-header" style="border-bottom: 2px solid var(--bronze-gold); padding-bottom: 10px;">
+            <span style="color: #fbbf24;">📋 Historial de Cambios Realizados</span>
             <span class="close-btn" onclick="window.cerrarModalCambiosRealizados()">&times;</span>
         </div>
-        <div class="table-responsive" style="max-height: 320px; overflow-y: auto;">
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
             <table>
-                <thead><tr><th>N°</th><th>Fecha</th><th>Equipo</th><th>Jugador</th><th>Acción</th></tr></thead>
+                <thead>
+                    <tr>
+                        <th>N°</th>
+                        <th>Fecha</th>
+                        <th>Equipo</th>
+                        <th>Jugador</th>
+                        <th>Acción</th>
+                        <th>Usuario</th>
+                        <th>Detalle</th>
+                    </tr>
+                </thead>
                 <tbody id="tablaCambiosRealizadosCuerpo"></tbody>
             </table>
         </div>
-        <div style="display: flex; justify-content: space-between; margin-top: 12px; gap: 8px;">
-            <button class="btn btn-danger btn-sm" onclick="window.borrarLogCambiosNube()">🗑️ Borrar</button>
+        <div style="display: flex; justify-content: space-between; margin-top: 15px;">
+            <button class="btn btn-danger btn-sm" onclick="window.borrarLogCambiosNube()">🗑️ Borrar Historial</button>
             <button class="btn btn-warning btn-sm" onclick="window.cerrarModalCambiosRealizados()">Cerrar</button>
         </div>
     </div>
 </div>
 
 <div id="modalRangosCategorias" class="modal" style="z-index: 1010;">
-    <div class="modal-content" style="max-width: 420px;">
+    <div class="modal-content" style="max-width: 520px;">
         <div class="modal-header">
-            <span>📅 Rangos por Categoría</span>
+            <span>📅 Rangos de Fechas por Categoría</span>
             <span class="close-btn" onclick="window.cerrarModalRangosCategorias()">&times;</span>
         </div>
         <div class="table-responsive">
             <table>
-                <thead><tr><th>Cat</th><th>Mínima</th><th>Máxima</th></tr></thead>
+                <thead><tr><th>Categoría</th><th>Fecha Mínima</th><th>Fecha Máxima</th></tr></thead>
                 <tbody id="tablaRangosInformativaCuerpo"></tbody>
             </table>
         </div>
-        <div style="text-align: right; margin-top: 12px;"><button class="btn btn-warning btn-sm" onclick="window.cerrarModalRangosCategorias()">Cerrar</button></div>
+        <div style="text-align: right; margin-top: 15px;"><button class="btn btn-warning btn-sm" onclick="window.cerrarModalRangosCategorias()">Cerrar</button></div>
     </div>
 </div>
 
 <div id="modalGuiaFoto" class="modal" style="z-index: 1005;">
-    <div class="modal-content" style="max-width: 400px; text-align: center;">
+    <div class="modal-content" style="max-width: 520px; text-align: center;">
         <div class="modal-header">
-            <span>📸 Guía de Fotografía</span>
+            <span>📸 Guía de Fotografía Correcta</span>
             <span class="close-btn" onclick="window.cerrarModalGuiaFoto()">&times;</span>
         </div>
-        <div style="background: #ffffff; padding: 6px; border-radius: 6px; margin-bottom: 12px;">
-            <img src="Logos Equipos/foto correcta.jpg" alt="Guía" style="max-width: 100%; border-radius: 4px;" onerror="this.src='Logos%20Equipos/lifarcc.jpg'">
+        <div style="background: #ffffff; padding: 8px; border-radius: 8px; margin-bottom: 15px;">
+            <img src="Logos Equipos/foto correcta.jpg" alt="Guía" style="max-width: 100%; border-radius: 6px;" onerror="this.src='Logos%20Equipos/lifarcc.jpg'">
         </div>
-        <div style="display: flex; gap: 8px;">
-            <button class="btn btn-danger btn-sm" style="flex:1;" onclick="window.cerrarModalGuiaFoto()">Cancelar</button>
-            <button class="btn btn-success btn-sm" style="flex:1;" onclick="window.procederConSubidaFoto()">✅ Entendido</button>
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+            <button class="btn btn-danger btn-sm" onclick="window.cerrarModalGuiaFoto()">Cancelar</button>
+            <button class="btn btn-success" onclick="window.procederConSubidaFoto()">✅ Entendido</button>
         </div>
     </div>
 </div>
 
 <div id="modalReporteSemanal" class="modal">
-    <div class="modal-content">
+    <div class="modal-content" style="max-width: 800px;">
         <div class="modal-header">
             <span>📊 Reporte Semanal</span>
             <span class="close-btn" onclick="window.cerrarModalReporteSemanal()">&times;</span>
         </div>
-        <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 10px; flex-wrap: wrap;">
-            <div style="flex:1;"><label style="font-size:10px;">Desde:</label><input type="date" id="repFechaInicio" onchange="window.filtrarReporteSemanal()"></div>
-            <div style="flex:1;"><label style="font-size:10px;">Hasta:</label><input type="date" id="repFechaFin" onchange="window.filtrarReporteSemanal()"></div>
-            <button class="btn btn-success btn-sm" style="width:100%;" onclick="window.imprimirReporteSemanal()">🖨️ Imprimir Reporte</button>
+        <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 15px; flex-wrap: wrap;">
+            <div><label>Desde:</label><input type="date" id="repFechaInicio" onchange="window.filtrarReporteSemanal()"></div>
+            <div><label>Hasta:</label><input type="date" id="repFechaFin" onchange="window.filtrarReporteSemanal()"></div>
+            <button class="btn btn-success btn-sm" onclick="window.imprimirReporteSemanal()">🖨️ Imprimir Reporte</button>
         </div>
-        <div class="table-responsive" style="max-height: 280px; overflow-y: auto;">
+        <div class="table-responsive" style="max-height: 380px; overflow-y: auto;">
             <table>
-                <thead><tr><th>N°</th><th>Club</th><th>Nombre</th><th>Cat</th></tr></thead>
+                <thead><tr><th>N°</th><th>Club</th><th>Nombre</th><th>Categoría</th><th>Fecha Alta</th></tr></thead>
                 <tbody id="tablaReporteSemanalCuerpo"></tbody>
             </table>
         </div>
@@ -805,18 +844,18 @@
 </div>
 
 <div id="modalLogAccesos" class="modal">
-    <div class="modal-content">
+    <div class="modal-content" style="max-width: 650px;">
         <div class="modal-header">
             <span>🕒 Registro de Accesos</span>
             <span class="close-btn" onclick="window.cerrarModalLogAccesos()">&times;</span>
         </div>
-        <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
             <table>
                 <thead><tr><th>N°</th><th>Fecha</th><th>Hora</th><th>Usuario</th></tr></thead>
                 <tbody id="tablaLogAccesosCuerpo"></tbody>
             </table>
         </div>
-        <div style="display: flex; justify-content: space-between; margin-top: 12px; gap: 8px;">
+        <div style="display: flex; justify-content: space-between; margin-top: 15px;">
             <button class="btn btn-danger btn-sm" onclick="window.borrarLogAccesosNube()">🗑️ Borrar</button>
             <button class="btn btn-warning btn-sm" onclick="window.cerrarModalLogAccesos()">Cerrar</button>
         </div>
@@ -830,42 +869,42 @@
             <span class="close-btn" onclick="window.cerrarModal()">&times;</span>
         </div>
         <input type="hidden" id="editDocId">
-        <div style="display: grid; gap: 10px;">
-            <div><label style="font-size:11px;">Nombre:</label><input type="text" id="editNombre"></div>
-            <div><label style="font-size:11px;">Equipo:</label><select id="editEquipoSelect"></select></div>
-            <div><label style="font-size:11px;">Categoría:</label><select id="editCategoria" disabled><option value="ARDILLA">ARDILLA</option><option value="HORMIGA">HORMIGA</option><option value="HORMIGUITA">HORMIGUITA</option><option value="MOSCO">MOSCO</option><option value="BOTANA">BOTANA</option></select></div>
-            <div><label style="font-size:11px;">Fecha Nac:</label><input type="date" id="editNacimiento" onblur="window.validarFechaEditBlur()"></div>
-            <div><label style="font-size:11px;">CURP:</label><input type="text" id="editCurp" maxlength="18"></div>
-            <div><label style="font-size:11px;">Documento:</label><input type="text" id="editDoc"></div>
+        <div style="display: grid; grid-template-columns: 1fr; gap: 10px;">
+            <div><label>Nombre:</label><input type="text" id="editNombre" style="width:100%;"></div>
+            <div><label>Equipo:</label><select id="editEquipoSelect" style="width:100%;"></select></div>
+            <div><label>Categoría:</label><select id="editCategoria" style="width:100%;" disabled><option value="ARDILLA">ARDILLA</option><option value="HORMIGA">HORMIGA</option><option value="HORMIGUITA">HORMIGUITA</option><option value="MOSCO">MOSCO</option><option value="BOTANA">BOTANA</option></select></div>
+            <div><label>Fecha Nac:</label><input type="date" id="editNacimiento" onblur="window.validarFechaEditBlur()" style="width:100%;"></div>
+            <div><label>CURP:</label><input type="text" id="editCurp" maxlength="18" style="width:100%;"></div>
+            <div><label>Documento:</label><input type="text" id="editDoc" style="width:100%;"></div>
         </div>
-        <div style="text-align: right; margin-top: 15px;"><button class="btn btn-success btn-sm" style="width:100%;" onclick="window.guardarEdicionModal()">Guardar Cambios</button></div>
+        <div style="text-align: right; margin-top: 20px;"><button class="btn btn-success" onclick="window.guardarEdicionModal()">Guardar</button></div>
     </div>
 </div>
 
 <div id="modalCambiarPass" class="modal">
-    <div class="modal-content" style="max-width: 380px;">
+    <div class="modal-content">
         <div class="modal-header">
             <span>🔑 Cambiar Contraseña</span>
             <span class="close-btn" onclick="window.cerrarModalCambiarPass()">&times;</span>
         </div>
         <div style="display: grid; gap: 10px;">
-            <div><label style="font-size:11px;">Actual:</label><input type="password" id="passActual"></div>
-            <div><label style="font-size:11px;">Nueva:</label><input type="password" id="passNueva1"></div>
-            <div><label style="font-size:11px;">Confirmar:</label><input type="password" id="passNueva2"></div>
+            <div><label>Actual:</label><input type="password" id="passActual" style="width:100%;"></div>
+            <div><label>Nueva:</label><input type="password" id="passNueva1" style="width:100%;"></div>
+            <div><label>Confirmar:</label><input type="password" id="passNueva2" style="width:100%;"></div>
         </div>
-        <div style="text-align: right; margin-top: 15px;"><button class="btn btn-success btn-sm" style="width:100%;" onclick="window.ejecutarCambioPassword()">Actualizar</button></div>
+        <div style="text-align: right; margin-top: 20px;"><button class="btn btn-success" onclick="window.ejecutarCambioPassword()">Actualizar</button></div>
     </div>
 </div>
 
 <div id="modalPlantillaEquipo" class="modal">
-    <div class="modal-content" style="max-width: 650px;">
+    <div class="modal-content" style="max-width: 750px;">
         <div class="modal-header">
             <span id="tituloModalPlantilla">📋 Plantilla Completa</span>
             <span class="close-btn" onclick="window.cerrarModalPlantillaEquipo()">&times;</span>
         </div>
-        <div class="table-responsive" style="max-height: 360px; overflow-y: auto;">
+        <div class="table-responsive" style="max-height: 420px; overflow-y: auto;">
             <table>
-                <thead><tr><th>N°</th><th>Foto</th><th>Nombre</th><th>Cat</th><th>Nac.</th><th>CURP</th></tr></thead>
+                <thead><tr><th>N°</th><th>Foto</th><th>Nombre</th><th>Cat.</th><th>Nac.</th><th>CURP</th></tr></thead>
                 <tbody id="tablaPlantillaModalCuerpo"></tbody>
             </table>
         </div>
@@ -929,7 +968,6 @@
     let rolActual = "Administrador"; 
     let equipoAsignado = null;
     let inputFotoActivoId = null; 
-    let buzonTabActual = "recibidos";
 
     function formatearFechaExcel(fechaStr) {
         if (!fechaStr) return "";
@@ -1094,7 +1132,7 @@
                 else if (d.id !== "fechas_sistema") configEquipos[d.id] = d.data();
             });
         } catch(e) {
-            console.warn("Modo offline o error al conectar con Firebase en móvil:", e);
+            console.warn("Modo offline o error al conectar con Firebase:", e);
         }
         inicializarSistema();
     }
@@ -1107,7 +1145,7 @@
         const filtrados = baseDatos.filter(j => j.equipo === equipoSelect && j.categoria === categoriaSelect);
         if (filtrados.length === 0) { tbody.innerHTML = `<tr><td colspan="9">No hay jugadores registrados.</td></tr>`; return; }
         filtrados.forEach((j, index) => {
-            tbody.innerHTML += `<tr><td><strong>${index+1}</strong></td><td>${j.foto ? `<img src="${j.foto}" style="width:36px; height:48px; object-fit:cover;">` : 'Sin foto'}</td><td style="text-align:left;">${j.nombre}</td><td>${j.categoria}</td><td>${formatearFechaDDMMYYYY(j.nacimiento)}</td><td><code>${j.curp}</code></td><td>${j.doc}</td><td>${j.equipo}</td><td><button class="btn btn-sm" onclick="window.abrirModal('${j.id}')">✏️</button></td></tr>`;
+            tbody.innerHTML += `<tr><td><strong>${index+1}</strong></td><td>${j.foto ? `<img src="${j.foto}" style="width:40px; height:52px; object-fit:cover;">` : 'Sin foto'}</td><td style="text-align:left;">${j.nombre}</td><td>${j.categoria}</td><td>${formatearFechaDDMMYYYY(j.nacimiento)}</td><td><code>${j.curp}</code></td><td>${j.doc}</td><td>${j.equipo}</td><td><button class="btn btn-sm" onclick="window.abrirModal('${j.id}')">✏️</button></td></tr>`;
         });
     }
 
@@ -1116,7 +1154,7 @@
         const tbody = document.getElementById("tablaDirectorioGeneral"); if (!tbody) return; tbody.innerHTML = "";
         let lista = [...baseDatos];
         lista.forEach((j, i) => {
-            tbody.innerHTML += `<tr><td><strong>${i+1}</strong></td><td>${j.foto ? `<img src="${j.foto}" style="width:30px; height:40px; object-fit:cover;">` : 'Sin foto'}</td><td>${j.equipo}</td><td style="text-align:left;">${j.nombre}</td><td>${j.categoria}</td><td>${formatearFechaDDMMYYYY(j.nacimiento)}</td><td><code>${j.curp}</code></td><td>${j.doc}</td><td><button class="btn btn-sm" onclick="window.abrirModal('${j.id}')">✏️</button></td></tr>`;
+            tbody.innerHTML += `<tr><td><strong>${i+1}</strong></td><td>${j.foto ? `<img src="${j.foto}" style="width:35px; height:46px; object-fit:cover;">` : 'Sin foto'}</td><td>${j.equipo}</td><td style="text-align:left;">${j.nombre}</td><td>${j.categoria}</td><td>${formatearFechaDDMMYYYY(j.nacimiento)}</td><td><code>${j.curp}</code></td><td>${j.doc}</td><td><button class="btn btn-sm" onclick="window.abrirModal('${j.id}')">✏️</button></td></tr>`;
         });
     }
 
