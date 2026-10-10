@@ -429,7 +429,7 @@
         <button class="btn btn-warning" style="width: 100%; justify-content: center;" onclick="intentarLogin()">Ingresar al Sistema</button>
     </div>
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 3.0.2
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 3.0.3
 </div>
 </div>
 
@@ -672,7 +672,7 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 3.0.1
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 3.0.2
     </div>
 </div>
 
@@ -2465,7 +2465,7 @@
                 <tbody>${filasHtml}</tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 3.0.1
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 3.0.2
             </div>
         </div>
         </body></html>`;
@@ -3001,49 +3001,137 @@
     }
 
     window.ejecutarImpresionSemanaJuego = function() {
-        const checkboxes = document.querySelectorAll('input[name="checkEquipoSemana"]:checked');
-        let equiposSeleccionados = []; 
-        checkboxes.forEach(chk => equiposSeleccionados.push(chk.value));
-        if (equiposSeleccionados.length === 0) { 
-            alert("⚠️ Debes seleccionar al menos un equipo."); 
-            return; 
-        }
-        window.cerrarModalSeleccionSemanaJuego();
-        window.print();
+    const checkboxes = document.querySelectorAll('input[name="checkEquipoSemana"]:checked');
+    let equiposSeleccionados = []; 
+    checkboxes.forEach(chk => equiposSeleccionados.push(chk.value));
+    
+    if (equiposSeleccionados.length === 0) { 
+        alert("⚠️ Debes seleccionar al menos un equipo."); 
+        return; 
     }
-    window.mostrarPlantillaEquipo = function() {
-        const eqTarget = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
-        const filtrados = baseDatos.filter(j => j.equipo === eqTarget);
-        filtrados.sort((a, b) => {
-            if (a.categoria !== b.categoria) return a.categoria.localeCompare(b.categoria);
-            return ordenarJugadoresPorNacimiento(a, b);
-        });
+    
+    window.cerrarModalSeleccionSemanaJuego();
 
-        document.getElementById("tituloModalPlantilla").innerText = `📋 Plantilla Completa - Club ${eqTarget} (${filtrados.length} jugadores)`;
-        const tbody = document.getElementById("tablaPlantillaModalCuerpo");
-        tbody.innerHTML = "";
+    // Tomamos la información global de la base de datos y categorías oficiales
+    const ordenCategoriasOficial = ["ARDILLA", "HORMIGA", "HORMIGUITA", "MOSCO", "BOTANA"];
+    const logoLiga = typeof logoLigaGlobal !== 'undefined' ? logoLigaGlobal : 'Logos Equipos/lifarcc.jpg';
 
-        if (filtrados.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="6" style="padding: 20px; color: #64748b;">No hay jugadores registrados.</td></tr>`;
+    // Generamos el HTML dinámico especializado para impresión masiva
+    let htmlContenido = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Rosters Oficiales - LIFARCC</title><style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 10mm; color: #000; background: white; }
+        .hoja-roster-impresion { page-break-after: always; break-after: page; margin-bottom: 20mm; width: 100%; max-width: 195mm; margin: 0 auto; }
+        .hoja-roster-impresion:last-child { page-break-after: avoid; break-after: avoid; margin-bottom: 0; }
+        table.print-table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; }
+        thead { display: table-header-group !important; } tbody { display: table-row-group !important; } tr { page-break-inside: avoid !important; }
+        table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 6px; text-align: center; font-size: 11px; }
+        table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; text-transform: uppercase; }
+        .logo-box-print { width: 95px; height: 95px; object-fit: contain; background: #fff; }
+        .header-table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
+        .header-table td { border: none !important; padding: 2px; vertical-align: middle; }
+        .league-title-print { font-size: 26px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
+        .league-subtitle-print { font-size: 9px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 3px; }
+        .print-footer { text-align: center; font-size: 9px; color: #555; border-top: 1px solid #aaa; padding-top: 6px; margin-top: 15px; }
+    </style></head><body>`;
+
+    let totalHojas = 0;
+
+    equiposSeleccionados.forEach(eq => {
+        // Obtenemos el logotipo del equipo si existe en configEquipos o usamos el por defecto
+        let logoEq = 'Logos Equipos/lifarcc.jpg';
+        if (typeof configEquipos !== 'undefined' && configEquipos[eq] && configEquipos[eq].logo) {
+            logoEq = configEquipos[eq].logo;
         } else {
-            filtrados.forEach((j, i) => {
-                let fotoTd = j.foto ? `<img src="${j.foto}" onclick="abrirModalAmpliarFoto('${j.foto}', '${j.nombre}')" style="width:40px; height:52px; object-fit:cover; border-radius:3px; cursor:pointer;" title="Ver fotografía ampliada">` : `<span style="font-size:7px; color:#64748b;">Sin foto</span>`;
-                tbody.innerHTML += `<tr>
-                    <td><strong>${i + 1}</strong></td>
-                    <td>${fotoTd}</td>
-                    <td style="text-align: left; padding-left: 10px; font-weight: 600;">${j.nombre}</td>
-                    <td>${j.categoria}</td>
-                    <td>${formatearFechaDDMMYYYY(j.nacimiento) || ''}</td>
-                    <td><code>${j.curp || ''}</code></td>
-                </tr>`;
-            });
+            const defaultLogos = { "ACEREROS": "Logos Equipos/acereros.jpg", "BUCANEROS": "Logos Equipos/bucaneros.jpg", "BÚFALOS": "Logos Equipos/bufalo.png", "CHEYENNES": "Logos Equipos/cheyennes.jpg", "PANTERAS": "Logos Equipos/panteras.jpg", "ZORROS": "Logos Equipos/zorros.jpg" };
+            if (defaultLogos[eq]) logoEq = defaultLogos[eq];
         }
-        document.getElementById("modalPlantillaEquipo").style.display = "flex";
+
+        // Filtramos jugadores de este equipo
+        const jugadoresEquipo = baseDatos.filter(j => j.equipo === eq);
+
+        ordenCategoriasOficial.forEach(cat => {
+            const filtradosCat = jugadoresEquipo.filter(j => j.categoria === cat);
+            if (filtradosCat.length > 0) {
+                totalHojas++;
+                // Ordenamos por fecha de nacimiento
+                filtradosCat.sort((a, b) => (a.nacimiento || "").localeCompare(b.nacimiento || ""));
+
+                let filasHtml = "";
+                filtradosCat.forEach((j, idx) => {
+                    let fotoTd = j.foto ? `<img src="${j.foto}" style="width:86px; height:109px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:8px;">Sin foto</span>`;
+                    filasHtml += `<tr>
+                        <td><strong>${idx+1}</strong></td>
+                        <td>${fotoTd}</td>
+                        <td style="text-align:left; font-weight:600;">${j.nombre}</td>
+                        <td>${j.nacimiento || ''}</td>
+                        <td><code>${j.curp || ''}</code></td>
+                        <td></td>
+                        <td></td>
+                    </tr>`;
+                });
+
+                htmlContenido += `
+                <div class="hoja-roster-impresion">
+                    <table class="print-table">
+                        <thead>
+                            <tr>
+                                <td colspan="7" style="border:none; padding:0;">
+                                    <table class="header-table">
+                                        <tr>
+                                            <td style="width:22%;"><img src="${logoLiga}" class="logo-box-print" onerror="this.style.display='none'"></td>
+                                            <td style="width:56%; text-align:center;">
+                                                <div class="league-title-print">LIFARCC</div>
+                                                <div class="league-subtitle-print">Liga Infantil de Football Americano de la Region Centro de Coahuila</div>
+                                            </td>
+                                            <td style="width:22%; text-align:right;"><img src="${logoEq}" class="logo-box-print" onerror="this.style.display='none'"></td>
+                                        </tr>
+                                    </table>
+                                    <div style="font-size:10px; font-weight:bold; text-align:center; margin-bottom:2px;">FECHA: ___________________________________</div>
+                                    <div style="font-size:11px; font-weight:bold; display:flex; justify-content:space-between; text-transform:uppercase; margin-bottom:2px;">
+                                        <span>CLUB ${eq}</span><span>JORNADA: ____________________</span>
+                                    </div>
+                                    <div style="font-size:11px; font-weight:bold; text-transform:uppercase; text-align:left; margin-bottom:3px;">ROSTER CATEGORIA: ${cat}</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="width:35px;">N°</th>
+                                <th style="width:90px;">Foto</th>
+                                <th>Nombre Completo</th>
+                                <th style="width:90px;">Fecha Nac.</th>
+                                <th style="width:135px;">CURP</th>
+                                <th style="width:50px;">N°- Jersey</th>
+                                <th style="width:50px;">Peso kg</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${filasHtml}
+                        </tbody>
+                    </table>
+                    <div class="print-footer">Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - Todos los Derechos Reservados © - V.3.0.1</div>
+                </div>`;
+            }
+        });
+    });
+
+    if (totalHojas === 0) {
+        alert("⚠️ No hay jugadores registrados en las categorías de los equipos seleccionados.");
+        return;
     }
 
-    window.cerrarModalPlantillaEquipo = function() {
-        document.getElementById("modalPlantillaEquipo").style.display = "none";
+    htmlContenido += `</body></html>`;
+
+    // Abrimos una ventana temporal con el reporte generado y lanzamos la impresión limpia
+    const vPrint = window.open('', '_blank');
+    if (!vPrint) {
+        alert("⚠️ Por favor permite las ventanas emergentes (pop-ups) en tu navegador para imprimir.");
+        return;
     }
+    vPrint.document.write(htmlContenido);
+    vPrint.document.close();
+    vPrint.focus();
+    setTimeout(() => {
+        vPrint.print();
+    }, 600);
+};
 
     window.imprimirRosterActual = function() {
         const equipoSelect = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
@@ -3134,7 +3222,7 @@
                 <tbody>${filasHtml}</tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 3.0.1
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 3.0.2 
             </div>
         </div>
         </body></html>`;
@@ -3240,7 +3328,7 @@
                         <tbody>${filasHtml}</tbody>
                     </table>
                     <div class="print-footer">
-                        Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 3.0.1
+                        Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 3.0.2
                     </div>
                 </div>`;
             }
@@ -3367,7 +3455,7 @@
                     <tbody>${filasHtml}</tbody>
                 </table>
                 <div class="print-footer">
-                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 3.0.1
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 3.0.2
                 </div>
             </div>`;
         });
