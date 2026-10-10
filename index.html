@@ -160,6 +160,7 @@
             border: 1px solid #475569;
             font-size: 11px;
             font-weight: bold;
+            position: relative;
         }
         .mini-team-badge img { width: 22px; height: 22px; object-fit: contain; background: #fff; border-radius: 50%; padding: 1px; }
 
@@ -255,7 +256,10 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            cursor: pointer;
+            transition: border-color 0.2s;
         }
+        .team-card:hover { border-color: var(--bronze-gold); }
         .team-card img {
             width: 50px;
             height: 50px;
@@ -269,7 +273,7 @@
         .team-card-info h5 { margin: 0 0 3px 0; color: white; font-size: 13px; }
         .team-card-info p { margin: 0 0 5px 0; font-size: 10px; color: var(--accent-silver); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        .table-responsive { overflow-x: auto; }
+        .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
         table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; color: #1e293b; }
         th, td { border: 1px solid #cbd5e1; padding: 7px 9px; text-align: center; font-size: 12px; }
         th {
@@ -295,8 +299,7 @@
             cursor: pointer;
         }
         .player-photo { width: 100%; height: 100%; object-fit: cover; }
-        .no-photo { font-size: 7px; color: #64748b; text-align: center; }
-
+        
         .modal {
             display: none;
             position: fixed;
@@ -305,17 +308,20 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            padding: 10px;
+            box-sizing: border-box;
         }
         .modal-content {
             background: #1e293b;
             border: 1px solid var(--metal-border);
             color: white;
-            padding: 25px;
+            padding: 20px;
             border-radius: 10px;
-            width: 90%;
+            width: 100%;
             max-width: 550px;
             max-height: 90vh;
             overflow-y: auto;
+            box-sizing: border-box;
         }
         .modal-header {
             font-size: 16px;
@@ -324,8 +330,9 @@
             margin-bottom: 15px;
             display: flex;
             justify-content: space-between;
+            align-items: center;
         }
-        .close-btn { cursor: pointer; color: var(--danger-color); font-size: 18px; }
+        .close-btn { cursor: pointer; color: var(--danger-color); font-size: 20px; font-weight: bold; padding: 0 5px; }
 
         .footer-copyright {
             margin-top: 30px;
@@ -339,14 +346,17 @@
 
         @media (max-width: 768px) {
             body { padding: 5px; }
-            .container { padding: 12px; }
-            .top-navbar { padding: 10px; }
+            .container { padding: 10px; }
+            .top-navbar { padding: 8px; }
             .filter-row { flex-direction: column; align-items: stretch; gap: 10px; }
             .filter-group { flex-direction: column; align-items: stretch; width: 100%; }
             .filter-group > div { width: 100%; }
             .form-grid-1, .form-grid-2 { grid-template-columns: 1fr !important; }
             .main-title-row { flex-direction: column; gap: 5px; text-align: center; }
             .teams-preview-grid { grid-template-columns: 1fr; }
+            .btn { width: 100%; justify-content: center; margin-bottom: 5px; }
+            .nav-actions-group, .nav-tabs-group { width: 100%; justify-content: center; }
+            table th, table td { padding: 5px 4px; font-size: 11px; }
         }
 
         @media print {
@@ -419,7 +429,7 @@
         <button class="btn btn-warning" style="width: 100%; justify-content: center;" onclick="window.intentarLogin()">Ingresar al Sistema</button>
     </div>
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.063
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 2.6.0
     </div>
 </div>
 
@@ -637,7 +647,7 @@
     </div>
 
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.063
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 2.6.0
     </div>
 </div>
 
@@ -910,6 +920,8 @@
         </div>
     </div>
 </div>
+
+<!-- SCRIPT COMPLETO VERSION 2.6.0 -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -1137,6 +1149,25 @@
         inicializarSistema();
     }
 
+    function renderizarLogosEquipos() {
+        const grid = document.getElementById("teamsPreviewGrid");
+        if (!grid) return;
+        grid.innerHTML = "";
+        listaEquiposOficiales.forEach(eq => {
+            const logo = (configEquipos[eq] && configEquipos[eq].logo) || logosPorDefecto[eq] || logoLifarccDefault;
+            const totalJugadores = baseDatos.filter(j => j.equipo === eq).length;
+            grid.innerHTML += `
+                <div class="team-card">
+                    <img src="${logo}" alt="${eq}" onerror="this.src='${logoLifarccDefault}'">
+                    <div class="team-card-info">
+                        <h5>${eq}</h5>
+                        <p>Jugadores: ${totalJugadores}</p>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
     window.renderizarRoster = function() {
         const equipoSelect = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
         const categoriaSelect = document.getElementById("filtroCategoria").value;
@@ -1207,6 +1238,7 @@
             if (selFiltro) { selFiltro.value = equipoAsignado; selFiltro.disabled = true; } 
             if (selAlta) { selAlta.value = equipoAsignado; selAlta.disabled = true; } 
         }
+        renderizarLogosEquipos();
         window.renderizarRoster();
     }
 
