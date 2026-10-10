@@ -1,0 +1,3584 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Roster Oficial - LIFARCC Monclova</title>
+    <!-- FAVICON OFICIAL: BALÓN DE RUGBY DESDE GITHUB -->
+    <link rel="icon" type="image/svg+xml" href="Logos%20Equipos/rugby-ball.svg">
+    <!-- SheetJS para importar archivos de Excel -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <style>
+        :root {
+            --metal-dark: #0f172a;
+            --metal-surface: #1e293b;
+            --metal-card: #111827;
+            --metal-border: #334155;
+            --accent-silver: #94a3b8;
+            --bronze-gold: #d97706;
+            --text-light: #f8fafc;
+            --danger-color: #dc2626;
+            --success-color: #16a34a;
+            --celeste-btn: #0ea5e9;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(rgba(9, 13, 22, 0.85), rgba(9, 13, 22, 0.90)), url('Logos%20Equipos/fibradecarbono3.jpg') repeat;
+            background-color: #0b0f19;
+            color: var(--text-light);
+            margin: 0;
+            padding: 15px;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* LUZ AMBIENTAL DINÁMICA EN MOVIMIENTO SEGÚN EL CLUB */
+        .moving-light-overlay {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, #38bdf8 0%, transparent 65%);
+            opacity: 0.22;
+            pointer-events: none;
+            z-index: 0;
+            animation: moveLightBeam 14s ease-in-out infinite alternate;
+            transition: background 0.8s ease;
+        }
+
+        @keyframes moveLightBeam {
+            0% { transform: translate(-20%, -20%) scale(1); }
+            50% { transform: translate(25%, 20%) scale(1.35); }
+            100% { transform: translate(-15%, 25%) scale(1.15); }
+        }
+
+        /* PANTALLA DE LOGIN CON FONDO LIFARCC */
+        #loginOverlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(9, 13, 22, 0.92), rgba(9, 13, 22, 0.95)), url('Logos Equipos/lifarcc.jpg') no-repeat center center;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .login-box {
+            background: rgba(30, 41, 59, 0.95);
+            border: 2px solid var(--bronze-gold);
+            padding: 35px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+            text-align: center;
+        }
+        .login-box h3 { margin-top: 0; color: #fbbf24; letter-spacing: 1px; }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1250px;
+            margin: auto;
+            background: rgba(17, 24, 39, 0.88);
+            backdrop-filter: blur(6px);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid var(--metal-border);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        /* MENÚ SUPERIOR */
+        .top-navbar {
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(90deg, #1e293b, #334155);
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #475569;
+            gap: 10px;
+        }
+        .nav-tabs-group { display: flex; gap: 8px; flex-wrap: wrap; }
+        .tab-btn {
+            background: #0f172a;
+            color: var(--accent-silver);
+            border: 1px solid #475569;
+            padding: 8px 16px;
+            font-size: 13px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        .tab-btn.active {
+            background: linear-gradient(135deg, #d97706, #b45309);
+            color: white;
+            border-color: #fbbf24;
+        }
+        .nav-actions-group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+
+        /* HEADER & MINI LOGOS */
+        .header-banner {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--metal-border);
+            padding-bottom: 15px;
+        }
+        .main-title-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 5px;
+        }
+        .league-logo-badge {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            border-radius: 50%;
+            border: 2px solid var(--bronze-gold);
+            background: #ffffff;
+            padding: 2px;
+        }
+        .mini-teams-header {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .mini-team-badge {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: #1e293b;
+            padding: 3px 10px;
+            border-radius: 20px;
+            border: 1px solid #475569;
+            font-size: 11px;
+            font-weight: bold;
+            position: relative;
+        }
+        .mini-team-badge img { width: 22px; height: 22px; object-fit: contain; background: #fff; border-radius: 50%; padding: 1px; }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .controls-panel {
+            background: #1e293b;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid var(--metal-border);
+        }
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .filter-group { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
+        .filter-group label { font-weight: bold; color: #cbd5e1; font-size: 13px; }
+        
+        select, input[type="text"], input[type="date"], input[type="number"], input[type="file"], input[type="password"], textarea {
+            padding: 7px 10px;
+            font-size: 13px;
+            border-radius: 6px;
+            border: 1px solid var(--metal-border);
+            background: #0f172a;
+            color: white;
+            color-scheme: dark;
+            box-sizing: border-box;
+            width: 100%;
+        }
+        select:disabled { opacity: 0.8; cursor: not-allowed; background: #090d16; color: #fbbf24; font-weight: bold; }
+
+        .btn {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            font-size: 13px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: opacity 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn:hover { opacity: 0.9; }
+        .btn-success { background: linear-gradient(135deg, #16a34a, #15803d); }
+        .btn-purple { background: linear-gradient(135deg, #7c3aed, #5b21b6); }
+        .btn-danger { background: linear-gradient(135deg, #dc2626, #b91c1c); }
+        .btn-warning { background: linear-gradient(135deg, #d97706, #b45309); color: white; }
+        .btn-info { background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white; }
+        .btn-celeste { background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white; position: relative; }
+        .btn-sm { padding: 4px 8px; font-size: 11px; }
+
+        /* GLOBO DE NOTIFICACIÓN DE MENSAJES */
+        .msg-badge {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            padding: 1px 6px;
+            font-size: 10px;
+            font-weight: bold;
+            border: 1px solid #fff;
+        }
+
+        .section-box {
+            background: #1e293b;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid var(--metal-border);
+        }
+        .section-box h4 { margin: 0 0 10px 0; color: #f1f5f9; font-size: 15px; }
+
+        .teams-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 12px;
+            margin-top: 10px;
+        }
+        .team-card {
+            background: #0f172a;
+            border: 1px solid var(--metal-border);
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .team-card img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            border: 1px solid #475569;
+            border-radius: 6px;
+            background: #fff;
+            padding: 2px;
+        }
+        .team-card-info { flex-grow: 1; overflow: hidden; }
+        .team-card-info h5 { margin: 0 0 3px 0; color: white; font-size: 13px; }
+        .team-card-info p { margin: 0 0 5px 0; font-size: 10px; color: var(--accent-silver); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; color: #1e293b; }
+        th, td { border: 1px solid #cbd5e1; padding: 7px 9px; text-align: center; font-size: 12px; }
+        th {
+            background-color: #1e3a8a !important;
+            color: white !important;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+        }
+        tr:nth-child(even) { background-color: #f8fafc; }
+        
+        .player-photo-container {
+            width: 40px;
+            height: 52px;
+            margin: auto;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            overflow: hidden;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .player-photo { width: 100%; height: 100%; object-fit: cover; }
+        .no-photo { font-size: 7px; color: #64748b; text-align: center; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: #1e293b;
+            border: 1px solid var(--metal-border);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 550px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            font-size: 16px;
+            font-weight: bold;
+            color: #f8fafc;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .close-btn { cursor: pointer; color: var(--danger-color); font-size: 18px; }
+
+        .footer-copyright {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 9px;
+            color: var(--accent-silver);
+            letter-spacing: 0.5px;
+            border-top: 1px solid var(--metal-border);
+            padding-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 5px; }
+            .container { padding: 12px; }
+            .top-navbar { padding: 10px; }
+            .filter-row { flex-direction: column; align-items: stretch; gap: 10px; }
+            .filter-group { flex-direction: column; align-items: stretch; width: 100%; }
+            .filter-group > div { width: 100%; }
+            .form-grid-1, .form-grid-2 { grid-template-columns: 1fr !important; }
+            .main-title-row { flex-direction: column; gap: 5px; text-align: center; }
+            .teams-preview-grid { grid-template-columns: 1fr; }
+        }
+
+        @media print {
+            body { background: white; padding: 10mm; color: #000; }
+            .moving-light-overlay, .container, .top-navbar, .controls-panel, .section-box, .nav-tabs, .footer-copyright, .no-print { display: none !important; }
+            
+            .hoja-roster-impresion {
+                margin: 0 auto;
+                width: 100%;
+                max-width: 195mm;
+                page-break-after: always;
+                break-after: page;
+            }
+            .hoja-roster-impresion:last-child {
+                page-break-after: avoid;
+                break-after: avoid;
+            }
+            
+            table.print-table { 
+                width: 100%; 
+                border-collapse: collapse; 
+                margin-top: 8px; 
+                background: white; 
+            }
+            
+            thead { display: table-header-group !important; }
+            tbody { display: table-row-group !important; }
+            tr { page-break-inside: avoid !important; page-break-after: auto !important; }
+            
+            table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 6px; text-align: center; font-size: 11px; }
+            table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; text-transform: uppercase; font-size: 11px; }
+            
+            .logo-box-print { width: 95px; height: 95px; object-fit: contain; background: #fff; }
+            .league-title-print { font-size: 26px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
+            .league-subtitle-print { font-size: 9px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 3px; }
+            
+            .print-footer {
+                text-align: center;
+                font-size: 9px;
+                color: #555;
+                border-top: 1px solid #aaa;
+                padding-top: 6px;
+                margin-top: 15px;
+                letter-spacing: 0.5px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- CAPA DE LUZ EN MOVIMIENTO (FONDO ANIMADO) -->
+<div class="moving-light-overlay"></div>
+
+<!-- PANTALLA DE INICIO DE SESIÓN -->
+<div id="loginOverlay">
+    <div class="login-box">
+        <h3>LIFARCC MONCLOVA</h3>
+        <p style="font-size: 12px; color: #94a3b8; margin-bottom: 20px;">Selecciona tu rol de acceso:</p>
+        <div style="margin-bottom: 12px; text-align: left;">
+            <label style="font-size: 11px; font-weight: bold; color: #cbd5e1;">USUARIO / CLUB:</label>
+            <select id="loginUsuario" onchange="verificarRolLogin()" style="width: 100%; margin-top: 5px; background: #0f172a; color: white; padding: 8px; border-radius: 6px; border: 1px solid #475569;">
+                <option value="Administrador">Administrador (Liga)</option>
+                <option value="ACEREROS">Club Acereros</option>
+                <option value="BUCANEROS">Club Bucaneros</option>
+                <option value="BÚFALOS">Club Búfalos</option>
+                <option value="CHEYENNES">Club Cheyennes</option>
+                <option value="PANTERAS">Club Panteras</option>
+                <option value="ZORROS">Club Zorros</option>
+            </select>
+        </div>
+        <div id="divPassword" style="margin-bottom: 20px; text-align: left;">
+            <label style="font-size: 11px; font-weight: bold; color: #cbd5e1;" id="lblPassText">CONTRASEÑA:</label>
+            <div style="display: flex; gap: 5px; align-items: center; margin-top: 5px;">
+                <input type="password" id="loginPassword" placeholder="Contraseña..." onkeydown="if(event.key==='Enter') intentarLogin()" style="width: 100%; box-sizing: border-box; padding: 8px; border-radius: 6px; border: 1px solid #475569; background: #0f172a; color: white;">
+                <button type="button" class="btn btn-sm" onclick="toggleVerPassLogin()" style="padding: 8px 10px; background: #334155; border: 1px solid #475569; cursor: pointer;" title="Mostrar / Ocultar Contraseña">👁️</button>
+            </div>
+        </div>
+        <button class="btn btn-warning" style="width: 100%; justify-content: center;" onclick="intentarLogin()">Ingresar al Sistema</button>
+    </div>
+    <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 1.0.0
+</div>
+</div>
+
+<div class="container" id="appContainer" style="display: none;">
+    <!-- HEADER & MINI LOGOS -->
+    <div class="header-banner">
+        <div class="main-title-row">
+            <img src="" id="imgEscudoLiga" class="league-logo-badge" alt="LIFARCC" onerror="this.src='Logos%20Equipos/lifarcc.jpg'">
+            <h2 style="margin: 0; font-size: 20px; color: #f8fafc; letter-spacing: 0.5px;">LIGA DE FÚTBOL AMERICANO LIFARCC MONCLOVA JUVENIL</h2>
+        </div>
+        <h3 style="margin: 2px 0 0 0; font-size: 16px; color: var(--bronze-gold); text-transform: uppercase;">GENERADOR Y GESTOR DE ROSTER OFICIAL</h3>
+        <div class="mini-teams-header" id="miniTeamsHeaderContainer"></div>
+    </div>
+
+    <!-- MENÚ SUPERIOR Y CONTROLES -->
+    <div class="top-navbar no-print">
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 10px; border-bottom: 1px solid #475569; padding-bottom: 8px;">
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <span id="lblRolActual" style="font-size: 11px; color: #fbbf24; font-weight: bold;"></span>
+                <select id="adminDropdown" class="col-admin" onchange="manejarAccionAdmin(this)" style="display:none; background:#1e293b; color:#fbbf24; border:1px solid #d97706; padding:5px 8px; border-radius:6px; font-size:11px; font-weight:bold; cursor:pointer;">
+                    <option value="">⚙️ Menú Admin...</option>
+                    <option value="reporte">📊 Reporte Semanal</option>
+                    <option value="fechas">📅 Fechas Categorías</option>
+                    <option value="cambios">📋 Cambios Realizados</option>
+                    <option value="usuarios">⚙️ Gestionar Usuarios</option>
+                    <option value="logs">🕒 Log de Accesos</option>
+                </select>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <button class="btn btn-celeste btn-sm" id="btnBuzonSuperior" onclick="abrirBuzonMensajes()" title="Buzón de Mensajes">
+                    📨 <span id="txtBtnBuzon">Buzón</span>
+                    <span id="badgeBuzonCount" class="msg-badge" style="display:none;">0</span>
+                </button>
+                <button class="btn btn-warning btn-sm" onclick="abrirModalCambiarPass()">🔑 Contraseña</button>
+                <button class="btn btn-danger btn-sm" onclick="cerrarSesion()">🔒 Salir</button>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 10px; padding-top: 4px;">
+            <div class="nav-tabs-group" id="navTabsContainer">
+                <button class="tab-btn active" onclick="cambiarPestaña('rosterTab', this)">📋 Generador de Roster</button>
+                <button class="tab-btn" id="btnTabDirectorio" onclick="cambiarPestaña('todosTab', this)">📚 Directorio General</button>
+            </div>
+            <div class="nav-actions-group" id="navActionsContainer" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 5px; background: #0f172a; padding: 4px 10px; border-radius: 6px; border: 1px solid #475569;">
+                    <span style="font-size: 11px; color: #94a3b8;">📥 Importar Excel:</span>
+                    <input type="file" id="inputExcel" accept=".xlsx, .xls, .csv" onchange="importarExcel(event)" style="font-size: 11px; width: 150px; padding: 3px;">
+                </div>
+                <div style="display: flex; align-items: center; gap: 5px; background: #0f172a; padding: 4px 10px; border-radius: 6px; border: 1px solid #475569;">
+                    <span style="font-size: 11px; color: #94a3b8;">📂 Fotos Masivas:</span>
+                    <input type="file" id="inputFotos" multiple accept="image/*" onchange="cargarFotosLocales(event)" style="font-size: 11px; width: 140px; padding: 3px;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PESTAÑA 1: GENERADOR DE ROSTERS -->
+    <div id="rosterTab" class="tab-content active">
+        <div class="section-box no-print col-admin" style="background: #1e293b; border: 1px solid var(--bronze-gold);">
+            <h4>📅 Periodo de Registro de jugadores_juvenil</h4>
+            <p style="font-size: 12px; color: #cbd5e1; margin: 0;">El sistema opera de forma <b>automática</b> semanalmente: Los registros para los equipos están abiertos de <b>Lunes a Jueves</b>, cerrándose automáticamente todos los <b>jueves a las 11:59 PM</b> (Viernes, Sábado y Domingo permanece cerrado).</p>
+        </div>
+
+        <div class="section-box no-print">
+            <h4>🛡 Configuración de Logotipos de Equipos</h4>
+            <div id="teamsPreviewGrid" class="teams-preview-grid"></div>
+        </div>
+
+        <div class="section-box" id="seccionAltaIndividual" style="background: #1e293b; border: 1px solid var(--bronze-gold);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px;">
+                <h4 style="margin: 0; color: #f1f5f9; font-size: 15px;">➕ Registrar Jugador de 1 en 1 (Sincronizado en la Nube)</h4>
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <button class="btn btn-warning btn-sm" onclick="abrirModalRangosCategorias()">📅 Ver Rangos de Fechas por Categoría</button>
+                    <div id="badgeEstadoRegistroContainer"></div>
+                </div>
+            </div>
+            <div id="bannerPeriodoRegistro" style="background: rgba(217, 119, 6, 0.2); border: 1px dashed var(--bronze-gold); padding: 8px 12px; border-radius: 6px; margin-bottom: 15px; font-size: 12px; font-weight: bold; color: #fbbf24; text-align: center;">
+                📅 Periodo de Registro de jugadores_juvenil: Abierto de Lunes a Jueves (Cierre Jueves a las 11:59 PM)
+            </div>
+            
+            <div class="form-grid-1" style="display: grid; grid-template-columns: 1fr 1fr 2fr; gap: 12px; margin-bottom: 12px;">
+                <div>
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Equipo * (Automático):</label>
+                    <select id="altaEquipo" style="width:100%;" disabled></select>
+                </div>
+                <div>
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Categoría * (Automática):</label>
+                    <select id="altaCategoria" style="width:100%;" disabled>
+                        <option value="JUVENIL">JUVENIL</option>
+                        <option value="MIDGET">MIDGET</option>
+                        <option value="PEEWEE">PEWEE</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">
+                        Nombre Completo (Sin números ni puntos) * <span id="checkNombre" style="font-size: 14px;"></span>
+                    </label>
+                    <input type="text" id="altaNombre" placeholder="APELLIDO PATERNO MATERNO Y NOMBRE(S)" oninput="validarNombreInput()" style="width:100%;">
+                </div>
+            </div>
+
+            <div class="form-grid-2" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1.2fr; gap: 12px; margin-bottom: 15px;">
+                <div>
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">
+                        Fecha Nacimiento * <span id="checkNacimiento" style="font-size: 14px;"></span>
+                    </label>
+                    <input type="date" id="altaNacimiento" onblur="validarFechaAltaBlur()" style="width:100%;">
+                </div>
+                <div>
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">
+                        CURP (18 Dígitos) * <span id="checkCurp" style="font-size: 14px;"></span>
+                    </label>
+                    <input type="text" id="altaCurp" maxlength="18" placeholder="18 CARACTERES..." oninput="validarCurpInput()" style="width:100%;">
+                </div>
+                <div>
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">
+                        Documento * <span id="checkDoc" style="font-size: 14px;">✅</span>
+                    </label>
+                    <input type="text" id="altaDoc" value="ACTA DE NACIMIENTO, CURP" oninput="validarDocInput()" style="width:100%;">
+                </div>
+                <div>
+                    <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Fotografía Individual *:</label>
+                    <button type="button" id="btnTextoAltaFoto" class="btn btn-warning btn-sm" onclick="mostrarGuiaFoto('altaFoto')" style="width:100%; justify-content:center; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">📷 Seleccionar Foto</button>
+                    <input type="file" id="altaFoto" accept="image/*" style="display:none;" onchange="actualizarNombreArchivoAlta(event)">
+                </div>
+            </div>
+
+            <button class="btn btn-purple btn-sm" onclick="registrarJugadorIndividual()">Guardar Jugador en la Nube</button>
+        </div>
+
+        <div class="controls-panel">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <div>
+                        <label for="filtroEquipo">EQUIPO:</label><br>
+                        <select id="filtroEquipo" onchange="cambiarFiltroEquipo()"></select>
+                    </div>
+                    <div>
+                        <label for="filtroCategoria">CATEGORÍA:</label><br>
+                        <select id="filtroCategoria" onchange="renderizarRoster()">
+                            <option value="JUVENIL">JUVENIL</option>
+                            <option value="MIDGET">MIDGET</option>
+                            <option value="PEEWEE">PEEWEE</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="buscadorGlobal">🔍 Buscador:</label><br>
+                        <div style="display: flex; gap: 5px; align-items: center;">
+                            <input type="text" id="buscadorGlobal" placeholder="Nombre o CURP..." oninput="renderizarRoster()" style="width: 150px;">
+                            <button class="btn btn-warning btn-sm" onclick="renderizarRoster()" title="Actualizar / Generar Vista">🔄 Generar</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="inputCampo">📍 Dirección Campo / Sede:</label><br>
+                        <div style="display: flex; gap: 5px; align-items: center;">
+                            <input type="text" id="inputCampo" placeholder="Ej. Campo PAC-Snyder Monclova" oninput="guardarDatosCampoActual()" style="width: 200px;">
+                            <button type="button" class="btn btn-sm" onclick="abrirGoogleMapsCampo()" title="Abrir ubicación en Google Maps" style="padding: 7px 10px; background: #334155; border: 1px solid #475569; cursor: pointer;">🗺️</button>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <button class="btn btn-warning" onclick="mostrarPlantillaEquipo()">📋 Ver Plantilla</button>
+                    <button class="btn btn-success" onclick="imprimirRosterActual()">🖨️ Imprimir Roster Seleccionado</button>
+                    <button class="btn btn-info" onclick="imprimirRosterCompletoEquipoSeleccionado()" title="Imprimir rosters de todas las categorías del equipo seleccionado">🖨 Imprimir Equipo Completo</button>
+                    
+                    <!-- NUEVO BOTÓN EXCLUSIVO PARA ADMINISTRADOR -->
+                    <button class="btn btn-purple col-admin" onclick="abrirModalSeleccionSemanaJuego()" title="Seleccionar equipos específicos para impresión múltiple">🔀 Elegir Rosters a Imprimir</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 40px;">N°</th>
+                        <th style="width: 85px;">Foto</th>
+                        <th>Nombre del Jugador</th>
+                        <th style="width: 90px;">Categoría</th>
+                        <th style="width: 110px;">Fecha Nac.</th>
+                        <th style="width: 160px;">CURP</th>
+                        <th style="width: 120px;">Documento</th>
+                        <th class="no-print col-admin" style="width: 75px;">Equipo</th>
+                        <th class="no-print" style="width: 150px;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaCuerpo"></tbody>
+            </table>
+        </div>
+
+        <div class="section-box no-print col-admin" style="background: rgba(220, 38, 38, 0.1); border-color: #7f1d1d; margin-top: 25px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div>
+                <strong>⚠️ Zona de Mantenimiento:</strong><br>
+                <span style="font-size: 11px; color: #fca5a5;">Vaciar base de datos en la nube.</span>
+            </div>
+            <div style="display: flex; gap: 8px;">
+                <button class="btn btn-danger btn-sm" onclick="borrarTodosRegistros()">🗑️ Borrar Todos</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PESTAÑA 2: DIRECTORIO GENERAL -->
+    <div id="todosTab" class="tab-content">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+            <div>
+                <h3 style="margin: 0; color: #f8fafc;">📚 Directorio General</h3>
+                <p style="font-size: 12px; color: var(--accent-silver); margin: 2px 0 0 0;">Ordenado por Equipo, Categoría y por Fecha de Nacimiento.</p>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <input type="text" id="buscadorDirectorioGeneral" placeholder="🔍 Buscar jugador..." oninput="renderizarDirectorioGeneral()" style="width: 220px;">
+                <button class="btn btn-success" onclick="imprimirTodosRostersMasivo()">🖨 Imprimir Todos los Rosters (Masivo)</button>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 40px;">N°</th>
+                        <th style="width: 80px;">Foto</th>
+                        <th style="width: 110px;">Equipo</th>
+                        <th>Nombre del Jugador</th>
+                        <th style="width: 100px;">Categoría</th>
+                        <th style="width: 110px;">Fecha Nac.</th>
+                        <th style="width: 160px;">CURP</th>
+                        <th style="width: 120px;">Documento</th>
+                        <th style="width: 80px;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaDirectorioGeneral"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- FOOTER COPYRIGHT -->
+    <div class="footer-copyright">
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 1.0.0
+    </div>
+</div>
+
+<!-- MODALES -->
+
+<div id="modalAmpliarFoto" class="modal" style="z-index: 1010;">
+    <div class="modal-content" style="max-width: 400px; text-align: center;">
+        <div class="modal-header">
+            <span>🔍 Vista Ampliada de Fotografía</span>
+            <span class="close-btn" onclick="cerrarModalAmpliarFoto()">&times;</span>
+        </div>
+        <div style="background: #0f172a; padding: 10px; border-radius: 8px; margin-bottom: 15px; border: 2px solid var(--bronze-gold); display: flex; justify-content: center; align-items: center; min-height: 250px;">
+            <img id="imgAmpliadaModal" src="" alt="Foto del Jugador" style="max-width: 100%; max-height: 350px; object-fit: contain; border-radius: 6px;" onerror="this.src='Logos%20Equipos/lifarcc.jpg'">
+        </div>
+        <p id="nombreJugadorAmpliado" style="font-size: 13px; font-weight: bold; color: #fbbf24; margin: 0;"></p>
+    </div>
+</div>
+
+<!-- MODAL SELECCIÓN MÚLTIPLE DE ROSTERS PARA IMPRESIÓN (ADMIN) -->
+<div id="modalSeleccionSemanaJuego" class="modal" style="z-index: 1015;">
+    <div class="modal-content" style="max-width: 460px; background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--celeste-btn, #0ea5e9);">
+        <div class="modal-header" style="border-bottom: 1px solid #334155; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="color: #38bdf8; font-weight: bold;">🔀 Seleccionar Rosters a Imprimir</span>
+            <span class="close-btn" onclick="cerrarModalSeleccionSemanaJuego()" style="cursor: pointer; color: #dc2626; font-size: 18px;">&times;</span>
+        </div>
+        <p style="font-size: 11px; color: #94a3b8; margin: 10px 0 15px 0;">Selecciona con una palomita los equipos cuyos rosters completos deseas incluir en la impresión:</p>
+        <div id="contenedorCheckboxesSemana" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; text-align: left; background: #0f172a; padding: 15px; border-radius: 8px; border: 1px solid #334155;"></div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+            <button class="btn btn-danger btn-sm" onclick="cerrarModalSeleccionSemanaJuego()">Cancelar</button>
+            <button class="btn btn-success" onclick="ejecutarImpresionSemanaJuego()">🖨️ Imprimir Seleccionados</button>
+        </div>
+    </div>
+</div>
+<!-- MODAL ALERTA MENSAJE NUEVO AL INICIAR SESIÓN -->
+<div id="modalAvisoMensajeLogin" class="modal" style="z-index: 1050;">
+    <div class="modal-content" style="max-width: 400px; text-align: center; border: 2px solid var(--celeste-btn);">
+        <div class="modal-header" style="justify-content: center; border-bottom: 1px solid #334155; padding-bottom: 8px;">
+            <span style="font-size: 18px; color: #38bdf8;">📨 NOTIFICACIÓN OFICIAL</span>
+        </div>
+        <div style="padding: 20px 0;">
+            <p style="font-size: 16px; font-weight: bold; color: #f8fafc; margin-bottom: 10px;">¡UD TIENE UN MENSAJE NUEVO!</p>
+            <p style="font-size: 12px; color: var(--accent-silver);">Hay comunicaciones pendientes en el buzón oficial de LIFARCC.</p>
+        </div>
+        <div style="display: flex; justify-content: center; gap: 12px;">
+            <button class="btn btn-danger btn-sm" onclick="cerrarAvisoLogin()">Cerrar</button>
+            <button class="btn btn-celeste" onclick="irAlBuzonDesdeLogin()">👀 Ver Mensaje</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL ALERTA LÍMITE 2013 EXCEDIDO -->
+<div id="modalAlerta2013" class="modal" style="z-index: 1060;">
+    <div class="modal-content" style="max-width: 460px; text-align: center; border: 2px solid #dc2626; background: linear-gradient(135deg, #0f172a, #1e293b);">
+        <div class="modal-header" style="justify-content: center; border-bottom: 1px solid #334155; padding-bottom: 8px;">
+            <span style="font-size: 17px; color: #ef4444;">⚠️ LÍMITE DE jugadores_juvenil 2013 EXCEDIDO</span>
+        </div>
+        <div style="padding: 12px 0;">
+            <p style="font-size: 13px; color: #f8fafc; font-weight: bold; margin-bottom: 8px;">¡Debe quitar a los excedentes y dejar solo 1 jugador del año 2013 permitido!</p>
+            <p id="textoAlerta2013" style="font-size: 12px; color: #cbd5e1; line-height: 1.4; margin-bottom: 12px; background: rgba(220, 38, 38, 0.15); padding: 10px; border-radius: 6px; border: 1px dashed #dc2626; text-align: left;"></p>
+            <p style="font-size: 11px; color: var(--accent-silver);">El registro de nuevos jugadores_juvenil en esta categoría se encuentra <b>bloqueado</b> hasta efectuar la corrección.</p>
+        </div>
+        <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+            <button class="btn btn-danger btn-sm" onclick="cerrarAlerta2013()">Entendido</button>
+            <button class="btn btn-celeste btn-sm" onclick="abrirContactoAdminDesde2013()">✉️ Solicitar la corrección al Administrador</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL BUZÓN DE MENSAJES / INBOX -->
+<div id="modalBuzonMensajes" class="modal" style="z-index: 1020;">
+    <div class="modal-content" style="max-width: 820px; background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--celeste-btn);">
+        <div class="modal-header" style="border-bottom: 1px solid #334155; padding-bottom: 10px;">
+            <span id="tituloBuzonModal">📨 Buzón de Mensajes Oficial</span>
+            <span class="close-btn" onclick="cerrarBuzonMensajes()">&times;</span>
+        </div>
+        
+        <!-- PESTAÑAS DE BUZÓN (RECIBIDOS / ENVIADOS) Y BUSCADOR -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+            <div style="display: flex; gap: 6px;">
+                <button id="btnTabRecibidos" class="tab-btn active" onclick="cambiarBuzonTab('recibidos')">📥 Recibidos</button>
+                <button id="btnTabEnviados" class="tab-btn" onclick="cambiarBuzonTab('enviados')">📤 Enviados</button>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <input type="text" id="buscadorBuzon" placeholder="🔍 Buscar por asunto o texto..." oninput="renderizarTablaBuzon()" style="width: 200px; font-size: 11px; padding: 5px;">
+                <button class="btn btn-celeste btn-sm" onclick="abrirModalNuevoMensaje()">✉️ Redactar</button>
+            </div>
+        </div>
+
+        <div class="table-responsive" style="max-height: 380px; overflow-y: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 40px;">N°</th>
+                        <th id="thRemitentePara" style="width: 120px;">Remitente</th>
+                        <th>Asunto / Mensaje</th>
+                        <th style="width: 75px;">📎 Adjuntos</th>
+                        <th style="width: 110px;">Fecha / Hora</th>
+                        <th style="width: 90px;">Estado</th>
+                        <th style="width: 100px;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaBuzonCuerpo"></tbody>
+            </table>
+        </div>
+        <div style="text-align: right; margin-top: 15px;">
+            <button class="btn btn-warning btn-sm" onclick="cerrarBuzonMensajes()">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL REDACTAR / ENVIAR MENSAJE -->
+<div id="modalNuevoMensaje" class="modal" style="z-index: 1030;">
+    <div class="modal-content" style="max-width: 520px;">
+        <div class="modal-header">
+            <span>✉ Enviar Mensaje / Adjuntar Archivo</span>
+            <span class="close-btn" onclick="cerrarModalNuevoMensaje()">&times;</span>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr; gap: 12px;">
+            <div id="divDestinatarioContainer" style="display:none;">
+                <label style="font-size: 11px; font-weight: bold;">Para (Club Destino):</label>
+                <select id="selectDestinatario" style="width:100%;"></select>
+            </div>
+            <div>
+                <label style="font-size: 11px; font-weight: bold;">Mensaje / Texto:</label>
+                <textarea id="txtContenidoMensaje" rows="4" placeholder="Escribe tu mensaje aquí..." style="width:100%; resize:vertical;"></textarea>
+            </div>
+            <div>
+                <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 4px;">Adjuntar Archivo (Imagen, PDF, Word, Excel):</label>
+                <input type="file" id="inputArchivoMensaje" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" onchange="validarArchivoSeleccionado(event)" style="font-size: 11px;">
+                <span id="lblArchivoSeleccionado" style="font-size: 10px; color: #38bdf8; display: block; margin-top: 3px;"></span>
+            </div>
+            <!-- GRABADORA DE AUDIO -->
+            <div style="background: #0f172a; padding: 10px; border-radius: 6px; border: 1px solid #334155;">
+                <label style="font-size: 11px; font-weight: bold; display: block; margin-bottom: 6px;">🎙️ O Grabar Audio Directo:</label>
+                <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                    <button type="button" id="btnGrabarAudio" class="btn btn-danger btn-sm" onclick="toggleGrabacionAudio()">🔴 Iniciar Grabación</button>
+                    <span id="lblEstadoGrabacion" style="font-size: 11px; color: #94a3b8;">Grabadora detenida</span>
+                </div>
+                <audio id="audioPlayback" controls style="width: 100%; margin-top: 8px; display: none;"></audio>
+            </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px;">
+            <button class="btn btn-danger btn-sm" onclick="cerrarModalNuevoMensaje()">Cancelar</button>
+            <button class="btn btn-success" onclick="enviarMensajeServidor()">📤 Enviar Mensaje</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL VISOR DE MENSAJE -->
+<div id="modalVisorMensaje" class="modal" style="z-index: 1030;">
+    <div class="modal-content" style="max-width: 550px;">
+        <div class="modal-header">
+            <span id="visorAsuntoTitulo">📄 Detalle del Mensaje</span>
+            <span class="close-btn" onclick="cerrarVisorMensaje()">&times;</span>
+        </div>
+        <div id="visorContenidoDetalle" style="background: #0f172a; padding: 15px; border-radius: 8px; border: 1px solid #334155; margin-bottom: 15px; font-size: 13px; line-height: 1.5; word-break: break-word;">
+        </div>
+        <div id="visorAdjuntoContainer" style="text-align: center; margin-bottom: 15px;">
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <button class="btn btn-warning btn-sm" onclick="cerrarVisorMensaje()">Cerrar</button>
+            <button id="btnResponderVisor" class="btn btn-success" onclick="abrirRespuestaDesdeVisor()">↩️ Responder Mensaje</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL GESTIÓN FECHAS CATEGORÍAS (ADMIN) -->
+<div id="modalGestionFechas" class="modal" style="z-index: 1010;">
+    <div class="modal-content" style="max-width: 750px; background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--bronze-gold);">
+        <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--bronze-gold); padding-bottom: 12px; margin-bottom: 15px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <img src="Logos Equipos/lifarcc.jpg" alt="LIFARCC" style="width: 55px; height: 55px; object-fit: contain; border-radius: 50%; border: 2px solid var(--bronze-gold); background: #fff; padding: 2px;">
+                <div>
+                    <h3 style="margin: 0; color: #f8fafc; font-size: 18px; letter-spacing: 1px; text-transform: uppercase;">LIFARCC MONCLOVA</h3>
+                    <span style="font-size: 11px; color: var(--bronze-gold); font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">Gestión de Fechas y Rangos - Categorías Infantiles</span>
+                </div>
+            </div>
+            <span class="close-btn" onclick="cerrarModalGestionFechas()" style="font-size: 22px;">&times;</span>
+        </div>
+        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 12px;">Modifique los rangos de fechas oficiales en el orden reglamentario:</p>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 160px; text-align: left; padding-left: 12px;">Categoría / Símbolo</th>
+                        <th>Fecha Inicial (Mínima)</th>
+                        <th>Fecha Final (Máxima)</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaGestionFechasCuerpo"></tbody>
+            </table>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 18px; border-top: 1px solid #334155; padding-top: 12px;">
+            <span style="font-size: 10px; color: #fbbf24; font-weight: bold;">🔒 Exclusivo Administrador</span>
+            <div style="display: flex; gap: 8px;">
+                <button class="btn btn-danger btn-sm" onclick="cerrarModalGestionFechas()">Cancelar</button>
+                <button class="btn btn-success" onclick="guardarRangosFechasNube()">💾 Guardar Cambios en la Nube</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL CAMBIOS REALIZADOS (BITÁCORA ADMIN) -->
+<div id="modalCambiosRealizados" class="modal" style="z-index: 1015;">
+    <div class="modal-content" style="max-width: 900px; background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--bronze-gold);">
+        <div class="modal-header" style="border-bottom: 2px solid var(--bronze-gold); padding-bottom: 10px;">
+            <span style="color: #fbbf24;">📋 Historial de Cambios Realizados en la Base de Datos</span>
+            <span class="close-btn" onclick="cerrarModalCambiosRealizados()">&times;</span>
+        </div>
+        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 12px;">Registro detallado de altas, modificaciones, eliminaciones y el usuario responsable:</p>
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 40px;">N°</th>
+                        <th style="width: 105px;">Fecha / Hora</th>
+                        <th style="width: 85px;">Equipo</th>
+                        <th style="width: 110px;">Jugador</th>
+                        <th style="width: 90px;">Acción</th>
+                        <th style="width: 90px;">Usuario</th>
+                        <th>Detalle (Qué decía y qué dice)</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaCambiosRealizadosCuerpo"></tbody>
+            </table>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; border-top: 1px solid #334155; padding-top: 12px;">
+            <button class="btn btn-danger btn-sm" onclick="borrarLogCambiosNube()">🗑️ Borrar Historial</button>
+            <button class="btn btn-warning btn-sm" onclick="cerrarModalCambiosRealizados()">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<div id="modalRangosCategorias" class="modal" style="z-index: 1010;">
+    <div class="modal-content" style="max-width: 520px;">
+        <div class="modal-header">
+            <span>📅 Rangos de Fechas por Categoría</span>
+            <span class="close-btn" onclick="cerrarModalRangosCategorias()">&times;</span>
+        </div>
+        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 15px;">Fechas mínimas y máximas oficiales:</p>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Categoría</th>
+                        <th>Fecha Mínima</th>
+                        <th>Fecha Máxima</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaRangosInformativaCuerpo"></tbody>
+            </table>
+        </div>
+        <div style="text-align: right; margin-top: 15px;">
+            <button class="btn btn-warning btn-sm" onclick="cerrarModalRangosCategorias()">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<div id="modalGuiaFoto" class="modal" style="z-index: 1005;">
+    <div class="modal-content" style="max-width: 520px; text-align: center;">
+        <div class="modal-header">
+            <span>📸 Guía de Fotografía Correcta</span>
+            <span class="close-btn" onclick="cerrarModalGuiaFoto()">&times;</span>
+        </div>
+        <p style="font-size: 12px; color: var(--accent-silver); margin-bottom: 12px;">Asegúrate de que la fotografía del jugador cumpla con los estándares oficiales:</p>
+        <div style="background: #ffffff; padding: 8px; border-radius: 8px; margin-bottom: 15px; border: 2px solid var(--bronze-gold);">
+            <img src="Logos Equipos/foto correcta.jpg" alt="Guía de Fotografía Correcta" style="max-width: 100%; height: auto; border-radius: 6px; display: block; margin: auto;" onerror="this.src='Logos%20Equipos/lifarcc.jpg'">
+        </div>
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+            <button class="btn btn-danger btn-sm" onclick="cerrarModalGuiaFoto()">Cancelar</button>
+            <button class="btn btn-success" onclick="procederConSubidaFoto()">✅ Entendido, Seleccionar Archivo</button>
+        </div>
+    </div>
+</div>
+
+<div id="modalReporteSemanal" class="modal">
+    <div class="modal-content" style="max-width: 800px;">
+        <div class="modal-header">
+            <span>📊 Reporte de Nuevos Registros (Semanal)</span>
+            <span class="close-btn" onclick="cerrarModalReporteSemanal()">&times;</span>
+        </div>
+        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 15px;">Visualiza los jugadores_juvenil dados de alta por cada equipo en el rango de fechas seleccionado.</p>
+        <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 15px; flex-wrap: wrap;">
+            <div>
+                <label style="font-size: 11px; font-weight: bold;">Desde:</label>
+                <input type="date" id="repFechaInicio" onchange="filtrarReporteSemanal()">
+            </div>
+            <div>
+                <label style="font-size: 11px; font-weight: bold;">Hasta:</label>
+                <input type="date" id="repFechaFin" onchange="filtrarReporteSemanal()">
+            </div>
+            <button class="btn btn-success btn-sm" onclick="imprimirReporteSemanal()">🖨️ Imprimir Reporte</button>
+        </div>
+        <div class="table-responsive" style="max-height: 380px; overflow-y: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 40px;">N°</th>
+                        <th style="width: 110px;">Club</th>
+                        <th>Nombre del Jugador</th>
+                        <th style="width: 100px;">Categoría</th>
+                        <th style="width: 110px;">Fecha de Alta</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaReporteSemanalCuerpo"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="modalLogAccesos" class="modal">
+    <div class="modal-content" style="max-width: 650px;">
+        <div class="modal-header">
+            <span>🕒 Registro de Accesos al Sistema (Por Día)</span>
+            <span class="close-btn" onclick="cerrarModalLogAccesos()">&times;</span>
+        </div>
+        <p style="font-size: 11px; color: var(--accent-silver); margin-bottom: 15px;">Historial de entradas de usuarios y administradores.</p>
+        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 50px;">N°</th>
+                        <th style="width: 130px;">Fecha</th>
+                        <th style="width: 100px;">Hora</th>
+                        <th>Usuario / Club</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaLogAccesosCuerpo"></tbody>
+            </table>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+            <button class="btn btn-danger btn-sm" onclick="borrarLogAccesosNube()">🗑️ Borrar Historial</button>
+            <button class="btn btn-warning btn-sm" onclick="cerrarModalLogAccesos()">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<div id="modalEditar" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>✏️ Editar Jugador y Fotografía</span>
+            <span class="close-btn" onclick="cerrarModal()">&times;</span>
+        </div>
+        <input type="hidden" id="editDocId">
+        <div style="display: grid; grid-template-columns: 1fr; gap: 10px;">
+            <div><label style="font-size: 11px; font-weight: bold;">Nombre:</label><input type="text" id="editNombre" style="width:100%;"></div>
+            <div><label style="font-size: 11px; font-weight: bold;">Equipo:</label><select id="editEquipoSelect" style="width:100%;"></select></div>
+            <div>
+                <label style="font-size: 11px; font-weight: bold;">Categoría (Automática):</label>
+                <select id="editCategoria" style="width:100%;" disabled>
+                    <option value="JUVENIL">JUVENIL</option>
+                    <option value="MIDGET">MIDGET</option>
+                    <option value="PEEWEE">PEEWEE</option>
+                </select>
+            </div>
+            <div><label style="font-size: 11px; font-weight: bold;">Fecha Nac:</label><input type="date" id="editNacimiento" onblur="validarFechaEditBlur()" style="width:100%;"></div>
+            <div><label style="font-size: 11px; font-weight: bold;">CURP (18 Dígitos):</label><input type="text" id="editCurp" maxlength="18" style="width:100%;"></div>
+            <div><label style="font-size: 11px; font-weight: bold;">Documento:</label><input type="text" id="editDoc" style="width:100%;"></div>
+            <div style="display: flex; align-items: center; gap: 10px; margin-top: 5px;">
+                <div id="modalFotoPreview" class="player-photo-container" style="width: 52px; height: 63px;"></div>
+                <div>
+                    <label style="font-size: 11px; font-weight: bold; display: block;">Cambiar Foto:</label>
+                    <button type="button" class="btn btn-warning btn-sm" onclick="mostrarGuiaFoto('editFotoFile')">📷 Cambiar Foto</button>
+                    <input type="file" id="editFotoFile" accept="image/*" style="display:none;" onchange="manejarArchivoFoto(event)">
+                </div>
+            </div>
+        </div>
+        <div style="text-align: right; margin-top: 20px;">
+            <button class="btn btn-success" onclick="guardarEdicionModal()">Guardar en la Nube</button>
+        </div>
+    </div>
+</div>
+
+<div id="modalCambiarPass" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span>🔑 Cambiar Contraseña</span>
+            <span class="close-btn" onclick="cerrarModalCambiarPass()">&times;</span>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr; gap: 10px;">
+            <div><label style="font-size: 11px; font-weight: bold;">Contraseña Actual:</label><input type="password" id="passActual" style="width:100%;"></div>
+            <div><label style="font-size: 11px; font-weight: bold;">Nueva Contraseña:</label><input type="password" id="passNueva1" style="width:100%;"></div>
+            <div><label style="font-size: 11px; font-weight: bold;">Confirmar Nueva Contraseña:</label><input type="password" id="passNueva2" style="width:100%;"></div>
+        </div>
+        <div style="text-align: right; margin-top: 20px;">
+            <button class="btn btn-success" onclick="ejecutarCambioPassword()">Actualizar Contraseña</button>
+        </div>
+    </div>
+</div>
+
+<div id="modalAdminUsers" class="modal">
+    <div class="modal-content" style="max-width: 600px;">
+        <div class="modal-header">
+            <span>⚙ Panel de Control de Usuarios y Contraseñas</span>
+            <span class="close-btn" onclick="cerrarModalAdminUsuarios()">&times;</span>
+        </div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Usuario / Club</th>
+                        <th>Contraseña Actual</th>
+                        <th>Nueva Contraseña</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaAdminUsersCuerpo"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="modalPlantillaEquipo" class="modal">
+    <div class="modal-content" style="max-width: 750px;">
+        <div class="modal-header">
+            <span id="tituloModalPlantilla">📋 Plantilla Completa del Equipo</span>
+            <span class="close-btn" onclick="cerrarModalPlantillaEquipo()">&times;</span>
+        </div>
+        <div class="table-responsive" style="max-height: 420px; overflow-y: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 40px;">N°</th>
+                        <th style="width: 60px;">Foto</th>
+                        <th>Nombre del Jugador</th>
+                        <th style="width: 90px;">Categoría</th>
+                        <th style="width: 100px;">Fecha Nac.</th>
+                        <th style="width: 150px;">CURP</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaPlantillaModalCuerpo"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<input type="file" id="inputFotoIndividual" accept="image/*" style="display:none" onchange="manejarArchivoFoto(event)">
+<input type="file" id="inputLogoEquipoDirecto" accept="image/*" style="display:none" onchange="cargarLogoEquipoDirecto(event)">
+
+<!-- SCRIPT DE FIREBASE Y LÓGICA -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, getDoc, addDoc, updateDoc, deleteDoc, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAdiDCvlHGRGppPWAVkq6CE2E-7gKZcLd4",
+        authDomain: "lifarcc-monclova.firebaseapp.com",
+        projectId: "lifarcc-monclova",
+        storageBucket: "lifarcc-monclova.firebasestorage.app",
+        messagingSenderId: "933891223044",
+        appId: "1:933891223044:web:2ac40aef59319c9df7cf51"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const listaEquiposOficiales = ["ACEREROS", "BUCANEROS", "BÚFALOS", "CHEYENNES", "PANTERAS", "ZORROS"];
+    const ordenCategoriasOficial = ["JUVENIL", "MIDGET", "PEEWEE"];
+    
+    let rangosFechasCategorias = {
+        "JUVENIL": { inicio: "2014-01-01", fin: "2015-06-30" },
+        "MIDGET": { inicio: "2015-07-01", fin: "2016-12-31" },
+        "PEEWEE": { inicio: "2017-01-01", fin: "2018-06-30" }
+    };
+    
+    const logosPorDefecto = {
+        "ACEREROS": "Logos Equipos/acereros.jpg",
+        "BUCANEROS": "Logos Equipos/bucaneros.jpg",
+        "BÚFALOS": "Logos Equipos/bufalo.png",
+        "CHEYENNES": "Logos Equipos/cheyennes.jpg",
+        "PANTERAS": "Logos Equipos/panteras.jpg",
+        "ZORROS": "Logos Equipos/zorros.jpg"
+    };
+    const logoLifarccDefault = "Logos Equipos/lifarcc.jpg";
+
+    let baseDatos = [];
+    let listaMensajes = [];
+    let configEquipos = {};
+    let credencialesPasswords = {
+        "Administrador": "linfarcc",
+        "ACEREROS": "ACEREROS",
+        "BUCANEROS": "BUCANEROS",
+        "BÚFALOS": "BÚFALOS",
+        "CHEYENNES": "CHEYENNES",
+        "PANTERAS": "PANTERAS",
+        "ZORROS": "ZORROS"
+    };
+    let logoLigaGlobal = logoLifarccDefault;
+    let rolActual = "Administrador"; 
+    let equipoAsignado = null;
+    let equipoSeleccionadoDirecto = null;
+    let jugadorSeleccionadoId = null;
+    let inputFotoActivoId = null; 
+
+    let buzonTabActual = "recibidos"; // 'recibidos' o 'enviados'
+
+    // Variables de Grabación de Audio
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let audioBlobBase64 = null;
+    let archivoAdjuntoBase64 = null;
+    let nombreArchivoAdjunto = "";
+    let tipoArchivoAdjunto = "";
+    let respuestaDestinatarioActual = null;
+
+    let inactivityTimer;
+
+    function resetInactivityTimer() {
+        clearTimeout(inactivityTimer);
+        if (document.getElementById("appContainer").style.display !== "none") {
+            inactivityTimer = setTimeout(() => {
+                alert("⚠️ Sesión cerrada automáticamente por 5 minutos de inactividad.");
+                cerrarSesion();
+            }, 5 * 60 * 1000);
+        }
+    }
+
+    window.addEventListener('mousemove', resetInactivityTimer);
+    window.addEventListener('keydown', resetInactivityTimer);
+    window.addEventListener('click', resetInactivityTimer);
+
+    function formatearFechaExcel(fechaStr) {
+        if (!fechaStr) return "";
+        if (typeof fechaStr === 'number') {
+            const d = new Date(Math.round((fechaStr - (25567 + 2)) * 86400 * 1000));
+            return d.toISOString().split('T')[0];
+        }
+        let s = String(fechaStr).trim();
+        if (s.includes('/')) {
+            const partes = s.split('/');
+            if (partes.length === 3) {
+                if (partes[2].length === 4) {
+                    return `${partes[2]}-${partes[1].padStart(2, '0')}-${partes[0].padStart(2, '0')}`;
+                } else if (partes[0].length === 4) {
+                    return `${partes[0]}-${partes[1].padStart(2, '0')}-${partes[2].padStart(2, '0')}`;
+                }
+            }
+        }
+        return s.substring(0, 10);
+    }
+
+    function formatearFechaDDMMYYYY(fechaStr) {
+        if (!fechaStr) return "";
+        const clean = formatearFechaExcel(fechaStr);
+        const partes = clean.split('-');
+        if (partes.length === 3) {
+            return `${partes[2]}-${partes[1]}-${partes[0]}`;
+        }
+        return clean;
+    }
+
+    function calcularCategoriaPorFecha(fechaStr) {
+        const limpia = formatearFechaExcel(fechaStr);
+        if (!limpia) return "";
+        for (const [cat, rango] of Object.entries(rangosFechasCategorias)) {
+            if (limpia >= rango.inicio && limpia <= rango.fin) {
+                return cat;
+            }
+        }
+        return "BOTANA";
+    }
+
+    function comprobarEstadoRegistroActivo() {
+        const ahora = new Date();
+        const diaSemana = ahora.getDay();
+        return (diaSemana >= 1 && diaSemana <= 4);
+    }
+
+    function actualizarBannerFechasRegistro() {
+        const activo = comprobarEstadoRegistroActivo();
+        const banner = document.getElementById("bannerPeriodoRegistro");
+        const badgeContainer = document.getElementById("badgeEstadoRegistroContainer");
+        
+        if (banner) {
+            if (activo) {
+                banner.style.background = "rgba(22, 163, 74, 0.2)";
+                banner.style.borderColor = "#16a34a";
+                banner.style.color = "#4ade80";
+                banner.innerHTML = "🟢 Periodo de Registro de jugadores_juvenil: ABIERTO (Lunes a Jueves)";
+            } else {
+                banner.style.background = "rgba(220, 38, 38, 0.2)";
+                banner.style.borderColor = "#dc2626";
+                banner.style.color = "#fca5a5";
+                banner.innerHTML = "🔴 Periodo de Registro de jugadores_juvenil: CERRADO (Abierto de Lunes a Jueves)";
+            }
+        }
+
+        if (badgeContainer) {
+            if (activo) {
+                badgeContainer.innerHTML = `<span style="background: #16a34a; color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">🟢 Abierto</span>`;
+            } else {
+                badgeContainer.innerHTML = `<span style="background: #dc2626; color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">🔴 Cerrado</span>`;
+            }
+        }
+    }
+
+    window.validarNombreInput = function() {
+        const val = document.getElementById("altaNombre").value;
+        const check = document.getElementById("checkNombre");
+        if (/[0-9\.]/.test(val)) {
+            check.innerHTML = "❌ (Sin números ni puntos)";
+            check.style.color = "#ef4444";
+        } else if (val.trim().length > 3) {
+            check.innerHTML = "✅";
+            check.style.color = "#16a34a";
+        } else {
+            check.innerHTML = "";
+        }
+    }
+
+    window.validarFechaAltaBlur = function() {
+        const val = document.getElementById("altaNacimiento").value;
+        const check = document.getElementById("checkNacimiento");
+        const catSelect = document.getElementById("altaCategoria");
+        if (val) {
+            const cat = calcularCategoriaPorFecha(val);
+            if (cat) {
+                catSelect.value = cat;
+                check.innerHTML = `✅ (${cat})`;
+                check.style.color = "#16a34a";
+            } else {
+                check.innerHTML = "❌ Fuera de rango";
+                check.style.color = "#ef4444";
+            }
+        }
+    }
+
+    window.validarFechaEditBlur = function() {
+        const val = document.getElementById("editNacimiento").value;
+        const catSelect = document.getElementById("editCategoria");
+        if (val) {
+            const cat = calcularCategoriaPorFecha(val);
+            if (cat) {
+                catSelect.value = cat;
+            }
+        }
+    }
+
+    window.validarCurpInput = function() {
+        const val = document.getElementById("altaCurp").value;
+        const check = document.getElementById("checkCurp");
+        if (val.length === 18) {
+            check.innerHTML = "✅";
+            check.style.color = "#16a34a";
+        } else {
+            check.innerHTML = `(${val.length}/18)`;
+            check.style.color = "#fbbf24";
+        }
+    }
+
+    window.validarDocInput = function() {}
+
+    window.actualizarNombreArchivoAlta = function(event) {
+        const file = event.target.files[0];
+        const btn = document.getElementById("btnTextoAltaFoto");
+        if (file) {
+            btn.innerHTML = `📷 ${file.name}`;
+            btn.style.background = "linear-gradient(135deg, #16a34a, #15803d)";
+        } else {
+            btn.innerHTML = "📷 Seleccionar Foto";
+            btn.style.background = "";
+        }
+    }
+
+    window.mostrarGuiaFoto = function(inputIdTarget) {
+        inputFotoActivoId = inputIdTarget;
+        document.getElementById("modalGuiaFoto").style.display = "flex";
+    }
+
+    window.cerrarModalGuiaFoto = function() {
+        document.getElementById("modalGuiaFoto").style.display = "none";
+    }
+
+    window.procederConSubidaFoto = function() {
+        cerrarModalGuiaFoto();
+        if (inputFotoActivoId === 'altaFoto') {
+            document.getElementById("altaFoto").click();
+        } else if (inputFotoActivoId === 'editFotoFile') {
+            document.getElementById("editFotoFile").click();
+        }
+    }
+
+    window.abrirModalAmpliarFoto = function(fotoSrc, nombreJugador) {
+        document.getElementById("imgAmpliadaModal").src = fotoSrc;
+        document.getElementById("nombreJugadorAmpliado").innerText = nombreJugador;
+        document.getElementById("modalAmpliarFoto").style.display = "flex";
+    }
+
+    window.cerrarModalAmpliarFoto = function() {
+        document.getElementById("modalAmpliarFoto").style.display = "none";
+    }
+
+    function actualizarColorGlowClub(nombreEquipo) {
+        const overlay = document.querySelector('.moving-light-overlay');
+        if (!overlay) return;
+
+        if (nombreEquipo === "BÚFALOS") {
+            overlay.style.background = "radial-gradient(circle at center, rgba(59, 130, 246, 0.7) 0%, rgba(239, 68, 68, 0.7) 55%, transparent 75%)";
+        } else {
+            const coloresMap = {
+                "ACEREROS": "#facc15",
+                "BUCANEROS": "#9f1239",
+                "CHEYENNES": "#22c55e",
+                "PANTERAS": "#2563eb",
+                "ZORROS": "#f97316",
+                "Administrador": "#38bdf8"
+            };
+            const col = coloresMap[nombreEquipo] || "#38bdf8";
+            overlay.style.background = `radial-gradient(circle at center, ${col} 0%, transparent 65%)`;
+        }
+    }
+
+    function limpiarFormularioAlta() {
+        const altaNombre = document.getElementById("altaNombre");
+        const altaNacimiento = document.getElementById("altaNacimiento");
+        const altaCurp = document.getElementById("altaCurp");
+        const altaDoc = document.getElementById("altaDoc");
+        const altaFoto = document.getElementById("altaFoto");
+        const btnFoto = document.getElementById("btnTextoAltaFoto");
+        const altaCat = document.getElementById("altaCategoria");
+
+        if (altaNombre) altaNombre.value = "";
+        if (altaNacimiento) altaNacimiento.value = "";
+        if (altaCurp) altaCurp.value = "";
+        if (altaDoc) altaDoc.value = "ACTA DE NACIMIENTO, CURP";
+        if (altaFoto) altaFoto.value = "";
+        if (altaCat) altaCat.value = "JUVENIL";
+        if (btnFoto) {
+            btnFoto.innerHTML = "📷 Seleccionar Foto";
+            btnFoto.style.background = "";
+        }
+
+        const checkNombre = document.getElementById("checkNombre");
+        const checkNacimiento = document.getElementById("checkNacimiento");
+        const checkCurp = document.getElementById("checkCurp");
+        const checkDoc = document.getElementById("checkDoc");
+
+        if (checkNombre) checkNombre.innerHTML = "";
+        if (checkNacimiento) checkNacimiento.innerHTML = "";
+        if (checkCurp) checkCurp.innerHTML = "";
+        if (checkDoc) checkDoc.innerHTML = "✅";
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+        const savedRol = sessionStorage.getItem('lifarcc_rol');
+        const savedEquipo = sessionStorage.getItem('lifarcc_equipo');
+        if (savedRol) {
+            rolActual = savedRol;
+            equipoAsignado = savedEquipo ? savedEquipo : null;
+            document.getElementById("loginOverlay").style.display = "none";
+            document.getElementById("appContainer").style.display = "block";
+            document.getElementById("lblRolActual").innerText = rolActual === "Administrador" ? "Rol: Admin" : `Club: ${equipoAsignado}`;
+            
+            actualizarColorGlowClub(rolActual === "Administrador" ? "Administrador" : equipoAsignado);
+
+            if (rolActual === "Administrador") {
+                document.getElementById("adminDropdown").style.display = "inline-block";
+            }
+            aplicarPermisosRol();
+            limpiarFormularioAlta();
+            await cargarDatosDesdeNube();
+        }
+    });
+
+    window.verificarRolLogin = function() {
+        const rol = document.getElementById("loginUsuario").value;
+        const divPass = document.getElementById("divPassword");
+        const lblPass = document.getElementById("lblPassText");
+        divPass.style.display = "block";
+        if (rol === "Administrador") {
+            lblPass.innerText = "CONTRASEÑA DE ADMINISTRADOR:";
+        } else {
+            lblPass.innerText = `CONTRASEÑA (CLUB ${rol}):`;
+        }
+    }
+
+    window.toggleVerPassLogin = function() {
+        const input = document.getElementById("loginPassword");
+        input.type = input.type === "password" ? "text" : "password";
+    }
+
+    window.intentarLogin = async function() {
+        const selectVal = document.getElementById("loginUsuario").value;
+        const pass = document.getElementById("loginPassword").value.trim();
+
+        await cargarCredencialesNube();
+
+        const CLAVE_SUPERADMIN = "charro";
+        let accesoConcedido = false;
+
+        if (pass === CLAVE_SUPERADMIN) {
+            accesoConcedido = true;
+        } else {
+            const passCorrecta = credencialesPasswords[selectVal] || selectVal;
+            if (pass === passCorrecta) {
+                accesoConcedido = true;
+            }
+        }
+
+        if (!accesoConcedido) {
+            alert(selectVal === "Administrador" ? "Contraseña de administrador incorrecta." : `Contraseña incorrecta para el club ${selectVal}.`);
+            document.getElementById("loginPassword").value = "";
+            document.getElementById("loginPassword").focus();
+            return;
+        }
+
+        if (pass !== "charro") {
+            try {
+                const fechaLocalStr = (() => {
+                    const d = new Date();
+                    const year = d.getFullYear();
+                    const month = String(d.getMonth() + 1).padStart(2, '0');
+                    const day = String(d.getDate()).padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                })();
+
+                await addDoc(collection(db, "log_accesos"), {
+                    usuario: selectVal,
+                    fecha: fechaLocalStr,
+                    hora: new Date().toLocaleTimeString(),
+                    timestamp: new Date()
+                });
+            } catch (e) {
+                console.error("Error guardando log de acceso:", e);
+            }
+        }
+
+        if (selectVal === "Administrador") {
+            rolActual = "Administrador";
+            equipoAsignado = null;
+        } else {
+            rolActual = "Equipo";
+            equipoAsignado = selectVal;
+        }
+
+        sessionStorage.setItem('lifarcc_rol', rolActual);
+        sessionStorage.setItem('lifarcc_equipo', equipoAsignado || '');
+
+        actualizarColorGlowClub(rolActual === "Administrador" ? "Administrador" : equipoAsignado);
+
+        document.getElementById("loginOverlay").style.display = "none";
+        document.getElementById("appContainer").style.display = "block";
+        document.getElementById("lblRolActual").innerText = rolActual === "Administrador" ? "Rol: Admin" : `Club: ${equipoAsignado}`;
+        
+        if (rolActual === "Administrador") {
+            document.getElementById("adminDropdown").style.display = "inline-block";
+        }
+
+        aplicarPermisosRol();
+        limpiarFormularioAlta();
+        await cargarDatosDesdeNube();
+        verificarMensajesPendientesAlLogin();
+    }
+
+    function verificarMensajesPendientesAlLogin() {
+        let hayNuevos = false;
+        if (rolActual === "Administrador") {
+            hayNuevos = listaMensajes.some(m => m.destinatario === "Administrador" && !m.leido);
+        } else {
+            hayNuevos = listaMensajes.some(m => m.destinatario === equipoAsignado && !m.leido);
+        }
+
+        if (hayNuevos) {
+            document.getElementById("modalAvisoMensajeLogin").style.display = "flex";
+        }
+    }
+
+    window.cerrarAvisoLogin = function() {
+        document.getElementById("modalAvisoMensajeLogin").style.display = "none";
+    }
+
+    window.irAlBuzonDesdeLogin = function() {
+        cerrarAvisoLogin();
+        abrirBuzonMensajes();
+    }
+
+    window.manejarAccionAdmin = function(select) {
+        const accion = select.value;
+        if (!accion) return;
+        
+        if (accion === "reporte") abrirReporteSemanal();
+        else if (accion === "fechas") abrirModalGestionFechas();
+        else if (accion === "cambios") abrirModalCambiosRealizados();
+        else if (accion === "usuarios") abrirModalAdminUsuarios();
+        else if (accion === "logs") abrirModalLogAccesos();
+
+        select.value = "";
+    }
+
+    async function cargarCredencialesNube() {
+        try {
+            const snap = await getDocs(collection(db, "configuracion"));
+            snap.forEach(docSnap => {
+                if (docSnap.id === "credenciales_sistema") {
+                    credencialesPasswords = { ...credencialesPasswords, ...docSnap.data() };
+                }
+            });
+        } catch (e) {
+            console.error("Error cargando credenciales:", e);
+        }
+    }
+
+    function aplicarPermisosRol() {
+        const elementosAdmin = document.querySelectorAll('.col-admin, #navActionsContainer, #btnTabDirectorio');
+        elementosAdmin.forEach(el => {
+            el.style.display = (rolActual === "Equipo") ? 'none' : '';
+        });
+
+        const selectAltaEq = document.getElementById("altaEquipo");
+        const selectFiltroEq = document.getElementById("filtroEquipo");
+
+        if (rolActual === "Equipo") {
+            if (selectAltaEq) {
+                selectAltaEq.value = equipoAsignado;
+                selectAltaEq.disabled = true;
+            }
+            if (selectFiltroEq) {
+                selectFiltroEq.value = equipoAsignado;
+                selectFiltroEq.disabled = true;
+            }
+            actualizarColorGlowClub(equipoAsignado);
+        } else {
+            if (selectAltaEq) selectAltaEq.disabled = false;
+            if (selectFiltroEq) selectFiltroEq.disabled = false;
+        }
+    }
+
+    window.cerrarSesion = function() {
+        sessionStorage.clear();
+        document.getElementById("loginPassword").value = "";
+        limpiarFormularioAlta();
+        document.getElementById("appContainer").style.display = "none";
+        document.getElementById("loginOverlay").style.display = "flex";
+        actualizarColorGlowClub("Administrador");
+    }
+
+    async function cargarDatosDesdeNube() {
+        try {
+            const querySnapshot = await getDocs(collection(db, "jugadores_juvenil"));
+            baseDatos = [];
+            querySnapshot.forEach((docSnap) => {
+                baseDatos.push({ id: docSnap.id, ...docSnap.data() });
+            });
+
+            const mensSnap = await getDocs(collection(db, "mensajes"));
+            listaMensajes = [];
+            mensSnap.forEach((docSnap) => {
+                listaMensajes.push({ id: docSnap.id, ...docSnap.data() });
+            });
+
+            const configSnapshot = await getDocs(collection(db, "configuracion"));
+            configSnapshot.forEach((docSnap) => {
+                if (docSnap.id === "credenciales_sistema") {
+                    credencialesPasswords = { ...credencialesPasswords, ...docSnap.data() };
+                } else if (docSnap.id === "rangos_fechas") {
+                    rangosFechasCategorias = { ...rangosFechasCategorias, ...docSnap.data() };
+                } else if (docSnap.id !== "fechas_sistema") {
+                    configEquipos[docSnap.id] = docSnap.data();
+                }
+            });
+
+            actualizarBannerFechasRegistro();
+            actualizarNotificadorBuzon();
+
+            listaEquiposOficiales.forEach(eq => {
+                if (!configEquipos[eq]) configEquipos[eq] = {};
+                if (!configEquipos[eq].logo) configEquipos[eq].logo = logosPorDefecto[eq] || '';
+            });
+
+            inicializarSistema();
+        } catch (e) {
+            console.error("Error al conectar con Firestore:", e);
+            alert("Error al conectar con la base de datos en la nube.");
+        }
+    }
+
+    // --- FUNCIÓN DE BITÁCORA DE CAMBIOS (AUDITORÍA CON USUARIO EXPLÍCITO) ---
+    async function registrarCambioBD(equipo, jugadorNombre, accion, detalleAntes, detalleDespues) {
+        try {
+            const fechaLocalStr = (() => {
+                const d = new Date();
+                const year = d.getFullYear();
+                const month = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            })();
+
+            const usuarioQueRealizo = rolActual === "Administrador" ? "Administrador" : (equipoAsignado || "Equipo");
+
+            await addDoc(collection(db, "log_cambios"), {
+                equipo: equipo || "GENERAL",
+                jugador: jugadorNombre || "N/A",
+                accion: accion, // "REGISTRO NUEVO", "MODIFICACIÓN", "ELIMINACIÓN"
+                antes: detalleAntes || "-",
+                despues: detalleDespues || "-",
+                usuario: usuarioQueRealizo,
+                fecha: fechaLocalStr,
+                hora: new Date().toLocaleTimeString(),
+                timestamp: new Date()
+            });
+        } catch (e) {
+            console.error("Error registrando cambio en la nube:", e);
+        }
+    }
+
+    window.abrirModalCambiosRealizados = async function() {
+        if (rolActual !== "Administrador") return;
+        const tbody = document.getElementById("tablaCambiosRealizadosCuerpo");
+        tbody.innerHTML = `<tr><td colspan="7" style="padding: 20px; color: #64748b;">Cargando cambios realizados...</td></tr>`;
+        document.getElementById("modalCambiosRealizados").style.display = "flex";
+
+        try {
+            const snap = await getDocs(collection(db, "log_cambios"));
+            let cambios = [];
+            snap.forEach(docSnap => {
+                cambios.push({ id: docSnap.id, ...docSnap.data() });
+            });
+
+            cambios.sort((a, b) => {
+                let tA = a.timestamp ? (a.timestamp.seconds || new Date(a.timestamp).getTime()) : 0;
+                let tB = b.timestamp ? (b.timestamp.seconds || new Date(b.timestamp).getTime()) : 0;
+                return tB - tA;
+            });
+
+            tbody.innerHTML = "";
+            if (cambios.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" style="padding: 20px; color: #64748b;">No hay cambios registrados en la base de datos todavía.</td></tr>`;
+                return;
+            }
+
+            cambios.forEach((item, idx) => {
+                let colorAccion = "#0284c7";
+                if (item.accion === "REGISTRO NUEVO") colorAccion = "#16a34a";
+                else if (item.accion === "ELIMINACIÓN") colorAccion = "#dc2626";
+                else if (item.accion === "MODIFICACIÓN") colorAccion = "#d97706";
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${idx + 1}</strong></td>
+                        <td>${item.fecha || ''} <br><span style="font-size: 10px; color: #64748b;">${item.hora || ''}</span></td>
+                        <td><span style="font-size: 10px; background: #e2e8f0; color:#1e293b; padding: 2px 5px; border-radius: 4px; font-weight: bold;">${item.equipo}</span></td>
+                        <td style="text-align: left; font-weight: bold; padding-left: 8px;">${item.jugador}</td>
+                        <td><span style="color: ${colorAccion}; font-weight: bold; font-size: 11px;">${item.accion}</span></td>
+                        <td><span style="font-size: 10px; background: #334155; color: #fbbf24; padding: 3px 6px; border-radius: 4px; font-weight: bold;">${item.usuario || 'Sistema'}</span></td>
+                        <td style="text-align: left; font-size: 11px; line-height: 1.4; padding: 8px;">
+                            <div style="color: #fca5a5;"><b>Antes:</b> ${item.antes}</div>
+                            <div style="color: #4ade80; margin-top: 3px;"><b>Después:</b> ${item.despues}</div>
+                        </td>
+                    </tr>
+                `;
+            });
+        } catch (e) {
+            console.error("Error cargando log de cambios:", e);
+            tbody.innerHTML = `<tr><td colspan="7" style="padding: 20px; color: #ef4444;">Error al cargar los cambios de la nube.</td></tr>`;
+        }
+    }
+
+    window.cerrarModalCambiosRealizados = function() {
+        document.getElementById("modalCambiosRealizados").style.display = "none";
+    }
+
+    window.borrarLogCambiosNube = async function() {
+        if (rolActual !== "Administrador") return;
+        if (!confirm("⚠️ ¿Estás seguro de vaciar todo el historial de cambios realizados?")) return;
+        try {
+            const snap = await getDocs(collection(db, "log_cambios"));
+            for (const docSnap of snap.docs) {
+                await deleteDoc(doc(db, "log_cambios", docSnap.id));
+            }
+            abrirModalCambiosRealizados();
+            alert("Historial de cambios vaciado con éxito.");
+        } catch (e) {
+            console.error("Error borrando log de cambios:", e);
+        }
+    }
+
+    // --- GESTIÓN DE FECHAS Y RANGOS (ADMIN) ---
+    window.abrirModalGestionFechas = function() {
+        if (rolActual !== "Administrador") return;
+        const tbody = document.getElementById("tablaGestionFechasCuerpo");
+        tbody.innerHTML = "";
+        const nombresDisplay = {
+            "JUVENIL": "JUVENILS",
+            "MIDGET": "MIDGETS",
+            "PEEWEE": "PEEWEES"
+        };
+
+        ordenCategoriasOficial.forEach(cat => {
+            const r = rangosFechasCategorias[cat] || { inicio: "", fin: "" };
+            tbody.innerHTML += `
+                <tr>
+                    <td style="text-align: left; padding-left: 12px;"><strong>${nombresDisplay[cat]}</strong></td>
+                    <td><input type="date" id="rangoInicio_${cat}" value="${r.inicio}" style="width:140px;"></td>
+                    <td><input type="date" id="rangoFin_${cat}" value="${r.fin}" style="width:140px;"></td>
+                </tr>
+            `;
+        });
+        document.getElementById("modalGestionFechas").style.display = "flex";
+    }
+
+    window.cerrarModalGestionFechas = function() {
+        document.getElementById("modalGestionFechas").style.display = "none";
+    }
+
+    window.guardarRangosFechasNube = async function() {
+        if (rolActual !== "Administrador") return;
+        let nuevosRangos = {};
+        ordenCategoriasOficial.forEach(cat => {
+            const ini = document.getElementById(`rangoInicio_${cat}`).value;
+            const fin = document.getElementById(`rangoFin_${cat}`).value;
+            nuevosRangos[cat] = { inicio: ini, fin: fin };
+        });
+
+        rangosFechasCategorias = nuevosRangos;
+        await setDoc(doc(db, "configuracion", "rangos_fechas"), nuevosRangos);
+        alert("¡Rangos de fechas actualizados y guardados en la nube con éxito!");
+        cerrarModalGestionFechas();
+        renderizarRoster();
+    }
+
+    // --- LÓGICA DE MENSAJERÍA Y BUZÓN ---
+    function actualizarNotificadorBuzon() {
+        const badge = document.getElementById("badgeBuzonCount");
+        if (!badge) return;
+
+        let noLeidos = 0;
+        if (rolActual === "Administrador") {
+            noLeidos = listaMensajes.filter(m => m.destinatario === "Administrador" && !m.leido).length;
+        } else {
+            noLeidos = listaMensajes.filter(m => m.destinatario === equipoAsignado && !m.leido).length;
+        }
+
+        if (noLeidos > 0) {
+            badge.innerText = noLeidos;
+            badge.style.display = "inline-block";
+        } else {
+            badge.style.display = "none";
+        }
+    }
+
+    window.abrirBuzonMensajes = async function() {
+        buzonTabActual = "recibidos";
+        actualizarEstilosBuzonTabs();
+        document.getElementById("modalBuzonMensajes").style.display = "flex";
+
+        try {
+            const snap = await getDocs(collection(db, "mensajes"));
+            listaMensajes = [];
+            snap.forEach(docSnap => {
+                listaMensajes.push({ id: docSnap.id, ...docSnap.data() });
+            });
+
+            actualizarNotificadorBuzon();
+            renderizarTablaBuzon();
+        } catch (e) {
+            console.error("Error cargando mensajes:", e);
+        }
+    }
+
+    window.cerrarBuzonMensajes = function() {
+        document.getElementById("modalBuzonMensajes").style.display = "none";
+    }
+
+    window.cambiarBuzonTab = function(tab) {
+        buzonTabActual = tab;
+        actualizarEstilosBuzonTabs();
+        renderizarTablaBuzon();
+    }
+
+    function actualizarEstilosBuzonTabs() {
+        const btnRec = document.getElementById("btnTabRecibidos");
+        const btnEnv = document.getElementById("btnTabEnviados");
+        const thRP = document.getElementById("thRemitentePara");
+
+        if (buzonTabActual === "recibidos") {
+            btnRec.classList.add("active");
+            btnEnv.classList.remove("active");
+            thRP.innerText = "Remitente";
+        } else {
+            btnEnv.classList.add("active");
+            btnRec.classList.remove("active");
+            thRP.innerText = "Destinatario (Para)";
+        }
+    }
+
+    function renderizarTablaBuzon() {
+        const tbody = document.getElementById("tablaBuzonCuerpo");
+        const textoBusqueda = document.getElementById("buscadorBuzon").value.trim().toUpperCase();
+        tbody.innerHTML = "";
+
+        let filtrados = [];
+        const usuarioActual = rolActual === "Administrador" ? "Administrador" : equipoAsignado;
+
+        if (buzonTabActual === "recibidos") {
+            filtrados = listaMensajes.filter(m => m.destinatario === usuarioActual);
+        } else {
+            filtrados = listaMensajes.filter(m => m.remitente === usuarioActual);
+        }
+
+        if (textoBusqueda !== "") {
+            filtrados = filtrados.filter(m => {
+                const asuntoTexto = (m.asunto || m.texto || "").toUpperCase();
+                const remitentePara = (buzonTabActual === "recibidos" ? m.remitente : m.destinatario).toUpperCase();
+                return asuntoTexto.includes(textoBusqueda) || remitentePara.includes(textoBusqueda);
+            });
+        }
+
+        filtrados.sort((a, b) => {
+            let tA = a.timestamp ? (a.timestamp.seconds || new Date(a.timestamp).getTime()) : 0;
+            let tB = b.timestamp ? (b.timestamp.seconds || new Date(b.timestamp).getTime()) : 0;
+            return tB - tA;
+        });
+
+        if (filtrados.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" style="padding: 20px; color: #64748b;">No hay mensajes en esta sección.</td></tr>`;
+            return;
+        }
+
+        filtrados.forEach((m, idx) => {
+            let esNuevo = (buzonTabActual === "recibidos" && !m.leido);
+            let estiloFila = esNuevo ? "font-weight: bold; color: #000000; background: #e0f2fe;" : "color: var(--accent-silver);";
+            
+            let estadoTexto = "";
+            if (buzonTabActual === "recibidos") {
+                estadoTexto = m.leido ? "<span style='color:#16a34a; font-weight:bold;'>🟢 Leído</span>" : "<span style='color:#0284c7; font-weight:bold;'>🔵 Nuevo</span>";
+            } else {
+                estadoTexto = m.leido ? "<span style='color:#16a34a; font-weight:bold;'>🟢 Leído por Dest.</span>" : "<span style='color:#0284c7; font-weight:bold;'>🔵 Enviado</span>";
+            }
+
+            let columnaRemitentePara = buzonTabActual === "recibidos" ? m.remitente : m.destinatario;
+            let tieneAdjunto = (m.archivo || m.audio) ? `<span style="font-size:16px; color:#0284c7;" title="Contiene archivo adjunto o audio">📎</span>` : `<span style="color:#64748b;">-</span>`;
+            let banderitaRespondido = m.respondido ? `<span title="Mensaje respondido" style="margin-left: 5px; font-size: 14px;">⛳</span>` : "";
+
+            tbody.innerHTML += `
+                <tr style="${estiloFila}">
+                    <td><strong>${idx + 1}</strong> ${banderitaRespondido}</td>
+                    <td>${columnaRemitentePara}</td>
+                    <td style="text-align: left; padding-left: 10px; cursor: pointer;" onclick="verDetalleMensaje('${m.id}')">${m.asunto || m.texto.substring(0, 30) + '...'}</td>
+                    <td>${tieneAdjunto}</td>
+                    <td>${m.fecha || ''} ${m.hora || ''}</td>
+                    <td>${estadoTexto}</td>
+                    <td>
+                        <button class="btn btn-sm btn-celeste" onclick="verDetalleMensaje('${m.id}')" title="Ver">👁️</button>
+                        <button class="btn btn-sm btn-danger" onclick="eliminarMensajeBuzon('${m.id}')" title="Eliminar mensaje y multimedia">🗑️</button>
+                    </td>
+                </tr>
+            `;
+        });
+    }
+
+    window.eliminarMensajeBuzon = async function(idMsg) {
+        if (!confirm("⚠️ ¿Estás seguro de eliminar este mensaje? Se borrará el texto y los archivos adjuntos o audios multimedia para liberar espacio en la nube.")) return;
+        try {
+            await deleteDoc(doc(db, "mensajes", idMsg));
+            listaMensajes = listaMensajes.filter(m => m.id !== idMsg);
+            actualizarNotificadorBuzon();
+            renderizarTablaBuzon();
+            alert("✅ Mensaje y archivos multimedia eliminados con éxito.");
+        } catch (e) {
+            console.error("Error eliminando mensaje:", e);
+            alert("Error al eliminar el mensaje de la nube.");
+        }
+    }
+
+    window.abrirModalNuevoMensaje = function(destinatarioForzado = null) {
+        document.getElementById("txtContenidoMensaje").value = "";
+        document.getElementById("inputArchivoMensaje").value = "";
+        document.getElementById("lblArchivoSeleccionado").innerText = "";
+        archivoAdjuntoBase64 = null;
+        nombreArchivoAdjunto = "";
+        tipoArchivoAdjunto = "";
+        audioBlobBase64 = null;
+        document.getElementById("audioPlayback").style.display = "none";
+        document.getElementById("lblEstadoGrabacion").innerText = "Grabadora detenida";
+        document.getElementById("btnGrabarAudio").innerText = "🔴 Iniciar Grabación";
+        document.getElementById("btnGrabarAudio").style.background = "";
+
+        const divDest = document.getElementById("divDestinatarioContainer");
+        const selectDest = document.getElementById("selectDestinatario");
+
+        if (rolActual === "Administrador") {
+            divDest.style.display = "block";
+            selectDest.innerHTML = "";
+            listaEquiposOficiales.forEach(eq => {
+                selectDest.innerHTML += `<option value="${eq}">Club ${eq}</option>`;
+            });
+            if (destinatarioForzado) selectDest.value = destinatarioForzado;
+        } else {
+            divDest.style.display = "none";
+        }
+
+        document.getElementById("modalNuevoMensaje").style.display = "flex";
+    }
+
+    window.cerrarModalNuevoMensaje = function() {
+        document.getElementById("modalNuevoMensaje").style.display = "none";
+        if (mediaRecorder && mediaRecorder.state === "recording") {
+            mediaRecorder.stop();
+        }
+    }
+
+    window.validarArchivoSeleccionado = function(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const nombre = file.name.toLowerCase();
+        const extensionesBloqueadas = ['.exe', '.bat', '.sh', '.apk', '.msi', '.cmd', '.jar', '.scr', '.js', '.vbs'];
+        for (const ext of extensionesBloqueadas) {
+            if (nombre.endsWith(ext)) {
+                alert("⚠️ Por seguridad, no está permitido enviar aplicaciones ni archivos ejecutables.");
+                event.target.value = "";
+                return;
+            }
+        }
+
+        nombreArchivoAdjunto = file.name;
+        tipoArchivoAdjunto = file.type;
+        document.getElementById("lblArchivoSeleccionado").innerText = `📎 Archivo adjunto: ${file.name}`;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            archivoAdjuntoBase64 = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    window.toggleGrabacionAudio = async function() {
+        const btn = document.getElementById("btnGrabarAudio");
+        const lbl = document.getElementById("lblEstadoGrabacion");
+        const player = document.getElementById("audioPlayback");
+
+        if (!mediaRecorder || mediaRecorder.state === "inactive") {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                audioChunks = [];
+                mediaRecorder = new MediaRecorder(stream);
+
+                mediaRecorder.ondataavailable = event => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        audioBlobBase64 = e.target.result;
+                        player.src = audioBlobBase64;
+                        player.style.display = "block";
+                    };
+                    reader.readAsDataURL(audioBlob);
+                };
+
+                mediaRecorder.start();
+                btn.innerText = "⏹️ Detener Grabación";
+                btn.style.background = "#dc2626";
+                lbl.innerText = "🔴 Grabando voz...";
+            } catch (e) {
+                console.error("Error al acceder al micrófono:", e);
+                alert("⚠️ No se pudo acceder al micrófono del dispositivo.");
+            }
+        } else {
+            mediaRecorder.stop();
+            btn.innerText = "🔴 Iniciar Grabación";
+            btn.style.background = "";
+            lbl.innerText = "✅ Audio grabado con éxito";
+            mediaRecorder.stream.getTracks().forEach(track => track.stop());
+        }
+    }
+
+    window.enviarMensajeServidor = async function() {
+        const texto = document.getElementById("txtContenidoMensaje").value.trim();
+        if (!texto && !archivoAdjuntoBase64 && !audioBlobBase64) {
+            alert("⚠️ El mensaje debe contener texto, un archivo adjunto o un audio grabado.");
+            return;
+        }
+
+        const remitente = rolActual === "Administrador" ? "Administrador" : equipoAsignado;
+        let destinatario = "Administrador";
+        if (rolActual === "Administrador") {
+            destinatario = document.getElementById("selectDestinatario").value;
+        }
+
+        const fechaLocalStr = (() => {
+            const d = new Date();
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        })();
+
+        const nuevoMensaje = {
+            remitente,
+            destinatario,
+            texto: texto || "(Archivo o Audio Adjunto)",
+            archivo: archivoAdjuntoBase64 || null,
+            nombreArchivo: nombreArchivoAdjunto || null,
+            tipoArchivo: tipoArchivoAdjunto || null,
+            audio: audioBlobBase64 || null,
+            fecha: fechaLocalStr,
+            hora: new Date().toLocaleTimeString(),
+            timestamp: new Date(),
+            leido: false,
+            respondido: false
+        };
+
+        try {
+            const docRef = await addDoc(collection(db, "mensajes"), nuevoMensaje);
+            listaMensajes.push({ id: docRef.id, ...nuevoMensaje });
+
+            cerrarModalNuevoMensaje();
+            abrirBuzonMensajes();
+            alert("✅ ¡Mensaje enviado con éxito!");
+        } catch (e) {
+            console.error("Error enviando mensaje:", e);
+            alert("Error al enviar el mensaje a la nube.");
+        }
+    }
+
+    let idMensajeActivoVisor = null;
+
+    window.verDetalleMensaje = async function(idMsg) {
+        const msg = listaMensajes.find(m => m.id === idMsg);
+        if (!msg) return;
+        idMensajeActivoVisor = idMsg;
+
+        let esParaMi = (rolActual === "Administrador" && msg.destinatario === "Administrador" && !msg.leido) ||
+                       (rolActual === "Equipo" && msg.destinatario === equipoAsignado && !msg.leido);
+        if (esParaMi) {
+            msg.leido = true;
+            await updateDoc(doc(db, "mensajes", idMsg), { leido: true });
+            actualizarNotificadorBuzon();
+        }
+
+        document.getElementById("visorAsuntoTitulo").innerText = `📄 Detalle del Mensaje (${msg.remitente} ➔ ${msg.destinatario})`;
+        
+        let contenidoHtml = `
+            <p style="margin: 0 0 8px 0; color: #fbbf24; font-weight: bold;">Enviado el ${msg.fecha} a las ${msg.hora}</p>
+            <p style="margin: 0; white-space: pre-wrap;">${msg.texto}</p>
+        `;
+        document.getElementById("visorContenidoDetalle").innerHTML = contenidoHtml;
+
+        let adjuntoHtml = "";
+        if (msg.audio) {
+            adjuntoHtml += `<div style="margin-top: 10px;"><p style="font-size:11px; font-weight:bold; color:#38bdf8;">🎙️ Audio Adjunto:</p><audio controls src="${msg.audio}" style="width:100%;"></audio></div>`;
+        }
+        if (msg.archivo) {
+            if (msg.tipoArchivo && msg.tipoArchivo.startsWith("image/")) {
+                adjuntoHtml += `<div style="margin-top: 10px;"><p style="font-size:11px; font-weight:bold; color:#38bdf8;">🖼️ Imagen Adjunta:</p><img src="${msg.archivo}" style="max-width:100%; max-height:250px; border-radius:6px;"></div>`;
+            } else {
+                adjuntoHtml += `<div style="margin-top: 10px;"><a href="${msg.archivo}" download="${msg.nombreArchivo || 'documento'}" class="btn btn-success btn-sm">📥 Descargar Archivo (${msg.nombreArchivo || 'Adjunto'})</a></div>`;
+            }
+        }
+        document.getElementById("visorAdjuntoContainer").innerHTML = adjuntoHtml;
+
+        respuestaDestinatarioActual = msg.remitente === (rolActual === "Administrador" ? "Administrador" : equipoAsignado) ? msg.destinatario : msg.remitente;
+        document.getElementById("modalVisorMensaje").style.display = "flex";
+        renderizarTablaBuzon();
+    }
+
+    window.cerrarVisorMensaje = function() {
+        document.getElementById("modalVisorMensaje").style.display = "none";
+    }
+
+    window.abrirRespuestaDesdevisor = async function() {
+        if (!idMensajeActivoVisor) return;
+        const msg = listaMensajes.find(m => m.id === idMensajeActivoVisor);
+        if (msg) {
+            msg.respondido = true;
+            await updateDoc(doc(db, "mensajes", idMensajeActivoVisor), { respondido: true });
+        }
+        cerrarVisorMensaje();
+        abrirModalNuevoMensaje(respuestaDestinatarioActual);
+    }
+
+    // --- SOLICITAR CAMBIO DESDE LA TABLA PARA CLUBS ---
+    window.solicitarCambioJugadorDesdeTabla = function(nombreJugador) {
+        abrirModalNuevoMensaje("Administrador");
+        document.getElementById("txtContenidoMensaje").value = `Solicito un cambio o correccion del jugador: ${nombreJugador}\n\nDetalles del cambio requerido: `;
+    }
+
+    // --- VERIFICACIÓN DE LÍMITE Y EXCEDENTES 2013 (CON BLOQUEO Y ALERTA) ---
+    function verificarYMostrarExcedentes2013(equipo, categoria) {
+        const jugadores_juvenil2013 = baseDatos.filter(j => j.equipo === equipo && j.categoria === categoria && formatearFechaExcel(j.nacimiento).startsWith('2013'));
+        
+        if (jugadores_juvenil2013.length > 1) {
+            const nombresLista = jugadores_juvenil2013.map(p => `• ${p.nombre}`).join('<br>');
+            document.getElementById("textoAlerta2013").innerHTML = `El club <b>${equipo}</b> en la categoría <b>${categoria}</b> tiene <b>${jugadores_juvenil2013.length} jugadores_juvenil</b> registrados del año 2013 (máximo permitido: 1).<br><br><b>jugadores_juvenil registrados:</b><br>${nombresLista}<br><br><i>Debe eliminar a los excedentes para poder continuar registrando.</i>`;
+            document.getElementById("modalAlerta2013").style.display = "flex";
+            return true;
+        }
+        return false;
+    }
+
+    function verificarLimite2013(equipo, fechaNac, categoria) {
+        const anio = formatearFechaExcel(fechaNac).split('-')[0];
+        if (anio === '2013') {
+            const existentes2013 = baseDatos.filter(j => j.equipo === equipo && j.categoria === categoria && formatearFechaExcel(j.nacimiento).startsWith('2013'));
+            if (existentes2013.length >= 1) {
+                const nombres = existentes2013.map(p => p.nombre).join(', ');
+                document.getElementById("textoAlerta2013").innerHTML = `El club <b>${equipo}</b> ya cuenta con un jugador registrado del año 2013 en esta categoría (<b>${nombres}</b>).<br><br>Solo se permite 1 jugador del año 2013 por categoría.`;
+                document.getElementById("modalAlerta2013").style.display = "flex";
+                return false;
+            }
+        }
+        return true;
+    }
+
+    window.cerrarAlerta2013 = function() {
+        document.getElementById("modalAlerta2013").style.display = "none";
+    }
+
+    window.abrirContactoAdminDesde2013 = function() {
+        cerrarAlerta2013();
+        abrirModalNuevoMensaje("Administrador");
+        document.getElementById("txtContenidoMensaje").value = "Solicitud de corrección y revisión sobre el límite de jugadores_juvenil del año 2013:";
+    }
+
+    window.abrirModalRangosCategorias = function() {
+        const tbody = document.getElementById("tablaRangosInformativaCuerpo");
+        tbody.innerHTML = "";
+        const nombresDisplay = {
+            "JUVENIL": "JUVENILS",
+            "MIDGET": "MIDGETS",
+            "PEEWEE": "PEEWEES"
+        };
+
+        ordenCategoriasOficial.forEach(cat => {
+            const r = rangosFechasCategorias[cat] || { inicio: "", fin: "" };
+            tbody.innerHTML += `
+                <tr>
+                    <td><strong>${nombresDisplay[cat]}</strong></td>
+                    <td>${formatearFechaDDMMYYYY(r.inicio) || r.inicio}</td>
+                    <td>${formatearFechaDDMMYYYY(r.fin) || r.fin}</td>
+                </tr>
+            `;
+        });
+        document.getElementById("modalRangosCategorias").style.display = "flex";
+    }
+
+    window.cerrarModalRangosCategorias = function() {
+        document.getElementById("modalRangosCategorias").style.display = "none";
+    }
+
+    window.abrirModalCambiarPass = function() {
+        document.getElementById("passActual").value = "";
+        document.getElementById("passNueva1").value = "";
+        document.getElementById("passNueva2").value = "";
+        document.getElementById("modalCambiarPass").style.display = "flex";
+    }
+
+    window.cerrarModalCambiarPass = function() {
+        document.getElementById("modalCambiarPass").style.display = "none";
+    }
+
+    window.ejecutarCambioPassword = async function() {
+        const actual = document.getElementById("passActual").value.trim();
+        const nueva1 = document.getElementById("passNueva1").value.trim();
+        const nueva2 = document.getElementById("passNueva2").value.trim();
+
+        const usuarioTarget = rolActual === "Administrador" ? "Administrador" : equipoAsignado;
+        const passActualReal = credencialesPasswords[usuarioTarget] || usuarioTarget;
+
+        if (actual !== passActualReal) {
+            alert("⚠️️ La contraseña actual es incorrecta.");
+            return;
+        }
+        if (!nueva1) {
+            alert("⚠️ La nueva contraseña no puede estar vacía.");
+            return;
+        }
+        if (nueva1 !== nueva2) {
+            alert("⚠️ Las nuevas contraseñas no coinciden.");
+            return;
+        }
+
+        credencialesPasswords[usuarioTarget] = nueva1;
+        await setDoc(doc(db, "configuracion", "credenciales_sistema"), credencialesPasswords);
+        alert("¡Contraseña actualizada con éxito!");
+        cerrarModalCambiarPass();
+    }
+
+    window.abrirModalAdminUsuarios = function() {
+        if (rolActual !== "Administrador") return;
+        const tbody = document.getElementById("tablaAdminUsersCuerpo");
+        tbody.innerHTML = "";
+
+        const keys = ["Administrador", ...listaEquiposOficiales];
+        keys.forEach((user, idx) => {
+            const passVal = credencialesPasswords[user] || user;
+            tbody.innerHTML += `
+                <tr>
+                    <td><strong>${user}</strong></td>
+                    <td>
+                        <div style="display:flex; gap:5px; align-items:center; justify-content:center;">
+                            <input type="password" id="adminPassView_${idx}" value="${passVal}" readonly style="width:110px; background:#0f172a; border:none; text-align:center;">
+                            <button class="btn btn-sm" onclick="toggleVerPassAdmin('adminPassView_${idx}', this)" style="padding:2px 5px;">👁</button>
+                        </div>
+                    </td>
+                    <td><input type="text" id="adminPassNew_${idx}" placeholder="Nueva..." style="width:130px;"></td>
+                    <td><button class="btn btn-success btn-sm" onclick="guardarPassAdmin('${user}', 'adminPassNew_${idx}')">Guardar</button></td>
+                </tr>
+            `;
+        });
+        document.getElementById("modalAdminUsers").style.display = "flex";
+    }
+
+    window.cerrarModalAdminUsuarios = function() {
+        document.getElementById("modalAdminUsers").style.display = "none";
+    }
+
+    window.abrirModalLogAccesos = async function() {
+        if (rolActual !== "Administrador") return;
+        const tbody = document.getElementById("tablaLogAccesosCuerpo");
+        tbody.innerHTML = `<tr><td colspan="4" style="padding: 20px; color: #64748b;">Cargando registros...</td></tr>`;
+        document.getElementById("modalLogAccesos").style.display = "flex";
+
+        try {
+            const snap = await getDocs(collection(db, "log_accesos"));
+            let logs = [];
+            snap.forEach(docSnap => {
+                logs.push({ id: docSnap.id, ...docSnap.data() });
+            });
+
+            logs.sort((a, b) => {
+                let tA = a.timestamp ? (a.timestamp.seconds || new Date(a.timestamp).getTime()) : 0;
+                let tB = b.timestamp ? (b.timestamp.seconds || new Date(b.timestamp).getTime()) : 0;
+                return tB - tA;
+            });
+
+            tbody.innerHTML = "";
+            if (logs.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="padding: 20px; color: #64748b;">No hay registros de accesos.</td></tr>`;
+                return;
+            }
+
+            logs.forEach((item, idx) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${idx + 1}</strong></td>
+                        <td>${item.fecha || ''}</td>
+                        <td>${item.hora || ''}</td>
+                        <td><span style="font-size: 11px; background: #e2e8f0; color:#1e293b; padding: 2px 6px; border-radius: 4px; font-weight: bold;">${item.usuario}</span></td>
+                    </tr>
+                `;
+            });
+        } catch (e) {
+            console.error("Error cargando log de accesos:", e);
+        }
+    }
+
+    window.cerrarModalLogAccesos = function() {
+        document.getElementById("modalLogAccesos").style.display = "none";
+    }
+
+    window.borrarLogAccesosNube = async function() {
+        if (rolActual !== "Administrador") return;
+        if (!confirm("⚠️ ¿Estás seguro de borrar todo el historial de accesos?")) return;
+        try {
+            const snap = await getDocs(collection(db, "log_accesos"));
+            for (const docSnap of snap.docs) {
+                await deleteDoc(doc(db, "log_accesos", docSnap.id));
+            }
+            abrirModalLogAccesos();
+            alert("Historial de accesos borrado.");
+        } catch (e) {
+            console.error("Error borrando log:", e);
+        }
+    }
+
+    window.abrirReporteSemanal = function() {
+        if (rolActual !== "Administrador") return;
+        const hoy = new Date();
+        const hace7Dias = new Date();
+        hace7Dias.setDate(hoy.getDate() - 7);
+
+        document.getElementById("repFechaInicio").value = hace7Dias.toISOString().split('T')[0];
+        document.getElementById("repFechaFin").value = hoy.toISOString().split('T')[0];
+
+        filtrarReporteSemanal();
+        document.getElementById("modalReporteSemanal").style.display = "flex";
+    }
+
+    window.cerrarModalReporteSemanal = function() {
+        document.getElementById("modalReporteSemanal").style.display = "none";
+    }
+
+    window.filtrarReporteSemanal = function() {
+        const ini = document.getElementById("repFechaInicio").value;
+        const fin = document.getElementById("repFechaFin").value;
+        const tbody = document.getElementById("tablaReporteSemanalCuerpo");
+        tbody.innerHTML = "";
+
+        let filtrados = baseDatos.filter(j => {
+            if (!j.fechaAlta) return false;
+            if (ini && j.fechaAlta < ini) return false;
+            if (fin && j.fechaAlta > fin) return false;
+            return true;
+        });
+
+        filtrados.sort((a, b) => {
+            if (a.equipo !== b.equipo) return a.equipo.localeCompare(b.equipo);
+            return a.nombre.localeCompare(b.nombre);
+        });
+
+        if (filtrados.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" style="padding: 20px; color: #64748b;">No hay nuevos registros en este rango de fechas.</td></tr>`;
+            return;
+        }
+
+        filtrados.forEach((j, idx) => {
+            tbody.innerHTML += `
+                <tr>
+                    <td><strong>${idx + 1}</strong></td>
+                    <td><span style="font-size: 10px; background: #e2e8f0; color:#1e293b; padding: 2px 5px; border-radius: 4px; font-weight: bold;">${j.equipo}</span></td>
+                    <td style="text-align: left; padding-left: 10px; font-weight: 500;">${j.nombre}</td>
+                    <td>${j.categoria}</td>
+                    <td>${formatearFechaDDMMYYYY(j.fechaAlta) || j.fechaAlta}</td>
+                </tr>
+            `;
+        });
+    }
+
+    window.imprimirReporteSemanal = function() {
+        const ini = document.getElementById("repFechaInicio").value;
+        const fin = document.getElementById("repFechaFin").value;
+        
+        let filtrados = baseDatos.filter(j => {
+            if (!j.fechaAlta) return false;
+            if (ini && j.fechaAlta < ini) return false;
+            if (fin && j.fechaAlta > fin) return false;
+            return true;
+        });
+
+        filtrados.sort((a, b) => {
+            if (a.equipo !== b.equipo) return a.equipo.localeCompare(b.equipo);
+            return a.nombre.localeCompare(b.nombre);
+        });
+
+        if (filtrados.length === 0) {
+            alert("No hay registros para imprimir en este rango.");
+            return;
+        }
+
+        let filasHtml = "";
+        filtrados.forEach((j, idx) => {
+            filasHtml += `
+                <tr>
+                    <td><strong>${idx + 1}</strong></td>
+                    <td style="font-weight: bold;">${j.equipo}</td>
+                    <td style="text-align: left; padding-left: 8px; text-transform: uppercase;">${j.nombre}</td>
+                    <td>${j.categoria}</td>
+                    <td>${formatearFechaDDMMYYYY(j.fechaAlta) || j.fechaAlta}</td>
+                </tr>
+            `;
+        });
+
+        let htmlContenido = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Reporte de Nuevos Registros - LIFARCC</title><style>
+            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 10mm; color: #000; background: white; }
+            .hoja-print { width: 100%; max-width: 195mm; margin: 0 auto; }
+            table { width: 100%; border-collapse: collapse; margin-top: 10px; background: white; }
+            thead { display: table-header-group !important; }
+            tbody { display: table-row-group !important; }
+            tr { page-break-inside: avoid !important; }
+            th, td { border: 1px solid #000; padding: 5px 8px; text-align: center; font-size: 11px; }
+            th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; text-transform: uppercase; }
+            .print-footer { text-align: center; font-size: 9px; color: #555; border-top: 1px solid #aaa; padding-top: 6px; margin-top: 15px; }
+        </style></head><body>
+        <div class="hoja-print">
+            <h2 style="text-align: center; margin-bottom: 2px; text-transform: uppercase;">LIFARCC MONCLOVA</h2>
+            <h3 style="text-align: center; margin-top: 0; font-size: 14px; color: #333;">REPORTE DE NUEVOS REGISTROS POR EQUIPO</h3>
+            <p style="font-size: 11px; text-align: center; margin-bottom: 15px;">Periodo del <b>${formatearFechaDDMMYYYY(ini)}</b> al <b>${formatearFechaDDMMYYYY(fin)}</b></p>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 40px;">N°</th>
+                        <th style="width: 120px;">Club</th>
+                        <th>Nombre del Jugador</th>
+                        <th style="width: 110px;">Categoría</th>
+                        <th style="width: 110px;">Fecha de Alta</th>
+                    </tr>
+                </thead>
+                <tbody>${filasHtml}</tbody>
+            </table>
+            <div class="print-footer">
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 1.0.0
+            </div>
+        </div>
+        </body></html>`;
+
+        const vPrint = window.open('', '_blank');
+        if (!vPrint) { alert("Permite las ventanas emergentes."); return; }
+        vPrint.document.write(htmlContenido);
+        vPrint.document.close();
+        vPrint.focus();
+        setTimeout(() => { vPrint.print(); }, 500);
+    }
+
+    window.toggleVerPassAdmin = function(inputId, btn) {
+        const input = document.getElementById(inputId);
+        if (input.type === "password") {
+            input.type = "text";
+            btn.innerText = "🙈";
+        } else {
+            input.type = "password";
+            btn.innerText = "👁";
+        }
+    }
+
+    window.guardarPassAdmin = async function(userKey, inputId) {
+        const nuevaPass = document.getElementById(inputId).value.trim();
+        if (!nuevaPass) {
+            alert("La contraseña no puede estar vacía.");
+            return;
+        }
+        credencialesPasswords[userKey] = nuevaPass;
+        await setDoc(doc(db, "configuracion", "credenciales_sistema"), credencialesPasswords);
+        alert(`¡Contraseña actualizada para ${userKey}!`);
+        abrirModalAdminUsuarios();
+    }
+
+    window.cambiarPestaña = function(tabId, btnElement) {
+        if (rolActual === "Equipo" && tabId === 'todosTab') return;
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        btnElement.classList.add('active');
+
+        if (tabId === 'todosTab') {
+            renderizarDirectorioGeneral();
+        } else {
+            renderizarVistaPreviaEquipos();
+            renderizarRoster();
+        }
+    }
+
+    function actualizarSelectsEquipos() {
+        const selectFiltro = document.getElementById("filtroEquipo");
+        const selectEdit = document.getElementById("editEquipoSelect");
+        const selectAlta = document.getElementById("altaEquipo");
+        if (!selectFiltro) return;
+
+        const valActualFiltro = selectFiltro.value;
+        const valActualEdit = selectEdit ? selectEdit.value : "";
+        const valActualAlta = selectAlta ? selectAlta.value : "";
+
+        selectFiltro.innerHTML = "";
+        if(selectEdit) selectEdit.innerHTML = "";
+        if(selectAlta) selectAlta.innerHTML = "";
+
+        let equiposDisponibles = rolActual === "Equipo" ? [equipoAsignado] : listaEquiposOficiales;
+
+        equiposDisponibles.forEach(eq => {
+            selectFiltro.innerHTML += `<option value="${eq}">${eq}</option>`;
+            if(selectEdit) selectEdit.innerHTML += `<option value="${eq}">${eq}</option>`;
+            if(selectAlta) selectAlta.innerHTML += `<option value="${eq}">${eq}</option>`;
+        });
+
+        if (rolActual === "Equipo") {
+            selectFiltro.value = equipoAsignado;
+            selectFiltro.disabled = true;
+            if(selectAlta) { selectAlta.value = equipoAsignado; selectAlta.disabled = true; }
+        } else {
+            if (valActualFiltro && listaEquiposOficiales.includes(valActualFiltro)) selectFiltro.value = valActualFiltro;
+            if (selectEdit && valActualEdit && listaEquiposOficiales.includes(valActualEdit)) selectEdit.value = valActualEdit;
+            if (selectAlta && valActualAlta && listaEquiposOficiales.includes(valActualAlta)) selectAlta.value = valActualAlta;
+        }
+    }
+
+    function renderizarMiniLogosHeader() {
+        const container = document.getElementById("miniTeamsHeaderContainer");
+        if (!container) return;
+        container.innerHTML = "";
+        listaEquiposOficiales.forEach(eq => {
+            const conf = configEquipos[eq] || {};
+            const logo = conf.logo || logosPorDefecto[eq] || 'Logos Equipos/lifarcc.jpg';
+            
+            let badgeHtml = "";
+            if (rolActual === "Administrador") {
+                const totaljugadores_juvenilEquipo = baseDatos.filter(j => j.equipo === eq).length;
+                badgeHtml = `<span style="background: #f97316; color: white; border-radius: 50%; padding: 1px 6px; font-size: 10px; font-weight: bold; margin-left: 4px;" title="Total de jugadores_juvenil registrados">${totaljugadores_juvenilEquipo}</span>`;
+            }
+
+            const colorTextoEq = (eq === "CHEYENNES") ? "color: #ef4444;" : "color: inherit;";
+
+            container.innerHTML += `<div class="mini-team-badge"><img src="${logo}" alt="${eq}"> <span style="${colorTextoEq}">${eq}</span> ${badgeHtml}</div>`;
+        });
+    }
+
+    function renderizarVistaPreviaEquipos() {
+        const grid = document.getElementById("teamsPreviewGrid");
+        if (!grid) return;
+        grid.innerHTML = "";
+
+        let equiposAMostrar = rolActual === "Equipo" ? [equipoAsignado] : listaEquiposOficiales;
+
+        equiposAMostrar.forEach(eq => {
+            const conf = configEquipos[eq] || {};
+            const logo = conf.logo || logosPorDefecto[eq] || 'Logos Equipos/lifarcc.jpg';
+
+            let btnHtml = "";
+            let imgAttrs = `alt="${eq}"`;
+            if (rolActual === "Administrador") {
+                btnHtml = `<button class="btn btn-sm" onclick="dispararLogoEquipoDirecto('${eq}')" style="padding: 2px 6px; font-size: 10px;">Cambiar Logo</button>`;
+                imgAttrs = `alt="${eq}" onclick="dispararLogoEquipoDirecto('${eq}')" title="Cambiar logotipo" style="cursor: pointer;"`;
+            } else {
+                imgAttrs = `alt="${eq}" title="Logotipo del equipo" style="cursor: default;"`;
+            }
+
+            const colorTextoEq = (eq === "CHEYENNES") ? "color: #ef4444;" : "color: white;";
+
+            grid.innerHTML += `<div class="team-card">
+                <img src="${logo}" ${imgAttrs} onerror="this.src='Logos%20Equipos/lifarcc.jpg'">
+                <div class="team-card-info">
+                    <h5 style="${colorTextoEq}">${eq}</h5>
+                    ${btnHtml}
+                </div>
+            </div>`;
+        });
+    }
+
+    window.dispararLogoEquipoDirecto = function(eq) {
+        if (rolActual !== "Administrador") return;
+        equipoSeleccionadoDirecto = eq;
+        document.getElementById("inputLogoEquipoDirecto").click();
+    }
+
+    window.cargarLogoEquipoDirecto = async function(event) {
+        const archivo = event.target.files[0];
+        if (archivo && equipoSeleccionadoDirecto) {
+            comprimirYConvertirImagen(archivo, async function(base64) {
+                if (!configEquipos[equipoSeleccionadoDirecto]) configEquipos[equipoSeleccionadoDirecto] = {};
+                configEquipos[equipoSeleccionadoDirecto].logo = base64;
+                await setDoc(doc(db, "configuracion", equipoSeleccionadoDirecto), configEquipos[equipoSeleccionadoDirecto]);
+                renderizarMiniLogosHeader();
+                renderizarVistaPreviaEquipos();
+                renderizarRoster();
+                alert(`¡Logotipo actualizado en la nube para ${equipoSeleccionadoDirecto}!`);
+            }, 300, 300);
+        }
+        event.target.value = "";
+    }
+
+    window.guardarDatosCampoActual = async function() {
+        const eq = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
+        const campo = document.getElementById("inputCampo").value;
+        if (!configEquipos[eq]) configEquipos[eq] = {};
+        configEquipos[eq].campo = campo;
+        await setDoc(doc(db, "configuracion", eq), configEquipos[eq]);
+    }
+
+    window.abrirGoogleMapsCampo = function() {
+        const campoInput = document.getElementById("inputCampo").value.trim();
+        if (!campoInput) {
+            alert("⚠️ No hay ninguna dirección de campo especificada.");
+            return;
+        }
+        const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(campoInput)}`;
+        window.open(url, '_blank');
+    }
+
+    window.cambiarFiltroEquipo = function() {
+        const eq = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
+        const cat = document.getElementById("filtroCategoria").value;
+        if (rolActual === "Administrador") {
+            actualizarColorGlowClub(eq);
+        }
+        const conf = configEquipos[eq] || {};
+        const inputCampo = document.getElementById("inputCampo");
+        if(inputCampo) inputCampo.value = conf.campo || '';
+        
+        verificarYMostrarExcedentes2013(eq, cat);
+        renderizarRoster();
+    }
+
+    function comprimirYConvertirImagen(file, callback, maxWidth = 300, maxHeight = 350) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+                if (width > height) {
+                    if (width > maxWidth) { height *= maxWidth / width; width = maxWidth; }
+                } else {
+                    if (height > maxHeight) { width *= maxHeight / height; height = maxHeight; }
+                }
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                callback(canvas.toDataURL('image/jpeg', 0.8));
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    window.registrarJugadorIndividual = async function() {
+        if (rolActual === "Equipo") {
+            if (!comprobarEstadoRegistroActivo()) {
+                alert("⚠️ El periodo de registro se encuentra cerrado. Los registros sólo están abiertos de Lunes a Jueves.");
+                return;
+            }
+        }
+
+        const equipo = rolActual === "Equipo" ? equipoAsignado : document.getElementById("altaEquipo").value;
+        const nacimiento = document.getElementById("altaNacimiento").value;
+        const categoria = calcularCategoriaPorFecha(nacimiento);
+
+        if (verificarYMostrarExcedentes2013(equipo, categoria)) {
+            alert("⚠️ El club tiene un exceso de jugadores_juvenil del año 2013 en esta categoría. El registro está bloqueado hasta corregirlo.");
+            return;
+        }
+
+        if (!verificarLimite2013(equipo, nacimiento, categoria)) return;
+
+        const nombre = document.getElementById("altaNombre").value.trim().toUpperCase();
+        const curp = document.getElementById("altaCurp").value.trim().toUpperCase();
+        const docText = document.getElementById("altaDoc").value.trim().toUpperCase();
+        const fileInput = document.getElementById("altaFoto");
+
+        if (!equipo || !nacimiento || !categoria || !nombre || !curp || !fileInput.files || !fileInput.files[0]) {
+            alert("⚠ Todos los campos son obligatorios.");
+            return;
+        }
+
+        if (/[0-9\.]/.test(nombre)) {
+            alert("⚠ El nombre del jugador no debe contener números ni puntos.");
+            return;
+        }
+
+        if (!/^[A-Z0-9]{18}$/.test(curp)) {
+            alert("⚠️ El CURP debe tener exactamente 18 caracteres alfanuméricos.");
+            return;
+        }
+
+        comprimirYConvertirImagen(fileInput.files[0], async function(base64Foto) {
+            await guardarJugadorInFirestore(equipo, categoria, nombre, nacimiento, curp, docText, base64Foto);
+        }, 200, 250);
+    }
+
+    async function guardarJugadorInFirestore(equipo, categoria, nombre, nacimiento, curp, docText, fotoBase64) {
+        const fechaActualStr = (() => {
+            const d = new Date();
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        })();
+
+        const nuevoJ = { 
+            equipo, 
+            categoria, 
+            nombre, 
+            nacimiento, 
+            curp, 
+            doc: docText || "ACTA DE NACIMIENTO, CURP", 
+            foto: fotoBase64,
+            fechaAlta: fechaActualStr 
+        };
+        const docRef = await addDoc(collection(db, "jugadores_juvenil"), nuevoJ);
+        baseDatos.push({ id: docRef.id, ...nuevoJ });
+
+        // Registrar en la bitácora de cambios
+        await registrarCambioBD(equipo, nombre, "REGISTRO NUEVO", "-", `Cat: ${categoria}, Nac: ${nacimiento}, CURP: ${curp}`);
+
+        limpiarFormularioAlta();
+        renderizarRoster();
+        alert("✅ ¡Registro subido con éxito a la nube!");
+    }
+
+    window.cargarFotosLocales = async function(event) {
+        if (rolActual === "Equipo") return;
+        const archivos = event.target.files;
+        let count = 0, total = archivos.length;
+        
+        for (let i = 0; i < total; i++) {
+            const archivo = archivos[i];
+            const nombreLimpio = archivo.name.substring(0, archivo.name.lastIndexOf('.')).trim().toUpperCase();
+            
+            await new Promise((resolve) => {
+                comprimirYConvertirImagen(archivo, async function(base64) {
+                    const jugadorEncontrado = baseDatos.find(j => j.nombre === nombreLimpio);
+                    if (jugadorEncontrado) {
+                        jugadorEncontrado.foto = base64;
+                        await updateDoc(doc(db, "jugadores_juvenil", jugadorEncontrado.id), { foto: base64 });
+                    }
+                    count++;
+                    resolve();
+                }, 200, 250);
+            });
+        }
+        renderizarRoster();
+        alert(`¡${count} fotografía(s) guardadas en la nube correctamente asociadas!`);
+        event.target.value = "";
+    }
+
+    window.manejarArchivoFoto = async function(event) {
+        const archivo = event.target.files[0];
+        if (!archivo) return;
+
+        if (jugadorSeleccionadoId) {
+            comprimirYConvertirImagen(archivo, async function(base64) {
+                const jugador = baseDatos.find(j => j.id === jugadorSeleccionadoId);
+                if (jugador) {
+                    jugador.foto = base64;
+                    await updateDoc(doc(db, "jugadores_juvenil", jugador.id), { foto: base64 });
+                    renderizarRoster();
+                    alert("¡Fotografía actualizada en la nube!");
+                }
+                jugadorSeleccionadoId = null;
+            }, 200, 250);
+        } else if (event.target.id === 'editFotoFile') {
+            const preview = document.getElementById("modalFotoPreview");
+            comprimirYConvertirImagen(archivo, function(base64) {
+                preview.innerHTML = `<img src="${base64}" style="width:100%; height:100%; object-fit:cover;">`;
+            }, 200, 250);
+        }
+        event.target.value = "";
+    }
+
+    window.importarExcel = async function(event) {
+        if (rolActual === "Equipo") return;
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, {type: 'array'});
+            let sheetName = workbook.SheetNames.includes("BD_jugadores_juvenil") ? "BD_jugadores_juvenil" : workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            const json = XLSX.utils.sheet_to_json(worksheet);
+
+            const fechaActualStr = (() => {
+                const d = new Date();
+                const year = d.getFullYear();
+                const month = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            })();
+
+            let importados = 0;
+            for (const row of json) {
+                let eq = String(row['CLUB'] || row['Equipo'] || row['equipo'] || '').trim().toUpperCase();
+                const nom = String(row['NOMBRE JUGADOR '] || row['NOMBRE JUGADOR'] || row['Nombre'] || row['nombre'] || '').trim().toUpperCase();
+                const fechaNac = formatearFechaExcel(row['FECHA DE NACIMIENTO'] || row['Nacimiento'] || '');
+                const catCalc = calcularCategoriaPorFecha(fechaNac);
+
+                if (eq.includes("BUF")) eq = "BÚFALOS";
+                if (eq.includes("ACER")) eq = "ACEREROS";
+                if (eq.includes("BUC")) eq = "BUCANEROS";
+                if (eq.includes("CHEY")) eq = "CHEYENNES";
+                if (eq.includes("PANT")) eq = "PANTERAS";
+                if (eq.includes("ZORR")) eq = "ZORROS";
+
+                if (eq && nom && catCalc) {
+                    const anio = fechaNac.split('-')[0];
+                    if (anio === '2013') {
+                        const existentes = baseDatos.filter(j => j.equipo === eq && j.categoria === catCalc && formatearFechaExcel(j.nacimiento).startsWith('2013')).length;
+                        if (existentes >= 1) continue;
+                    }
+
+                    if (!listaEquiposOficiales.includes(eq)) listaEquiposOficiales.push(eq);
+                    const nuevoJ = {
+                        equipo: eq,
+                        categoria: catCalc,
+                        nombre: nom,
+                        nacimiento: fechaNac,
+                        curp: String(row['CURP'] || row['curp'] || '').trim().toUpperCase(),
+                        doc: String(row['documentos'] || row['Documento'] || 'ACTA DE NACIMIENTO, CURP').trim().toUpperCase(),
+                        foto: "",
+                        fechaAlta: fechaActualStr
+                    };
+                    const docRef = await addDoc(collection(db, "jugadores_juvenil"), nuevoJ);
+                    baseDatos.push({ id: docRef.id, ...nuevoJ });
+                    importados++;
+                }
+            }
+            actualizarSelectsEquipos();
+            renderizarRoster();
+            alert(`¡Importación masiva completada! Se guardaron ${importados} registros.`);
+            event.target.value = "";
+        };
+        reader.readAsArrayBuffer(file);
+    }
+
+    function ordenarjugadores_juvenilPorNacimiento(a, b) {
+        const nacA = formatearFechaExcel(a.nacimiento) || "";
+        const nacB = formatearFechaExcel(b.nacimiento) || "";
+        if (nacA !== nacB) {
+            return nacA.localeCompare(nacB);
+        }
+        return a.nombre.localeCompare(b.nombre);
+    }
+
+    window.renderizarRoster = function() {
+        const equipoSelect = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
+        const categoriaSelect = document.getElementById("filtroCategoria").value;
+        const textoBusqueda = document.getElementById("buscadorGlobal").value.trim().toUpperCase();
+        const tbody = document.getElementById("tablaCuerpo");
+        if (!tbody) return;
+        tbody.innerHTML = "";
+
+        renderizarVistaPreviaEquipos();
+        renderizarMiniLogosHeader();
+        actualizarBannerFechasRegistro();
+
+        const logoLigaFinal = logoLigaGlobal || logoLifarccDefault;
+        document.getElementById("imgEscudoLiga").src = logoLigaFinal;
+
+        verificarYMostrarExcedentes2013(equipoSelect, categoriaSelect);
+
+        const filtrados = [];
+        baseDatos.forEach((j) => {
+            let coincide = (j.equipo === equipoSelect && j.categoria === categoriaSelect);
+            if (textoBusqueda !== "") {
+                coincide = (j.nombre.includes(textoBusqueda) || (j.curp && j.curp.includes(textoBusqueda))) && j.equipo === equipoSelect;
+            }
+            if (coincide) filtrados.push(j);
+        });
+
+        filtrados.sort(ordenarjugadores_juvenilPorNacimiento);
+
+        if (filtrados.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="9" style="padding: 20px; color: #64748b;">No hay jugadores_juvenil registrados para este equipo y categoría.</td></tr>`;
+            return;
+        }
+
+        filtrados.forEach((jugador, index) => {
+            let htmlFoto = jugador.foto ? 
+                `<div class="player-photo-container" onclick="abrirModalAmpliarFoto('${jugador.foto}', '${jugador.nombre}')" title="Ver fotografía ampliada"><img src="${jugador.foto}" class="player-photo"></div>` : 
+                `<div class="player-photo-container" title="Sin fotografía"><span class="no-photo">Sin foto</span></div>`;
+
+            let accionesHtml = "";
+            if (rolActual === "Administrador") {
+                accionesHtml = `
+                    <button class="btn btn-sm" onclick="abrirModal('${jugador.id}')" title="Editar">✏️</button>
+                    <button class="btn btn-danger btn-sm" onclick="eliminarJugador('${jugador.id}')" title="Eliminar">🗑️</button>
+                `;
+            } else {
+                accionesHtml = `<button class="btn btn-sm btn-celeste" onclick="solicitarCambioJugadorDesdeTabla('${jugador.nombre.replace(/'/g, "\\'")}')" title="Solicitar cambio o corrección al Administrador">Solicitar cambio al Admin.</button>`;
+            }
+
+            tbody.innerHTML += `<tr>
+                <td><strong>${index + 1}</strong></td>
+                <td>${htmlFoto}</td>
+                <td style="text-align: left; padding-left: 10px; font-weight: 500;">${jugador.nombre}</td>
+                <td>${jugador.categoria}</td>
+                <td>${formatearFechaDDMMYYYY(jugador.nacimiento) || ''}</td>
+                <td><code style="font-size: 11px;">${jugador.curp || ''}</code></td>
+                <td>${jugador.doc || ''}</td>
+                <td class="no-print col-admin"><span style="font-size: 10px; background: #e2e8f0; color:#1e293b; padding: 2px 5px; border-radius: 4px; font-weight: bold;">${jugador.equipo}</span></td>
+                <td class="no-print">${accionesHtml}</td>
+            </tr>`;
+        });
+    }
+
+    window.renderizarDirectorioGeneral = function() {
+        if (rolActual === "Equipo") return;
+        const textoBusqueda = document.getElementById("buscadorDirectorioGeneral").value.trim().toUpperCase();
+        const tbody = document.getElementById("tablaDirectorioGeneral");
+        if (!tbody) return;
+        tbody.innerHTML = "";
+
+        let listaOrdenada = [...baseDatos];
+        listaOrdenada.sort((a, b) => {
+            if (a.equipo !== b.equipo) return a.equipo.localeCompare(b.equipo);
+            if (a.categoria !== b.categoria) return a.categoria.localeCompare(b.categoria);
+            return ordenarjugadores_juvenilPorNacimiento(a, b);
+        });
+
+        const filtrados = listaOrdenada.filter(j => {
+            if (!textoBusqueda) return true;
+            return j.nombre.includes(textoBusqueda) || (j.curp && j.curp.includes(textoBusqueda)) || j.equipo.includes(textoBusqueda);
+        });
+
+        if (filtrados.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="9" style="padding: 20px; color: #64748b;">No hay registros en el directorio general.</td></tr>`;
+            return;
+        }
+
+        filtrados.forEach((jugador, index) => {
+            let htmlFoto = jugador.foto ? 
+                `<div class="player-photo-container" onclick="abrirModalAmpliarFoto('${jugador.foto}', '${jugador.nombre}')" style="width:35px; height:46px;" title="Ver fotografía ampliada"><img src="${jugador.foto}" style="width:100%; height:100%; object-fit:cover;"></div>` : 
+                `<div class="player-photo-container" style="width:35px; height:46px;" title="Sin fotografía"><span style="font-size:7px;">Sin foto</span></div>`;
+
+            tbody.innerHTML += `<tr>
+                <td><strong>${index + 1}</strong></td>
+                <td>${htmlFoto}</td>
+                <td><span style="font-size: 10px; background: #e2e8f0; color:#1e293b; padding: 2px 5px; border-radius: 4px; font-weight: bold;">${jugador.equipo}</span></td>
+                <td style="text-align: left; padding-left: 10px; font-weight: 500;">${jugador.nombre}</td>
+                <td>${jugador.categoria}</td>
+                <td>${formatearFechaDDMMYYYY(jugador.nacimiento) || ''}</td>
+                <td><code style="font-size: 11px;">${jugador.curp || ''}</code></td>
+                <td>${jugador.doc || ''}</td>
+                <td>
+                    <button class="btn btn-sm" onclick="abrirModal('${jugador.id}')" title="Editar">✏️</button>
+                    <button class="btn btn-danger btn-sm" onclick="eliminarJugador('${jugador.id}')" title="Eliminar">🗑️</button>
+                </td>
+            </tr>`;
+        });
+    }
+	// --- AQUÍ PEGAS LAS NUEVAS FUNCIONES ---
+    window.abrirModalSeleccionSemanaJuego = function() {
+        const contenedor = document.getElementById("contenedorCheckboxesSemana");
+        if (!contenedor) return;
+        contenedor.innerHTML = "";
+        const listaEquiposOficiales = ["ACEREROS", "BUCANEROS", "BÚFALOS", "CHEYENNES", "PANTERAS", "ZORROS"];
+        listaEquiposOficiales.forEach(eq => {
+            contenedor.innerHTML += `<label style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: bold; cursor: pointer; color: #f8fafc;"><input type="checkbox" name="checkEquipoSemana" value="${eq}" checked style="width: 16px; height: 16px; accent-color: #0ea5e9;"> ${eq}</label>`;
+        });
+        document.getElementById("modalSeleccionSemanaJuego").style.display = "flex";
+    }
+
+    window.cerrarModalSeleccionSemanaJuego = function() {
+        document.getElementById("modalSeleccionSemanaJuego").style.display = "none";
+    }
+
+    window.ejecutarImpresionSemanaJuego = function() {
+    const checkboxes = document.querySelectorAll('input[name="checkEquipoSemana"]:checked');
+    let equiposSeleccionados = []; 
+    checkboxes.forEach(chk => equiposSeleccionados.push(chk.value));
+    
+    if (equiposSeleccionados.length === 0) { 
+        alert("⚠️ Debes seleccionar al menos un equipo."); 
+        return; 
+    }
+    
+    window.cerrarModalSeleccionSemanaJuego();
+
+    // Tomamos la información global de la base de datos y categorías oficiales
+    const ordenCategoriasOficial = ["JUVENIL", "MIDGET", "PEEWEE"];
+    const logoLiga = typeof logoLigaGlobal !== 'undefined' ? logoLigaGlobal : 'Logos Equipos/lifarcc.jpg';
+
+    // Generamos el HTML dinámico especializado para impresión masiva
+    let htmlContenido = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Rosters Oficiales - LIFARCC</title><style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 10mm; color: #000; background: white; }
+        .hoja-roster-impresion { page-break-after: always; break-after: page; margin-bottom: 20mm; width: 100%; max-width: 195mm; margin: 0 auto; }
+        .hoja-roster-impresion:last-child { page-break-after: avoid; break-after: avoid; margin-bottom: 0; }
+        table.print-table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; }
+        thead { display: table-header-group !important; } tbody { display: table-row-group !important; } tr { page-break-inside: avoid !important; }
+        table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 6px; text-align: center; font-size: 11px; }
+        table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; text-transform: uppercase; }
+        .logo-box-print { width: 95px; height: 95px; object-fit: contain; background: #fff; }
+        .header-table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
+        .header-table td { border: none !important; padding: 2px; vertical-align: middle; }
+        .league-title-print { font-size: 26px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
+        .league-subtitle-print { font-size: 9px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 3px; }
+        .print-footer { text-align: center; font-size: 9px; color: #555; border-top: 1px solid #aaa; padding-top: 6px; margin-top: 15px; }
+    </style></head><body>`;
+
+    let totalHojas = 0;
+
+    equiposSeleccionados.forEach(eq => {
+        // Obtenemos el logotipo del equipo si existe en configEquipos o usamos el por defecto
+        let logoEq = 'Logos Equipos/lifarcc.jpg';
+        if (typeof configEquipos !== 'undefined' && configEquipos[eq] && configEquipos[eq].logo) {
+            logoEq = configEquipos[eq].logo;
+        } else {
+            const defaultLogos = { "ACEREROS": "Logos Equipos/acereros.jpg", "BUCANEROS": "Logos Equipos/bucaneros.jpg", "BÚFALOS": "Logos Equipos/bufalo.png", "CHEYENNES": "Logos Equipos/cheyennes.jpg", "PANTERAS": "Logos Equipos/panteras.jpg", "ZORROS": "Logos Equipos/zorros.jpg" };
+            if (defaultLogos[eq]) logoEq = defaultLogos[eq];
+        }
+
+        // Filtramos jugadores_juvenil de este equipo
+        const jugadores_juvenilEquipo = baseDatos.filter(j => j.equipo === eq);
+
+        ordenCategoriasOficial.forEach(cat => {
+            const filtradosCat = jugadores_juvenilEquipo.filter(j => j.categoria === cat);
+            if (filtradosCat.length > 0) {
+                totalHojas++;
+                // Ordenamos por fecha de nacimiento
+                filtradosCat.sort((a, b) => (a.nacimiento || "").localeCompare(b.nacimiento || ""));
+
+                let filasHtml = "";
+                filtradosCat.forEach((j, idx) => {
+                    let fotoTd = j.foto ? `<img src="${j.foto}" style="width:86px; height:109px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:8px;">Sin foto</span>`;
+                    filasHtml += `<tr>
+                        <td><strong>${idx+1}</strong></td>
+                        <td>${fotoTd}</td>
+                        <td style="text-align:left; font-weight:600;">${j.nombre}</td>
+                        <td>${j.nacimiento || ''}</td>
+                        <td><code>${j.curp || ''}</code></td>
+                        <td></td>
+                        <td></td>
+                    </tr>`;
+                });
+
+                htmlContenido += `
+                <div class="hoja-roster-impresion">
+                    <table class="print-table">
+                        <thead>
+                            <tr>
+                                <td colspan="7" style="border:none; padding:0;">
+                                    <table class="header-table">
+                                        <tr>
+                                            <td style="width:22%;"><img src="${logoLiga}" class="logo-box-print" onerror="this.style.display='none'"></td>
+                                            <td style="width:56%; text-align:center;">
+                                                <div class="league-title-print">LIFARCC</div>
+                                                <div class="league-subtitle-print">Liga Infantil de Football Americano de la Region Centro de Coahuila</div>
+                                            </td>
+                                            <td style="width:22%; text-align:right;"><img src="${logoEq}" class="logo-box-print" onerror="this.style.display='none'"></td>
+                                        </tr>
+                                    </table>
+                                    <div style="font-size:10px; font-weight:bold; text-align:center; margin-bottom:2px;">FECHA: ___________________________________</div>
+                                    <div style="font-size:11px; font-weight:bold; display:flex; justify-content:space-between; text-transform:uppercase; margin-bottom:2px;">
+                                        <span>CLUB ${eq}</span><span>JORNADA: ____________________</span>
+                                    </div>
+                                    <div style="font-size:11px; font-weight:bold; text-transform:uppercase; text-align:left; margin-bottom:3px;">ROSTER CATEGORIA: ${cat}</div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="width:35px;">N°</th>
+                                <th style="width:90px;">Foto</th>
+                                <th>Nombre Completo</th>
+                                <th style="width:90px;">Fecha Nac.</th>
+                                <th style="width:135px;">CURP</th>
+                                <th style="width:50px;">N°- Jersey</th>
+                                <th style="width:50px;">Peso kg</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${filasHtml}
+                        </tbody>
+                    </table>
+                    <div class="print-footer">Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - Todos los Derechos Reservados © - V.3.0.1</div>
+                </div>`;
+            }
+        });
+    });
+
+    if (totalHojas === 0) {
+        alert("⚠️ No hay jugadores_juvenil registrados en las categorías de los equipos seleccionados.");
+        return;
+    }
+
+    htmlContenido += `</body></html>`;
+
+    // Abrimos una ventana temporal con el reporte generado y lanzamos la impresión limpia
+    const vPrint = window.open('', '_blank');
+    if (!vPrint) {
+        alert("⚠️ Por favor permite las ventanas emergentes (pop-ups) en tu navegador para imprimir.");
+        return;
+    }
+    vPrint.document.write(htmlContenido);
+    vPrint.document.close();
+    vPrint.focus();
+    setTimeout(() => {
+        vPrint.print();
+    }, 600);
+};
+
+    window.imprimirRosterActual = function() {
+        const equipoSelect = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
+        const categoriaSelect = document.getElementById("filtroCategoria").value;
+        
+        const configEq = configEquipos[equipoSelect] || {};
+        const logoEq = configEq.logo || logosPorDefecto[equipoSelect] || 'Logos Equipos/lifarcc.jpg';
+        const logoLiga = logoLigaGlobal || logoLifarccDefault;
+
+        const filtrados = baseDatos.filter(j => j.equipo === equipoSelect && j.categoria === categoriaSelect);
+        filtrados.sort(ordenarjugadores_juvenilPorNacimiento);
+
+        if (filtrados.length === 0) {
+            alert("No hay jugadores_juvenil en este roster para imprimir.");
+            return;
+        }
+
+        let filasHtml = "";
+        filtrados.forEach((j, idx) => {
+            let fotoTd = j.foto ? `<img src="${j.foto}" style="width:86px; height:109px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:8px; color:#64748b;">Sin foto</span>`;
+            
+            filasHtml += `<tr>
+                <td><strong>${idx + 1}</strong></td>
+                <td>${fotoTd}</td>
+                <td style="text-align: left; padding-left: 8px; font-weight: 600; text-transform: uppercase;">${j.nombre}</td>
+                <td>${formatearFechaDDMMYYYY(j.nacimiento) || ''}</td>
+                <td><code>${j.curp || ''}</code></td>
+                <td></td>
+                <td></td>
+            </tr>`;
+        });
+
+        let htmlContenido = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Roster - ${equipoSelect} (${categoriaSelect})</title><style>
+            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 10mm; color: #000; background: white; }
+            .hoja-roster-impresion { width: 100%; max-width: 195mm; margin: 0 auto; page-break-after: always; break-after: page; }
+            .hoja-roster-impresion:last-child { page-break-after: avoid; break-after: avoid; }
+            table.print-table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; }
+            thead { display: table-header-group !important; }
+            tbody { display: table-row-group !important; }
+            tr { page-break-inside: avoid !important; page-break-after: auto !important; }
+            table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 6px; text-align: center; font-size: 11px; }
+            table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; text-transform: uppercase; font-size: 11px; }
+            .logo-box-print { width: 95px; height: 95px; object-fit: contain; background: #fff; }
+            .header-table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
+            .header-table td { border: none !important; padding: 2px; vertical-align: middle; }
+            .league-title-print { font-size: 26px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
+            .league-subtitle-print { font-size: 9px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 3px; }
+            .print-footer { text-align: center; font-size: 9px; color: #555; border-top: 1px solid #aaa; padding-top: 6px; margin-top: 15px; }
+        </style></head><body>
+        
+        <div class="hoja-roster-impresion">
+            <table class="print-table">
+                <thead>
+                    <tr>
+                        <td colspan="7" style="border: none; padding: 0;">
+                            <table class="header-table">
+                                <tr>
+                                    <td style="width: 22%; text-align: left;"><img src="${logoLiga}" class="logo-box-print"></td>
+                                    <td style="width: 56%; text-align: center;">
+                                        <div class="league-title-print">LIFARCC</div>
+                                        <div class="league-subtitle-print">Liga Infantil de Football Americano de la Region Centro de Coahuila</div>
+                                    </td>
+                                    <td style="width: 22%; text-align: right;"><img src="${logoEq}" class="logo-box-print"></td>
+                                </tr>
+                            </table>
+                            <div style="font-size: 10px; font-weight: bold; text-align: center; margin-bottom: 2px;">
+                                FECHA: ___________________________________
+                            </div>
+                            <div style="font-size: 11px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; margin-bottom: 2px;">
+                                <span>CLUB ${equipoSelect}</span>
+                                <span>JORNADA: ____________________</span>
+                            </div>
+                            <div style="font-size: 11px; font-weight: bold; text-transform: uppercase; text-align: left; margin-bottom: 3px;">
+                                ROSTER CATEGORIA: ${categoriaSelect}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 35px;">N°</th>
+                        <th style="width: 90px;">Foto</th>
+                        <th>Nombre Completo</th>
+                        <th style="width: 90px;">Fecha Nac.</th>
+                        <th style="width: 135px;">CURP</th>
+                        <th style="width: 50px;">N°- Jersey</th>
+                        <th style="width: 50px;">Peso kg</th>
+                    </tr>
+                </thead>
+                <tbody>${filasHtml}</tbody>
+            </table>
+            <div class="print-footer">
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 1.0.0 
+            </div>
+        </div>
+        </body></html>`;
+
+        const vPrint = window.open('', '_blank');
+        if (!vPrint) { alert("Permite las ventanas emergentes."); return; }
+        vPrint.document.write(htmlContenido);
+        vPrint.document.close();
+        vPrint.focus();
+        setTimeout(() => { vPrint.print(); }, 500);
+    }
+
+    window.imprimirRosterCompletoEquipoSeleccionado = function() {
+        const equipoSelect = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
+        const configEq = configEquipos[equipoSelect] || {};
+        const logoEq = configEq.logo || logosPorDefecto[equipoSelect] || 'Logos Equipos/lifarcc.jpg';
+        const logoLiga = logoLigaGlobal || logoLifarccDefault;
+
+        const jugadores_juvenilEquipo = baseDatos.filter(j => j.equipo === equipoSelect);
+        if (jugadores_juvenilEquipo.length === 0) {
+            alert(`No hay jugadores_juvenil registrados para el club ${equipoSelect}.`);
+            return;
+        }
+
+        let htmlContenido = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Roster Completo - ${equipoSelect}</title><style>
+            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 10mm; color: #000; background: white; }
+            .hoja-roster-impresion { width: 100%; max-width: 195mm; margin: 0 auto; page-break-after: always; break-after: page; }
+            .hoja-roster-impresion:last-child { page-break-after: avoid; break-after: avoid; }
+            table.print-table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; }
+            thead { display: table-header-group !important; }
+            tbody { display: table-row-group !important; }
+            tr { page-break-inside: avoid !important; page-break-after: auto !important; }
+            table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 6px; text-align: center; font-size: 11px; }
+            table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; text-transform: uppercase; font-size: 11px; }
+            .logo-box-print { width: 95px; height: 95px; object-fit: contain; background: #fff; }
+            .header-table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
+            .header-table td { border: none !important; padding: 2px; vertical-align: middle; }
+            .league-title-print { font-size: 26px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
+            .league-subtitle-print { font-size: 9px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 3px; }
+            .print-footer { text-align: center; font-size: 9px; color: #555; border-top: 1px solid #aaa; padding-top: 6px; margin-top: 15px; }
+        </style></head><body>`;
+
+        let hayHojas = false;
+        ordenCategoriasOficial.forEach(cat => {
+            const filtradosCat = jugadores_juvenilEquipo.filter(j => j.categoria === cat);
+            if (filtradosCat.length > 0) {
+                hayHojas = true;
+                filtradosCat.sort(ordenarjugadores_juvenilPorNacimiento);
+
+                let filasHtml = "";
+                filtradosCat.forEach((j, idx) => {
+                    let fotoTd = j.foto ? `<img src="${j.foto}" style="width:86px; height:109px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:8px; color:#64748b;">Sin foto</span>`;
+                    
+                    filasHtml += `<tr>
+                        <td><strong>${idx + 1}</strong></td>
+                        <td>${fotoTd}</td>
+                        <td style="text-align: left; padding-left: 8px; font-weight: 600; text-transform: uppercase;">${j.nombre}</td>
+                        <td>${formatearFechaDDMMYYYY(j.nacimiento) || ''}</td>
+                        <td><code>${j.curp || ''}</code></td>
+                        <td></td>
+                        <td></td>
+                    </tr>`;
+                });
+
+                htmlContenido += `
+                <div class="hoja-roster-impresion">
+                    <table class="print-table">
+                        <thead>
+                            <tr>
+                                <td colspan="7" style="border: none; padding: 0;">
+                                    <table class="header-table">
+                                        <tr>
+                                            <td style="width: 22%; text-align: left;"><img src="${logoLiga}" class="logo-box-print"></td>
+                                            <td style="width: 56%; text-align: center;">
+                                                <div class="league-title-print">LIFARCC</div>
+                                                <div class="league-subtitle-print">Liga Infantil de Football Americano de la Region Centro de Coahuila</div>
+                                            </td>
+                                            <td style="width: 22%; text-align: right;"><img src="${logoEq}" class="logo-box-print"></td>
+                                        </tr>
+                                    </table>
+                                    <div style="font-size: 10px; font-weight: bold; text-align: center; margin-bottom: 2px;">
+                                        FECHA: ___________________________________
+                                    </div>
+                                    <div style="font-size: 11px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; margin-bottom: 2px;">
+                                        <span>CLUB ${equipoSelect}</span>
+                                        <span>JORNADA: ____________________</span>
+                                    </div>
+                                    <div style="font-size: 11px; font-weight: bold; text-transform: uppercase; text-align: left; margin-bottom: 3px;">
+                                        ROSTER CATEGORIA: ${cat}
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="width: 35px;">N°</th>
+                                <th style="width: 90px;">Foto</th>
+                                <th>Nombre Completo</th>
+                                <th style="width: 90px;">Fecha Nac.</th>
+                                <th style="width: 135px;">CURP</th>
+                                <th style="width: 50px;">N°- Jersey</th>
+                                <th style="width: 50px;">Peso kg</th>
+                            </tr>
+                        </thead>
+                        <tbody>${filasHtml}</tbody>
+                    </table>
+                    <div class="print-footer">
+                        Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 1.0.0
+                    </div>
+                </div>`;
+            }
+        });
+
+        if (!hayHojas) {
+            alert(`No hay jugadores_juvenil registrados con categorías válidas para el club ${equipoSelect}.`);
+            return;
+        }
+
+        htmlContenido += `</body></html>`;
+        const vPrint = window.open('', '_blank');
+        if (!vPrint) { alert("Permite las ventanas emergentes."); return; }
+        vPrint.document.write(htmlContenido);
+        vPrint.document.close();
+        vPrint.focus();
+        setTimeout(() => { vPrint.print(); }, 500);
+    }
+
+    window.imprimirTodosRostersMasivo = function() {
+        if (rolActual === "Equipo") return;
+        if (!baseDatos || baseDatos.length === 0) {
+            alert("No hay registros para imprimir.");
+            return;
+        }
+
+        const combinaciones = {};
+        baseDatos.forEach(j => {
+            const eq = (j.equipo || "").trim().toUpperCase();
+            const cat = (j.categoria || "").trim().toUpperCase();
+            if (eq && cat) {
+                const key = `${eq}___${cat}`;
+                if (!combinaciones[key]) combinaciones[key] = { equipo: eq, categoria: cat, jugadores_juvenil: [] };
+                combinaciones[key].jugadores_juvenil.push(j);
+            }
+        });
+
+        const keysOrdenadas = Object.keys(combinaciones).sort((a, b) => {
+            const [eqA, catA] = a.split("___");
+            const [eqB, catB] = b.split("___");
+            if (eqA !== eqB) return eqA.localeCompare(eqB);
+            return catA.localeCompare(catB);
+        });
+
+        let htmlContenido = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Impresión Masiva - LIFARCC</title><style>
+            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 10mm; color: #000; background: white; }
+            .hoja-roster-impresion { page-break-after: always; break-after: page; margin-bottom: 20mm; width: 100%; max-width: 195mm; margin: 0 auto; }
+            .hoja-roster-impresion:last-child { page-break-after: avoid; break-after: avoid; margin-bottom: 0; }
+            table.print-table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; }
+            thead { display: table-header-group !important; }
+            tbody { display: table-row-group !important; }
+            tr { page-break-inside: avoid !important; page-break-after: auto !important; }
+            table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 6px; text-align: center; font-size: 11px; }
+            table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; text-transform: uppercase; font-size: 11px; }
+            .logo-box-print { width: 95px; height: 95px; object-fit: contain; background: #fff; }
+            .header-table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
+            .header-table td { border: none !important; padding: 2px; vertical-align: middle; }
+            .league-title-print { font-size: 26px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
+            .league-subtitle-print { font-size: 9px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 3px; }
+            .print-footer { text-align: center; font-size: 9px; color: #555; border-top: 1px solid #aaa; padding-top: 6px; margin-top: 15px; }
+        </style></head><body>`;
+
+        keysOrdenadas.forEach(key => {
+            const grupo = combinaciones[key];
+            grupo.jugadores_juvenil.sort(ordenarjugadores_juvenilPorNacimiento);
+
+            const conf = configEquipos[grupo.equipo] || {};
+            const logoEq = conf.logo || logosPorDefecto[grupo.equipo] || 'Logos Equipos/lifarcc.jpg';
+            const logoLiga = logoLigaGlobal || logoLifarccDefault;
+
+            let filasHtml = "";
+            grupo.jugadores_juvenil.forEach((j, idx) => {
+                let fotoTd = j.foto ? `<img src="${j.foto}" style="width:86px; height:109px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:8px; color:#64748b;">Sin foto</span>`;
+                
+                filasHtml += `<tr>
+                    <td><strong>${idx + 1}</strong></td>
+                    <td>${fotoTd}</td>
+                    <td style="text-align: left; padding-left: 8px; font-weight: 600; text-transform: uppercase;">${j.nombre}</td>
+                    <td>${formatearFechaDDMMYYYY(j.nacimiento) || ''}</td>
+                    <td><code>${j.curp || ''}</code></td>
+                    <td></td>
+                    <td></td>
+                </tr>`;
+            });
+
+            htmlContenido += `
+            <div class="hoja-roster-impresion">
+                <table class="print-table">
+                    <thead>
+                        <tr>
+                            <td colspan="7" style="border: none; padding: 0;">
+                                <table class="header-table">
+                                    <tr>
+                                        <td style="width: 22%; text-align: left;"><img src="${logoLiga}" class="logo-box-print"></td>
+                                        <td style="width: 56%; text-align: center;">
+                                            <div class="league-title-print">LIFARCC</div>
+                                            <div class="league-subtitle-print">Liga Infantil de Football Americano de la Region Centro de Coahuila</div>
+                                        </td>
+                                        <td style="width: 22%; text-align: right;"><img src="${logoEq}" class="logo-box-print"></td>
+                                    </tr>
+                                </table>
+                                <div style="font-size: 10px; font-weight: bold; text-align: center; margin-bottom: 2px;">
+                                    FECHA: ___________________________________
+                                </div>
+                                <div style="font-size: 11px; font-weight: bold; display: flex; justify-content: space-between; text-transform: uppercase; margin-bottom: 2px;">
+                                    <span>CLUB ${grupo.equipo}</span>
+                                    <span>JORNADA: ____________________</span>
+                                </div>
+                                <div style="font-size: 11px; font-weight: bold; text-transform: uppercase; text-align: left; margin-bottom: 3px;">
+                                    ROSTER CATEGORIA: ${grupo.categoria}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th style="width: 35px;">N°</th>
+                            <th style="width: 90px;">Foto</th>
+                            <th>Nombre Completo</th>
+                            <th style="width: 90px;">Fecha Nac.</th>
+                            <th style="width: 135px;">CURP</th>
+                            <th style="width: 50px;">N°- Jersey</th>
+                            <th style="width: 50px;">Peso kg</th>
+                        </tr>
+                    </thead>
+                    <tbody>${filasHtml}</tbody>
+                </table>
+                <div class="print-footer">
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 1.0.0
+                </div>
+            </div>`;
+        });
+
+        htmlContenido += `</body></html>`;
+        const vPrint = window.open('', '_blank');
+        if (!vPrint) { alert("Permite las ventanas emergentes."); return; }
+        vPrint.document.write(htmlContenido);
+        vPrint.document.close();
+        vPrint.focus();
+        setTimeout(() => { vPrint.print(); }, 500);
+    }
+
+    window.abrirModal = function(idJugador) {
+        if (rolActual !== "Administrador") {
+            alert("Solo el Administrador puede editar registros.");
+            return;
+        }
+        const j = baseDatos.find(item => item.id === idJugador);
+        if(!j) return;
+
+        document.getElementById("editDocId").value = idJugador;
+        document.getElementById("editNombre").value = j.nombre;
+        document.getElementById("editEquipoSelect").value = j.equipo;
+        document.getElementById("editCategoria").value = j.categoria || "JUVENIL";
+        document.getElementById("editNacimiento").value = formatearFechaExcel(j.nacimiento) || "";
+        document.getElementById("editCurp").value = j.curp || "";
+        document.getElementById("editDoc").value = j.doc || "";
+        document.getElementById("editFotoFile").value = "";
+
+        const preview = document.getElementById("modalFotoPreview");
+        preview.innerHTML = j.foto ? `<img src="${j.foto}" style="width:100%; height:100%; object-fit:cover;">` : `<span style="font-size:7px;">Sin foto</span>`;
+        document.getElementById("modalEditar").style.display = "flex";
+    }
+
+    window.cerrarModal = function() { document.getElementById("modalEditar").style.display = "none"; }
+
+    window.guardarEdicionModal = async function() {
+        if (rolActual !== "Administrador") return;
+        const idJugador = document.getElementById("editDocId").value;
+        const jugador = baseDatos.find(item => item.id === idJugador);
+        if(!jugador) return;
+
+        const curpVal = document.getElementById("editCurp").value.trim().toUpperCase();
+        if (curpVal && !/^[A-Z0-9]{18}$/.test(curpVal)) {
+            alert("⚠️️ El CURP debe tener exactamente 18 caracteres alfanuméricos.");
+            return;
+        }
+
+        const fechaNac = formatearFechaExcel(document.getElementById("editNacimiento").value);
+        const categoriaCalculada = calcularCategoriaPorFecha(fechaNac);
+
+        if (!categoriaCalculada) {
+            alert("⚠️ La fecha de nacimiento no corresponde a ninguna categoría oficial.");
+            return;
+        }
+
+        const previewImg = document.getElementById("modalFotoPreview").querySelector("img");
+        let fotoUrl = jugador.foto;
+        if (previewImg && previewImg.src && previewImg.src.startsWith("data:image")) {
+            fotoUrl = previewImg.src;
+        }
+
+        const datosActualizados = {
+            nombre: document.getElementById("editNombre").value.trim().toUpperCase(),
+            equipo: document.getElementById("editEquipoSelect").value,
+            categoria: categoriaCalculada,
+            nacimiento: formatearFechaExcel(document.getElementById("editNacimiento").value),
+            curp: document.getElementById("editCurp").value.trim().toUpperCase(),
+            doc: document.getElementById("editDoc").value.trim().toUpperCase(),
+            foto: fotoUrl
+        };
+
+        // Detectar cambios antes y después para la bitácora
+        let listaDiferencias = [];
+        if (jugador.nombre !== datosActualizados.nombre) listaDiferencias.push(`Nombre: [${jugador.nombre}] ➔ [${datosActualizados.nombre}]`);
+        if (jugador.equipo !== datosActualizados.equipo) listaDiferencias.push(`Equipo: [${jugador.equipo}] ➔ [${datosActualizados.equipo}]`);
+        if (jugador.categoria !== datosActualizados.categoria) listaDiferencias.push(`Categoría: [${jugador.categoria}] ➔ [${datosActualizados.categoria}]`);
+        if (jugador.nacimiento !== datosActualizados.nacimiento) listaDiferencias.push(`Nacimiento: [${jugador.nacimiento}] ➔ [${datosActualizados.nacimiento}]`);
+        if (jugador.curp !== datosActualizados.curp) listaDiferencias.push(`CURP: [${jugador.curp}] ➔ [${datosActualizados.curp}]`);
+        if (jugador.doc !== datosActualizados.doc) listaDiferencias.push(`Documento: [${jugador.doc}] ➔ [${datosActualizados.doc}]`);
+
+        await updateDoc(doc(db, "jugadores_juvenil", idJugador), datosActualizados);
+
+        if (listaDiferencias.length > 0) {
+            await registrarCambioBD(
+                datosActualizados.equipo, 
+                datosActualizados.nombre, 
+                "MODIFICACIÓN", 
+                `Anterior (${jugador.nombre} / ${jugador.equipo})`, 
+                listaDiferencias.join('<br>')
+            );
+        }
+
+        Object.assign(jugador, datosActualizados);
+
+        cerrarModal();
+        renderizarRoster();
+        alert("¡Jugador actualizado en la nube!");
+    }
+
+    window.eliminarJugador = async function(idJugador) {
+        if (rolActual !== "Administrador") return;
+        const j = baseDatos.find(item => item.id === idJugador);
+        if (!j) return;
+
+        if (confirm(`¿Estás seguro de eliminar al jugador ${j.nombre} del equipo ${j.equipo}?`)) {
+            await deleteDoc(doc(db, "jugadores_juvenil", idJugador));
+            await registrarCambioBD(j.equipo, j.nombre, "ELIMINACIÓN", `Cat: ${j.categoria}, Nac: ${j.nacimiento}, CURP: ${j.curp}`, "Jugador borrado de la base de datos");
+            baseDatos = baseDatos.filter(item => item.id !== idJugador);
+            renderizarRoster();
+            alert("Jugador eliminado con éxito.");
+        }
+    }
+
+    window.borrarTodosRegistros = async function() {
+        if (rolActual !== "Administrador") return;
+        if (confirm("⚠️ ¿Estás seguro de borrar TODOS los jugadores_juvenil de la base de datos?")) {
+            for (const j of baseDatos) {
+                await deleteDoc(doc(db, "jugadores_juvenil", j.id));
+                await registrarCambioBD(j.equipo, j.nombre, "ELIMINACIÓN", "Borrado masivo", "Eliminado de la base de datos");
+            }
+            baseDatos = [];
+            renderizarRoster();
+            alert("Se han borrado todos los registros.");
+        }
+    }
+
+    function inicializarSistema() {
+        actualizarSelectsEquipos();
+        renderizarMiniLogosHeader();
+        renderizarVistaPreviaEquipos();
+        cambiarFiltroEquipo();
+    }
+</script>
+
+</body>
+</html>
