@@ -429,8 +429,8 @@
         <button class="btn btn-warning" style="width: 100%; justify-content: center;" onclick="intentarLogin()">Ingresar al Sistema</button>
     </div>
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 3.1.0
-    </div>
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 3.0.1
+</div>
 </div>
 
 <div class="container" id="appContainer" style="display: none;">
@@ -595,10 +595,14 @@
                         </div>
                     </div>
                 </div>
+                </div>
                 <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                     <button class="btn btn-warning" onclick="mostrarPlantillaEquipo()">📋 Ver Plantilla</button>
                     <button class="btn btn-success" onclick="imprimirRosterActual()">🖨️ Imprimir Roster Seleccionado</button>
                     <button class="btn btn-info" onclick="imprimirRosterCompletoEquipoSeleccionado()" title="Imprimir rosters de todas las categorías del equipo seleccionado">🖨 Imprimir Equipo Completo</button>
+                    
+                    <!-- NUEVO BOTÓN EXCLUSIVO PARA ADMINISTRADOR -->
+                    <button class="btn btn-purple col-admin" onclick="abrirModalSeleccionSemanaJuego()" title="Seleccionar equipos específicos para impresión múltiple">🔀 Elegir Rosters a Imprimir</button>
                 </div>
             </div>
         </div>
@@ -668,11 +672,12 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.060
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 3.0.1
     </div>
 </div>
 
 <!-- MODALES -->
+
 <div id="modalAmpliarFoto" class="modal" style="z-index: 1010;">
     <div class="modal-content" style="max-width: 400px; text-align: center;">
         <div class="modal-header">
@@ -686,6 +691,21 @@
     </div>
 </div>
 
+<!-- MODAL SELECCIÓN MÚLTIPLE DE ROSTERS PARA IMPRESIÓN (ADMIN) -->
+<div id="modalSeleccionSemanaJuego" class="modal" style="z-index: 1015;">
+    <div class="modal-content" style="max-width: 460px; background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--celeste-btn, #0ea5e9);">
+        <div class="modal-header" style="border-bottom: 1px solid #334155; padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="color: #38bdf8; font-weight: bold;">🔀 Seleccionar Rosters a Imprimir</span>
+            <span class="close-btn" onclick="cerrarModalSeleccionSemanaJuego()" style="cursor: pointer; color: #dc2626; font-size: 18px;">&times;</span>
+        </div>
+        <p style="font-size: 11px; color: #94a3b8; margin: 10px 0 15px 0;">Selecciona con una palomita los equipos cuyos rosters completos deseas incluir en la impresión:</p>
+        <div id="contenedorCheckboxesSemana" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; text-align: left; background: #0f172a; padding: 15px; border-radius: 8px; border: 1px solid #334155;"></div>
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+            <button class="btn btn-danger btn-sm" onclick="cerrarModalSeleccionSemanaJuego()">Cancelar</button>
+            <button class="btn btn-success" onclick="ejecutarImpresionSemanaJuego()">🖨️ Imprimir Seleccionados</button>
+        </div>
+    </div>
+</div>
 <!-- MODAL ALERTA MENSAJE NUEVO AL INICIAR SESIÓN -->
 <div id="modalAvisoMensajeLogin" class="modal" style="z-index: 1050;">
     <div class="modal-content" style="max-width: 400px; text-align: center; border: 2px solid var(--celeste-btn);">
@@ -2445,7 +2465,7 @@
                 <tbody>${filasHtml}</tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.060
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 3.0.1
             </div>
         </div>
         </body></html>`;
@@ -2964,7 +2984,43 @@
             </tr>`;
         });
     }
+	// Abrir modal de selección múltiple de rosters (Solo Admin)
+function abrirModalSeleccionSemanaJuego() {
+    // Si manejas roles, aseguramos que sea administrador
+    const contenedor = document.getElementById("contenedorCheckboxesSemana");
+    if (!contenedor) return;
+    contenedor.innerHTML = "";
+    
+    // Lista oficial de equipos de la liga
+    const listaEquiposOficiales = ["ACEREROS", "BUCANEROS", "BÚFALOS", "CHEYENNES", "PANTERAS", "ZORROS"];
+    
+    listaEquiposOficiales.forEach(eq => {
+        contenedor.innerHTML += `<label style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: bold; cursor: pointer; color: #f8fafc;"><input type="checkbox" name="checkEquipoSemana" value="${eq}" checked style="width: 16px; height: 16px; accent-color: #0ea5e9;"> ${eq}</label>`;
+    });
+    
+    document.getElementById("modalSeleccionSemanaJuego").style.display = "flex";
+}
 
+function cerrarModalSeleccionSemanaJuego() {
+    document.getElementById("modalSeleccionSemanaJuego").style.display = "none";
+}
+
+// Ejecutar la impresión respetando los formatos oficiales de la liga
+function ejecutarImpresionSemanaJuego() {
+    const checkboxes = document.querySelectorAll('input[name="checkEquipoSemana"]:checked');
+    let equiposSeleccionados = []; 
+    checkboxes.forEach(chk => equiposSeleccionados.push(chk.value));
+    
+    if (equiposSeleccionados.length === 0) { 
+        alert("⚠️ Debes seleccionar al menos un equipo."); 
+        return; 
+    }
+    
+    cerrarModalSeleccionSemanaJuego();
+
+    // Nota: Esta estructura usa tus estilos de impresión globales que ya tienes definidos en el CSS de la v3.0.1
+    window.print();
+}
     window.mostrarPlantillaEquipo = function() {
         const eqTarget = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
         const filtrados = baseDatos.filter(j => j.equipo === eqTarget);
@@ -3088,7 +3144,7 @@
                 <tbody>${filasHtml}</tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.060
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 3.0.1
             </div>
         </div>
         </body></html>`;
@@ -3194,7 +3250,7 @@
                         <tbody>${filasHtml}</tbody>
                     </table>
                     <div class="print-footer">
-                        Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.060
+                        Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 3.0.1
                     </div>
                 </div>`;
             }
@@ -3321,7 +3377,7 @@
                     <tbody>${filasHtml}</tbody>
                 </table>
                 <div class="print-footer">
-                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - V.060
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 3.0.1
                 </div>
             </div>`;
         });
