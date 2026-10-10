@@ -1596,14 +1596,10 @@
         }
     }
 
-    window.cerrarSesion = function() {
-        sessionStorage.clear();
-        document.getElementById("loginPassword").value = "";
-        limpiarFormularioAlta();
-        document.getElementById("appContainer").style.display = "none";
-        document.getElementById("loginOverlay").style.display = "flex";
-        actualizarColorGlowClub("Administrador");
-    }
+window.cerrarSesion = function() {
+    sessionStorage.clear();
+    window.location.href = 'index.html';
+};
 
     async function cargarDatosDesdeNube() {
         try {
