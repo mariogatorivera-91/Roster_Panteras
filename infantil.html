@@ -1239,10 +1239,21 @@
         return "BOTANA";
     }
 
-    function comprobarEstadoRegistroActivo() {
+   function comprobarEstadoRegistroActivo() {
         const ahora = new Date();
-        const diaSemana = ahora.getDay();
-        return (diaSemana >= 1 && diaSemana <= 4);
+        const diaSemana = ahora.getDay(); // 0: Dom, 1: Lun, 2: Mar, 3: Mié, 4: Jue, 5: Vie, 6: Sáb
+        const hora = ahora.getHours();
+        const minutos = ahora.getMinutes();
+        
+        // Si es Sábado (6) o Domingo (0), está cerrado todo el día
+        if (diaSemana === 6 || diaSemana === 0) return false;
+        
+        // (Opcional por si deseas asegurar el límite exacto del viernes a las 23:59):
+        // Si es Viernes (5) y pasa de las 23:59, se cierra.
+        if (diaSemana === 5 && (hora > 23 || (hora === 23 && minutos >= 59))) return false;
+        
+        // Abierto de Lunes (1) a Viernes (5) dentro del horario permitido
+        return (diaSemana >= 1 && diaSemana <= 5);
     }
 
     function actualizarBannerFechasRegistro() {
@@ -1255,12 +1266,12 @@
                 banner.style.background = "rgba(22, 163, 74, 0.2)";
                 banner.style.borderColor = "#16a34a";
                 banner.style.color = "#4ade80";
-                banner.innerHTML = "🟢 Periodo de Registro de Jugadores: ABIERTO (Lunes a Jueves)";
+                banner.innerHTML = "🟢 Periodo de Registro de Jugadores: ABIERTO (Lunes a Viernes)";
             } else {
                 banner.style.background = "rgba(220, 38, 38, 0.2)";
                 banner.style.borderColor = "#dc2626";
                 banner.style.color = "#fca5a5";
-                banner.innerHTML = "🔴 Periodo de Registro de Jugadores: CERRADO (Abierto de Lunes a Jueves)";
+                banner.innerHTML = "🔴 Periodo de Registro de Jugadores: CERRADO (Abierto de Lunes a Viernes)";
             }
         }
 
