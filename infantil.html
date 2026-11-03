@@ -1246,14 +1246,15 @@
         const minutos = ahora.getMinutes();
         
         // Si es Sábado (6) o Domingo (0), está cerrado todo el día
-        if (diaSemana === 6 || diaSemana === 0) return false;
+       // quita las diagonales para activar if (diaSemana === 6 || diaSemana === 0) return false;
         
         // (Opcional por si deseas asegurar el límite exacto del viernes a las 23:59):
         // Si es Viernes (5) y pasa de las 23:59, se cierra.
-        if (diaSemana === 5 && (hora > 23 || (hora === 23 && minutos >= 59))) return false;
+       // quita las digaonales para activar if (diaSemana === 5 && (hora > 23 || (hora === 23 && minutos >= 59))) return false;
         
         // Abierto de Lunes (1) a Viernes (5) dentro del horario permitido
-        return (diaSemana >= 1 && diaSemana <= 5);
+        //return (diaSemana >= 1 && diaSemana <= 5);
+	   return false;
     }
 
     function actualizarBannerFechasRegistro() {
