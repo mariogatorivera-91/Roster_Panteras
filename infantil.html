@@ -498,67 +498,7 @@
             <h4>🛡 Configuración de Logotipos de Equipos</h4>
             <div id="teamsPreviewGrid" class="teams-preview-grid"></div>
         </div>
-		<!-- ========================================== -->
-  <!-- AQUÍ DEBES PEGAR EL PANEL DE CONTROL NUEVO -->
-  <!-- ==========================================-->
-  <div class="card bg-dark text-light p-4 mb-4 border-info shadow-lg">
-    <h4 class="text-info font-monospace mb-3">⚙️ Configuración y Horarios de Registro - LIFARCC</h4>
-    <hr class="border-secondary">
-    
-  <div class="row g-3 align-items-center">
-       Selector de Modo (Automático vs Manual) -->
-     <div class="col-md-4">
-        <label class="form-label font-monospace text-muted">Modo de Control:</label>
-        <select id="adminControlMode" class="form-select bg-black text-info border-info" onchange="toggleControlMode()">
-          <option value="auto">📅 Automático (Por días de la semana)</option>
-          <option value="manual">⚡ Forzado Manual (Sin importar el día)</option>
-        </select>
-      </div> -->
 
-      <!-- Panel Manual (Switch Activar / Desactivar) -->
-      <div class="col-md-4" id="manualControlContainer" style="display: none;">
-        <label class="form-label font-monospace text-muted">Estado Manual:</label>
-        <div class="form-check form-switch fs-5 mt-1">
-          <input class="form-check-input" type="checkbox" role="switch" id="adminManualStatus" onchange="saveRegistrationConfig()">
-          <label class="form-check-label text-warning fw-bold" id="manualStatusLabel" for="adminManualStatus">Cerrado</label>
-        </div>
-      </div>
-    </div>
-
-    <!-- Panel Automático (Día de Inicio y Día de Fin) -->
-    <div class="row g-3 mt-2" id="autoControlContainer">
-      <div class="col-md-4">
-        <label class="form-label font-monospace text-muted">Día de Inicio:</label>
-        <select id="adminDayStart" class="form-select bg-black text-info border-info" onchange="saveRegistrationConfig()">
-          <option value="1">Lunes</option>
-          <option value="2">Martes</option>
-          <option value="3">Miércoles</option>
-          <option value="4">Jueves</option>
-          <option value="5">Viernes</option>
-          <option value="6">Sábado</option>
-          <option value="0">Domingo</option>
-        </select>
-      </div>
-      <div class="col-md-4">
-        <label class="form-label font-monospace text-muted">Día de Cierre (Fin):</label>
-        <select id="adminDayEnd" class="form-select bg-black text-info border-info" onchange="saveRegistrationConfig()">
-          <option value="1">Lunes</option>
-          <option value="2">Martes</option>
-          <option value="3">Miércoles</option>
-          <option value="4">Jueves</option>
-          <option value="5" selected>Viernes</option>
-          <option value="6">Sábado</option>
-          <option value="0">Domingo</option>
-        </select>
-      </div>
-      <div class="col-md-4 d-flex align-items-end">
-        <div id="currentSystemStatus" class="badge bg-secondary p-2.5 w-100 text-center font-monospace fs-6">Estado: Verificando...</div>
-      </div>
-    </div>
-  </div>
- <!-- ========================================== -->
-  <!-- FIN DEL BLOQUE NUEVO                       -->
-  <!-- ========================================== -->
 <!-- Interruptor Maestro de Registro (Admin) -->
 <div class="card p-3 mb-3 border-info shadow-sm bg-dark text-light">
     <div class="d-flex justify-content-between align-items-center">
