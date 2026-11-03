@@ -491,7 +491,7 @@
     <div id="rosterTab" class="tab-content active">
         <div class="section-box no-print col-admin" style="background: #1e293b; border: 1px solid var(--bronze-gold);">
             <h4>📅 Periodo de Registro de Jugadores</h4>
-            <p style="font-size: 12px; color: #cbd5e1; margin: 0;">El sistema opera de forma <b>automática</b> semanalmente: Los registros para los equipos están abiertos de <b>Lunes a Jueves</b>, cerrándose automáticamente todos los <b>jueves a las 11:59 PM</b> (Viernes, Sábado y Domingo permanece cerrado).</p>
+            <p style="font-size: 12px; color: #cbd5e1; margin: 0;">El sistema opera de forma <b>manualmente</b> semanalmente: Los registros para los equipos permanecen cerrados durante la <b>segunda vuelta</b>, Si requiere un registro debe comunicarse con el <b> Administrador</b> de lunes a jueves antesd e las 6:00 pm.</p>
         </div>
 
         <div class="section-box no-print">
@@ -581,7 +581,7 @@
                 </div>
             </div>
             <div id="bannerPeriodoRegistro" style="background: rgba(217, 119, 6, 0.2); border: 1px dashed var(--bronze-gold); padding: 8px 12px; border-radius: 6px; margin-bottom: 15px; font-size: 12px; font-weight: bold; color: #fbbf24; text-align: center;">
-                📅 Periodo de Registro de Jugadores: Abierto de Lunes a Jueves (Cierre Jueves a las 11:59 PM)
+                📅 Periodo de Registro de Jugadores: Abierto Temporalmente por el Administrador
             </div>
             
             <div class="form-grid-1" style="display: grid; grid-template-columns: 1fr 1fr 2fr; gap: 12px; margin-bottom: 12px;">
@@ -1340,12 +1340,12 @@
                 banner.style.background = "rgba(22, 163, 74, 0.2)";
                 banner.style.borderColor = "#16a34a";
                 banner.style.color = "#4ade80";
-                banner.innerHTML = "🟢 Periodo de Registro de Jugadores: ABIERTO (Lunes a Viernes)";
+                banner.innerHTML = "🟢 Periodo de Registro de Jugadores: ABIERTO Temporalmente";
             } else {
                 banner.style.background = "rgba(220, 38, 38, 0.2)";
                 banner.style.borderColor = "#dc2626";
                 banner.style.color = "#fca5a5";
-                banner.innerHTML = "🔴 Periodo de Registro de Jugadores: CERRADO (Abierto de Lunes a Viernes)";
+                banner.innerHTML = "🔴 Periodo de Registro de Jugadores: CERRADO periodo Finalizado";
             }
         }
 
