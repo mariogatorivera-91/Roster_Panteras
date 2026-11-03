@@ -430,7 +430,7 @@
     </div>
     <div style="position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 10px; color: #94a3b8; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
         Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 3.0.3
-</div>
+    </div>
 </div>
 
 <div class="container" id="appContainer" style="display: none;">
@@ -489,24 +489,25 @@
 
     <!-- PESTAÑA 1: GENERADOR DE ROSTERS -->
     <div id="rosterTab" class="tab-content active">
-        <div class="section-box no-print col-admin" style="background: #1e293b; border: 1px solid var(--bronze-gold);">
-         <!-- desde aqui pegue yo mario-->  <div> 
+        <div class="section-box no-print col-admin" style="background: #1e293b; border: 1px solid var(--bronze-gold); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div>
                 <h4 style="margin: 0; color: #f8fafc;">🎚️ Control Maestro de Registro</h4>
                 <p style="font-size: 11px; color: #cbd5e1; margin: 3px 0 0 0;">Enciende o apaga el sistema de registros en tiempo real para todos los equipos.</p>
             </div>
             <div>
                 <button id="btnAdminToggleRegistro" class="btn btn-warning" onclick="toggleEstadoRegistroAdmin()">🔄 Cambiar Estado</button>
             </div>
-        </div><!-- hasta aqui pegue yo mario-->
-			<h4>📅 Periodo de Registro de Jugadores</h4>
-            <p style="font-size: 12px; color: #cbd5e1; margin: 0;">El sistema opera de forma <b>manualmente</b> semanalmente: Los registros para los equipos permanecen cerrados durante la <b>segunda vuelta</b>, Si requiere un registro debe comunicarse con el <b> Administrador</b> de lunes a jueves antesd e las 6:00 pm.</p>
+        </div>
+
+        <div class="section-box no-print">
+            <h4>📅 Periodo de Registro de Jugadores</h4>
+            <p style="font-size: 12px; color: #cbd5e1; margin: 0;">El sistema opera de forma <b>manual</b> semanalmente: Los registros para los equipos permanecen cerrados durante la <b>segunda vuelta</b>. Si requiere un registro, debe comunicarse con el <b>Administrador</b> de lunes a jueves antes de las 6:00 pm.</p>
         </div>
 
         <div class="section-box no-print">
             <h4>🛡 Configuración de Logotipos de Equipos</h4>
             <div id="teamsPreviewGrid" class="teams-preview-grid"></div>
         </div>
-
 
         <div class="section-box" id="seccionAltaIndividual" style="background: #1e293b; border: 1px solid var(--bronze-gold);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px;">
@@ -604,7 +605,6 @@
                         </div>
                     </div>
                 </div>
-                </div>
                 <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                     <button class="btn btn-warning" onclick="mostrarPlantillaEquipo()">📋 Ver Plantilla</button>
                     <button class="btn btn-success" onclick="imprimirRosterActual()">🖨️ Imprimir Roster Seleccionado</button>
@@ -681,7 +681,7 @@
 
     <!-- FOOTER COPYRIGHT -->
     <div class="footer-copyright">
-        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 3.0.2
+        Página Creada por <span style="font-style: italic; font-weight: bold; color: #38bdf8;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 3.0.3
     </div>
 </div>
 
@@ -715,6 +715,7 @@
         </div>
     </div>
 </div>
+
 <!-- MODAL ALERTA MENSAJE NUEVO AL INICIAR SESIÓN -->
 <div id="modalAvisoMensajeLogin" class="modal" style="z-index: 1050;">
     <div class="modal-content" style="max-width: 400px; text-align: center; border: 2px solid var(--celeste-btn);">
@@ -1164,7 +1165,7 @@
     let baseDatos = [];
     let listaMensajes = [];
     let configEquipos = {};
-	let estadoRegistroAbierto = false; // Estado maestro sincronizado en la nube  mario
+    let estadoRegistroAbierto = false; 
     let credencialesPasswords = {
         "Administrador": "linfarcc",
         "ACEREROS": "ACEREROS",
@@ -1181,9 +1182,8 @@
     let jugadorSeleccionadoId = null;
     let inputFotoActivoId = null; 
 
-    let buzonTabActual = "recibidos"; // 'recibidos' o 'enviados'
+    let buzonTabActual = "recibidos";
 
-    // Variables de Grabación de Audio
     let mediaRecorder = null;
     let audioChunks = [];
     let audioBlobBase64 = null;
@@ -1248,8 +1248,8 @@
         }
         return "BOTANA";
     }
-// QUE DESDE AQUI SUSTITUYA MARIO
-  function comprobarEstadoRegistroActivo() {
+
+    function comprobarEstadoRegistroActivo() {
         return estadoRegistroAbierto;
     }
 
@@ -1258,7 +1258,6 @@
         estadoRegistroAbierto = !estadoRegistroAbierto;
         
         try {
-            // Guardar el estado maestro en Firebase Firestore
             await setDoc(doc(db, "configuracion", "estado_registro"), { abierto: estadoRegistroAbierto });
             actualizarBannerFechasRegistro();
             aplicarRestriccionRegistros();
@@ -1648,10 +1647,10 @@
         }
     }
 
-window.cerrarSesion = function() {
-    sessionStorage.clear();
-    window.location.href = 'index.html';
-};
+    window.cerrarSesion = function() {
+        sessionStorage.clear();
+        window.location.reload();
+    };
 
     async function cargarDatosDesdeNube() {
         try {
@@ -1667,7 +1666,7 @@ window.cerrarSesion = function() {
                 listaMensajes.push({ id: docSnap.id, ...docSnap.data() });
             });
 
-const configSnapshot = await getDocs(collection(db, "configuracion"));
+            const configSnapshot = await getDocs(collection(db, "configuracion"));
             configSnapshot.forEach((docSnap) => {
                 if (docSnap.id === "credenciales_sistema") {
                     credencialesPasswords = { ...credencialesPasswords, ...docSnap.data() };
@@ -1695,7 +1694,6 @@ const configSnapshot = await getDocs(collection(db, "configuracion"));
         }
     }
 
-    // --- FUNCIÓN DE BITÁCORA DE CAMBIOS (AUDITORÍA CON USUARIO EXPLÍCITO) ---
     async function registrarCambioBD(equipo, jugadorNombre, accion, detalleAntes, detalleDespues) {
         try {
             const fechaLocalStr = (() => {
@@ -1711,7 +1709,7 @@ const configSnapshot = await getDocs(collection(db, "configuracion"));
             await addDoc(collection(db, "log_cambios"), {
                 equipo: equipo || "GENERAL",
                 jugador: jugadorNombre || "N/A",
-                accion: accion, // "REGISTRO NUEVO", "MODIFICACIÓN", "ELIMINACIÓN"
+                accion: accion,
                 antes: detalleAntes || "-",
                 despues: detalleDespues || "-",
                 usuario: usuarioQueRealizo,
@@ -1795,7 +1793,6 @@ const configSnapshot = await getDocs(collection(db, "configuracion"));
         }
     }
 
-    // --- GESTIÓN DE FECHAS Y RANGOS (ADMIN) ---
     window.abrirModalGestionFechas = function() {
         if (rolActual !== "Administrador") return;
         const tbody = document.getElementById("tablaGestionFechasCuerpo");
@@ -1841,7 +1838,6 @@ const configSnapshot = await getDocs(collection(db, "configuracion"));
         renderizarRoster();
     }
 
-    // --- LÓGICA DE MENSAJERÍA Y BUZÓN ---
     function actualizarNotificadorBuzon() {
         const badge = document.getElementById("badgeBuzonCount");
         if (!badge) return;
@@ -2184,7 +2180,7 @@ const configSnapshot = await getDocs(collection(db, "configuracion"));
         document.getElementById("modalVisorMensaje").style.display = "none";
     }
 
-    window.abrirRespuestaDesdevisor = async function() {
+    window.abrirRespuestaDesdeVisor = async function() {
         if (!idMensajeActivoVisor) return;
         const msg = listaMensajes.find(m => m.id === idMensajeActivoVisor);
         if (msg) {
@@ -2195,13 +2191,11 @@ const configSnapshot = await getDocs(collection(db, "configuracion"));
         abrirModalNuevoMensaje(respuestaDestinatarioActual);
     }
 
-    // --- SOLICITAR CAMBIO DESDE LA TABLA PARA CLUBS ---
     window.solicitarCambioJugadorDesdeTabla = function(nombreJugador) {
         abrirModalNuevoMensaje("Administrador");
         document.getElementById("txtContenidoMensaje").value = `Solicito un cambio o correccion del jugador: ${nombreJugador}\n\nDetalles del cambio requerido: `;
     }
 
-    // --- VERIFICACIÓN DE LÍMITE Y EXCEDENTES 2013 (CON BLOQUEO Y ALERTA) ---
     function verificarYMostrarExcedentes2013(equipo, categoria) {
         const jugadores2013 = baseDatos.filter(j => j.equipo === equipo && j.categoria === categoria && formatearFechaExcel(j.nacimiento).startsWith('2013'));
         
@@ -2286,7 +2280,7 @@ const configSnapshot = await getDocs(collection(db, "configuracion"));
         const passActualReal = credencialesPasswords[usuarioTarget] || usuarioTarget;
 
         if (actual !== passActualReal) {
-            alert("⚠️️ La contraseña actual es incorrecta.");
+            alert("⚠ La contraseña actual es incorrecta.");
             return;
         }
         if (!nueva1) {
@@ -2720,18 +2714,11 @@ const configSnapshot = await getDocs(collection(db, "configuracion"));
         };
         reader.readAsDataURL(file);
     }
-window.registrarJugadorIndividual = async function() {
-        if (rolActual === "Equipo") {
-            if (!comprobarEstadoRegistroActivo()) {
-                alert("⚠️ El periodo de registro se encuentra cerrado por el Administrador.");
-                return;
-            }
-        }
-        // Resto de tu código de registro...
+
     window.registrarJugadorIndividual = async function() {
         if (rolActual === "Equipo") {
             if (!comprobarEstadoRegistroActivo()) {
-                alert("⚠️ El periodo de registro se encuentra cerrado. Los registros sólo están abiertos de Lunes a Jueves.");
+                alert("⚠️ El periodo de registro se encuentra cerrado. Los registros sólo están abiertos cuando el Administrador los autoriza.");
                 return;
             }
         }
@@ -2794,7 +2781,6 @@ window.registrarJugadorIndividual = async function() {
         const docRef = await addDoc(collection(db, "jugadores"), nuevoJ);
         baseDatos.push({ id: docRef.id, ...nuevoJ });
 
-        // Registrar en la bitácora de cambios
         await registrarCambioBD(equipo, nombre, "REGISTRO NUEVO", "-", `Cat: ${categoria}, Nac: ${nacimiento}, CURP: ${curp}`);
 
         limpiarFormularioAlta();
@@ -3033,12 +3019,11 @@ window.registrarJugadorIndividual = async function() {
             </tr>`;
         });
     }
-	// --- AQUÍ PEGAS LAS NUEVAS FUNCIONES ---
+
     window.abrirModalSeleccionSemanaJuego = function() {
         const contenedor = document.getElementById("contenedorCheckboxesSemana");
         if (!contenedor) return;
         contenedor.innerHTML = "";
-        const listaEquiposOficiales = ["ACEREROS", "BUCANEROS", "BÚFALOS", "CHEYENNES", "PANTERAS", "ZORROS"];
         listaEquiposOficiales.forEach(eq => {
             contenedor.innerHTML += `<label style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: bold; cursor: pointer; color: #f8fafc;"><input type="checkbox" name="checkEquipoSemana" value="${eq}" checked style="width: 16px; height: 16px; accent-color: #0ea5e9;"> ${eq}</label>`;
         });
@@ -3050,137 +3035,130 @@ window.registrarJugadorIndividual = async function() {
     }
 
     window.ejecutarImpresionSemanaJuego = function() {
-    const checkboxes = document.querySelectorAll('input[name="checkEquipoSemana"]:checked');
-    let equiposSeleccionados = []; 
-    checkboxes.forEach(chk => equiposSeleccionados.push(chk.value));
-    
-    if (equiposSeleccionados.length === 0) { 
-        alert("⚠️ Debes seleccionar al menos un equipo."); 
-        return; 
-    }
-    
-    window.cerrarModalSeleccionSemanaJuego();
+        const checkboxes = document.querySelectorAll('input[name="checkEquipoSemana"]:checked');
+        let equiposSeleccionados = []; 
+        checkboxes.forEach(chk => equiposSeleccionados.push(chk.value));
+        
+        if (equiposSeleccionados.length === 0) { 
+            alert("⚠️ Debes seleccionar al menos un equipo."); 
+            return; 
+        }
+        
+        window.cerrarModalSeleccionSemanaJuego();
 
-    // Tomamos la información global de la base de datos y categorías oficiales
-    const ordenCategoriasOficial = ["ARDILLA", "HORMIGA", "HORMIGUITA", "MOSCO", "BOTANA"];
-    const logoLiga = typeof logoLigaGlobal !== 'undefined' ? logoLigaGlobal : 'Logos Equipos/lifarcc.jpg';
+        const logoLiga = typeof logoLigaGlobal !== 'undefined' ? logoLigaGlobal : 'Logos Equipos/lifarcc.jpg';
 
-    // Generamos el HTML dinámico especializado para impresión masiva
-    let htmlContenido = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Rosters Oficiales - LIFARCC</title><style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 10mm; color: #000; background: white; }
-        .hoja-roster-impresion { page-break-after: always; break-after: page; margin-bottom: 20mm; width: 100%; max-width: 195mm; margin: 0 auto; }
-        .hoja-roster-impresion:last-child { page-break-after: avoid; break-after: avoid; margin-bottom: 0; }
-        table.print-table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; }
-        thead { display: table-header-group !important; } tbody { display: table-row-group !important; } tr { page-break-inside: avoid !important; }
-        table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 6px; text-align: center; font-size: 11px; }
-        table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; text-transform: uppercase; }
-        .logo-box-print { width: 95px; height: 95px; object-fit: contain; background: #fff; }
-        .header-table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
-        .header-table td { border: none !important; padding: 2px; vertical-align: middle; }
-        .league-title-print { font-size: 26px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
-        .league-subtitle-print { font-size: 9px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 3px; }
-        .print-footer { text-align: center; font-size: 9px; color: #555; border-top: 1px solid #aaa; padding-top: 6px; margin-top: 15px; }
-    </style></head><body>`;
+        let htmlContenido = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Rosters Oficiales - LIFARCC</title><style>
+            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 10mm; color: #000; background: white; }
+            .hoja-roster-impresion { page-break-after: always; break-after: page; margin-bottom: 20mm; width: 100%; max-width: 195mm; margin: 0 auto; }
+            .hoja-roster-impresion:last-child { page-break-after: avoid; break-after: avoid; margin-bottom: 0; }
+            table.print-table { width: 100%; border-collapse: collapse; margin-top: 5px; background: white; }
+            thead { display: table-header-group !important; } tbody { display: table-row-group !important; } tr { page-break-inside: avoid !important; }
+            table.print-table th, table.print-table td { border: 1px solid #000; padding: 4px 6px; text-align: center; font-size: 11px; }
+            table.print-table th { background-color: #f1f5f9 !important; color: #000 !important; font-weight: bold; text-transform: uppercase; }
+            .logo-box-print { width: 95px; height: 95px; object-fit: contain; background: #fff; }
+            .header-table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
+            .header-table td { border: none !important; padding: 2px; vertical-align: middle; }
+            .league-title-print { font-size: 26px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; line-height: 1; letter-spacing: 2px; }
+            .league-subtitle-print { font-size: 9px; font-weight: bold; color: #222; text-transform: uppercase; text-align: center; margin-top: 3px; }
+            .print-footer { text-align: center; font-size: 9px; color: #555; border-top: 1px solid #aaa; padding-top: 6px; margin-top: 15px; }
+        </style></head><body>`;
 
-    let totalHojas = 0;
+        let totalHojas = 0;
 
-    equiposSeleccionados.forEach(eq => {
-        // Obtenemos el logotipo del equipo si existe en configEquipos o usamos el por defecto
-        let logoEq = 'Logos Equipos/lifarcc.jpg';
-        if (typeof configEquipos !== 'undefined' && configEquipos[eq] && configEquipos[eq].logo) {
-            logoEq = configEquipos[eq].logo;
-        } else {
-            const defaultLogos = { "ACEREROS": "Logos Equipos/acereros.jpg", "BUCANEROS": "Logos Equipos/bucaneros.jpg", "BÚFALOS": "Logos Equipos/bufalo.png", "CHEYENNES": "Logos Equipos/cheyennes.jpg", "PANTERAS": "Logos Equipos/panteras.jpg", "ZORROS": "Logos Equipos/zorros.jpg" };
-            if (defaultLogos[eq]) logoEq = defaultLogos[eq];
+        equiposSeleccionados.forEach(eq => {
+            let logoEq = 'Logos Equipos/lifarcc.jpg';
+            if (typeof configEquipos !== 'undefined' && configEquipos[eq] && configEquipos[eq].logo) {
+                logoEq = configEquipos[eq].logo;
+            } else {
+                const defaultLogos = { "ACEREROS": "Logos Equipos/acereros.jpg", "BUCANEROS": "Logos Equipos/bucaneros.jpg", "BÚFALOS": "Logos Equipos/bufalo.png", "CHEYENNES": "Logos Equipos/cheyennes.jpg", "PANTERAS": "Logos Equipos/panteras.jpg", "ZORROS": "Logos Equipos/zorros.jpg" };
+                if (defaultLogos[eq]) logoEq = defaultLogos[eq];
+            }
+
+            const jugadoresEquipo = baseDatos.filter(j => j.equipo === eq);
+
+            ordenCategoriasOficial.forEach(cat => {
+                const filtradosCat = jugadoresEquipo.filter(j => j.categoria === cat);
+                if (filtradosCat.length > 0) {
+                    totalHojas++;
+                    filtradosCat.sort((a, b) => (a.nacimiento || "").localeCompare(b.nacimiento || ""));
+
+                    let filasHtml = "";
+                    filtradosCat.forEach((j, idx) => {
+                        let fotoTd = j.foto ? `<img src="${j.foto}" style="width:86px; height:109px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:8px;">Sin foto</span>`;
+                        filasHtml += `<tr>
+                            <td><strong>${idx+1}</strong></td>
+                            <td>${fotoTd}</td>
+                            <td style="text-align:left; font-weight:600;">${j.nombre}</td>
+                            <td>${formatearFechaDDMMYYYY(j.nacimiento) || ''}</td>
+                            <td><code>${j.curp || ''}</code></td>
+                            <td></td>
+                            <td></td>
+                        </tr>`;
+                    });
+
+                    htmlContenido += `
+                    <div class="hoja-roster-impresion">
+                        <table class="print-table">
+                            <thead>
+                                <tr>
+                                    <td colspan="7" style="border:none; padding:0;">
+                                        <table class="header-table">
+                                            <tr>
+                                                <td style="width:22%;"><img src="${logoLiga}" class="logo-box-print" onerror="this.style.display='none'"></td>
+                                                <td style="width:56%; text-align:center;">
+                                                    <div class="league-title-print">LIFARCC</div>
+                                                    <div class="league-subtitle-print">Liga Infantil de Football Americano de la Region Centro de Coahuila</div>
+                                                </td>
+                                                <td style="width:22%; text-align:right;"><img src="${logoEq}" class="logo-box-print" onerror="this.style.display='none'"></td>
+                                            </tr>
+                                        </table>
+                                        <div style="font-size:10px; font-weight:bold; text-align:center; margin-bottom:2px;">FECHA: ___________________________________</div>
+                                        <div style="font-size:11px; font-weight:bold; display:flex; justify-content:space-between; text-transform:uppercase; margin-bottom:2px;">
+                                            <span>CLUB ${eq}</span><span>JORNADA: ____________________</span>
+                                        </div>
+                                        <div style="font-size:11px; font-weight:bold; text-transform:uppercase; text-align:left; margin-bottom:3px;">ROSTER CATEGORIA: ${cat}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th style="width:35px;">N°</th>
+                                    <th style="width:90px;">Foto</th>
+                                    <th>Nombre Completo</th>
+                                    <th style="width:90px;">Fecha Nac.</th>
+                                    <th style="width:135px;">CURP</th>
+                                    <th style="width:50px;">N°- Jersey</th>
+                                    <th style="width:50px;">Peso kg</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${filasHtml}
+                            </tbody>
+                        </table>
+                        <div class="print-footer">Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - Todos los Derechos Reservados © - V.3.0.3</div>
+                    </div>`;
+                }
+            });
+        });
+
+        if (totalHojas === 0) {
+            alert("⚠️ No hay jugadores registrados en las categorías de los equipos seleccionados.");
+            return;
         }
 
-        // Filtramos jugadores de este equipo
-        const jugadoresEquipo = baseDatos.filter(j => j.equipo === eq);
+        htmlContenido += `</body></html>`;
 
-        ordenCategoriasOficial.forEach(cat => {
-            const filtradosCat = jugadoresEquipo.filter(j => j.categoria === cat);
-            if (filtradosCat.length > 0) {
-                totalHojas++;
-                // Ordenamos por fecha de nacimiento
-                filtradosCat.sort((a, b) => (a.nacimiento || "").localeCompare(b.nacimiento || ""));
-
-                let filasHtml = "";
-                filtradosCat.forEach((j, idx) => {
-                    let fotoTd = j.foto ? `<img src="${j.foto}" style="width:86px; height:109px; object-fit:cover; border-radius:3px;">` : `<span style="font-size:8px;">Sin foto</span>`;
-                    filasHtml += `<tr>
-                        <td><strong>${idx+1}</strong></td>
-                        <td>${fotoTd}</td>
-                        <td style="text-align:left; font-weight:600;">${j.nombre}</td>
-                        <td>${j.nacimiento || ''}</td>
-                        <td><code>${j.curp || ''}</code></td>
-                        <td></td>
-                        <td></td>
-                    </tr>`;
-                });
-
-                htmlContenido += `
-                <div class="hoja-roster-impresion">
-                    <table class="print-table">
-                        <thead>
-                            <tr>
-                                <td colspan="7" style="border:none; padding:0;">
-                                    <table class="header-table">
-                                        <tr>
-                                            <td style="width:22%;"><img src="${logoLiga}" class="logo-box-print" onerror="this.style.display='none'"></td>
-                                            <td style="width:56%; text-align:center;">
-                                                <div class="league-title-print">LIFARCC</div>
-                                                <div class="league-subtitle-print">Liga Infantil de Football Americano de la Region Centro de Coahuila</div>
-                                            </td>
-                                            <td style="width:22%; text-align:right;"><img src="${logoEq}" class="logo-box-print" onerror="this.style.display='none'"></td>
-                                        </tr>
-                                    </table>
-                                    <div style="font-size:10px; font-weight:bold; text-align:center; margin-bottom:2px;">FECHA: ___________________________________</div>
-                                    <div style="font-size:11px; font-weight:bold; display:flex; justify-content:space-between; text-transform:uppercase; margin-bottom:2px;">
-                                        <span>CLUB ${eq}</span><span>JORNADA: ____________________</span>
-                                    </div>
-                                    <div style="font-size:11px; font-weight:bold; text-transform:uppercase; text-align:left; margin-bottom:3px;">ROSTER CATEGORIA: ${cat}</div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th style="width:35px;">N°</th>
-                                <th style="width:90px;">Foto</th>
-                                <th>Nombre Completo</th>
-                                <th style="width:90px;">Fecha Nac.</th>
-                                <th style="width:135px;">CURP</th>
-                                <th style="width:50px;">N°- Jersey</th>
-                                <th style="width:50px;">Peso kg</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${filasHtml}
-                        </tbody>
-                    </table>
-                    <div class="print-footer">Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - Todos los Derechos Reservados © - V.3.0.1</div>
-                </div>`;
-            }
-        });
-    });
-
-    if (totalHojas === 0) {
-        alert("⚠️ No hay jugadores registrados en las categorías de los equipos seleccionados.");
-        return;
-    }
-
-    htmlContenido += `</body></html>`;
-
-    // Abrimos una ventana temporal con el reporte generado y lanzamos la impresión limpia
-    const vPrint = window.open('', '_blank');
-    if (!vPrint) {
-        alert("⚠️ Por favor permite las ventanas emergentes (pop-ups) en tu navegador para imprimir.");
-        return;
-    }
-    vPrint.document.write(htmlContenido);
-    vPrint.document.close();
-    vPrint.focus();
-    setTimeout(() => {
-        vPrint.print();
-    }, 600);
-};
+        const vPrint = window.open('', '_blank');
+        if (!vPrint) {
+            alert("⚠️ Por favor permite las ventanas emergentes (pop-ups) en tu navegador para imprimir.");
+            return;
+        }
+        vPrint.document.write(htmlContenido);
+        vPrint.document.close();
+        vPrint.focus();
+        setTimeout(() => {
+            vPrint.print();
+        }, 600);
+    };
 
     window.imprimirRosterActual = function() {
         const equipoSelect = rolActual === "Equipo" ? equipoAsignado : document.getElementById("filtroEquipo").value;
@@ -3271,7 +3249,7 @@ window.registrarJugadorIndividual = async function() {
                 <tbody>${filasHtml}</tbody>
             </table>
             <div class="print-footer">
-                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 3.0.2 
+                Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 3.0.3 
             </div>
         </div>
         </body></html>`;
@@ -3377,7 +3355,7 @@ window.registrarJugadorIndividual = async function() {
                         <tbody>${filasHtml}</tbody>
                     </table>
                     <div class="print-footer">
-                        Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 3.0.2
+                        Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 3.0.3
                     </div>
                 </div>`;
             }
@@ -3504,7 +3482,7 @@ window.registrarJugadorIndividual = async function() {
                     <tbody>${filasHtml}</tbody>
                 </table>
                 <div class="print-footer">
-                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 3.0.2
+                    Página Creada por <span style="font-style: italic; font-weight: bold; color: #0284c7;">Carrivers Desing</span> - <span style="color: #ef4444;">Todos los Derechos Reservados ©</span> - Version 3.0.3
                 </div>
             </div>`;
         });
@@ -3550,7 +3528,7 @@ window.registrarJugadorIndividual = async function() {
 
         const curpVal = document.getElementById("editCurp").value.trim().toUpperCase();
         if (curpVal && !/^[A-Z0-9]{18}$/.test(curpVal)) {
-            alert("⚠️️ El CURP debe tener exactamente 18 caracteres alfanuméricos.");
+            alert("⚠ El CURP debe tener exactamente 18 caracteres alfanuméricos.");
             return;
         }
 
@@ -3578,7 +3556,6 @@ window.registrarJugadorIndividual = async function() {
             foto: fotoUrl
         };
 
-        // Detectar cambios antes y después para la bitácora
         let listaDiferencias = [];
         if (jugador.nombre !== datosActualizados.nombre) listaDiferencias.push(`Nombre: [${jugador.nombre}] ➔ [${datosActualizados.nombre}]`);
         if (jugador.equipo !== datosActualizados.equipo) listaDiferencias.push(`Equipo: [${jugador.equipo}] ➔ [${datosActualizados.equipo}]`);
@@ -3639,8 +3616,6 @@ window.registrarJugadorIndividual = async function() {
         renderizarVistaPreviaEquipos();
         cambiarFiltroEquipo();
     }
-
-	
 </script>
 </body>
 </html>
