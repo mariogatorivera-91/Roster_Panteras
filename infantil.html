@@ -500,22 +500,22 @@
         </div>
 		<!-- ========================================== -->
   <!-- AQUÍ DEBES PEGAR EL PANEL DE CONTROL NUEVO -->
-  <!-- ========================================== -->
+  <!-- ==========================================
   <div class="card bg-dark text-light p-4 mb-4 border-info shadow-lg">
     <h4 class="text-info font-monospace mb-3">⚙️ Configuración y Horarios de Registro - LIFARCC</h4>
     <hr class="border-secondary">
     
-    <div class="row g-3 align-items-center">
-      <!-- Selector de Modo (Automático vs Manual) -->
-      <div class="col-md-4">
+  <!--   <div class="row g-3 align-items-center">
+       Selector de Modo (Automático vs Manual) -->
+     <!--  <div class="col-md-4">
         <label class="form-label font-monospace text-muted">Modo de Control:</label>
         <select id="adminControlMode" class="form-select bg-black text-info border-info" onchange="toggleControlMode()">
           <option value="auto">📅 Automático (Por días de la semana)</option>
           <option value="manual">⚡ Forzado Manual (Sin importar el día)</option>
         </select>
-      </div>
-
-      <!-- Panel Manual (Switch Activar / Desactivar) -->
+      </div> -->
+ <!--
+      <!-- Panel Manual (Switch Activar / Desactivar) 
       <div class="col-md-4" id="manualControlContainer" style="display: none;">
         <label class="form-label font-monospace text-muted">Estado Manual:</label>
         <div class="form-check form-switch fs-5 mt-1">
@@ -525,7 +525,7 @@
       </div>
     </div>
 
-    <!-- Panel Automático (Día de Inicio y Día de Fin) -->
+    <!-- Panel Automático (Día de Inicio y Día de Fin) 
     <div class="row g-3 mt-2" id="autoControlContainer">
       <div class="col-md-4">
         <label class="form-label font-monospace text-muted">Día de Inicio:</label>
@@ -556,9 +556,22 @@
       </div>
     </div>
   </div>
-  <!-- ========================================== -->
+  ========================================== -->
   <!-- FIN DEL BLOQUE NUEVO                       -->
   <!-- ========================================== -->
+<!-- Interruptor Maestro de Registro (Admin) -->
+<div class="card p-3 mb-3 border-info shadow-sm bg-dark text-light">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h5 class="text-info mb-1 font-monospace">⚙️ Control Maestro de Registro</h5>
+            <small class="text-muted">Enciende o apaga las altas de jugadores para todos los clubes al instante.</small>
+        </div>
+        <div class="form-check form-switch fs-4">
+            <input class="form-check-input" type="checkbox" role="switch" id="masterToggleSwitch" onchange="toggleMasterRegistration()">
+            <label class="form-check-label fw-bold text-danger ms-2" id="masterToggleLabel" for="masterToggleSwitch">🔴 CERRADO</label>
+        </div>
+    </div>
+</div> <!-- aqui termina Interruptor Maestro de Registro (Admin) -->
         <div class="section-box" id="seccionAltaIndividual" style="background: #1e293b; border: 1px solid var(--bronze-gold);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px;">
                 <h4 style="margin: 0; color: #f1f5f9; font-size: 15px;">➕ Registrar Jugador de 1 en 1 (Sincronizado en la Nube)</h4>
@@ -3658,135 +3671,82 @@ window.cerrarSesion = function() {
         renderizarVistaPreviaEquipos();
         cambiarFiltroEquipo();
     }
+//lo mas nuevo
+// Estado maestro del registro (respaldado en localStorage)
+let isMasterOpen = JSON.parse(localStorage.getItem('lifarcc_master_open')) || false;
 
-	// Estructura de configuración (se guarda en localStorage o Firebase)
-let regConfig = JSON.parse(localStorage.getItem('lifarcc_reg_config')) || {
-    mode: 'auto',       // 'auto' o 'manual'
-    manualOpen: false,  // true (abierto) o false (cerrado) cuando está en manual
-    dayStart: 1,        // Lunes (1) por defecto
-    dayEnd: 5           // Viernes (5) por defecto
-};
-
-// Inicializar la interfaz del Admin al cargar
-function initRegistrationAdminUI() {
-    const modeSelect = document.getElementById('adminControlMode');
-    const manualSwitch = document.getElementById('adminManualStatus');
-    const startSelect = document.getElementById('adminDayStart');
-    const endSelect = document.getElementById('adminDayEnd');
-
-    if (modeSelect) {
-        modeSelect.value = regConfig.mode;
-        manualSwitch.checked = regConfig.manualOpen;
-        startSelect.value = regConfig.dayStart;
-        endSelect.value = regConfig.dayEnd;
-
-        toggleControlMode();
-        updateSystemStatusBadge();
+// Inicializar al cargar tu sistema
+window.addEventListener('DOMContentLoaded', () => {
+    const toggleSwitch = document.getElementById('masterToggleSwitch');
+    if (toggleSwitch) {
+        toggleSwitch.checked = isMasterOpen;
     }
+    actualizarTodosLosIndicadoresMaster();
+    aplicarRestriccionMasterClubs();
+});
+
+// Acción al mover el interruptor maestro
+function toggleMasterRegistration() {
+    const toggleSwitch = document.getElementById('masterToggleSwitch');
+    if (!toggleSwitch) return;
+
+    isMasterOpen = toggleSwitch.checked;
+    localStorage.setItem('lifarcc_master_open', JSON.stringify(isMasterOpen));
+
+    // Si manejas Firebase, sincroniza aquí el estado:
+    // database.ref('liga/registro_abierto').set(isMasterOpen);
+
+    actualizarTodosLosIndicadoresMaster();
+    aplicarRestriccionMasterClubs();
 }
 
-// Alternar entre visibilidad de modo manual y automático
-function toggleControlMode() {
-    const mode = document.getElementById('adminControlMode').value;
-    regConfig.mode = mode;
-
-    const manualContainer = document.getElementById('manualControlContainer');
-    const autoContainer = document.getElementById('autoControlContainer');
-
-    if (mode === 'manual') {
-        manualContainer.style.display = 'block';
-        autoContainer.style.opacity = '0.4';
-    } else {
-        manualContainer.style.display = 'none';
-        autoContainer.style.opacity = '1';
-    }
-    saveRegistrationConfig();
-}
-
-// Guardar configuración localmente (y opcionalmente en Firebase)
-function saveRegistrationConfig() {
-    regConfig.mode = document.getElementById('adminControlMode').value;
-    regConfig.manualOpen = document.getElementById('adminManualStatus').checked;
-    regConfig.dayStart = parseInt(document.getElementById('adminDayStart').value);
-    regConfig.dayEnd = parseInt(document.getElementById('adminDayEnd').value);
-
-    // Actualizar etiqueta visual del switch manual
-    const label = document.getElementById('manualStatusLabel');
-    if (regConfig.manualOpen) {
-        label.innerText = '🟢 ABIERTO (Forzado)';
-        label.className = 'form-check-label text-success fw-bold';
-    } else {
-        label.innerText = '🔴 CERRADO (Forzado)';
-        label.className = 'form-check-label text-danger fw-bold';
-    }
-
-    localStorage.setItem('lifarcc_reg_config', JSON.stringify(regConfig));
-
-    // Si usas Firebase, sincroniza aquí:
-    // database.ref('liga/config_registro').set(regConfig);
-
-    updateSystemStatusBadge();
-    aplicarRestriccionAClubs();
-}
-
-// Función central: Retorna true si el registro está permitido
-function isRegistrationAllowed() {
-    if (regConfig.mode === 'manual') {
-        return regConfig.manualOpen;
-    }
-
-    // Modo Automático por días de la semana
-    const now = new Date();
-    const currentDay = now.getDay(); // 0 = Domingo, 1 = Lunes, ..., 6 = Sábado
-
-    const start = regConfig.dayStart;
-    const end = regConfig.dayEnd;
-
-    // Soporte para rangos normales (ej: Lunes [1] a Viernes [5])
-    if (start <= end) {
-        return currentDay >= start && currentDay <= end;
-    } else {
-        // Soporte para rangos cruzados (ej: Viernes [5] a Lunes [1])
-        return currentDay >= start || currentDay <= end;
-    }
-}
-
-// Actualizar indicador visual en el panel
-function updateSystemStatusBadge() {
-    const badge = document.getElementById('currentSystemStatus');
-    if (!badge) return;
-
-    if (isRegistrationAllowed()) {
-        badge.className = 'badge bg-success p-2.5 w-100 text-center font-monospace fs-6 shadow-sm';
-        badge.innerHTML = '🟢 REGISTRO ACTIVO';
-    } else {
-        badge.className = 'badge bg-danger p-2.5 w-100 text-center font-monospace fs-6 shadow-sm';
-        badge.innerHTML = '🔴 REGISTRO CERRADO';
-    }
-}
-
-// Bloquear o desbloquear botones de los clubes según el estatus
-function aplicarRestriccionAClubs() {
-    const abierto = isRegistrationAllowed();
-    // Selecciona los botones de agregar/editar jugador en los paneles de los clubes
-    const botones = document.querySelectorAll('.btn-nuevo-jugador, .btn-guardar-roster');
-    
-    botones.forEach(btn => {
-        btn.disabled = !abierto;
-        if (!abierto) {
-            btn.title = "El registro de jugadores se encuentra cerrado temporalmente por la Liga.";
+// Sincronizar todos tus indicadores visuales existentes
+function actualizarTodosLosIndicadoresMaster() {
+    const label = document.getElementById('masterToggleLabel');
+    if (label) {
+        if (isMasterOpen) {
+            label.innerText = '🟢 ABIERTO';
+            label.className = 'form-check-label fw-bold text-success ms-2';
         } else {
-            btn.removeAttribute('title');
+            label.innerText = '🔴 CERRADO';
+            label.className = 'form-check-label fw-bold text-danger ms-2';
         }
+    }
+
+    // 1. Indicador superior principal
+    const badgeSuperior = document.getElementById('currentSystemStatus');
+    if (badgeSuperior) {
+        badgeSuperior.className = isMasterOpen ? 'badge bg-success p-2 w-100 text-center font-monospace fs-6' : 'badge bg-danger p-2 w-100 text-center font-monospace fs-6';
+        badgeSuperior.innerHTML = isMasterOpen ? '🟢 ESTADO: REGISTRO ABIERTO' : '🔴 ESTADO: REGISTRO CERRADO';
+    }
+
+    // 2. Insignia en el formulario
+    const btnBadge = document.getElementById('regStatusBtnBadge');
+    if (btnBadge) {
+        btnBadge.className = isMasterOpen ? 'badge bg-success fs-6' : 'badge bg-danger fs-6';
+        btnBadge.innerHTML = isMasterOpen ? '🟢 Activo' : '🔴 Cerrado';
+    }
+
+    // 3. Barra de alerta dentro del recuadro del formulario
+    const alertBanner = document.getElementById('regAlertBanner');
+    if (alertBanner) {
+        alertBanner.className = isMasterOpen ? 'alert alert-success text-center font-monospace py-2' : 'alert alert-danger text-center font-monospace py-2';
+        alertBanner.innerHTML = isMasterOpen ? '🟢 Periodo de Registro de Jugadores: ABIERTO POR LA ADMINISTRACIÓN' : '🔴 Periodo de Registro de Jugadores: CERRADO POR LA ADMINISTRACIÓN';
+    }
+}
+
+// Bloquear o habilitar inputs de registro de los clubes
+function aplicarRestriccionMasterClubs() {
+    const inputsYBotones = document.querySelectorAll('#formRegistrarJugador input, #formRegistrarJugador select, #formRegistrarJugador button, .btn-nuevo-jugador');
+    
+    inputsYBotones.forEach(el => {
+        if (el.id === 'masterToggleSwitch') return;
+        el.disabled = !isMasterOpen;
     });
 }
 
-// Ejecutar al cargar la página
-window.addEventListener('DOMContentLoaded', () => {
-    initRegistrationAdminUI();
-    aplicarRestriccionAClubs();
-});
-			//aqui termina lo que pegue
+	//aqui termina lo mas nuevo
+	
 </script>
 </body>
 </html>
