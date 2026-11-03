@@ -3658,7 +3658,135 @@ window.cerrarSesion = function() {
         renderizarVistaPreviaEquipos();
         cambiarFiltroEquipo();
     }
-</script>
 
+	// Estructura de configuración (se guarda en localStorage o Firebase)
+let regConfig = JSON.parse(localStorage.getItem('lifarcc_reg_config')) || {
+    mode: 'auto',       // 'auto' o 'manual'
+    manualOpen: false,  // true (abierto) o false (cerrado) cuando está en manual
+    dayStart: 1,        // Lunes (1) por defecto
+    dayEnd: 5           // Viernes (5) por defecto
+};
+
+// Inicializar la interfaz del Admin al cargar
+function initRegistrationAdminUI() {
+    const modeSelect = document.getElementById('adminControlMode');
+    const manualSwitch = document.getElementById('adminManualStatus');
+    const startSelect = document.getElementById('adminDayStart');
+    const endSelect = document.getElementById('adminDayEnd');
+
+    if (modeSelect) {
+        modeSelect.value = regConfig.mode;
+        manualSwitch.checked = regConfig.manualOpen;
+        startSelect.value = regConfig.dayStart;
+        endSelect.value = regConfig.dayEnd;
+
+        toggleControlMode();
+        updateSystemStatusBadge();
+    }
+}
+
+// Alternar entre visibilidad de modo manual y automático
+function toggleControlMode() {
+    const mode = document.getElementById('adminControlMode').value;
+    regConfig.mode = mode;
+
+    const manualContainer = document.getElementById('manualControlContainer');
+    const autoContainer = document.getElementById('autoControlContainer');
+
+    if (mode === 'manual') {
+        manualContainer.style.display = 'block';
+        autoContainer.style.opacity = '0.4';
+    } else {
+        manualContainer.style.display = 'none';
+        autoContainer.style.opacity = '1';
+    }
+    saveRegistrationConfig();
+}
+
+// Guardar configuración localmente (y opcionalmente en Firebase)
+function saveRegistrationConfig() {
+    regConfig.mode = document.getElementById('adminControlMode').value;
+    regConfig.manualOpen = document.getElementById('adminManualStatus').checked;
+    regConfig.dayStart = parseInt(document.getElementById('adminDayStart').value);
+    regConfig.dayEnd = parseInt(document.getElementById('adminDayEnd').value);
+
+    // Actualizar etiqueta visual del switch manual
+    const label = document.getElementById('manualStatusLabel');
+    if (regConfig.manualOpen) {
+        label.innerText = '🟢 ABIERTO (Forzado)';
+        label.className = 'form-check-label text-success fw-bold';
+    } else {
+        label.innerText = '🔴 CERRADO (Forzado)';
+        label.className = 'form-check-label text-danger fw-bold';
+    }
+
+    localStorage.setItem('lifarcc_reg_config', JSON.stringify(regConfig));
+
+    // Si usas Firebase, sincroniza aquí:
+    // database.ref('liga/config_registro').set(regConfig);
+
+    updateSystemStatusBadge();
+    aplicarRestriccionAClubs();
+}
+
+// Función central: Retorna true si el registro está permitido
+function isRegistrationAllowed() {
+    if (regConfig.mode === 'manual') {
+        return regConfig.manualOpen;
+    }
+
+    // Modo Automático por días de la semana
+    const now = new Date();
+    const currentDay = now.getDay(); // 0 = Domingo, 1 = Lunes, ..., 6 = Sábado
+
+    const start = regConfig.dayStart;
+    const end = regConfig.dayEnd;
+
+    // Soporte para rangos normales (ej: Lunes [1] a Viernes [5])
+    if (start <= end) {
+        return currentDay >= start && currentDay <= end;
+    } else {
+        // Soporte para rangos cruzados (ej: Viernes [5] a Lunes [1])
+        return currentDay >= start || currentDay <= end;
+    }
+}
+
+// Actualizar indicador visual en el panel
+function updateSystemStatusBadge() {
+    const badge = document.getElementById('currentSystemStatus');
+    if (!badge) return;
+
+    if (isRegistrationAllowed()) {
+        badge.className = 'badge bg-success p-2.5 w-100 text-center font-monospace fs-6 shadow-sm';
+        badge.innerHTML = '🟢 REGISTRO ACTIVO';
+    } else {
+        badge.className = 'badge bg-danger p-2.5 w-100 text-center font-monospace fs-6 shadow-sm';
+        badge.innerHTML = '🔴 REGISTRO CERRADO';
+    }
+}
+
+// Bloquear o desbloquear botones de los clubes según el estatus
+function aplicarRestriccionAClubs() {
+    const abierto = isRegistrationAllowed();
+    // Selecciona los botones de agregar/editar jugador en los paneles de los clubes
+    const botones = document.querySelectorAll('.btn-nuevo-jugador, .btn-guardar-roster');
+    
+    botones.forEach(btn => {
+        btn.disabled = !abierto;
+        if (!abierto) {
+            btn.title = "El registro de jugadores se encuentra cerrado temporalmente por la Liga.";
+        } else {
+            btn.removeAttribute('title');
+        }
+    });
+}
+
+// Ejecutar al cargar la página
+window.addEventListener('DOMContentLoaded', () => {
+    initRegistrationAdminUI();
+    aplicarRestriccionAClubs();
+});
+			//aqui termina lo que pegue
+</script>
 </body>
 </html>
