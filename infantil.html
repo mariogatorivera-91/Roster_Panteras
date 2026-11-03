@@ -490,7 +490,15 @@
     <!-- PESTAÑA 1: GENERADOR DE ROSTERS -->
     <div id="rosterTab" class="tab-content active">
         <div class="section-box no-print col-admin" style="background: #1e293b; border: 1px solid var(--bronze-gold);">
-            <h4>📅 Periodo de Registro de Jugadores</h4>
+         <!-- desde aqui pegue yo mario-->  <div> 
+                <h4 style="margin: 0; color: #f8fafc;">🎚️ Control Maestro de Registro</h4>
+                <p style="font-size: 11px; color: #cbd5e1; margin: 3px 0 0 0;">Enciende o apaga el sistema de registros en tiempo real para todos los equipos.</p>
+            </div>
+            <div>
+                <button id="btnAdminToggleRegistro" class="btn btn-warning" onclick="toggleEstadoRegistroAdmin()">🔄 Cambiar Estado</button>
+            </div>
+        </div><!-- hasta aqui pegue yo mario-->
+			<h4>📅 Periodo de Registro de Jugadores</h4>
             <p style="font-size: 12px; color: #cbd5e1; margin: 0;">El sistema opera de forma <b>manualmente</b> semanalmente: Los registros para los equipos permanecen cerrados durante la <b>segunda vuelta</b>, Si requiere un registro debe comunicarse con el <b> Administrador</b> de lunes a jueves antesd e las 6:00 pm.</p>
         </div>
 
@@ -1156,6 +1164,7 @@
     let baseDatos = [];
     let listaMensajes = [];
     let configEquipos = {};
+	let estadoRegistroAbierto = false; // Estado maestro sincronizado en la nube  mario
     let credencialesPasswords = {
         "Administrador": "linfarcc",
         "ACEREROS": "ACEREROS",
@@ -1239,50 +1248,72 @@
         }
         return "BOTANA";
     }
+// QUE DESDE AQUI SUSTITUYA MARIO
+  function comprobarEstadoRegistroActivo() {
+        return estadoRegistroAbierto;
+    }
 
-   function comprobarEstadoRegistroActivo() {
-        const ahora = new Date();
-        const diaSemana = ahora.getDay(); // 0: Dom, 1: Lun, 2: Mar, 3: Mié, 4: Jue, 5: Vie, 6: Sáb
-        const hora = ahora.getHours();
-        const minutos = ahora.getMinutes();
+    window.toggleEstadoRegistroAdmin = async function() {
+        if (rolActual !== "Administrador") return;
+        estadoRegistroAbierto = !estadoRegistroAbierto;
         
-        // Si es Sábado (6) o Domingo (0), está cerrado todo el día
-       // quita las diagonales para activar if (diaSemana === 6 || diaSemana === 0) return false;
-        
-        // (Opcional por si deseas asegurar el límite exacto del viernes a las 23:59):
-        // Si es Viernes (5) y pasa de las 23:59, se cierra.
-       // quita las digaonales para activar if (diaSemana === 5 && (hora > 23 || (hora === 23 && minutos >= 59))) return false;
-        
-        // Abierto de Lunes (1) a Viernes (5) dentro del horario permitido
-        //return (diaSemana >= 1 && diaSemana <= 5);
-	   return false;
+        try {
+            // Guardar el estado maestro en Firebase Firestore
+            await setDoc(doc(db, "configuracion", "estado_registro"), { abierto: estadoRegistroAbierto });
+            actualizarBannerFechasRegistro();
+            aplicarRestriccionRegistros();
+            alert(estadoRegistroAbierto ? "🟢 ¡Registros ABIERTOS con éxito para todos los equipos!" : "🔴 ¡Registros CERRADOS con éxito!");
+        } catch (e) {
+            console.error("Error al guardar estado de registro:", e);
+            alert("Error al actualizar el estado en la nube.");
+        }
     }
 
     function actualizarBannerFechasRegistro() {
         const activo = comprobarEstadoRegistroActivo();
         const banner = document.getElementById("bannerPeriodoRegistro");
         const badgeContainer = document.getElementById("badgeEstadoRegistroContainer");
+        const btnToggleAdmin = document.getElementById("btnAdminToggleRegistro");
         
+        if (btnToggleAdmin) {
+            btnToggleAdmin.innerText = activo ? "🔴 Cerrar Registros" : "🟢 Abrir Registros";
+            btnToggleAdmin.className = activo ? "btn btn-danger" : "btn btn-success";
+        }
+
         if (banner) {
             if (activo) {
-                banner.style.background = "rgba(22, 163, 74, 0.2)";
+                banner.style.background = "rgba(22, 163, 74, 0.25)";
                 banner.style.borderColor = "#16a34a";
                 banner.style.color = "#4ade80";
-                banner.innerHTML = "🟢 Periodo de Registro de Jugadores: ABIERTO Temporalmente";
+                banner.innerHTML = "🟢 ESTADO: REGISTRO DE JUGADORES ACTIVO (Abierto por el Administrador)";
             } else {
-                banner.style.background = "rgba(220, 38, 38, 0.2)";
+                banner.style.background = "rgba(220, 38, 38, 0.25)";
                 banner.style.borderColor = "#dc2626";
                 banner.style.color = "#fca5a5";
-                banner.innerHTML = "🔴 Periodo de Registro de Jugadores: CERRADO periodo Finalizado";
+                banner.innerHTML = "🔴 ESTADO: REGISTRO DE JUGADORES CERRADO";
             }
         }
 
         if (badgeContainer) {
             if (activo) {
-                badgeContainer.innerHTML = `<span style="background: #16a34a; color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">🟢 Abierto</span>`;
+                badgeContainer.innerHTML = `<span style="background: #16a34a; color: white; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: bold;">🟢 Activo</span>`;
             } else {
-                badgeContainer.innerHTML = `<span style="background: #dc2626; color: white; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold;">🔴 Cerrado</span>`;
+                badgeContainer.innerHTML = `<span style="background: #dc2626; color: white; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: bold;">🔴 Cerrado</span>`;
             }
+        }
+    }
+
+    function aplicarRestriccionRegistros() {
+        const activo = comprobarEstadoRegistroActivo();
+        const seccionAlta = document.getElementById("seccionAltaIndividual");
+        if (seccionAlta && rolActual === "Equipo") {
+            const inputs = seccionAlta.querySelectorAll("input, button:not([onclick*='Rangos'])");
+            inputs.forEach(el => {
+                el.disabled = !activo;
+            });
+            seccionAlta.style.opacity = activo ? "1" : "0.65";
+        } else if (seccionAlta) {
+            seccionAlta.style.opacity = "1";
         }
     }
 
@@ -1636,12 +1667,14 @@ window.cerrarSesion = function() {
                 listaMensajes.push({ id: docSnap.id, ...docSnap.data() });
             });
 
-            const configSnapshot = await getDocs(collection(db, "configuracion"));
+const configSnapshot = await getDocs(collection(db, "configuracion"));
             configSnapshot.forEach((docSnap) => {
                 if (docSnap.id === "credenciales_sistema") {
                     credencialesPasswords = { ...credencialesPasswords, ...docSnap.data() };
                 } else if (docSnap.id === "rangos_fechas") {
                     rangosFechasCategorias = { ...rangosFechasCategorias, ...docSnap.data() };
+                } else if (docSnap.id === "estado_registro") {
+                    estadoRegistroAbierto = docSnap.data().abierto !== undefined ? docSnap.data().abierto : false;
                 } else if (docSnap.id !== "fechas_sistema") {
                     configEquipos[docSnap.id] = docSnap.data();
                 }
@@ -2687,7 +2720,14 @@ window.cerrarSesion = function() {
         };
         reader.readAsDataURL(file);
     }
-
+window.registrarJugadorIndividual = async function() {
+        if (rolActual === "Equipo") {
+            if (!comprobarEstadoRegistroActivo()) {
+                alert("⚠️ El periodo de registro se encuentra cerrado por el Administrador.");
+                return;
+            }
+        }
+        // Resto de tu código de registro...
     window.registrarJugadorIndividual = async function() {
         if (rolActual === "Equipo") {
             if (!comprobarEstadoRegistroActivo()) {
@@ -3599,81 +3639,7 @@ window.cerrarSesion = function() {
         renderizarVistaPreviaEquipos();
         cambiarFiltroEquipo();
     }
-//lo mas nuevo
-// Estado maestro del registro (respaldado en localStorage)
-let isMasterOpen = JSON.parse(localStorage.getItem('lifarcc_master_open')) || false;
 
-// Inicializar al cargar tu sistema
-window.addEventListener('DOMContentLoaded', () => {
-    const toggleSwitch = document.getElementById('masterToggleSwitch');
-    if (toggleSwitch) {
-        toggleSwitch.checked = isMasterOpen;
-    }
-    actualizarTodosLosIndicadoresMaster();
-    aplicarRestriccionMasterClubs();
-});
-
-// Acción al mover el interruptor maestro
-function toggleMasterRegistration() {
-    const toggleSwitch = document.getElementById('masterToggleSwitch');
-    if (!toggleSwitch) return;
-
-    isMasterOpen = toggleSwitch.checked;
-    localStorage.setItem('lifarcc_master_open', JSON.stringify(isMasterOpen));
-
-    // Si manejas Firebase, sincroniza aquí el estado:
-    // database.ref('liga/registro_abierto').set(isMasterOpen);
-
-    actualizarTodosLosIndicadoresMaster();
-    aplicarRestriccionMasterClubs();
-}
-
-// Sincronizar todos tus indicadores visuales existentes
-function actualizarTodosLosIndicadoresMaster() {
-    const label = document.getElementById('masterToggleLabel');
-    if (label) {
-        if (isMasterOpen) {
-            label.innerText = '🟢 ABIERTO';
-            label.className = 'form-check-label fw-bold text-success ms-2';
-        } else {
-            label.innerText = '🔴 CERRADO';
-            label.className = 'form-check-label fw-bold text-danger ms-2';
-        }
-    }
-
-    // 1. Indicador superior principal
-    const badgeSuperior = document.getElementById('currentSystemStatus');
-    if (badgeSuperior) {
-        badgeSuperior.className = isMasterOpen ? 'badge bg-success p-2 w-100 text-center font-monospace fs-6' : 'badge bg-danger p-2 w-100 text-center font-monospace fs-6';
-        badgeSuperior.innerHTML = isMasterOpen ? '🟢 ESTADO: REGISTRO ABIERTO' : '🔴 ESTADO: REGISTRO CERRADO';
-    }
-
-    // 2. Insignia en el formulario
-    const btnBadge = document.getElementById('regStatusBtnBadge');
-    if (btnBadge) {
-        btnBadge.className = isMasterOpen ? 'badge bg-success fs-6' : 'badge bg-danger fs-6';
-        btnBadge.innerHTML = isMasterOpen ? '🟢 Activo' : '🔴 Cerrado';
-    }
-
-    // 3. Barra de alerta dentro del recuadro del formulario
-    const alertBanner = document.getElementById('regAlertBanner');
-    if (alertBanner) {
-        alertBanner.className = isMasterOpen ? 'alert alert-success text-center font-monospace py-2' : 'alert alert-danger text-center font-monospace py-2';
-        alertBanner.innerHTML = isMasterOpen ? '🟢 Periodo de Registro de Jugadores: ABIERTO POR LA ADMINISTRACIÓN' : '🔴 Periodo de Registro de Jugadores: CERRADO POR LA ADMINISTRACIÓN';
-    }
-}
-
-// Bloquear o habilitar inputs de registro de los clubes
-function aplicarRestriccionMasterClubs() {
-    const inputsYBotones = document.querySelectorAll('#formRegistrarJugador input, #formRegistrarJugador select, #formRegistrarJugador button, .btn-nuevo-jugador');
-    
-    inputsYBotones.forEach(el => {
-        if (el.id === 'masterToggleSwitch') return;
-        el.disabled = !isMasterOpen;
-    });
-}
-
-	//aqui termina lo mas nuevo
 	
 </script>
 </body>
